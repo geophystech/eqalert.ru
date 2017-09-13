@@ -962,6 +962,20 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
+bootstrap-vue@^1.0.0-beta.7:
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-1.0.0-beta.7.tgz#dab0eb35421df80fe0966849b8e992f0ec0a270e"
+  dependencies:
+    bootstrap "^4.0.0-beta"
+    jquery "^3.0.0"
+    popper.js "^1.12.5"
+    vue "^2.4.2"
+    vue-functional-data-merge "^1.0.6"
+
+bootstrap@^4.0.0-beta:
+  version "4.0.0-beta"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.tgz#dc5928175d2e71310bc668cf9e05a907211b72a6"
+
 brace-expansion@^1.0.0, brace-expansion@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.8.tgz#c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
@@ -3343,6 +3357,10 @@ istanbul@^0.4.0:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
+jquery@^3.0.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
 js-base64@^2.1.9:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.2.0.tgz#5e8a8d193a908198dd23d1704826d207b0e5a8f6"
@@ -4579,6 +4597,10 @@ pluralize@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
 
+popper.js@^1.12.5:
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.5.tgz#229e4dea01629e1f1a1e26991ffade5024220fa6"
+
 postcss-calc@^5.2.0:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/postcss-calc/-/postcss-calc-5.3.1.tgz#77bae7ca928ad85716e2fda42f261bf7c1d65b5e"
@@ -5689,6 +5711,13 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
+style-loader@^0.18.2:
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.18.2.tgz#cc31459afbcd6d80b7220ee54b291a9fd66ff5eb"
+  dependencies:
+    loader-utils "^1.0.2"
+    schema-utils "^0.3.0"
+
 supports-color@3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-3.1.2.tgz#72a262894d9d408b956ca05ff37b2ed8a6e2a2d5"
@@ -6067,6 +6096,10 @@ void-elements@^2.0.0:
 vue-axios@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.0.2.tgz#0fe5a69f1edb09a1cd6c4a7f88c74d2fb7fe1778"
+
+vue-functional-data-merge@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-1.0.6.tgz#cde4f0cf3f251f7f0196341156d2c936cca63d40"
 
 vue-hot-reload-api@^2.1.0:
   version "2.1.0"
