@@ -1,5 +1,6 @@
 <template>
-  <div class="mainpage">Mainpage content</div>
+  <div class="mainpage">
+  </div>
 </template>
 
 <script>
