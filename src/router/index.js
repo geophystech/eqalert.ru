@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Mainpage'
+import Mainpage from '@/components/Mainpage'
+import Events from '@/components/Events'
 
 Vue.use(Router)
 
@@ -9,7 +10,12 @@ export default new Router({
     {
       path: '/',
       name: 'Mainpage',
-      component: Hello
+      component: Mainpage
+    },
+    {
+      path: '/events',
+      name: 'Events',
+      component: Events
     }
   ]
 })
