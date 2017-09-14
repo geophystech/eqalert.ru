@@ -1,5 +1,45 @@
+// ----------------
+//    Variables.
+// ----------------
+
 // Colors.
 $color-blue: #337ab7;
+$color-dark-gray: #444;
 $color-gray: #e7e7e7;
 $color-orange: #ff7300;
 $color-white: #fff;
+
+// ----------------
+//    Fonts.
+// ----------------
+
+@font-face {
+  font-family: 'Open Sans Regular';
+  src: url('../assets/fonts/OpenSans-Regular-webfont.eot');
+  src: url('../assets/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../assets/fonts/OpenSans-Regular-webfont.woff') format('woff'),
+       url('../assets/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
+       url('../assets/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans Light';
+  src: url('../assets/fonts/OpenSans-Light-webfont.eot');
+  src: url('../assets/fonts/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../assets/fonts/OpenSans-Light-webfont.woff') format('woff'),
+       url('../assets/fonts/OpenSans-Light-webfont.ttf') format('truetype'),
+       url('../assets/fonts/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// ----------------
+//    Body.
+// ----------------
+
+body {
+	color: $color-dark-gray;
+	font-family: 'Open Sans Light';
+}
