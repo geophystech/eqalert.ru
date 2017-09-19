@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import AppHeader from './components/AppHeader'
-import AppNavbar from './components/AppNavbar'
-import AppFooter from './components/AppFooter'
+import AppHeader from '@/components/AppHeader'
+import AppNavbar from '@/components/AppNavbar'
+import AppFooter from '@/components/AppFooter'
 
 export default {
   name: 'app',
