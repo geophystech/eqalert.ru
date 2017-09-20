@@ -3,9 +3,11 @@
 // ----------------
 
 // Colors.
+$color-black: #000;
 $color-blue: #337ab7;
-$color-dark-gray: #444;
 $color-gray: #e7e7e7;
+$color-gray-dark: #444;
+$color-gray-light: #dfdfdf;
 $color-orange: #ff7300;
 $color-white: #fff;
 
@@ -40,6 +42,20 @@ $color-white: #fff;
 // ----------------
 
 body {
-	color: $color-dark-gray;
+	color: $color-gray-dark;
 	font-family: 'Open Sans Light';
+}
+
+
+// --------------------
+//    Font Awesome.
+// --------------------
+
+.fa-icon {
+  width: auto;
+  height: 1em; /* or any other relative font sizes */
+
+  /* You would have to include the following two lines to make this work in Safari */
+  max-width: 100%;
+  max-height: 100%;
 }
