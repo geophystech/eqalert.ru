@@ -1,15 +1,15 @@
 <template>
   <div class="mainpage">
-    <Map />
+    <AppMap shouldDrawLastEvents="true" />
   </div>
 </template>
 
 <script>
-import Map from '@/components/Map'
+import AppMap from '@/components/AppMap'
 
 export default {
   name: 'mainpage',
-  components: { Map }
+  components: { AppMap }
 }
 </script>
 

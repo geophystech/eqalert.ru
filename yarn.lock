@@ -4185,6 +4185,10 @@ mocha@^3.2.0:
     mkdirp "0.5.1"
     supports-color "3.1.2"
 
+moment@^2.11.1:
+  version "2.18.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
+
 ms@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.1.tgz#9cd13c03adbff25b65effde7ce864ee952017098"
@@ -6274,10 +6278,6 @@ void-elements@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
-vue-awesome@^2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-2.3.3.tgz#e83f976fe5c7f86d207c24ca33731bdc6e9906a9"
-
 vue-axios@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.0.2.tgz#0fe5a69f1edb09a1cd6c4a7f88c74d2fb7fe1778"
@@ -6325,6 +6325,12 @@ vue-markdown@^2.2.4:
     markdown-it-sup "^1.0.0"
     markdown-it-task-lists "^2.0.1"
     markdown-it-toc-and-anchor "^4.1.2"
+
+vue-moment@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-2.0.2.tgz#c480341f281d8edc08126ffea5c45ce92e6c584b"
+  dependencies:
+    moment "^2.11.1"
 
 vue-router@^2.7.0:
   version "2.7.0"

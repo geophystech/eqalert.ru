@@ -2,7 +2,7 @@
     <header id="header">
       <b-row class="align-items-center">
         <b-col class="align-items-center d-flex justify-content-end">
-          <router-link to="mainpage" alt="eqalert.ru" class="mr-auto">
+          <router-link to="/" alt="eqalert.ru" class="mr-auto">
             <img src="../assets/img/logos/eqalert-beta.png">
           </router-link>
 
@@ -28,7 +28,7 @@
 
           <router-link to="events">
             Войти
-            <icon name="long-arrow-right" class="align-middle" />
+            <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
           </router-link>
         </b-col>
       </b-row>
@@ -36,12 +36,9 @@
 </template>
 
 <script>
-import Icon from 'vue-awesome/components/Icon'
-import 'vue-awesome/icons/long-arrow-right'
-
 export default {
   name: 'app-header',
-  components: { Icon },
+  components: {},
   data () {
     return {
       eventsCount: 0
@@ -50,9 +47,7 @@ export default {
   methods: {
     fetchEventsCount: function () {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/68aaa3ec79647d0599287f735b288e2c/raw/c4cacd8582cd9de2ab7e423f7fa2f4cb93d165ae/fake.json')
-      .then(response => {
-        this.eventsCount = response.data.events.length
-      })
+      .then(response => { this.eventsCount = response.data.events.length })
       .catch(e => { this.errors.push(e) })
     }
   },
