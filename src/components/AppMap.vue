@@ -124,6 +124,13 @@ export default {
       zoomHome.addTo(map)
 
       this.drawTileLayers()
+
+      // Store current tile provider to the storage
+      map.on('baselayerchange', event => {
+        if (event.name !== this.$store.getters.currentTileProvider) {
+          this.$store.dispatch('setCurrentTileProvider', event.name)
+        }
+      })
     },
     drawStations: function () {
       this.stations.forEach(function (station) {
@@ -180,7 +187,8 @@ export default {
       })
     },
     drawTileLayers: function () {
-      map.addLayer(this.tileProviders.OpenStreetMap)
+      // Draw stored tile provider for current user.
+      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(map)
       new L.Control.Layers(this.tileProviders).addTo(map)
     },
     eventColor: function (timeDifference) {
