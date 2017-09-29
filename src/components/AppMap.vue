@@ -9,6 +9,8 @@ require('moment/locale/ru')
 const L = window.L
 const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
 let map = null
+let boundaries = null
+let controlLayers = null
 
 export default {
   name: 'app-map',
@@ -19,6 +21,7 @@ export default {
       center: [50.17689812200105, 142.66845703125],
       events: [],
       maxZoom: 18,
+      plateBoundaries: null,
       stations: null,
       tileProviders: {
         'OpenStreetMap': new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -120,17 +123,39 @@ export default {
         zoomControl: false
       }).setView(this.center, this.zoom)
 
-      const zoomHome = L.Control.zoomHome({ zoomHomeIcon: 'home' })
-      zoomHome.addTo(map)
+      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(map)
 
       this.drawTileLayers()
 
       // Store current tile provider to the storage
-      map.on('baselayerchange', event => {
-        if (event.name !== this.$store.getters.currentTileProvider) {
-          this.$store.dispatch('setCurrentTileProvider', event.name)
+      map.on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
+    },
+    drawPlateBoundaries: function () {
+      boundaries = new L.GeoJSON(this.plateBoundaries, {
+        style: {
+          color: '#8A0707',
+          weight: 2
+        },
+        onEachFeature: function (feature, layer) {
+          const message =
+            `Обновленная модель границ тектонических плит.
+            <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
+            P.Bird, 2003</a>`
+
+          layer.on('mouseover', function (event) { return this.bindPopup(message).openPopup(event.latlng) })
+
+          return layer.on('mouseout', function (event) {
+            const popups = document.getElementsByClassName('leaflet-popup')
+            Array.from(popups).forEach((popup) => {
+              popup.addEventListener('mouseleave', () => {
+                return layer.closePopup()
+              })
+            })
+          })
         }
       })
+
+      controlLayers.addOverlay(boundaries, 'Plate Boundaries')
     },
     drawStations: function () {
       this.stations.forEach(function (station) {
@@ -189,7 +214,8 @@ export default {
     drawTileLayers: function () {
       // Draw stored tile provider for current user.
       this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(map)
-      new L.Control.Layers(this.tileProviders).addTo(map)
+      controlLayers = new L.Control.Layers(this.tileProviders)
+      controlLayers.addTo(map)
     },
     eventColor: function (timeDifference) {
       if (timeDifference <= 24) {
@@ -227,6 +253,14 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
+    getPlateBoundaries: function () {
+      this.$http.get('/static/json/plate_boundaries.geojson')
+        .then(response => {
+          this.plateBoundaries = response.data
+          this.drawPlateBoundaries()
+        })
+        .catch(error => { console.log(error) })
+    },
     getStations: function () {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
         .then(response => {
@@ -241,6 +275,7 @@ export default {
       this.getStations()
       this.getLastEvents()
     }
+    this.getPlateBoundaries()
   },
   mounted () {
     this.drawMap()

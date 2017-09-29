@@ -19,8 +19,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setCurrentTileProvider ({ commit }, provider) {
-      commit('set', { type: 'currentTileProvider', value: provider })
+    setCurrentTileProvider ({ commit, state }, provider) {
+      if (provider !== state.currentTileProvider) {
+        commit('set', { type: 'currentTileProvider', value: provider })
+      }
     }
   },
   plugins: [createPersistedState()]
