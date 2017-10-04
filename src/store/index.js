@@ -11,6 +11,32 @@ export default new Vuex.Store({
   getters: {
     currentTileProvider: state => {
       return state.currentTileProvider
+    },
+    datasetChartByDatetime: () => {
+      return {
+        datasets: [{
+          label: 'Количество землетрясений',
+          data: [],
+          fill: true,
+          lineTension: 0.1,
+          backgroundColor: 'rgba(51,122,183,0.4)',
+          borderColor: 'rgba(51,122,183,1)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(51,122,183,1)',
+          pointBackgroundColor: 'rgba(51,122,183,1)',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(51,122,183,1)',
+          pointHoverBorderColor: 'rgba(51,122,183,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10
+        }],
+        labels: []
+      }
     }
   },
   mutations: {
@@ -25,5 +51,10 @@ export default new Vuex.Store({
       }
     }
   },
-  plugins: [createPersistedState()]
+  plugins: [createPersistedState({
+    filter: (mutation) => {
+      // Store in localStorage only currentTileProvider
+      if (mutation.payload.type === 'currentTileProvider') return true
+    }
+  })]
 })

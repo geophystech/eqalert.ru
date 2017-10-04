@@ -30,7 +30,11 @@
               <b-row class="d-flex justify-content-center header">
                 <h4>Аналитика</h4>
               </b-row>
-              <b-row>charts</b-row>
+              <b-row>
+                <b-col>
+                  <ChartByDatetime :chart-data="chartByDatetime" :height="300" />
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
         </b-col>
@@ -41,16 +45,18 @@
 
 <script>
 import AppMap from '@/components/AppMap'
+import ChartByDatetime from './charts/ChartByDatetime'
 
 const moment = require('moment')
 require('moment/locale/ru')
 
 export default {
   name: 'mainpage',
-  components: { AppMap },
+  components: { AppMap, ChartByDatetime },
   data () {
     return {
-      events: []
+      events: [],
+      chartByDatetime: {}
     }
   },
   computed: {
@@ -60,12 +66,23 @@ export default {
   },
   created () {
     this.getEvents()
+    this.getDataForChartByDatetime()
   },
   methods: {
     getEvents: function () {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/14feed1393937c7ae8681177f35bb68e/raw/5413dfb1f5450e38d62af9e3690bbc4235926f11/eq_last_events_with_moment_tensor.json')
         .then(response => {
           this.events = response.data.events
+        })
+        .catch(error => { console.log(error) })
+    },
+    getDataForChartByDatetime: function () {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/7d2bb32a1f9fea48a8a969cae089d0b6/raw/2020b03b5ea212ae144e8b80a714f6360c21ca33/eq_by_datetime_chart.json')
+        .then(response => {
+          let chartData = this.$store.getters.datasetChartByDatetime
+          chartData.datasets[0].data = response.data.data
+          chartData.labels = response.data.labels
+          this.chartByDatetime = chartData
         })
         .catch(error => { console.log(error) })
     }
