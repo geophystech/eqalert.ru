@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getEvents: function () {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/14feed1393937c7ae8681177f35bb68e/raw/5413dfb1f5450e38d62af9e3690bbc4235926f11/eq_last_events_with_moment_tensor.json')
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/14feed1393937c7ae8681177f35bb68e/raw/c9d4f89e110a27a217a4d4ea3e65a3d7349a4429/eq_last_events_with_moment_tensor.json')
         .then(response => {
           this.events = response.data.events
         })
