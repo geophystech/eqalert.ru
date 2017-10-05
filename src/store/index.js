@@ -12,10 +12,10 @@ export default new Vuex.Store({
     currentTileProvider: state => {
       return state.currentTileProvider
     },
-    datasetChartByDatetime: () => {
+    chartDataset: () => {
       return {
         datasets: [{
-          label: 'Количество землетрясений',
+          label: '',
           data: [],
           fill: true,
           lineTension: 0.1,
