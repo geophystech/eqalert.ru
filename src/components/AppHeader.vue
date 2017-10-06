@@ -3,7 +3,7 @@
       <b-row class="align-items-center">
         <b-col class="align-items-center d-flex justify-content-end">
           <router-link to="/" alt="eqalert.ru" class="mr-auto">
-            <img src="../assets/img/logos/eqalert-beta.png">
+            <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
           </router-link>
 
           <router-link to="events">
