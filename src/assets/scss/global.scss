@@ -49,7 +49,6 @@ body {
 	font-family: 'Open Sans Light';
 }
 
-
 // --------------------
 //    Font Awesome.
 // --------------------
@@ -61,4 +60,11 @@ body {
   /* You would have to include the following two lines to make this work in Safari */
   max-width: 100%;
   max-height: 100%;
+}
+
+// -------------
+//    Links.
+// -------------
+a {
+  color: $color-blue;
 }

@@ -16,7 +16,7 @@ export default {
   name: 'app-map',
   components: {},
   props: ['shouldDrawEpicenter', 'shouldDrawLastEvents'],
-  data () {
+  data() {
     return {
       center: [50.17689812200105, 142.66845703125],
       events: [],
@@ -36,7 +36,7 @@ export default {
     }
   },
   methods: {
-    drawEpicenter: function () {
+    drawEpicenter: function() {
       const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
         color: '',
         fillColor: '#ff0a0a',
@@ -49,7 +49,7 @@ export default {
       epicenter.bindPopup('Эпицентр землетрясения')
       map.addLayer(epicenter)
     },
-    drawLastEvents: function () {
+    drawLastEvents: function() {
       this.events.reverse().forEach((event) => {
         let marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
           color: 'black',
@@ -95,7 +95,7 @@ export default {
       })
 
       let legend = L.control({ position: 'bottomright' })
-      legend.onAdd = function () {
+      legend.onAdd = function() {
         let div = L.DomUtil.create('div', 'map-legend')
         div.innerHTML += '<span style="background:#FF0000;">< 24 ч</span>'
         div.innerHTML += '<span style="background:#FFA500">1-5 дн</span>'
@@ -106,14 +106,14 @@ export default {
       legend.addTo(map)
 
       let text = L.control({ position: 'bottomright' })
-      text.onAdd = function () {
+      text.onAdd = function() {
         let div = L.DomUtil.create('div', 'map-text')
         div.innerHTML += '<p>События за последние 3 месяца</p>'
         return div
       }
       text.addTo(map)
     },
-    drawMap: function () {
+    drawMap: function() {
       map = L.map('map', {
         fullscreenControl: true,
         fullscreenControlOptions: { position: 'topleft' },
@@ -130,21 +130,21 @@ export default {
       // Store current tile provider to the storage
       map.on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
     },
-    drawPlateBoundaries: function () {
+    drawPlateBoundaries: function() {
       boundaries = new L.GeoJSON(this.plateBoundaries, {
         style: {
           color: '#8A0707',
           weight: 2
         },
-        onEachFeature: function (feature, layer) {
+        onEachFeature: function(feature, layer) {
           const message =
             `Обновленная модель границ тектонических плит.
             <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
             P.Bird, 2003</a>`
 
-          layer.on('mouseover', function (event) { return this.bindPopup(message).openPopup(event.latlng) })
+          layer.on('mouseover', function(event) { return this.bindPopup(message).openPopup(event.latlng) })
 
-          return layer.on('mouseout', function (event) {
+          return layer.on('mouseout', function(event) {
             const popups = document.getElementsByClassName('leaflet-popup')
             Array.from(popups).forEach((popup) => {
               popup.addEventListener('mouseleave', () => {
@@ -157,8 +157,8 @@ export default {
 
       controlLayers.addOverlay(boundaries, 'Plate Boundaries')
     },
-    drawStations: function () {
-      this.stations.forEach(function (station) {
+    drawStations: function() {
+      this.stations.forEach(function(station) {
         let marker = new L.RegularPolygonMarker(new L.LatLng(station.latitude, station.longitude), {
           numberOfSides: 3,
           rotation: 30.0,
@@ -211,13 +211,13 @@ export default {
         map.addLayer(marker)
       })
     },
-    drawTileLayers: function () {
+    drawTileLayers: function() {
       // Draw stored tile provider for current user.
       this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(map)
       controlLayers = new L.Control.Layers(this.tileProviders)
       controlLayers.addTo(map)
     },
-    eventColor: function (timeDifference) {
+    eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
         return '#ff0000'
       } else if (timeDifference > 24 && timeDifference <= 120) {
@@ -228,7 +228,7 @@ export default {
         return '#808080'
       }
     },
-    eventRadius: function (magnitude) {
+    eventRadius: function(magnitude) {
       if (magnitude < 3.0) {
         return 4
       } else if (magnitude >= 3.0 && magnitude < 4.0) {
@@ -245,7 +245,7 @@ export default {
         return 26
       }
     },
-    getLastEvents: function () {
+    getLastEvents: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
         .then(response => {
           this.events = response.data.events
@@ -253,7 +253,7 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
-    getPlateBoundaries: function () {
+    getPlateBoundaries: function() {
       this.$http.get('/static/json/plate_boundaries.geojson')
         .then(response => {
           this.plateBoundaries = response.data
@@ -261,7 +261,7 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
-    getStations: function () {
+    getStations: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
         .then(response => {
           this.stations = response.data.seismic_stations
@@ -270,14 +270,14 @@ export default {
         .catch(error => { console.log(error) })
     }
   },
-  created () {
+  created() {
     if (this.shouldDrawLastEvents) {
       this.getStations()
       this.getLastEvents()
     }
     this.getPlateBoundaries()
   },
-  mounted () {
+  mounted() {
     this.drawMap()
     if (this.shouldDrawEpicenter) this.drawEpicenter()
   }

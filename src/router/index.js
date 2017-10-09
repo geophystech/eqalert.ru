@@ -4,6 +4,7 @@ import Mainpage from '@/components/Mainpage'
 import Event from '@/components/Event'
 import Events from '@/components/Events'
 import MomentTensor from '@/components/MomentTensor'
+import StaticPage from '@/components/StaticPage'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/events/:hashid/moment-tensor',
       name: 'MomentTensor',
       component: MomentTensor
+    },
+    {
+      path: '/:page',
+      name: 'StaticPage',
+      component: StaticPage
     }
   ]
 })

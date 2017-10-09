@@ -40,12 +40,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    set (state, { type, value }) {
+    set(state, { type, value }) {
       state[type] = value
     }
   },
   actions: {
-    setCurrentTileProvider ({ commit, state }, provider) {
+    setCurrentTileProvider({ commit, state }, provider) {
       if (provider !== state.currentTileProvider) {
         commit('set', { type: 'currentTileProvider', value: provider })
       }

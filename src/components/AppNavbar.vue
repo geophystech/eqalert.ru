@@ -5,7 +5,7 @@
 	  	  	<b-nav-item to="events">Все землетрясения</b-nav-item>
 	  	  	<b-nav-item to="events">Сеть станций</b-nav-item>
 	  	  	<b-nav-item to="events">Мониторинг объектов</b-nav-item>
-	  	  	<b-nav-item to="events">О сервисе</b-nav-item>
+	  	  	<b-nav-item :to="{ name: 'StaticPage', params: { page: 'about' } }">О сервисе</b-nav-item>
 	  	  </b-nav>
   		</b-navbar>
     </nav>
