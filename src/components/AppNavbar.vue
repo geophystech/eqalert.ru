@@ -4,7 +4,7 @@
         <b-nav justified>
           <b-nav-item to="events">Все землетрясения</b-nav-item>
           <b-nav-item :to="{ name: 'StaticPage', params: { page: 'stations' } }" :key="$route.path">Сеть станций</b-nav-item>
-          <b-nav-item to="events">Мониторинг объектов</b-nav-item>
+          <li><a href="https://geophystech.ru/services/seismic-monitoring-system/" class="nav-link">Мониторинг объектов</a></li>
           <b-nav-item :to="{ name: 'StaticPage', params: { page: 'about' } }" :key="$route.path">О сервисе</b-nav-item>
         </b-nav>
       </b-navbar>
