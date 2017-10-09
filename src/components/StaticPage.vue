@@ -16,20 +16,20 @@ export default {
     }
   },
   methods: {
-    getContent: function() {
-      const page = this.$router.currentRoute.params.page
+    getContent: function(page = this.$router.currentRoute.params.page) {
       this.$http.get(`/static/markdown/${page}.md`)
         .then(response => {
           this.content = response.data
         })
         .catch(error => { console.log(error) })
-    },
-    customTags: function() {
-      console.log('called!')
     }
   },
   created() {
     this.getContent()
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.getContent(to.params.page)
+    next()
   }
 }
 </script>
@@ -42,6 +42,8 @@ export default {
   }
 
   img {
+    display: block;
+    margin: 0 auto;
     max-width: 100%;
   }
 
