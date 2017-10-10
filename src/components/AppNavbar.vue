@@ -27,7 +27,7 @@ export default {
   #navbar {
     background-color: $color-blue;
     border-color: $color-gray;
-    border-radius: 4px;
+    border-radius: $border-radius;
 
     a {
       color: $color-white;
