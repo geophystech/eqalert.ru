@@ -17,7 +17,8 @@
           :fields="fields"
           :items="events"
           :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc">
+          :sort-desc.sync="sortDesc"
+          @row-clicked="openEvent">
           <template slot="index" scope="data">{{ data.index + 1 }}</template>
           <template slot="magnitude" scope="data">
             <span :class="{ 'highlight-event': data.value > highlightEventTreshold }">{{ data.value }}</span>
@@ -67,6 +68,9 @@ export default {
           this.events = response.data.events
         })
         .catch(error => { console.log(error) })
+    },
+    'openEvent': function(item) {
+      this.$router.push({ name: 'Event', params: { hashid: item.hashid } })
     }
   },
   created() {
@@ -114,6 +118,14 @@ export default {
           tr {
             th {
               text-align: center;
+            }
+          }
+        }
+
+        tbody {
+          tr {
+            &:hover {
+              cursor: pointer;
             }
           }
         }
