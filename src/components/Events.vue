@@ -22,6 +22,8 @@
           <template slot="magnitude" scope="data">
             <span :class="{ 'highlight-event': data.value > highlightEventTreshold }">{{ data.value }}</span>
           </template>
+          <template slot="depth" scope="data">{{ data.value }} км</template>
+          <template slot="datetime" scope="data">{{ moment.utc(data.value).locale('ru').format('LL в HH:mm:ss UTC') }}</template>
           <template slot="settlement" scope="data">
             <span v-if="data.value.title === null">Нет данных</span>
             <span v-else>{{ data.value.distance }} км до {{ data.value.title }}</span>
@@ -34,6 +36,9 @@
 </template>
 
 <script>
+const moment = require('moment')
+require('moment/locale/ru')
+
 export default {
   data() {
     return {
@@ -48,6 +53,11 @@ export default {
       highlightEventTreshold: this.$store.getters.highlightEventTreshold,
       sortBy: 'datetime',
       sortDesc: true
+    }
+  },
+  computed: {
+    moment: function() {
+      return moment
     }
   },
   methods: {
