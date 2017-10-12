@@ -29,6 +29,12 @@
             <span v-if="data.value.title === null">Нет данных</span>
             <span v-else>{{ data.value.distance }} км до {{ data.value.title }}</span>
           </template>
+
+          <template slot="bottom-row" scope="data">
+            <td :colspan="data.columns">
+              <a href="javascript:void(0)" @click.prevent="getEvents">Показать больше событий</a>
+            </td>
+          </template>
         </b-table>
       </b-col>
     </b-row>
@@ -124,7 +130,15 @@ export default {
 
         tbody {
           tr {
-            &:hover {
+            &:last-child {
+              a {
+                border-bottom: 1px dotted $color-blue;
+                font-weight: bold;
+                text-decoration: none;
+              }
+            }
+
+            &:hover:not(:last-child) {
               cursor: pointer;
             }
           }
