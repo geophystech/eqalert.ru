@@ -9,7 +9,26 @@
     </b-row>
 
     <b-row no-gutters>
-      <b-col class="filters" cols="3">фильтры</b-col>
+      <b-col class="filters" cols="3">
+        <b-row class="filter" no-gutters>
+          <b-col align-self="center">
+            <b-row no-gutters><b-col class="text-center filter-title">Магнитуда</b-col></b-row>
+            <b-row no-gutters class="filter-inputs" align-v="center">
+              <b-col cols="5">
+                <b-input-group left="От">
+                  <b-form-input v-model.trim="filters.mag_min" placeholder="2.5" />
+                </b-input-group>
+              </b-col>
+              <b-col class="text-center"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
+              <b-col cols="5">
+                <b-input-group left="До">
+                  <b-form-input v-model.trim="filters.mag_max" placeholder="10.0" />
+                </b-input-group>
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
+      </b-col>
       <b-col class="all-events">
         <b-table
           hover
@@ -55,8 +74,11 @@ export default {
         { key: 'magnitude', label: 'Магнитуда', sortable: true },
         { key: 'depth', label: 'Глубина', sortable: true },
         { key: 'datetime', label: 'Дата и время', sortable: true },
-        { key: 'settlement', label: 'Ближайший населенный пункт', sortable: true }
+        { key: 'settlement', label: 'Ближайший населённый пункт', sortable: true }
       ],
+      filters: {
+        mag_min: ''
+      },
       highlightEventTreshold: this.$store.getters.highlightEventTreshold,
       sortBy: 'datetime',
       sortDesc: true
@@ -71,7 +93,7 @@ export default {
     getEvents: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/68aaa3ec79647d0599287f735b288e2c/raw/6974efa90788178207afa2a3c2ce1c3da38e3bb3/eq_events.json')
         .then(response => {
-          this.events = response.data.events
+          this.events = this.events.concat(response.data.events)
         })
         .catch(error => { console.log(error) })
     },
@@ -111,11 +133,63 @@ export default {
       }
     }
 
+    .filters {
+      border: 1px solid $color-gray-light-4;
+      border-radius: $border-radius;
+      margin-right: 3%;
+
+      .filter {
+        border-bottom: 1px solid $color-gray-light-4;
+        padding-bottom: 6%;
+
+        .filter-title{
+          font-size: 90%;
+          font-weight: bold;
+        }
+
+        .filter-inputs {
+          .input-group {
+            height: 80%;
+
+            input {
+              text-align: center;
+            }
+          }
+
+          // Left input.
+          .col-5:first-child {
+            padding-left: 3%
+          }
+
+          // Arrows.
+          .col {
+            color: $color-gray-light-2;
+          }
+
+          // Right input.
+          .col-5:last-child {
+            padding-right: 3%
+          }
+        }
+
+        .row:first-child {
+          margin-bottom: 4%;
+          margin-top: 4%;
+        }
+
+        .input-group-addon {
+          background-color: $color-white-2;
+          font-size: 80%;
+        }
+      }
+    }
+
     .all-events {
       font-size: 90%;
 
       table {
         border: 1px solid $color-gray-light-4;
+        border-radius: $border-radius;
         text-align: center;
 
         thead {
