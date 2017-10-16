@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentTileProvider: ''
+    currentTileProvider: '',
+    highlightEventTreshold: 4.0
   },
   getters: {
     currentTileProvider: state => {
@@ -37,6 +38,9 @@ export default new Vuex.Store({
         }],
         labels: []
       }
+    },
+    highlightEventTreshold: state => {
+      return state.highlightEventTreshold
     }
   },
   mutations: {
