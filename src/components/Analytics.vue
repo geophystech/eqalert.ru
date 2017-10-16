@@ -1,5 +1,5 @@
 <template>
-  <div class="event">
+  <div class="analytics">
   </div>
 </template>
 
