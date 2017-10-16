@@ -124,8 +124,8 @@
           </b-col>
         </b-row>
 
-        <b-row no-gutters>
-          <b-col align-self="center">
+        <b-row class="filter" no-gutters>
+          <b-col class="text-center">
             <b-button size="sm">Сбросить фильтры</b-button>
           </b-col>
         </b-row>
@@ -256,6 +256,14 @@ export default {
 
         &:nth-last-child(2) {
           padding-top: 6%;
+        }
+
+        &:nth-last-child(1) {
+          padding-top: 6%;
+
+          .btn {
+            box-shadow: none;
+          }
         }
 
         .filter-title {
