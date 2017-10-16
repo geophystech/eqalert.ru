@@ -2,7 +2,7 @@
     <nav id="navbar">
       <b-navbar>
         <b-nav justified>
-          <b-nav-item to="events">Все землетрясения</b-nav-item>
+          <b-nav-item :to="{ name: 'Events' }" key="events">Все землетрясения</b-nav-item>
           <b-nav-item :to="{ name: 'StaticPage', params: { page: 'stations' } }" :key="$route.path">Сеть станций</b-nav-item>
           <li><a href="https://geophystech.ru/services/seismic-monitoring-system/" class="nav-link">Мониторинг объектов</a></li>
           <b-nav-item :to="{ name: 'StaticPage', params: { page: 'about' } }" :key="$route.path">О сервисе</b-nav-item>
@@ -46,17 +46,22 @@ export default {
     }
 
     li {
-      border-bottom: $border-bottom-blue;
       transition: border-bottom 0.30s ease 0s;
+
+      a {
+        border-bottom: $border-bottom-blue;
+      }
     }
 
     li:hover {
-      border-bottom: $border-bottom-orange;
+      a {
+        border-bottom: $border-bottom-orange;
+      }
     }
   }
 
   .active {
-    border-bottom: $border-bottom-orange;
+    border-bottom: $border-bottom-orange !important;
   }
 </style>
 
