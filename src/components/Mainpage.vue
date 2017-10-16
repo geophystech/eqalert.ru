@@ -28,7 +28,9 @@
 
             <b-col>
               <b-row class="d-flex justify-content-center header">
-                <h4>Аналитика</h4>
+                <h4>
+                  <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
+                </h4>
               </b-row>
               <b-row>
                 <b-col>
@@ -150,6 +152,12 @@ export default {
       border-top: $border;
       height: auto;
       margin-top: 3%;
+
+      h4 {
+        a {
+          color: $color-gray-dark;
+        }
+      }
 
       .header {
         padding-bottom: 3%;
