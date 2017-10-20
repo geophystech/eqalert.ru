@@ -129,7 +129,6 @@
             <b-button size="sm">Сбросить фильтры</b-button>
           </b-col>
         </b-row>
-
       </b-col>
       <b-col class="all-events">
         <b-table
@@ -150,7 +149,6 @@
             <span v-if="data.value.title === null">Нет данных</span>
             <span v-else>{{ data.value.distance }} км до {{ data.value.title }}</span>
           </template>
-
           <template slot="bottom-row" scope="data">
             <td :colspan="data.columns">
               <a href="javascript:void(0)" @click.prevent="getEvents">Показать больше событий</a>
@@ -159,7 +157,6 @@
         </b-table>
       </b-col>
     </b-row>
-    </div>
   </div>
 </template>
 

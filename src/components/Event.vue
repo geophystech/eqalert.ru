@@ -34,6 +34,58 @@
         </b-button-group>
       </b-col>
     </b-row>
+
+    <b-tabs>
+      <b-tab title="Общая информация"
+        :href="tabsUrls.generalInformation"
+        :active="current.pageUrl === tabsUrls.generalInformation"
+        @click="switchView(tabsUrls.generalInformation)">
+
+        <keep-alive>
+          <component :is="current.view" />>
+        </keep-alive>
+      </b-tab>
+
+      <b-tab title="Ближайшие населенные пункты"
+        :href="tabsUrls.settlements"
+        :active="current.pageUrl === tabsUrls.settlements"
+        @click="switchView(tabsUrls.settlements)">
+
+        <keep-alive>
+          <component :is="current.view" />
+        </keep-alive>
+      </b-tab>
+
+      <b-tab title="Здания и сооружения"
+        :href="tabsUrls.buildings"
+        :active="current.pageUrl === tabsUrls.buildings"
+        @click="switchView(tabsUrls.buildings)">
+
+        <keep-alive>
+          <component :is="current.view" />
+        </keep-alive>
+      </b-tab>
+
+      <b-tab title="Тензор момента"
+        :href="tabsUrls.momentTensor"
+        :active="current.pageUrl === tabsUrls.momentTensor"
+        @click="switchView(tabsUrls.momentTensor)">
+
+        <keep-alive>
+          <component :is="current.view" />
+        </keep-alive>
+      </b-tab>
+
+      <b-tab title="Магистральные объекты"
+        :href="tabsUrls.ldos"
+        :active="current.pageUrl === tabsUrls.ldos"
+        @click="switchView(tabsUrls.ldos)">
+
+        <keep-alive>
+          <component :is="current.view" />
+        </keep-alive>
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 
@@ -41,10 +93,27 @@
 const moment = require('moment')
 require('moment/locale/ru')
 
+import Buildings from '@/components/event_views/Buildings'
+import GeneralInformation from '@/components/event_views/GeneralInformation'
+import Ldos from '@/components/event_views/Ldos'
+import MomentTensor from '@/components/event_views/MomentTensor'
+import Settlements from '@/components/event_views/Settlements'
+
 export default {
+  components: {
+    buildings: Buildings,
+    generalInformation: GeneralInformation,
+    ldos: Ldos,
+    momentTensor: MomentTensor,
+    settlements: Settlements
+  },
   name: 'event',
   data() {
     return {
+      current: {
+        pageUrl: `#${this.$router.currentRoute.fullPath}`,
+        view: 'generalInformation'
+      },
       breadcrumbs: [
         {
           text: 'Главная',
@@ -62,6 +131,13 @@ export default {
         magnitude: '4.5',
         magnitudeType: [['M', 'L']],
         processingMethod: 'M'
+      },
+      tabsUrls: {
+        buildings: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'buildings' } }).href,
+        generalInformation: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid } }).href,
+        ldos: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'ldos' } }).href,
+        momentTensor: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'moment-tensor' } }).href,
+        settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href
       }
     }
   },
@@ -103,6 +179,10 @@ export default {
         default:
           this.event.magnitudeType.push(['M', ''])
       }
+    },
+    switchView: function(href) {
+      this.current.view = Object.keys(this.tabsUrls).find(key => this.tabsUrls[key] === href)
+      history.pushState({}, null, href)
     }
   },
   created() {
@@ -112,11 +192,12 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../assets/scss/global.scss';
 
   .event-header {
-    margin-top: 2%;
+    margin-bottom: 3%;
+    margin-top: 4%;
 
     .breadcrumb {
       background-color: transparent;
@@ -143,6 +224,23 @@ export default {
 
     .processing-method {
       color: $color-blue;
+    }
+  }
+
+  .tabs {
+    .nav-tabs {
+      justify-content: center;
+
+      .nav-item{
+        a {
+          font-size: 90%;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .tab-content {
+      padding-top: 2%;
     }
   }
 </style>

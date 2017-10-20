@@ -1,5 +1,6 @@
 <template>
-  <div class="moment-tensor">
+  <div class="buildings">
+    Здания и сооружения
   </div>
 </template>
 
