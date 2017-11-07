@@ -15,10 +15,10 @@ let controlLayers = null
 export default {
   name: 'app-map',
   components: {},
-  props: ['shouldDrawEpicenter', 'shouldDrawLastEvents'],
+  props: ['shouldDrawEpicenter', 'shouldDrawLastEvents', 'shouldDrawPga'],
   data() {
     return {
-      center: [50.17689812200105, 142.66845703125],
+      center: [50.351, 142.395],
       events: [],
       maxZoom: 18,
       plateBoundaries: null,
@@ -129,6 +129,33 @@ export default {
 
       // Store current tile provider to the storage
       map.on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
+    },
+    drawPga: function(shouldDrawEpicenter) {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
+        .then(response => {
+          const pgaData = response.data.event.pga
+          let legendData = ''
+
+          Object.keys(pgaData).forEach((key) => {
+            const pga = L.polygon(pgaData[key].data, { color: pgaData[key].line_color, weigh: 2 })
+            pga.addTo(map)
+            pga.bindPopup(`Пиковое ускорение грунта: ${pgaData[key].range}%g (ускорение свободного падения)`)
+            legendData += `<i style="background: ${pgaData[key].line_color}"></i>${pgaData[key].range}<br>`
+          })
+
+          let pgaLegend = L.control({ position: 'bottomright' })
+          pgaLegend.onAdd = (map) => {
+            let div = L.DomUtil.create('div', 'map-legend')
+            div.innerHTML += '<h6>%g</h6>'
+            div.innerHTML += legendData
+            return div
+          }
+
+          pgaLegend.addTo(map)
+
+          if (shouldDrawEpicenter) this.drawEpicenter()
+        })
+        .catch(error => { console.log(error) })
     },
     drawPlateBoundaries: function() {
       boundaries = new L.GeoJSON(this.plateBoundaries, {
@@ -279,7 +306,8 @@ export default {
   },
   mounted() {
     this.drawMap()
-    if (this.shouldDrawEpicenter) this.drawEpicenter()
+    if (this.shouldDrawEpicenter && !this.shouldDrawPga) this.drawEpicenter()
+    if (this.shouldDrawPga) this.drawPga(this.shouldDrawEpicenter)
   }
 }
 </script>
@@ -321,8 +349,12 @@ export default {
     }
 
     .map-legend {
+      background: rgba(255, 255, 255, .8);
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, .2);
       color: #555;
       line-height: 15px;
+      padding: 6px 8px;
       text-align: left;
 
       i {

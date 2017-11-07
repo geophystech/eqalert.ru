@@ -38,51 +38,55 @@
     <b-tabs>
       <b-tab title="Общая информация"
         :href="tabsUrls.generalInformation"
-        :active="current.pageUrl === tabsUrls.generalInformation"
+        :active="currentPageUrl === tabsUrls.generalInformation"
         @click="switchView(tabsUrls.generalInformation)">
 
-        <keep-alive>
-          <component :is="current.view" />>
-        </keep-alive>
+        <b-row>
+          <b-col cols="8">
+            <keep-alive>
+              <component is="generalInformation" />
+            </keep-alive>
+          </b-col>
+        </b-row>
       </b-tab>
 
       <b-tab title="Ближайшие населенные пункты"
         :href="tabsUrls.settlements"
-        :active="current.pageUrl === tabsUrls.settlements"
+        :active="currentPageUrl === tabsUrls.settlements"
         @click="switchView(tabsUrls.settlements)">
 
         <keep-alive>
-          <component :is="current.view" />
+          <component is="settlements" />
         </keep-alive>
       </b-tab>
 
       <b-tab title="Здания и сооружения"
         :href="tabsUrls.buildings"
-        :active="current.pageUrl === tabsUrls.buildings"
+        :active="currentPageUrl === tabsUrls.buildings"
         @click="switchView(tabsUrls.buildings)">
 
         <keep-alive>
-          <component :is="current.view" />
+          <component is="buildings" />
         </keep-alive>
       </b-tab>
 
       <b-tab title="Тензор момента"
         :href="tabsUrls.momentTensor"
-        :active="current.pageUrl === tabsUrls.momentTensor"
+        :active="currentPageUrl === tabsUrls.momentTensor"
         @click="switchView(tabsUrls.momentTensor)">
 
         <keep-alive>
-          <component :is="current.view" />
+          <component is="momentTensor" />
         </keep-alive>
       </b-tab>
 
       <b-tab title="Магистральные объекты"
         :href="tabsUrls.ldos"
-        :active="current.pageUrl === tabsUrls.ldos"
+        :active="currentPageUrl === tabsUrls.ldos"
         @click="switchView(tabsUrls.ldos)">
 
         <keep-alive>
-          <component :is="current.view" />
+          <component is="ldos" />
         </keep-alive>
       </b-tab>
     </b-tabs>
@@ -110,10 +114,7 @@ export default {
   name: 'event',
   data() {
     return {
-      current: {
-        pageUrl: `#${this.$router.currentRoute.fullPath}`,
-        view: 'generalInformation'
-      },
+      currentPageUrl: `#${this.$router.currentRoute.fullPath}`,
       breadcrumbs: [
         {
           text: 'Главная',
@@ -181,7 +182,6 @@ export default {
       }
     },
     switchView: function(href) {
-      this.current.view = Object.keys(this.tabsUrls).find(key => this.tabsUrls[key] === href)
       history.pushState({}, null, href)
     }
   },
