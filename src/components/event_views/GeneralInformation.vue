@@ -1,14 +1,14 @@
 <template>
   <div class="general-information">
-    <AppMap shouldDrawEpicenter="true" shouldDrawPga="true" />
+    <AppMap :hashid="hashid" mapId="map-general-information" shouldDrawEpicenter="true" shouldDrawPga="true" target="generalInformation" />
 
     <b-table
       hover
       responsive
       :fields="fields"
       :items="items">
-      <template slot="index" scope="data">{{ data.index + 1 }}</template>
-      <template slot="description" scope="data">
+      <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
+      <template slot="description" slot-scope="data">
         <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.auto="data.value" />
       </template>
     </b-table>
@@ -46,6 +46,9 @@ export default {
     }
   },
   computed: {
+    hashid: function() {
+      return 'KEXKBvM0'
+    },
     moment: function() {
       return moment
     }

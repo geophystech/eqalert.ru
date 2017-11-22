@@ -1,25 +1,25 @@
 <template>
-  <div id="map" />
+  <div class="map" :id="mapId" />
 </template>
 
 <script>
-const moment = require('moment')
-require('moment/locale/ru')
+// const moment = require('moment')
+// require('moment/locale/ru')
 
 const L = window.L
 const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
-let map = null
-let boundaries = null
+// let boundaries = null
 let controlLayers = null
 
 export default {
   name: 'app-map',
   components: {},
-  props: ['shouldDrawEpicenter', 'shouldDrawLastEvents', 'shouldDrawPga'],
+  props: ['hashid', 'mapId', 'shouldDrawEpicenter', 'shouldDrawLastEvents', 'shouldDrawPga', 'target'],
   data() {
     return {
       center: [50.351, 142.395],
       events: [],
+      initializedMaps: [],
       maxZoom: 18,
       plateBoundaries: null,
       stations: null,
@@ -36,85 +36,85 @@ export default {
     }
   },
   methods: {
-    drawEpicenter: function() {
-      const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
-        color: '',
-        fillColor: '#ff0a0a',
-        fillOpacity: 1.0,
-        numberOfPoints: 5,
-        radius: 12,
-        weight: 2
-      })
+    // drawEpicenter: function() {
+    //   const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
+    //     color: '',
+    //     fillColor: '#ff0a0a',
+    //     fillOpacity: 1.0,
+    //     numberOfPoints: 5,
+    //     radius: 12,
+    //     weight: 2
+    //   })
 
-      epicenter.bindPopup('Эпицентр землетрясения')
-      map.addLayer(epicenter)
-    },
-    drawLastEvents: function() {
-      this.events.reverse().forEach((event) => {
-        let marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
-          color: 'black',
-          colorOpacity: 1.0,
-          fillColor: this.eventColor(event.datetime_in_hours),
-          fillOpacity: 0.8,
-          gradient: false,
-          numberOfSides: 360,
-          radius: this.eventRadius(event.magnitude),
-          weight: 1
-        })
+    //   epicenter.bindPopup('Эпицентр землетрясения')
+    //   map.addLayer(epicenter)
+    // },
+    // drawLastEvents: function() {
+    //   this.events.reverse().forEach((event) => {
+    //     let marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
+    //       color: 'black',
+    //       colorOpacity: 1.0,
+    //       fillColor: this.eventColor(event.datetime_in_hours),
+    //       fillOpacity: 0.8,
+    //       gradient: false,
+    //       numberOfSides: 360,
+    //       radius: this.eventRadius(event.magnitude),
+    //       weight: 1
+    //     })
 
-        let message =
-          `<table class="table table-hover table-sm table-responsive">
-            <thead>
-              <tr>
-                <th class="text-center" colspan=2>${event.hashid}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th class="align-middle" scope="row">Магнитуда</th>
-                <td><span class="magnitude-color">${event.magnitude}</span> ( M<sub>${event.magnitude_type}</sub> )</td>
-              </tr>
-              <tr>
-                <th scope="row">Время</th>
-                <td>${moment.utc(event.datetime).locale('ru').format('LL в HH:mm:ss UTC')}</td>
-              </tr>
-              <tr>
-                <th scope="row">Координаты</th>
-                <td>${event.latitude}N, ${event.longitude}E</td>
-              </tr>
-              <tr>
-                <th scope="row">Глубина</th>
-                <td>${event.depth} км</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="text-center read-more"><a href="#/events/${event.hashid}" class="btn btn-success">Подробнее</a></div>`
+    //     let message =
+    //       `<table class="table table-hover table-sm table-responsive">
+    //         <thead>
+    //           <tr>
+    //             <th class="text-center" colspan=2>${event.hashid}</th>
+    //           </tr>
+    //         </thead>
+    //         <tbody>
+    //           <tr>
+    //             <th class="align-middle" scope="row">Магнитуда</th>
+    //             <td><span class="magnitude-color">${event.magnitude}</span> ( M<sub>${event.magnitude_type}</sub> )</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Время</th>
+    //             <td>${moment.utc(event.datetime).locale('ru').format('LL в HH:mm:ss UTC')}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Координаты</th>
+    //             <td>${event.latitude}N, ${event.longitude}E</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Глубина</th>
+    //             <td>${event.depth} км</td>
+    //           </tr>
+    //         </tbody>
+    //       </table>
+    //       <div class="text-center read-more"><a href="#/events/${event.hashid}" class="btn btn-success">Подробнее</a></div>`
 
-        marker.bindPopup(message)
-        marker.addTo(map)
-      })
+    //     marker.bindPopup(message)
+    //     marker.addTo(map)
+    //   })
 
-      let legend = L.control({ position: 'bottomright' })
-      legend.onAdd = function() {
-        let div = L.DomUtil.create('div', 'map-legend')
-        div.innerHTML += '<span style="background:#FF0000;">< 24 ч</span>'
-        div.innerHTML += '<span style="background:#FFA500">1-5 дн</span>'
-        div.innerHTML += '<span style="background:#FFFF00">6-14 дн</span>'
-        div.innerHTML += '<span style="background:#808080">> 14 дн</span>'
-        return div
-      }
-      legend.addTo(map)
+    //   let legend = L.control({ position: 'bottomright' })
+    //   legend.onAdd = function() {
+    //     let div = L.DomUtil.create('div', 'map-legend')
+    //     div.innerHTML += '<span style="background:#FF0000;">< 24 ч</span>'
+    //     div.innerHTML += '<span style="background:#FFA500">1-5 дн</span>'
+    //     div.innerHTML += '<span style="background:#FFFF00">6-14 дн</span>'
+    //     div.innerHTML += '<span style="background:#808080">> 14 дн</span>'
+    //     return div
+    //   }
+    //   legend.addTo(map)
 
-      let text = L.control({ position: 'bottomright' })
-      text.onAdd = function() {
-        let div = L.DomUtil.create('div', 'map-text')
-        div.innerHTML += '<p>События за последние 3 месяца</p>'
-        return div
-      }
-      text.addTo(map)
-    },
+    //   let text = L.control({ position: 'bottomright' })
+    //   text.onAdd = function() {
+    //     let div = L.DomUtil.create('div', 'map-text')
+    //     div.innerHTML += '<p>События за последние 3 месяца</p>'
+    //     return div
+    //   }
+    //   text.addTo(map)
+    // },
     drawMap: function() {
-      map = L.map('map', {
+      window.map[this.hashid][this.target] = L.map(this.mapId, {
         fullscreenControl: true,
         fullscreenControlOptions: { position: 'topleft' },
         scrollWheelZoom: false,
@@ -123,126 +123,127 @@ export default {
         zoomControl: false
       }).setView(this.center, this.zoom)
 
-      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(map)
+      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[this.hashid][this.target])
 
       this.drawTileLayers()
 
       // Store current tile provider to the storage
-      map.on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
+      window.map[this.hashid][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
     },
-    drawPga: function(shouldDrawEpicenter) {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
-        .then(response => {
-          const pgaData = response.data.event.pga
-          let legendData = ''
+    // drawPga: function(shouldDrawEpicenter) {
+    //   this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
+    //     .then(response => {
+    //       const pgaData = response.data.event.pga
+    //       let legendData = ''
 
-          Object.keys(pgaData).forEach((key) => {
-            const pga = L.polygon(pgaData[key].data, { color: pgaData[key].line_color, weigh: 2 })
-            pga.addTo(map)
-            pga.bindPopup(`Пиковое ускорение грунта: ${pgaData[key].range}%g (ускорение свободного падения)`)
-            legendData += `<i style="background: ${pgaData[key].line_color}"></i>${pgaData[key].range}<br>`
-          })
+    //       Object.keys(pgaData).forEach((key) => {
+    //         const pga = L.polygon(pgaData[key].data, { color: pgaData[key].line_color, weigh: 2 })
+    //         pga.addTo(map)
+    //         pga.bindPopup(`Пиковое ускорение грунта: ${pgaData[key].range}%g (ускорение свободного падения)`)
+    //         legendData += `<i style="background: ${pgaData[key].line_color}"></i>${pgaData[key].range}<br>`
+    //       })
 
-          let pgaLegend = L.control({ position: 'bottomright' })
-          pgaLegend.onAdd = (map) => {
-            let div = L.DomUtil.create('div', 'map-legend')
-            div.innerHTML += '<h6>%g</h6>'
-            div.innerHTML += legendData
-            return div
-          }
+    //       let pgaLegend = L.control({ position: 'bottomright' })
+    //       pgaLegend.onAdd = (map) => {
+    //         let div = L.DomUtil.create('div', 'map-legend')
+    //         div.innerHTML += '<h6>%g</h6>'
+    //         div.innerHTML += legendData
+    //         return div
+    //       }
 
-          pgaLegend.addTo(map)
+    //       pgaLegend.addTo(map)
 
-          if (shouldDrawEpicenter) this.drawEpicenter()
-        })
-        .catch(error => { console.log(error) })
-    },
-    drawPlateBoundaries: function() {
-      boundaries = new L.GeoJSON(this.plateBoundaries, {
-        style: {
-          color: '#8A0707',
-          weight: 2
-        },
-        onEachFeature: function(feature, layer) {
-          const message =
-            `Обновленная модель границ тектонических плит.
-            <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
-            P.Bird, 2003</a>`
+    //       if (shouldDrawEpicenter) this.drawEpicenter()
+    //     })
+    //     .catch(error => { console.log(error) })
+    // },
+    // drawPlateBoundaries: function() {
+    //   boundaries = new L.GeoJSON(this.plateBoundaries, {
+    //     style: {
+    //       color: '#8A0707',
+    //       weight: 2
+    //     },
+    //     onEachFeature: function(feature, layer) {
+    //       const message =
+    //         `Обновленная модель границ тектонических плит.
+    //         <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
+    //         P.Bird, 2003</a>`
 
-          layer.on('mouseover', function(event) { return this.bindPopup(message).openPopup(event.latlng) })
+    //       layer.on('mouseover', function(event) { return this.bindPopup(message).openPopup(event.latlng) })
 
-          return layer.on('mouseout', function(event) {
-            const popups = document.getElementsByClassName('leaflet-popup')
-            Array.from(popups).forEach((popup) => {
-              popup.addEventListener('mouseleave', () => {
-                return layer.closePopup()
-              })
-            })
-          })
-        }
-      })
+    //       return layer.on('mouseout', function(event) {
+    //         const popups = document.getElementsByClassName('leaflet-popup')
+    //         Array.from(popups).forEach((popup) => {
+    //           popup.addEventListener('mouseleave', () => {
+    //             return layer.closePopup()
+    //           })
+    //         })
+    //       })
+    //     }
+    //   })
 
-      controlLayers.addOverlay(boundaries, 'Plate Boundaries')
-    },
-    drawStations: function() {
-      this.stations.forEach(function(station) {
-        let marker = new L.RegularPolygonMarker(new L.LatLng(station.latitude, station.longitude), {
-          numberOfSides: 3,
-          rotation: 30.0,
-          radius: 7,
-          fillOpacity: 1.0,
-          color: false,
-          fillColor: station.color
-        })
+    //   controlLayers.addOverlay(boundaries, 'Plate Boundaries')
+    // },
+    // drawStations: function() {
+    //   this.stations.forEach(function(station) {
+    //     let marker = new L.RegularPolygonMarker(new L.LatLng(station.latitude, station.longitude), {
+    //       numberOfSides: 3,
+    //       rotation: 30.0,
+    //       radius: 7,
+    //       fillOpacity: 1.0,
+    //       color: false,
+    //       fillColor: station.color
+    //     })
 
-        let message =
-          `<table class="table table-hover table-sm table-responsive">
-            <thead>
-              <tr>
-                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Каналов</th>
-                <td>${station.channel_number}</td>
-              </tr>
-              <tr>
-                <th scope="row">Высота</th>
-                <td>${station.elevation}</td>
-              </tr>
-              <tr>
-                <th scope="row">Тип датчика</th>
-                <td>${station.instrument}</td>
-              </tr>
-              <tr>
-                <th scope="row">Регистратор</th>
-                <td>${station.datalogger}</td>
-              </tr>
-              <tr>
-                <th scope="row">Частота дискр.</th>
-                <td>${station.sample_rate}</td>
-              </tr>
-              <tr>
-                <th scope="row">Телеметрия</th>
-                <td>${station.has_realtime}</td>
-              </tr>
-              <tr>
-                <th scope="row">Оператор</th>
-                <td>${station.operator}</td>
-              </tr>
-            </tbody>
-          </table>`
+    //     let message =
+    //       `<table class="table table-hover table-sm table-responsive">
+    //         <thead>
+    //           <tr>
+    //             <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
+    //           </tr>
+    //         </thead>
+    //         <tbody>
+    //           <tr>
+    //             <th scope="row">Каналов</th>
+    //             <td>${station.channel_number}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Высота</th>
+    //             <td>${station.elevation}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Тип датчика</th>
+    //             <td>${station.instrument}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Регистратор</th>
+    //             <td>${station.datalogger}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Частота дискр.</th>
+    //             <td>${station.sample_rate}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Телеметрия</th>
+    //             <td>${station.has_realtime}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Оператор</th>
+    //             <td>${station.operator}</td>
+    //           </tr>
+    //         </tbody>
+    //       </table>`
 
-        marker.bindPopup(message)
-        map.addLayer(marker)
-      })
-    },
+    //     marker.bindPopup(message)
+    //     map.addLayer(marker)
+    //   })
+    // },
     drawTileLayers: function() {
       // Draw stored tile provider for current user.
-      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(map)
+      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[this.hashid][this.target])
+
       controlLayers = new L.Control.Layers(this.tileProviders)
-      controlLayers.addTo(map)
+      controlLayers.addTo(window.map[this.hashid][this.target])
     },
     eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
@@ -298,22 +299,32 @@ export default {
     }
   },
   created() {
-    if (this.shouldDrawLastEvents) {
-      this.getStations()
-      this.getLastEvents()
-    }
-    this.getPlateBoundaries()
+    // if (this.shouldDrawLastEvents) {
+    //   this.getStations()
+    //   this.getLastEvents()
+    // }
+    // this.getPlateBoundaries()
   },
   mounted() {
+    // maps.forEach((map) => {
+      // this.initializedMaps.push(map.id)
+      // this.drawMap(map.id)
+    // })
+
     this.drawMap()
-    if (this.shouldDrawEpicenter && !this.shouldDrawPga) this.drawEpicenter()
-    if (this.shouldDrawPga) this.drawPga(this.shouldDrawEpicenter)
+
+    // console.log(this.initializedMaps[0])
+    // console.log(this.initializedMaps[1])
+    // console.log(this.initializedMaps[2])
+
+    // if (this.shouldDrawEpicenter && !this.shouldDrawPga) this.drawEpicenter()
+    // if (this.shouldDrawPga) this.drawPga(this.shouldDrawEpicenter)
   }
 }
 </script>
 
 <style lang="scss">
-  #map {
+  .map {
     height: 450px;
     margin-top: 2%;
 

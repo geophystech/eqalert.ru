@@ -1,6 +1,6 @@
 <template>
   <div class="mainpage">
-    <AppMap shouldDrawLastEvents="true" />
+    <AppMap id="mainpage-map" shouldDrawLastEvents="true" />
 
     <b-container>
       <b-row>

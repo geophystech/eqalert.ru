@@ -39,12 +39,12 @@
       <b-tab title="Общая информация"
         :href="tabsUrls.generalInformation"
         :active="currentPageUrl === tabsUrls.generalInformation"
-        @click="switchView(tabsUrls.generalInformation)">
+        @click="switchView(tabsUrls.generalInformation); invalidateMapSize('generalInformation')">
 
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="generalInformation" />
+              <component is="generalInformation" hashid="hashid" />
             </keep-alive>
           </b-col>
         </b-row>
@@ -53,11 +53,15 @@
       <b-tab title="Ближайшие населенные пункты"
         :href="tabsUrls.settlements"
         :active="currentPageUrl === tabsUrls.settlements"
-        @click="switchView(tabsUrls.settlements)">
+        @click="switchView(tabsUrls.settlements); invalidateMapSize('settlements')">
 
-        <keep-alive>
-          <component is="settlements" />
-        </keep-alive>
+        <b-row>
+          <b-col cols="8">
+            <keep-alive>
+              <component is="settlements" hashid="hashid" />
+            </keep-alive>
+          </b-col>
+        </b-row>
       </b-tab>
 
       <b-tab title="Здания и сооружения"
@@ -103,6 +107,8 @@ import Ldos from '@/components/event_views/Ldos'
 import MomentTensor from '@/components/event_views/MomentTensor'
 import Settlements from '@/components/event_views/Settlements'
 
+if (!window.map) window.map = {}
+
 export default {
   components: {
     buildings: Buildings,
@@ -143,13 +149,6 @@ export default {
     }
   },
   methods: {
-    getEvent: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/b090c866778c02ddd63c5dc1667317f9/raw/a41ec3cd01d380d553cf1655a16d10a56d5c7979/eq_KEXKBvM0_general_information.json')
-        .then(response => {
-          this.event.datetime = moment.utc(response.data.event.datetime).locale('ru').format('LL в HH:mm:ss UTC')
-        })
-        .catch(error => { console.log(error) })
-    },
     convertMagnitudeType: function(type) {
       switch (type) {
         case 'L':
@@ -181,13 +180,34 @@ export default {
           this.event.magnitudeType.push(['M', ''])
       }
     },
+    getEvent: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/b090c866778c02ddd63c5dc1667317f9/raw/a41ec3cd01d380d553cf1655a16d10a56d5c7979/eq_KEXKBvM0_general_information.json')
+        .then(response => {
+          this.event.datetime = moment.utc(response.data.event.datetime).locale('ru').format('LL в HH:mm:ss UTC')
+        })
+        .catch(error => { console.log(error) })
+    },
+    invalidateMapSize: function(target) {
+      if (window.map[this.event.hashid][target]) {
+        setTimeout(() => { window.map[this.event.hashid][target].invalidateSize() }, 1)
+      }
+    },
+    populateMap: function() {
+      if (!window.map[this.event.hashid]) window.map[this.event.hashid] = {}
+      Object.keys(this.tabsUrls).forEach(tab => { window.map[this.event.hashid][tab] = null })
+    },
     switchView: function(href) {
       history.pushState({}, null, href)
     }
   },
   created() {
+    this.$root.$on('changed::tab', tab => {
+      this.invalidateMapSize(this.currentTab)
+    })
+
     this.event.hashid = this.$router.currentRoute.params.hashid
     this.getEvent()
+    this.populateMap()
   }
 }
 </script>
