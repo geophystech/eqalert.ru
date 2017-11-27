@@ -9,7 +9,7 @@ require('moment/locale/ru')
 const L = window.L
 const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
 let boundaries = null
-let controlLayers = null
+let controlLayers = {}
 
 export default {
   name: 'app-map',
@@ -182,7 +182,7 @@ export default {
         }
       })
 
-      controlLayers.addOverlay(boundaries, 'Plate Boundaries')
+      controlLayers[this.hashid][this.target].addOverlay(boundaries, 'Plate Boundaries')
     },
     drawStations: function() {
       this.stations.forEach(station => {
@@ -242,8 +242,8 @@ export default {
       // Draw stored tile provider for current user.
       this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[this.hashid][this.target])
 
-      controlLayers = new L.Control.Layers(this.tileProviders)
-      controlLayers.addTo(window.map[this.hashid][this.target])
+      controlLayers[this.hashid][this.target] = new L.Control.Layers(this.tileProviders)
+      controlLayers[this.hashid][this.target].addTo(window.map[this.hashid][this.target])
     },
     eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
@@ -296,9 +296,14 @@ export default {
           this.drawStations()
         })
         .catch(error => { console.log(error) })
+    },
+    populateControlLayers: function() {
+      if (!controlLayers[this.hashid]) controlLayers[this.hashid] = {}
     }
   },
   created() {
+    this.populateControlLayers()
+
     if (this.shouldDrawLastEvents) {
       this.getStations()
       this.getLastEvents()
@@ -306,11 +311,6 @@ export default {
     this.getPlateBoundaries()
   },
   mounted() {
-    // maps.forEach((map) => {
-      // this.initializedMaps.push(map.id)
-      // this.drawMap(map.id)
-    // })
-
     this.drawMap()
 
     if (this.shouldDrawEpicenter && !this.shouldDrawPga) this.drawEpicenter()
