@@ -39,7 +39,7 @@
       <b-tab title="Общая информация"
         :href="tabsUrls.generalInformation"
         :active="currentPageUrl === tabsUrls.generalInformation"
-        @click="switchView(tabsUrls.generalInformation); invalidateMapSize('generalInformation')">
+        @click="switchView(tabsUrls.generalInformation)">
 
         <b-row>
           <b-col cols="8">
@@ -53,7 +53,7 @@
       <b-tab title="Ближайшие населенные пункты"
         :href="tabsUrls.settlements"
         :active="currentPageUrl === tabsUrls.settlements"
-        @click="switchView(tabsUrls.settlements); invalidateMapSize('settlements')">
+        @click="switchView(tabsUrls.settlements)">
 
         <b-row>
           <b-col cols="8">
@@ -140,11 +140,11 @@ export default {
         processingMethod: 'M'
       },
       tabsUrls: {
-        buildings: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'buildings' } }).href,
         generalInformation: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid } }).href,
+        settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href,
+        buildings: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'buildings' } }).href,
         ldos: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'ldos' } }).href,
-        momentTensor: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'moment-tensor' } }).href,
-        settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href
+        momentTensor: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'moment-tensor' } }).href
       }
     }
   },
@@ -188,8 +188,10 @@ export default {
         .catch(error => { console.log(error) })
     },
     invalidateMapSize: function(target) {
-      if (window.map[this.event.hashid][target]) {
-        setTimeout(() => { window.map[this.event.hashid][target].invalidateSize() }, 1)
+      const key = Object.keys(this.tabsUrls)[target]
+
+      if (window.map[this.event.hashid][key]) {
+        setTimeout(() => { window.map[this.event.hashid][key].invalidateSize() }, 1)
       }
     },
     populateMap: function() {
@@ -202,7 +204,7 @@ export default {
   },
   created() {
     this.$root.$on('changed::tab', tab => {
-      this.invalidateMapSize(this.currentTab)
+      this.invalidateMapSize(tab.currentTab)
     })
 
     this.event.hashid = this.$router.currentRoute.params.hashid

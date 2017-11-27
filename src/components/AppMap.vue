@@ -36,19 +36,19 @@ export default {
     }
   },
   methods: {
-    // drawEpicenter: function() {
-    //   const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
-    //     color: '',
-    //     fillColor: '#ff0a0a',
-    //     fillOpacity: 1.0,
-    //     numberOfPoints: 5,
-    //     radius: 12,
-    //     weight: 2
-    //   })
+    drawEpicenter: function() {
+      const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
+        color: '',
+        fillColor: '#ff0a0a',
+        fillOpacity: 1.0,
+        numberOfPoints: 5,
+        radius: 12,
+        weight: 2
+      })
 
-    //   epicenter.bindPopup('Эпицентр землетрясения')
-    //   map.addLayer(epicenter)
-    // },
+      epicenter.bindPopup('Эпицентр землетрясения')
+      window.map[this.hashid][this.target].addLayer(epicenter)
+    },
     // drawLastEvents: function() {
     //   this.events.reverse().forEach((event) => {
     //     let marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
@@ -130,33 +130,33 @@ export default {
       // Store current tile provider to the storage
       window.map[this.hashid][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
     },
-    // drawPga: function(shouldDrawEpicenter) {
-    //   this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
-    //     .then(response => {
-    //       const pgaData = response.data.event.pga
-    //       let legendData = ''
+    drawPga: function(shouldDrawEpicenter) {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
+        .then(response => {
+          const pgaData = response.data.event.pga
+          let legendData = ''
 
-    //       Object.keys(pgaData).forEach((key) => {
-    //         const pga = L.polygon(pgaData[key].data, { color: pgaData[key].line_color, weigh: 2 })
-    //         pga.addTo(map)
-    //         pga.bindPopup(`Пиковое ускорение грунта: ${pgaData[key].range}%g (ускорение свободного падения)`)
-    //         legendData += `<i style="background: ${pgaData[key].line_color}"></i>${pgaData[key].range}<br>`
-    //       })
+          Object.keys(pgaData).forEach((key) => {
+            const pga = L.polygon(pgaData[key].data, { color: pgaData[key].line_color, weigh: 2 })
+            pga.addTo(window.map[this.hashid][this.target])
+            pga.bindPopup(`Пиковое ускорение грунта: ${pgaData[key].range}%g (ускорение свободного падения)`)
+            legendData += `<i style="background: ${pgaData[key].line_color}"></i>${pgaData[key].range}<br>`
+          })
 
-    //       let pgaLegend = L.control({ position: 'bottomright' })
-    //       pgaLegend.onAdd = (map) => {
-    //         let div = L.DomUtil.create('div', 'map-legend')
-    //         div.innerHTML += '<h6>%g</h6>'
-    //         div.innerHTML += legendData
-    //         return div
-    //       }
+          let pgaLegend = L.control({ position: 'bottomright' })
+          pgaLegend.onAdd = (map) => {
+            let div = L.DomUtil.create('div', 'map-legend')
+            div.innerHTML += '<h6>%g</h6>'
+            div.innerHTML += legendData
+            return div
+          }
 
-    //       pgaLegend.addTo(map)
+          pgaLegend.addTo(window.map[this.hashid][this.target])
 
-    //       if (shouldDrawEpicenter) this.drawEpicenter()
-    //     })
-    //     .catch(error => { console.log(error) })
-    // },
+          if (shouldDrawEpicenter) this.drawEpicenter()
+        })
+        .catch(error => { console.log(error) })
+    },
     // drawPlateBoundaries: function() {
     //   boundaries = new L.GeoJSON(this.plateBoundaries, {
     //     style: {
@@ -313,12 +313,8 @@ export default {
 
     this.drawMap()
 
-    // console.log(this.initializedMaps[0])
-    // console.log(this.initializedMaps[1])
-    // console.log(this.initializedMaps[2])
-
-    // if (this.shouldDrawEpicenter && !this.shouldDrawPga) this.drawEpicenter()
-    // if (this.shouldDrawPga) this.drawPga(this.shouldDrawEpicenter)
+    if (this.shouldDrawEpicenter && !this.shouldDrawPga) this.drawEpicenter()
+    if (this.shouldDrawPga) this.drawPga(this.shouldDrawEpicenter)
   }
 }
 </script>
