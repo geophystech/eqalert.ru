@@ -4,7 +4,7 @@
 
     <b-table
       hover
-      responsive
+      outlined
       :fields="fields"
       :items="items">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
@@ -41,7 +41,7 @@ export default {
         { key: 'parameter', label: 'Параметр' },
         { key: 'value', label: 'Значение', 'class': 'text-center' },
         { key: 'error', label: 'Погрешность', 'class': 'text-center' },
-        { key: 'description', label: ' ' }
+        { key: 'description', label: ' ', 'class': 'text-center' }
       ]
     }
   },
