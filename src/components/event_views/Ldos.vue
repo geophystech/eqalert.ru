@@ -1,5 +1,5 @@
 <template>
-  <div class="ldos">
+  <div class="event-tab ldos">
     Магистральные объекты
   </div>
 </template>

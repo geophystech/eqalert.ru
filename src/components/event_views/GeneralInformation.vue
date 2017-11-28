@@ -1,5 +1,5 @@
 <template>
-  <div class="general-information">
+  <div class="event-tab general-information">
     <AppMap :hashid="hashid" mapId="map-general-information" shouldDrawEpicenter="true" shouldDrawPga="true" target="generalInformation" />
 
     <b-table
@@ -81,11 +81,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .general-information {
-    font-size: 90%;
+  @import '../../assets/scss/event.scss';
 
-    #map {
-      margin-bottom: 5%;
-    }
-  }
 </style>

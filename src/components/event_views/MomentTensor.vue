@@ -1,5 +1,5 @@
 <template>
-  <div class="moment-tensor">
+  <div class="event-tab moment-tensor">
     ТЕНЗОР МОМЕНТА!!!
   </div>
 </template>

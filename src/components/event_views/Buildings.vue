@@ -1,5 +1,5 @@
 <template>
-  <div class="buildings">
+  <div class="event-tab buildings">
     Здания и сооружения
   </div>
 </template>
