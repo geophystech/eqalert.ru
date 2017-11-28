@@ -239,6 +239,7 @@ export default {
 
     .badge-final {
       background-color: $color-green;
+      color: $color-white;
     }
     .magnitude {
       color: $color-orange;
