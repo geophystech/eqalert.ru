@@ -14,13 +14,15 @@ let controlLayers = {}
 export default {
   name: 'app-map',
   components: {},
-  props: ['hashid', 'mapId', 'shouldDrawEpicenter', 'shouldDrawLastEvents', 'shouldDrawPga', 'target'],
+  props: ['hashid', 'mapId', 'shouldDrawEpicenter', 'shouldDrawLastEvents', 'shouldDrawMsk64', 'shouldDrawPga', 'target'],
   data() {
     return {
       center: [50.351, 142.395],
       events: [],
       initializedMaps: [],
       maxZoom: 18,
+      msk64: [],
+      pga: [],
       plateBoundaries: null,
       stations: null,
       tileProviders: {
@@ -130,32 +132,57 @@ export default {
       // Store current tile provider to the storage
       window.map[this.hashid][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
     },
-    drawPga: function(shouldDrawEpicenter) {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
-        .then(response => {
-          const pgaData = response.data.event.pga
-          let legendData = ''
+    drawMsk64: function() {
+      let legendData = ''
 
-          Object.keys(pgaData).forEach((key) => {
-            const pga = L.polygon(pgaData[key].data, { color: pgaData[key].line_color, weigh: 2 })
-            pga.addTo(window.map[this.hashid][this.target])
-            pga.bindPopup(`Пиковое ускорение грунта: ${pgaData[key].range}%g (ускорение свободного падения)`)
-            legendData += `<i style="background: ${pgaData[key].line_color}"></i>${pgaData[key].range}<br>`
-          })
+      this.msk64.forEach(msk => {
+        const circle = L.circle(
+          [this.center[0], this.center[1]],
+          msk.distance * 1000,
+          { color: msk.color, fillColor: msk.color })
 
-          let pgaLegend = L.control({ position: 'bottomright' })
-          pgaLegend.onAdd = (map) => {
-            let div = L.DomUtil.create('div', 'map-legend')
-            div.innerHTML += '<h6>%g</h6>'
-            div.innerHTML += legendData
-            return div
-          }
+        circle.addTo(window.map[this.hashid][this.target])
+        circle.bindPopup(`<div class="text-center"><strong>${msk.value}</strong></div>`)
 
-          pgaLegend.addTo(window.map[this.hashid][this.target])
+        legendData += `<i style="background: ${msk.color}"></i>${msk.value}<br>`
+      })
 
-          if (shouldDrawEpicenter) this.drawEpicenter()
-        })
-        .catch(error => { console.log(error) })
+      const legend = L.control({ position: 'bottomright' })
+      legend.onAdd = function() {
+        const div = L.DomUtil.create('div', 'map-legend')
+        div.innerHTML = legendData
+
+        return div
+      }
+
+      legend.addTo(window.map[this.hashid][this.target])
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
+    },
+    drawPga: function() {
+      let legendData = ''
+
+      Object.keys(this.pga).forEach((key) => {
+        const pga = L.polygon(this.pga[key].data, { color: this.pga[key].line_color, weigh: 2 })
+
+        pga.addTo(window.map[this.hashid][this.target])
+        pga.bindPopup(`Пиковое ускорение грунта: ${this.pga[key].range}%g (ускорение свободного падения)`)
+
+        legendData += `<i style="background: ${this.pga[key].line_color}"></i>${this.pga[key].range}<br>`
+      })
+
+      let pgaLegend = L.control({ position: 'bottomright' })
+      pgaLegend.onAdd = (map) => {
+        const div = L.DomUtil.create('div', 'map-legend')
+        div.innerHTML += '<h6>%g</h6>'
+        div.innerHTML += legendData
+
+        return div
+      }
+
+      pgaLegend.addTo(window.map[this.hashid][this.target])
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
     },
     drawPlateBoundaries: function() {
       boundaries = new L.GeoJSON(this.plateBoundaries, {
@@ -281,6 +308,22 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
+    getMsk64: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/a255459e6af24ddba9d8abad2bbdf793/raw/c64daf2034c66ed85e024841721c480159cb2f3d/eq_QgpAn7OW_settlements.json')
+        .then(response => {
+          this.msk64 = response.data.msk64
+          this.drawMsk64()
+        })
+        .catch(error => { console.log(error) })
+    },
+    getPga: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
+        .then(response => {
+          this.pga = response.data.event.pga
+          this.drawPga()
+        })
+        .catch(error => { console.log(error) })
+    },
     getPlateBoundaries: function() {
       this.$http.get('/static/json/plate_boundaries.geojson')
         .then(response => {
@@ -313,8 +356,13 @@ export default {
   mounted() {
     this.drawMap()
 
-    if (this.shouldDrawEpicenter && !this.shouldDrawPga) this.drawEpicenter()
-    if (this.shouldDrawPga) this.drawPga(this.shouldDrawEpicenter)
+    if (this.shouldDrawPga) {
+      this.getPga()
+    } else if (this.shouldDrawMsk64) {
+      this.getMsk64()
+    } else {
+      this.drawEpicenter()
+    }
   }
 }
 </script>
