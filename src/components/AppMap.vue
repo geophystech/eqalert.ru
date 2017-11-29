@@ -14,9 +14,20 @@ let controlLayers = {}
 export default {
   name: 'app-map',
   components: {},
-  props: ['hashid', 'mapId', 'shouldDrawEpicenter', 'shouldDrawLastEvents', 'shouldDrawMsk64', 'shouldDrawPga', 'target'],
+  props: [
+    'hashid',
+    'mapId',
+    'shouldDrawBuildings',
+    'shouldDrawEpicenter',
+    'shouldDrawLastEvents',
+    'shouldDrawMsk64',
+    'shouldDrawPga',
+    'target'
+  ],
   data() {
     return {
+      buildings: [],
+      buildingsInformation: {},
       center: [50.351, 142.395],
       events: [],
       initializedMaps: [],
@@ -38,6 +49,89 @@ export default {
     }
   },
   methods: {
+    drawBuildings: function() {
+      let markers = new L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
+
+      this.buildings.forEach(building => {
+        const marker = new L.MapMarker(new L.LatLng(building.latitude, building.longitude), {
+          dropShadow: true,
+          fillColor: building.color,
+          gradient: true,
+          innerRadius: 0,
+          radius: 7
+        })
+
+        const message =
+          `<table class="table table-hover table-sm table-responsive">
+            <tbody>
+              <tr>
+                <th class="align-middle" scope="row">Тип строения</th>
+                <td>${building.building_type}</td>
+              </tr>
+              <tr>
+                <th scope="row">Тип фундамента</th>
+                <td>${building.building_base_type}</td>
+              </tr>
+              <tr>
+                <th scope="row">Материал</th>
+                <td>${building.fabric_type}</td>
+              </tr>
+              <tr>
+                <th scope="row">Год постройки</th>
+                <td>${building.built_year}</td>
+              </tr>
+              <tr>
+                <th scope="row">Кол-во этажей</th>
+                <td>${building.flats}</td>
+              </tr>
+              <tr>
+                <th scope="row">Адрес</th>
+                <td>${building.street}, д. ${building.street_number}</td>
+              </tr>
+              <tr>
+                <th scope="row">Кол-во проживающих</th>
+                <td>${building.residents}</td>
+              </tr>
+              <tr>
+                <th scope="row">Максимальная бальность</th>
+                <td>${building.max_msk64} (MSK64)</td>
+              </tr>
+              <tr>
+                <th scope="row">Прогноз повреждений</th>
+                <td>d-${building.damage_level}</td>
+              </tr>
+              <tr>
+                <th scope="row">PGA</th>
+                <td>${building.pga}</td>
+              </tr>
+              <tr>
+                <th scope="row">По данным</th>
+                <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
+              </tr>
+            </tbody>
+          </table>`
+
+        marker.bindPopup(message)
+        markers.addLayer(marker)
+      })
+
+      window.map[this.hashid][this.target].addLayer(markers)
+
+      const legend = L.control({ position: 'bottomright' })
+      legend.onAdd = function(map) {
+        let div = L.DomUtil.create('div', 'map-legend')
+        div.innerHTML =
+          `<div class="buildings-legend"><span style="background: #008000"></span><span>d-1</span></div>
+           <div class="buildings-legend"><span style="background: #ffa500"></span><span>d-2</span></div>
+           <div class="buildings-legend"><span style="background: #ff0000"></span><span>d-3</span></div>
+          `
+        return div
+      }
+
+      legend.addTo(window.map[this.hashid][this.target])
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
+    },
     drawEpicenter: function() {
       const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
         color: '',
@@ -52,8 +146,9 @@ export default {
       window.map[this.hashid][this.target].addLayer(epicenter)
     },
     drawLastEvents: function() {
+      console.log(this.buildingsInformation)
       this.events.reverse().forEach((event) => {
-        let marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
+        const marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
           color: 'black',
           colorOpacity: 1.0,
           fillColor: this.eventColor(event.datetime_in_hours),
@@ -64,7 +159,7 @@ export default {
           weight: 1
         })
 
-        let message =
+        const message =
           `<table class="table table-hover table-sm table-responsive">
             <thead>
               <tr>
@@ -300,6 +395,17 @@ export default {
         return 26
       }
     },
+    getBuildings: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/ec3b73cb31ece1eedc4c5a86f211e0a8/raw/2ab7e942c9eef6b1eab3b18d341def4573c821ed/eq_QgpAn7OW_buildings.json')
+        .then(response => {
+          this.buildings = response.data.buildings.filter(building => {
+            // Show only damaged buildings.
+            return building.damage_level > 0
+          })
+          this.drawBuildings()
+        })
+        .catch(error => { console.log(error) })
+    },
     getLastEvents: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
         .then(response => {
@@ -360,6 +466,8 @@ export default {
       this.getPga()
     } else if (this.shouldDrawMsk64) {
       this.getMsk64()
+    } else if (this.shouldDrawBuildings) {
+      this.getBuildings()
     } else {
       this.drawEpicenter()
     }
@@ -425,6 +533,19 @@ export default {
         padding: 5px;
         text-align: center;
         width: 70px;
+      }
+
+      .buildings-legend {
+        width: 50px;
+
+        span:first-child {
+          width: 10px;
+        }
+
+        span:last-child {
+          margin-left: 10px;
+          width: auto;
+        }
       }
     }
 

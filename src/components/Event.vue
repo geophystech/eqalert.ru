@@ -69,9 +69,13 @@
         :active="currentPageUrl === tabsUrls.buildings"
         @click="switchView(tabsUrls.buildings)">
 
-        <keep-alive>
-          <component is="buildings" />
-        </keep-alive>
+        <b-row>
+          <b-col cols="8">
+            <keep-alive>
+              <component is="buildings" hashid="hashid" />
+            </keep-alive>
+          </b-col>
+        </b-row>
       </b-tab>
 
       <b-tab title="Тензор момента"
