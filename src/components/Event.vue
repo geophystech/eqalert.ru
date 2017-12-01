@@ -93,9 +93,13 @@
         :active="currentPageUrl === tabsUrls.ldos"
         @click="switchView(tabsUrls.ldos)">
 
-        <keep-alive>
-          <component is="ldos" />
-        </keep-alive>
+        <b-row>
+          <b-col cols="8">
+            <keep-alive>
+              <component is="ldos" hashid="hashid" />
+            </keep-alive>
+          </b-col>
+        </b-row>
       </b-tab>
     </b-tabs>
   </div>

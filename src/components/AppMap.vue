@@ -20,6 +20,7 @@ export default {
     'shouldDrawBuildings',
     'shouldDrawEpicenter',
     'shouldDrawLastEvents',
+    'shouldDrawLDOs',
     'shouldDrawMsk64',
     'shouldDrawPga',
     'target'
@@ -31,6 +32,7 @@ export default {
       center: [50.351, 142.395],
       events: [],
       initializedMaps: [],
+      ldos: [],
       maxZoom: 18,
       msk64: [],
       pga: [],
@@ -209,6 +211,91 @@ export default {
         return div
       }
       text.addTo(window.map[this.hashid][this.target])
+    },
+    drawLDOs: function() {
+      this.ldos.forEach(ldo => {
+        ldo.parts.forEach(part => {
+          const coordinates = [[part.latitude_start, part.longitude_start], [part.latitude_end, part.longitude_end]]
+          const partPolyline = L.polyline(coordinates, { color: part.color }).addTo(window.map[this.hashid][this.target])
+          let message =
+            `<table class="table table-hover table-sm table-responsive">
+              <thead>
+                <tr>
+                  <th class="text-center" colspan=2>Общая информация</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th class="align-middle" scope="row">Наименование</th>
+                  <td>${ldo.name}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Количество анализируемых участков</th>
+                  <td>${ldo.parts_number}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Год постройки</th>
+                  <td>${part.built_year}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Глубина залегания</th>
+                  <td>${part.height}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Материал конструкций</th>
+                  <td>${part.fabric_type}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Тип грунта</th>
+                  <td>${part.soil_type}</td>
+                </tr>
+
+                <tr>
+                  <th class="text-center" colspan=2>Информация о сейсмических воздействиях</th>
+                </tr>`
+
+          if (part.has_damage === true) {
+            message +=
+              `<tr>
+                <th scope="row">PGA</th>
+                <td>${part.pga_value}</td>
+              </tr>
+              <tr>
+                <th scope="row">Вероятность повреждения</th>
+                <td>${part.damage}</td>
+              </tr>`
+          } else {
+            message +=
+              `<tr>
+                <td class="text-center" colspan=2>сейсмическое воздействие не оказано</t>
+               </tr>`
+          }
+
+          message +=
+            `   <tr>
+                  <th scope="row">Примечания</th>
+                  <td>${part.notes}</td>
+                </tr>
+              </tbody>
+            </table>`
+
+          partPolyline.bindPopup(message)
+
+          let partColor = null
+
+          partPolyline.on('mouseover', function(event) {
+            partColor = this.options.color
+
+            partPolyline.setStyle({ color: 'cyan' })
+          })
+
+          partPolyline.on('mouseout', function(event) {
+            partPolyline.setStyle({ color: partColor })
+          })
+        })
+      })
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
     },
     drawMap: function() {
       window.map[this.hashid][this.target] = L.map(this.mapId, {
@@ -414,6 +501,14 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
+    getLDOs: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/d11aa34f71ae59da19f0a59379f0c0cd/raw/0949a047792fc84a346aa420848e0761d8609a59/eq_QgpAn7OW_ldos.json')
+        .then(response => {
+          this.ldos = response.data.ldos
+          this.drawLDOs()
+        })
+        .catch(error => { console.log(error) })
+    },
     getMsk64: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/a255459e6af24ddba9d8abad2bbdf793/raw/c64daf2034c66ed85e024841721c480159cb2f3d/eq_QgpAn7OW_settlements.json')
         .then(response => {
@@ -468,6 +563,8 @@ export default {
       this.getMsk64()
     } else if (this.shouldDrawBuildings) {
       this.getBuildings()
+    } else if (this.shouldDrawLDOs) {
+      this.getLDOs()
     } else {
       this.drawEpicenter()
     }
