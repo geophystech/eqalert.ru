@@ -148,7 +148,6 @@ export default {
       window.map[this.hashid][this.target].addLayer(epicenter)
     },
     drawLastEvents: function() {
-      console.log(this.buildingsInformation)
       this.events.reverse().forEach((event) => {
         const marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
           color: 'black',
@@ -565,7 +564,7 @@ export default {
       this.getBuildings()
     } else if (this.shouldDrawLDOs) {
       this.getLDOs()
-    } else {
+    } else if (!this.shouldDrawLastEvents) {
       this.drawEpicenter()
     }
   }

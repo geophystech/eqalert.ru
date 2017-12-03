@@ -151,8 +151,8 @@ export default {
         generalInformation: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid } }).href,
         settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href,
         buildings: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'buildings' } }).href,
-        ldos: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'ldos' } }).href,
-        momentTensor: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'moment-tensor' } }).href
+        momentTensor: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'moment-tensor' } }).href,
+        ldos: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'ldos' } }).href
       }
     }
   },
