@@ -574,7 +574,6 @@ export default {
 <style lang="scss">
   .map {
     height: 450px;
-    margin-top: 2%;
 
     .magnitude-color {
       color: red;

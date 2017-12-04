@@ -150,6 +150,10 @@ export default {
   $border: 1px $color-gray-light solid;
 
   .mainpage {
+    .map {
+      margin-top: 2%;
+    }
+
     .events-analytics-block {
       border-top: $border;
       height: auto;

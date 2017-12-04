@@ -47,6 +47,11 @@
               <component is="generalInformation" hashid="hashid" />
             </keep-alive>
           </b-col>
+          <b-col cols="4">
+            <keep-alive>
+              <component is="lastEvents" :lastEvents="lastEvents" />
+            </keep-alive>
+          </b-col>
         </b-row>
       </b-tab>
 
@@ -61,6 +66,11 @@
               <component is="settlements" hashid="hashid" />
             </keep-alive>
           </b-col>
+          <b-col cols="4">
+            <keep-alive>
+              <component is="lastEvents" :lastEvents="lastEvents" />
+            </keep-alive>
+          </b-col>
         </b-row>
       </b-tab>
 
@@ -73,6 +83,11 @@
           <b-col cols="8">
             <keep-alive>
               <component is="buildings" hashid="hashid" />
+            </keep-alive>
+          </b-col>
+          <b-col cols="4">
+            <keep-alive>
+              <component is="lastEvents" :lastEvents="lastEvents" />
             </keep-alive>
           </b-col>
         </b-row>
@@ -99,6 +114,11 @@
               <component is="ldos" hashid="hashid" />
             </keep-alive>
           </b-col>
+          <b-col cols="4">
+            <keep-alive>
+              <component is="lastEvents" :lastEvents="lastEvents" />
+            </keep-alive>
+          </b-col>
         </b-row>
       </b-tab>
     </b-tabs>
@@ -111,6 +131,7 @@ require('moment/locale/ru')
 
 import Buildings from '@/components/event_views/Buildings'
 import GeneralInformation from '@/components/event_views/GeneralInformation'
+import LastEvents from '@/components/event_views/LastEvents'
 import Ldos from '@/components/event_views/Ldos'
 import MomentTensor from '@/components/event_views/MomentTensor'
 import Settlements from '@/components/event_views/Settlements'
@@ -121,6 +142,7 @@ export default {
   components: {
     buildings: Buildings,
     generalInformation: GeneralInformation,
+    lastEvents: LastEvents,
     ldos: Ldos,
     momentTensor: MomentTensor,
     settlements: Settlements
@@ -147,6 +169,7 @@ export default {
         magnitudeType: [['M', 'L']],
         processingMethod: 'M'
       },
+      lastEvents: [],
       tabsUrls: {
         generalInformation: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid } }).href,
         settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href,
@@ -195,6 +218,21 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
+    getLastEvents: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/ac17699342b7c268bfeb39d7fba3ead2/raw/dc0c10cea9983e445e331a0f2b0543550ddc232b/eq_sidebar_last_events')
+        .then(response => {
+          response.data.events.forEach(event => {
+            if (event.settlement.title) {
+              event.settlement.settlement = `${event.settlement.distance} км до ${event.settlement.title}`
+            } else {
+              event.settlement.settlement = 'Населённый пункт: нет данных'
+            }
+
+            this.lastEvents.push(event)
+          })
+        })
+        .catch(error => { console.log(error) })
+    },
     invalidateMapSize: function(target) {
       const key = Object.keys(this.tabsUrls)[target]
 
@@ -211,6 +249,7 @@ export default {
     }
   },
   created() {
+    this.getLastEvents()
     this.$root.$on('changed::tab', tab => {
       this.invalidateMapSize(tab.currentTab)
     })
