@@ -44,7 +44,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="generalInformation" hashid="hashid" />
+              <component is="generalInformation" :hashid="event.hashid" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -63,7 +63,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="settlements" hashid="hashid" />
+              <component is="settlements" :hashid="event.hashid" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -82,7 +82,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="buildings" hashid="hashid" />
+              <component is="buildings" :hashid="event.hashid" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -98,9 +98,18 @@
         :active="currentPageUrl === tabsUrls.momentTensor"
         @click="switchView(tabsUrls.momentTensor)">
 
-        <keep-alive>
-          <component is="momentTensor" />
-        </keep-alive>
+        <b-row>
+          <b-col cols="8">
+            <keep-alive>
+              <component is="momentTensor" :hashid="event.hashid" :momentTensorData="momentTensor" />
+            </keep-alive>
+          </b-col>
+          <b-col cols="4">
+            <keep-alive>
+              <component is="lastEvents" :lastEvents="lastEvents" />
+            </keep-alive>
+          </b-col>
+        </b-row>
       </b-tab>
 
       <b-tab title="Магистральные объекты"
@@ -111,7 +120,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="ldos" hashid="hashid" />
+              <component is="ldos" :hashid="event.hashid" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -170,6 +179,7 @@ export default {
         processingMethod: 'M'
       },
       lastEvents: [],
+      momentTensor: {},
       tabsUrls: {
         generalInformation: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid } }).href,
         settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href,
