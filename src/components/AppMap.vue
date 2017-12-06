@@ -1,5 +1,5 @@
 <template>
-  <div id="map" />
+  <div class="map" :id="mapId" />
 </template>
 
 <script>
@@ -8,19 +8,34 @@ require('moment/locale/ru')
 
 const L = window.L
 const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
-let map = null
 let boundaries = null
-let controlLayers = null
+let controlLayers = {}
 
 export default {
   name: 'app-map',
   components: {},
-  props: ['shouldDrawEpicenter', 'shouldDrawLastEvents'],
+  props: [
+    'hashid',
+    'mapId',
+    'shouldDrawBuildings',
+    'shouldDrawEpicenter',
+    'shouldDrawLastEvents',
+    'shouldDrawLDOs',
+    'shouldDrawMsk64',
+    'shouldDrawPga',
+    'target'
+  ],
   data() {
     return {
-      center: [50.17689812200105, 142.66845703125],
+      buildings: [],
+      buildingsInformation: {},
+      center: [50.351, 142.395],
       events: [],
+      initializedMaps: [],
+      ldos: [],
       maxZoom: 18,
+      msk64: [],
+      pga: [],
       plateBoundaries: null,
       stations: null,
       tileProviders: {
@@ -36,6 +51,89 @@ export default {
     }
   },
   methods: {
+    drawBuildings: function() {
+      let markers = new L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
+
+      this.buildings.forEach(building => {
+        const marker = new L.MapMarker(new L.LatLng(building.latitude, building.longitude), {
+          dropShadow: true,
+          fillColor: building.color,
+          gradient: true,
+          innerRadius: 0,
+          radius: 7
+        })
+
+        const message =
+          `<table class="table table-hover table-sm table-responsive">
+            <tbody>
+              <tr>
+                <th class="align-middle" scope="row">Тип строения</th>
+                <td>${building.building_type}</td>
+              </tr>
+              <tr>
+                <th scope="row">Тип фундамента</th>
+                <td>${building.building_base_type}</td>
+              </tr>
+              <tr>
+                <th scope="row">Материал</th>
+                <td>${building.fabric_type}</td>
+              </tr>
+              <tr>
+                <th scope="row">Год постройки</th>
+                <td>${building.built_year}</td>
+              </tr>
+              <tr>
+                <th scope="row">Кол-во этажей</th>
+                <td>${building.flats}</td>
+              </tr>
+              <tr>
+                <th scope="row">Адрес</th>
+                <td>${building.street}, д. ${building.street_number}</td>
+              </tr>
+              <tr>
+                <th scope="row">Кол-во проживающих</th>
+                <td>${building.residents}</td>
+              </tr>
+              <tr>
+                <th scope="row">Максимальная бальность</th>
+                <td>${building.max_msk64} (MSK64)</td>
+              </tr>
+              <tr>
+                <th scope="row">Прогноз повреждений</th>
+                <td>d-${building.damage_level}</td>
+              </tr>
+              <tr>
+                <th scope="row">PGA</th>
+                <td>${building.pga}</td>
+              </tr>
+              <tr>
+                <th scope="row">По данным</th>
+                <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
+              </tr>
+            </tbody>
+          </table>`
+
+        marker.bindPopup(message)
+        markers.addLayer(marker)
+      })
+
+      window.map[this.hashid][this.target].addLayer(markers)
+
+      const legend = L.control({ position: 'bottomright' })
+      legend.onAdd = function(map) {
+        let div = L.DomUtil.create('div', 'map-legend')
+        div.innerHTML =
+          `<div class="buildings-legend"><span style="background: #008000"></span><span>d-1</span></div>
+           <div class="buildings-legend"><span style="background: #ffa500"></span><span>d-2</span></div>
+           <div class="buildings-legend"><span style="background: #ff0000"></span><span>d-3</span></div>
+          `
+        return div
+      }
+
+      legend.addTo(window.map[this.hashid][this.target])
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
+    },
     drawEpicenter: function() {
       const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
         color: '',
@@ -47,11 +145,11 @@ export default {
       })
 
       epicenter.bindPopup('Эпицентр землетрясения')
-      map.addLayer(epicenter)
+      window.map[this.hashid][this.target].addLayer(epicenter)
     },
     drawLastEvents: function() {
       this.events.reverse().forEach((event) => {
-        let marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
+        const marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
           color: 'black',
           colorOpacity: 1.0,
           fillColor: this.eventColor(event.datetime_in_hours),
@@ -62,7 +160,7 @@ export default {
           weight: 1
         })
 
-        let message =
+        const message =
           `<table class="table table-hover table-sm table-responsive">
             <thead>
               <tr>
@@ -91,7 +189,7 @@ export default {
           <div class="text-center read-more"><a href="#/events/${event.hashid}" class="btn btn-success">Подробнее</a></div>`
 
         marker.bindPopup(message)
-        marker.addTo(map)
+        marker.addTo(window.map[this.hashid][this.target])
       })
 
       let legend = L.control({ position: 'bottomright' })
@@ -103,7 +201,7 @@ export default {
         div.innerHTML += '<span style="background:#808080">> 14 дн</span>'
         return div
       }
-      legend.addTo(map)
+      legend.addTo(window.map[this.hashid][this.target])
 
       let text = L.control({ position: 'bottomright' })
       text.onAdd = function() {
@@ -111,10 +209,95 @@ export default {
         div.innerHTML += '<p>События за последние 3 месяца</p>'
         return div
       }
-      text.addTo(map)
+      text.addTo(window.map[this.hashid][this.target])
+    },
+    drawLDOs: function() {
+      this.ldos.forEach(ldo => {
+        ldo.parts.forEach(part => {
+          const coordinates = [[part.latitude_start, part.longitude_start], [part.latitude_end, part.longitude_end]]
+          const partPolyline = L.polyline(coordinates, { color: part.color }).addTo(window.map[this.hashid][this.target])
+          let message =
+            `<table class="table table-hover table-sm table-responsive">
+              <thead>
+                <tr>
+                  <th class="text-center" colspan=2>Общая информация</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th class="align-middle" scope="row">Наименование</th>
+                  <td>${ldo.name}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Количество анализируемых участков</th>
+                  <td>${ldo.parts_number}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Год постройки</th>
+                  <td>${part.built_year}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Глубина залегания</th>
+                  <td>${part.height}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Материал конструкций</th>
+                  <td>${part.fabric_type}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Тип грунта</th>
+                  <td>${part.soil_type}</td>
+                </tr>
+
+                <tr>
+                  <th class="text-center" colspan=2>Информация о сейсмических воздействиях</th>
+                </tr>`
+
+          if (part.has_damage === true) {
+            message +=
+              `<tr>
+                <th scope="row">PGA</th>
+                <td>${part.pga_value}</td>
+              </tr>
+              <tr>
+                <th scope="row">Вероятность повреждения</th>
+                <td>${part.damage}</td>
+              </tr>`
+          } else {
+            message +=
+              `<tr>
+                <td class="text-center" colspan=2>сейсмическое воздействие не оказано</t>
+               </tr>`
+          }
+
+          message +=
+            `   <tr>
+                  <th scope="row">Примечания</th>
+                  <td>${part.notes}</td>
+                </tr>
+              </tbody>
+            </table>`
+
+          partPolyline.bindPopup(message)
+
+          let partColor = null
+
+          partPolyline.on('mouseover', function(event) {
+            partColor = this.options.color
+
+            partPolyline.setStyle({ color: 'cyan' })
+          })
+
+          partPolyline.on('mouseout', function(event) {
+            partPolyline.setStyle({ color: partColor })
+          })
+        })
+      })
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
     },
     drawMap: function() {
-      map = L.map('map', {
+      window.map[this.hashid][this.target] = L.map(this.mapId, {
         fullscreenControl: true,
         fullscreenControlOptions: { position: 'topleft' },
         scrollWheelZoom: false,
@@ -123,12 +306,64 @@ export default {
         zoomControl: false
       }).setView(this.center, this.zoom)
 
-      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(map)
+      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[this.hashid][this.target])
 
       this.drawTileLayers()
 
       // Store current tile provider to the storage
-      map.on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
+      window.map[this.hashid][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
+    },
+    drawMsk64: function() {
+      let legendData = ''
+
+      this.msk64.forEach(msk => {
+        const circle = L.circle(
+          [this.center[0], this.center[1]],
+          msk.distance * 1000,
+          { color: msk.color, fillColor: msk.color })
+
+        circle.addTo(window.map[this.hashid][this.target])
+        circle.bindPopup(`<div class="text-center"><strong>${msk.value}</strong></div>`)
+
+        legendData += `<i style="background: ${msk.color}"></i>${msk.value}<br>`
+      })
+
+      const legend = L.control({ position: 'bottomright' })
+      legend.onAdd = function() {
+        const div = L.DomUtil.create('div', 'map-legend')
+        div.innerHTML = legendData
+
+        return div
+      }
+
+      legend.addTo(window.map[this.hashid][this.target])
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
+    },
+    drawPga: function() {
+      let legendData = ''
+
+      Object.keys(this.pga).forEach((key) => {
+        const pga = L.polygon(this.pga[key].data, { color: this.pga[key].line_color, weigh: 2 })
+
+        pga.addTo(window.map[this.hashid][this.target])
+        pga.bindPopup(`Пиковое ускорение грунта: ${this.pga[key].range}%g (ускорение свободного падения)`)
+
+        legendData += `<i style="background: ${this.pga[key].line_color}"></i>${this.pga[key].range}<br>`
+      })
+
+      let pgaLegend = L.control({ position: 'bottomright' })
+      pgaLegend.onAdd = (map) => {
+        const div = L.DomUtil.create('div', 'map-legend')
+        div.innerHTML += '<h6>%g</h6>'
+        div.innerHTML += legendData
+
+        return div
+      }
+
+      pgaLegend.addTo(window.map[this.hashid][this.target])
+
+      if (this.shouldDrawEpicenter) this.drawEpicenter()
     },
     drawPlateBoundaries: function() {
       boundaries = new L.GeoJSON(this.plateBoundaries, {
@@ -155,10 +390,10 @@ export default {
         }
       })
 
-      controlLayers.addOverlay(boundaries, 'Plate Boundaries')
+      controlLayers[this.hashid][this.target].addOverlay(boundaries, 'Plate Boundaries')
     },
     drawStations: function() {
-      this.stations.forEach(function(station) {
+      this.stations.forEach(station => {
         let marker = new L.RegularPolygonMarker(new L.LatLng(station.latitude, station.longitude), {
           numberOfSides: 3,
           rotation: 30.0,
@@ -208,14 +443,15 @@ export default {
           </table>`
 
         marker.bindPopup(message)
-        map.addLayer(marker)
+        window.map[this.hashid][this.target].addLayer(marker)
       })
     },
     drawTileLayers: function() {
       // Draw stored tile provider for current user.
-      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(map)
-      controlLayers = new L.Control.Layers(this.tileProviders)
-      controlLayers.addTo(map)
+      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[this.hashid][this.target])
+
+      controlLayers[this.hashid][this.target] = new L.Control.Layers(this.tileProviders)
+      controlLayers[this.hashid][this.target].addTo(window.map[this.hashid][this.target])
     },
     eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
@@ -245,11 +481,46 @@ export default {
         return 26
       }
     },
+    getBuildings: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/ec3b73cb31ece1eedc4c5a86f211e0a8/raw/2ab7e942c9eef6b1eab3b18d341def4573c821ed/eq_QgpAn7OW_buildings.json')
+        .then(response => {
+          this.buildings = response.data.buildings.filter(building => {
+            // Show only damaged buildings.
+            return building.damage_level > 0
+          })
+          this.drawBuildings()
+        })
+        .catch(error => { console.log(error) })
+    },
     getLastEvents: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
         .then(response => {
           this.events = response.data.events
           this.drawLastEvents()
+        })
+        .catch(error => { console.log(error) })
+    },
+    getLDOs: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/d11aa34f71ae59da19f0a59379f0c0cd/raw/0949a047792fc84a346aa420848e0761d8609a59/eq_QgpAn7OW_ldos.json')
+        .then(response => {
+          this.ldos = response.data.ldos
+          this.drawLDOs()
+        })
+        .catch(error => { console.log(error) })
+    },
+    getMsk64: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/a255459e6af24ddba9d8abad2bbdf793/raw/c64daf2034c66ed85e024841721c480159cb2f3d/eq_QgpAn7OW_settlements.json')
+        .then(response => {
+          this.msk64 = response.data.msk64
+          this.drawMsk64()
+        })
+        .catch(error => { console.log(error) })
+    },
+    getPga: function() {
+      this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
+        .then(response => {
+          this.pga = response.data.event.pga
+          this.drawPga()
         })
         .catch(error => { console.log(error) })
     },
@@ -268,9 +539,14 @@ export default {
           this.drawStations()
         })
         .catch(error => { console.log(error) })
+    },
+    populateControlLayers: function() {
+      if (!controlLayers[this.hashid]) controlLayers[this.hashid] = {}
     }
   },
   created() {
+    this.populateControlLayers()
+
     if (this.shouldDrawLastEvents) {
       this.getStations()
       this.getLastEvents()
@@ -279,15 +555,25 @@ export default {
   },
   mounted() {
     this.drawMap()
-    if (this.shouldDrawEpicenter) this.drawEpicenter()
+
+    if (this.shouldDrawPga) {
+      this.getPga()
+    } else if (this.shouldDrawMsk64) {
+      this.getMsk64()
+    } else if (this.shouldDrawBuildings) {
+      this.getBuildings()
+    } else if (this.shouldDrawLDOs) {
+      this.getLDOs()
+    } else if (!this.shouldDrawLastEvents) {
+      this.drawEpicenter()
+    }
   }
 }
 </script>
 
 <style lang="scss">
-  #map {
+  .map {
     height: 450px;
-    margin-top: 2%;
 
     .magnitude-color {
       color: red;
@@ -321,8 +607,12 @@ export default {
     }
 
     .map-legend {
+      background: rgba(255, 255, 255, .8);
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, .2);
       color: #555;
       line-height: 15px;
+      padding: 6px 8px;
       text-align: left;
 
       i {
@@ -338,6 +628,19 @@ export default {
         padding: 5px;
         text-align: center;
         width: 70px;
+      }
+
+      .buildings-legend {
+        width: 50px;
+
+        span:first-child {
+          width: 10px;
+        }
+
+        span:last-child {
+          margin-left: 10px;
+          width: auto;
+        }
       }
     }
 

@@ -129,7 +129,6 @@
             <b-button size="sm">Сбросить фильтры</b-button>
           </b-col>
         </b-row>
-
       </b-col>
       <b-col class="all-events">
         <b-table
@@ -140,18 +139,17 @@
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           @row-clicked="openEvent">
-          <template slot="index" scope="data">{{ data.index + 1 }}</template>
-          <template slot="magnitude" scope="data">
+          <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
+          <template slot="magnitude" slot-scope="data">
             <span :class="{ 'highlight-event': data.value > highlightEventTreshold }">{{ data.value }}</span>
           </template>
-          <template slot="depth" scope="data">{{ data.value }} км</template>
-          <template slot="datetime" scope="data">{{ moment.utc(data.value).locale('ru').format('LL в HH:mm:ss UTC') }}</template>
-          <template slot="settlement" scope="data">
+          <template slot="depth" slot-scope="data">{{ data.value }} км</template>
+          <template slot="datetime" slot-scope="data">{{ moment.utc(data.value).locale('ru').format('LL в HH:mm:ss UTC') }}</template>
+          <template slot="settlement" slot-scope="data">
             <span v-if="data.value.title === null">Нет данных</span>
             <span v-else>{{ data.value.distance }} км до {{ data.value.title }}</span>
           </template>
-
-          <template slot="bottom-row" scope="data">
+          <template slot="bottom-row" slot-scope="data">
             <td :colspan="data.columns">
               <a href="javascript:void(0)" @click.prevent="getEvents">Показать больше событий</a>
             </td>
@@ -159,7 +157,6 @@
         </b-table>
       </b-col>
     </b-row>
-    </div>
   </div>
 </template>
 

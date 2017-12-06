@@ -1,6 +1,6 @@
 <template>
   <div class="mainpage">
-    <AppMap shouldDrawLastEvents="true" />
+    <AppMap hashid="mainpage" mapId="mainpage-map" target="mainpage" shouldDrawLastEvents="true" />
 
     <b-container>
       <b-row>
@@ -86,6 +86,8 @@ import ChartByMagnitudeCumulative from './charts/ChartByMagnitudeCumulative'
 const moment = require('moment')
 require('moment/locale/ru')
 
+if (!window.map) window.map = { mainpage: { mainpage: null } }
+
 export default {
   name: 'mainpage',
   components: { AppMap, ChartByDatetime, ChartByMagnitudeCumulative },
@@ -148,6 +150,10 @@ export default {
   $border: 1px $color-gray-light solid;
 
   .mainpage {
+    .map {
+      margin-top: 2%;
+    }
+
     .events-analytics-block {
       border-top: $border;
       height: auto;
