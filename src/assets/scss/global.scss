@@ -16,31 +16,6 @@ $color-orange: #ff7300;
 $color-white: #fff;
 $color-white-2: #faf9f9;
 
-// ----------------
-//    Fonts.
-// ----------------
-
-@font-face {
-  font-family: 'Open Sans Regular';
-  src: url('../assets/fonts/OpenSans-Regular-webfont.eot');
-  src: url('../assets/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-       url('../assets/fonts/OpenSans-Regular-webfont.woff') format('woff'),
-       url('../assets/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
-       url('../assets/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Open Sans Light';
-  src: url('../assets/fonts/OpenSans-Light-webfont.eot');
-  src: url('../assets/fonts/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
-       url('../assets/fonts/OpenSans-Light-webfont.woff') format('woff'),
-       url('../assets/fonts/OpenSans-Light-webfont.ttf') format('truetype'),
-       url('../assets/fonts/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
 
 // ----------------
 //       Body.
@@ -48,7 +23,7 @@ $color-white-2: #faf9f9;
 
 body {
 	color: $color-gray-dark;
-	font-family: 'Open Sans Light';
+  font-family: 'Open Sans', sans-serif;
 }
 
 // --------------------

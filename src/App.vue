@@ -27,8 +27,4 @@ export default {
 </script>
 
 <style lang="scss">
-  body {
-    color: #444;
-    font-family: 'Open Sans Light';
-  }
 </style>

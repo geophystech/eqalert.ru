@@ -314,7 +314,6 @@ export default {
       .nav-item{
         a {
           font-size: 90%;
-          font-weight: bold;
         }
       }
     }
