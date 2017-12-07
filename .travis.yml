@@ -1,20 +1,21 @@
 language: node_js
 node_js:
-  - "8"
-
-dist: trusty
-sudo: false
-
-addons:
-  chrome: stable
-
-before_install:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - stable
 
 cache:
   yarn: true
   directories:
     - node_modules
+
+services:
+  - docker
+
+sudo: required
+
+before_script:
+  - docker pull selenium/standalone-firefox:2.48.2
+  - docker pull selenium/standalone-chrome:2.48.2
+  - docker images --no-trunc
 
 install:
   - yarn install
@@ -22,3 +23,5 @@ install:
 script:
   - yarn run lint
   - yarn run test
+  - dockers/Screenshotter/screenshotter.sh --verify
+
