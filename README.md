@@ -21,9 +21,8 @@ Built on <a href="https://vuejs.org">Vue.js</a> and <a href="https://getbootstra
 
 </p>
 
-<img alt="Travis build status" src="https://travis-ci.org/geophystech/eqalert.ru.svg?branch=master">
 
-# eqalert.ru 
+# eqalert.ru <img alt="Travis build status" src="https://travis-ci.org/geophystech/eqalert.ru.svg?branch=master">
 
 > Eqalert.ru – the real-time information resource about earthquakes, seismic impacts and hazards
 
