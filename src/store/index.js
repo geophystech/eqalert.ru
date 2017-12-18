@@ -6,10 +6,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    api: {
+      authorizationToken: ''
+    },
     currentTileProvider: '',
     highlightEventTreshold: 4.0
   },
   getters: {
+    apiAuthorizationToken: state => {
+      return state.api.authorizationToken
+    },
     currentTileProvider: state => {
       return state.currentTileProvider
     },
