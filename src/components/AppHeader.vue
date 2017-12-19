@@ -46,8 +46,8 @@ export default {
   },
   methods: {
     fetchEventsCount: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/68aaa3ec79647d0599287f735b288e2c/raw/c4cacd8582cd9de2ab7e423f7fa2f4cb93d165ae/fake.json')
-      .then(response => { this.eventsCount = response.data.events.length })
+      this.$http.get(this.$root.$options.settings.api.endpoints.systemInfo)
+      .then(response => { this.eventsCount = response.data.data.counters.reports })
       .catch(e => { this.errors.push(e) })
     }
   },
