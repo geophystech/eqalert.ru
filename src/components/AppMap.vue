@@ -394,13 +394,13 @@ export default {
     },
     drawStations: function() {
       this.stations.forEach(station => {
-        let marker = new L.RegularPolygonMarker(new L.LatLng(station.latitude, station.longitude), {
+        let marker = new L.RegularPolygonMarker(new L.LatLng(station.sta_lat, station.sta_lon), {
           numberOfSides: 3,
           rotation: 30.0,
           radius: 7,
           fillOpacity: 1.0,
           color: false,
-          fillColor: station.color
+          fillColor: this.$root.$options.settings.stations.colors[station.scnl_network]
         })
 
         let message =
@@ -413,11 +413,11 @@ export default {
             <tbody>
               <tr>
                 <th scope="row">Каналов</th>
-                <td>${station.channel_number}</td>
+                <td>${station.channel_num}</td>
               </tr>
               <tr>
                 <th scope="row">Высота</th>
-                <td>${station.elevation}</td>
+                <td>${station.sta_elevation}</td>
               </tr>
               <tr>
                 <th scope="row">Тип датчика</th>
@@ -533,9 +533,9 @@ export default {
         .catch(error => { console.log(error) })
     },
     getStations: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
+      this.$http.get(this.$root.$options.settings.api.endpoints.stations)
         .then(response => {
-          this.stations = response.data.seismic_stations
+          this.stations = response.data.data
           this.drawStations()
         })
         .catch(error => { console.log(error) })

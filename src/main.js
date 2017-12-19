@@ -9,7 +9,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 import ApiSettings from './settings/api.js'
-import EventSettings from './settings/event.js'
+import EventsSettings from './settings/events.js'
+import StationsSettings from './settings/stations.js'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -32,7 +33,8 @@ new Vue({
   store,
   settings: {
     api: ApiSettings,
-    events: EventSettings
+    events: EventsSettings,
+    stations: StationsSettings
   },
   template: '<App/>',
   components: { App }
