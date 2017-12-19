@@ -188,7 +188,7 @@ export default {
         rmsMax: '',
         staNumMin: ''
       },
-      highlightEventTreshold: this.$store.getters.highlightEventTreshold,
+      highlightEventTreshold: this.$root.$options.settings.events.highlightTreshold,
       sortBy: 'datetime',
       sortDesc: true
     }

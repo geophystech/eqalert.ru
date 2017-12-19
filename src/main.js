@@ -7,7 +7,9 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import api from './api.js'
+
+import ApiSettings from './settings/api.js'
+import EventSettings from './settings/event.js'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -19,7 +21,7 @@ Vue.use(BootstrapVue)
 
 // Set axios authorization headers.
 const apiToken = store.getters.apiAuthorizationToken
-const apiType = api.authorizationType
+const apiType = ApiSettings.authorizationType
 
 if (apiToken) axios.defaults.headers.common['Authorization'] = `${apiType} ${apiToken}`
 
@@ -28,7 +30,10 @@ new Vue({
   el: '#app',
   router,
   store,
-  api: api,
+  settings: {
+    api: ApiSettings,
+    events: EventSettings
+  },
   template: '<App/>',
   components: { App }
 })

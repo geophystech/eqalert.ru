@@ -9,8 +9,7 @@ export default new Vuex.Store({
     api: {
       authorizationToken: ''
     },
-    currentTileProvider: '',
-    highlightEventTreshold: 4.0
+    currentTileProvider: ''
   },
   getters: {
     apiAuthorizationToken: state => {
@@ -44,9 +43,6 @@ export default new Vuex.Store({
         }],
         labels: []
       }
-    },
-    highlightEventTreshold: state => {
-      return state.highlightEventTreshold
     }
   },
   mutations: {
