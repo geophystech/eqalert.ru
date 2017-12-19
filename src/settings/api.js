@@ -1,8 +1,9 @@
+const baseURL = 'https://api-test.geophystech.ru/api'
+const version = 'v1'
+
 let config = {}
 
 config.authorizationType = 'Bearer'
-config.baseURL = 'https://api-test.geophystech.ru/api'
-config.version = 'v1'
 
 // Endpoints after `api/v1/`.
 config.endpoints = {
@@ -13,7 +14,7 @@ config.endpoints = {
 
 // Add `baseURL` and `version` to each endpoint.
 Object.keys(config.endpoints).map((key, index) => {
-  config.endpoints[key] = `${config.baseURL}/${config.version}/${config.endpoints[key]}`
+  config.endpoints[key] = `${baseURL}/${version}/${config.endpoints[key]}`
 })
 
 export default config

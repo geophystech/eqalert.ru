@@ -533,7 +533,6 @@ export default {
         .catch(error => { console.log(error) })
     },
     getStations: function() {
-      console.log(this.$root.$options.api)
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
         .then(response => {
           this.stations = response.data.seismic_stations
