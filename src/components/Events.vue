@@ -219,7 +219,13 @@ export default {
   },
   methods: {
     getEvents: function() {
-      this.$http.get(`${this.$root.$options.settings.api.endpoints.events}?cursor=${this.cursor}&show_nearest_city=1&limit=10&`)
+      this.$http.get(this.$root.$options.settings.api.endpoints.events, {
+        params: {
+          cursor: this.cursor,
+          limit: 10,
+          show_nearest_city: 1
+        }
+      })
         .then(response => {
           this.events = this.events.concat(response.data.data)
           this.cursor = response.data.meta.cursor.next
