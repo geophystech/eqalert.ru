@@ -5,7 +5,14 @@
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
         <router-link to="/">Снять ограничения данных</router-link>
       </b-col>
-      <b-col cols="8">Загружено <span class="events-count">{{ events.length }}</span> событий (04.09.2017 — 08.10.2017)</b-col>
+      <b-col cols="8">
+        Загружено <span class="events-count">{{ events.length }}</span> событий
+        <span v-if="events.length">
+          ({{ moment.utc(events[events.length - 1].locValues.data.event_datetime).locale('ru').format('L') }}
+          —
+          {{ moment.utc(events[0].locValues.data.event_datetime).locale('ru').format('L') }})
+        </span>
+      </b-col>
     </b-row>
 
     <b-row no-gutters>
@@ -133,7 +140,6 @@
       <b-col class="all-events">
         <b-table
           hover
-          responsive
           :fields="fields"
           :items="events"
           :sort-by.sync="sortBy"
@@ -141,17 +147,24 @@
           @row-clicked="openEvent">
           <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
           <template slot="magnitude" slot-scope="data">
-            <span :class="{ 'highlight-event': data.value > highlightEventTreshold }">{{ data.value }}</span>
+            <span :class="{ 'highlight-event': data.item.locValues.data.mag > highlightEventTreshold }">
+              {{ data.item.locValues.data.mag }}
+            </span>
           </template>
-          <template slot="depth" slot-scope="data">{{ data.value }} км</template>
-          <template slot="datetime" slot-scope="data">{{ moment.utc(data.value).locale('ru').format('LL в HH:mm:ss UTC') }}</template>
+          <template slot="depth" slot-scope="data">{{ data.item.locValues.data.depth }} км</template>
+          <template slot="datetime" slot-scope="data">
+            {{ moment.utc(data.item.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}
+          </template>
           <template slot="settlement" slot-scope="data">
-            <span v-if="data.value.title === null">Нет данных</span>
-            <span v-else>{{ data.value.distance }} км до {{ data.value.title }}</span>
+            <span v-if="data.item.nearestCity.data.settlement.data.translation.data.title === null">Нет данных</span>
+            <span v-else>
+              {{ round(data.item.nearestCity.data.ep_dis, 1) }} км до {{ data.item.nearestCity.data.settlement.data.translation.data.title }}
+            </span>
           </template>
           <template slot="bottom-row" slot-scope="data">
             <td :colspan="data.columns">
-              <a href="javascript:void(0)" @click.prevent="getEvents">Показать больше событий</a>
+              <a href="javascript:void(0)" @click.prevent="getEvents" v-if="cursor">Показать больше событий</a>
+              <span v-else>Загружены все события</span>
             </td>
           </template>
         </b-table>
@@ -164,9 +177,12 @@
 const moment = require('moment')
 require('moment/locale/ru')
 
+import { round } from '@/helpers.js'
+
 export default {
   data() {
     return {
+      cursor: '',
       events: [],
       fields: [
         { key: 'index', label: '#' },
@@ -196,13 +212,17 @@ export default {
   computed: {
     moment: function() {
       return moment
+    },
+    round: function() {
+      return round
     }
   },
   methods: {
     getEvents: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/68aaa3ec79647d0599287f735b288e2c/raw/6974efa90788178207afa2a3c2ce1c3da38e3bb3/eq_events.json')
+      this.$http.get(`${this.$root.$options.settings.api.endpoints.events}?cursor=${this.cursor}&show_nearest_city=1&limit=10&`)
         .then(response => {
-          this.events = this.events.concat(response.data.events)
+          this.events = this.events.concat(response.data.data)
+          this.cursor = response.data.meta.cursor.next
         })
         .catch(error => { console.log(error) })
     },
