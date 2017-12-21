@@ -7,7 +7,7 @@ config.authorizationType = 'Bearer'
 
 // Endpoints after `api/v1/`.
 config.endpoints = {
-  reports: 'reports',
+  events: 'reports',
   stations: 'stations',
   systemInfo: 'systemInfo'
 }
