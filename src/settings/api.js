@@ -7,6 +7,11 @@ config.authorizationType = 'Bearer'
 
 // Endpoints after `api/v1/`.
 config.endpoints = {
+  analyticsEarthquakeCounts: 'analytics/earthquakeCounts',
+  analyticsCumulativeCounts: 'analytics/cumulativeCounts',
+  analyticsDensityCounts: 'analytics/densityCounts',
+  analyticsStationCounts: 'analytics/stationCounts',
+  analyticsRMSAllocation: 'analytics/RMSAllocation',
   events: 'reports',
   stations: 'stations',
   systemInfo: 'systemInfo'
