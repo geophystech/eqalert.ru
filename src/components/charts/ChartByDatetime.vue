@@ -1,12 +1,13 @@
 <script>
-import { Line, mixins } from 'vue-chartjs'
-const { reactiveProp } = mixins
+import { Line } from 'vue-chartjs'
+
+const moment = require('moment')
+require('moment/locale/ru')
 
 export default Line.extend({
-  mixins: [reactiveProp],
-  props: ['chartData'],
   data() {
     return {
+      chartData: this.$store.getters.chartDataset,
       options: {
         scales: {
           xAxes: [
@@ -41,8 +42,30 @@ export default Line.extend({
       }
     }
   },
-  mounted() {
-    this.renderChart(this.chartData, this.options)
+  created() {
+    this.drawChart()
+  },
+  methods: {
+    drawChart: function() {
+      this.$http.get(this.$root.$options.settings.api.endpoints.analyticsEarthquakeCounts)
+        .then(response => {
+          const dates = this.prepareDates(response.data.data.dates)
+          this.chartData.datasets[0].label = 'Количество землетрясений'
+          this.chartData.datasets[0].data = response.data.data.counts
+          this.chartData.labels = dates
+
+          this.renderChart(this.chartData, this.options)
+        })
+        .catch(error => { console.log(error) })
+    },
+    prepareDates: function(dates) {
+      return dates.map(date => {
+        let _date = moment.utc(date).locale('ru').format('MMMM YYYY')
+        _date = _date[0].toUpperCase() + _date.substr(1)
+
+        return _date
+      })
+    }
   }
 })
 </script>

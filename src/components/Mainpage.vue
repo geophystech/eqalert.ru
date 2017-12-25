@@ -34,12 +34,12 @@
               </b-row>
               <b-row>
                 <b-col>
-                  <ChartByDatetime :chart-data="chartsData.byDatetime" :height="300" />
+                  <ChartByDatetime :height="300" />
                 </b-col>
               </b-row>
               <b-row>
                 <b-col>
-                  <ChartByMagnitudeCumulative :chart-data="chartsData.byMagnitudeCumulative" :height="300" />
+                  <ChartByMagnitudeCumulative :height="300" />
                 </b-col>
               </b-row>
             </b-col>
@@ -93,11 +93,7 @@ export default {
   components: { AppMap, ChartByDatetime, ChartByMagnitudeCumulative },
   data() {
     return {
-      events: [],
-      chartsData: {
-        byDatetime: {},
-        byMagnitudeCumulative: {}
-      }
+      events: []
     }
   },
   computed: {
@@ -107,36 +103,12 @@ export default {
   },
   created() {
     this.getEvents()
-    this.getDataForChartByDatetime()
-    this.getDataForChartByMagnitudeCumulative()
   },
   methods: {
     getEvents: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/14feed1393937c7ae8681177f35bb68e/raw/c9d4f89e110a27a217a4d4ea3e65a3d7349a4429/eq_last_events_with_moment_tensor.json')
         .then(response => {
           this.events = response.data.events
-        })
-        .catch(error => { console.log(error) })
-    },
-    getDataForChartByDatetime: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/7d2bb32a1f9fea48a8a969cae089d0b6/raw/2020b03b5ea212ae144e8b80a714f6360c21ca33/eq_by_datetime_chart.json')
-        .then(response => {
-          let chartData = this.$store.getters.chartDataset
-          chartData.datasets[0].label = 'Количество землетрясений'
-          chartData.datasets[0].data = response.data.data
-          chartData.labels = response.data.labels
-          this.chartsData.byDatetime = chartData
-        })
-        .catch(error => { console.log(error) })
-    },
-    getDataForChartByMagnitudeCumulative: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/2a42d678c314945beef697872ea80ba5/raw/ff3a551df94f41a99e910a5dbb08be17eb4adb42/eq_by_magnitude_cumulative_chart.json')
-        .then(response => {
-          let chartData = this.$store.getters.chartDataset
-          chartData.datasets[0].label = 'Кумулятивный график повторяемости (ML)'
-          chartData.datasets[0].data = response.data.data
-          chartData.labels = response.data.labels
-          this.chartsData.byMagnitudeCumulative = chartData
         })
         .catch(error => { console.log(error) })
     }

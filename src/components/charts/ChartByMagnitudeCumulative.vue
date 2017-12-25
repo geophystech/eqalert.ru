@@ -1,12 +1,10 @@
 <script>
-import { Line, mixins } from 'vue-chartjs'
-const { reactiveProp } = mixins
+import { Line } from 'vue-chartjs'
 
 export default Line.extend({
-  mixins: [reactiveProp],
-  props: ['chartData'],
   data() {
     return {
+      chartData: this.$store.getters.chartDataset,
       options: {
         scales: {
           xAxes: [
@@ -52,8 +50,21 @@ export default Line.extend({
       }
     }
   },
-  mounted() {
-    this.renderChart(this.chartData, this.options)
+  created() {
+    this.drawChart()
+  },
+  methods: {
+    drawChart: function() {
+      this.$http.get(this.$root.$options.settings.api.endpoints.analyticsCumulativeCounts)
+        .then(response => {
+          this.chartData.datasets[0].label = 'Кумулятивный график повторяемости (ML)'
+          this.chartData.datasets[0].data = response.data.data.counts
+          this.chartData.labels = response.data.data.magnitudes
+
+          this.renderChart(this.chartData, this.options)
+        })
+        .catch(error => { console.log(error) })
+    }
   }
 })
 </script>
