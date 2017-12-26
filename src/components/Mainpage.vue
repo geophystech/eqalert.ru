@@ -80,8 +80,8 @@
 
 <script>
 import AppMap from '@/components/AppMap'
-import ChartByDatetime from './charts/ChartByDatetime'
-import ChartByMagnitudeCumulative from './charts/ChartByMagnitudeCumulative'
+import ChartByDatetime from '@/components/charts/ChartByDatetime'
+import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
 
 const moment = require('moment')
 require('moment/locale/ru')
