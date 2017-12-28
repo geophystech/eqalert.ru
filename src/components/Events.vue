@@ -8,13 +8,16 @@
     <b-row no-gutters>
       <Filters />
       <b-col class="all-events">
+        <Spinner line-fg-color="#337ab7" line-size="1" v-show="spinners.loadMoreEvents && !events.length" />
+
         <b-table
           hover
           :fields="fields"
           :items="events"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
-          @row-clicked="openEvent">
+          @row-clicked="openEvent"
+          v-show="events.length" >
           <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
           <template slot="magnitude" slot-scope="data">
             <span :class="{ 'highlight-event': data.item.locValues.data.mag > highlightEventTreshold }">
@@ -33,7 +36,8 @@
           </template>
           <template slot="bottom-row" slot-scope="data">
             <td :colspan="data.columns">
-              <a href="javascript:void(0)" @click.prevent="getEvents" v-if="cursor">Показать больше событий</a>
+              <Spinner line-fg-color="#337ab7" line-size="1" size="26" v-show="spinners.loadMoreEvents" />
+              <a href="javascript:void(0)" @click.prevent="getEvents" v-if="cursor" v-show="!spinners.loadMoreEvents">Показать больше событий</a>
               <span v-else>Загружены все события</span>
             </td>
           </template>
@@ -49,10 +53,11 @@ require('moment/locale/ru')
 
 import CountersHeader from '@/components/CountersHeader.vue'
 import Filters from '@/components/Filters.vue'
+import Spinner from 'vue-simple-spinner'
 import { round } from '@/helpers.js'
 
 export default {
-  components: { CountersHeader, Filters },
+  components: { CountersHeader, Filters, Spinner },
   data() {
     return {
       cursor: '',
@@ -67,6 +72,9 @@ export default {
       highlightEventTreshold: this.$root.$options.settings.events.highlightTreshold,
       sortBy: 'datetime',
       sortDesc: true,
+      spinners: {
+        loadMoreEvents: false
+      },
       startDate: '',
       endDate: ''
     }
@@ -81,6 +89,8 @@ export default {
   },
   methods: {
     getEvents: function() {
+      this.spinners.loadMoreEvents = true
+
       this.$http.get(this.$root.$options.settings.api.endpoints.events, {
         params: {
           cursor: this.cursor,
@@ -89,6 +99,7 @@ export default {
         }
       })
         .then(response => {
+          this.spinners.loadMoreEvents = false
           this.events = this.events.concat(response.data.data)
           this.cursor = response.data.meta.cursor.next
 
