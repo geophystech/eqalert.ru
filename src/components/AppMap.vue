@@ -344,12 +344,13 @@ export default {
       let legendData = ''
 
       Object.keys(this.pga).forEach((key) => {
-        const pga = L.polygon(this.pga[key].data, { color: this.pga[key].line_color, weigh: 2 })
+        const lineColor = this.pgaLineColor(this.pga[key].range)
+        const pga = L.polygon(this.pga[key].data, { color: lineColor, weigh: 2 })
 
         pga.addTo(window.map[this.hashid][this.target])
         pga.bindPopup(`Пиковое ускорение грунта: ${this.pga[key].range}%g (ускорение свободного падения)`)
 
-        legendData += `<i style="background: ${this.pga[key].line_color}"></i>${this.pga[key].range}<br>`
+        legendData += `<i style="background: ${lineColor}"></i>${this.pga[key].range}<br>`
       })
 
       let pgaLegend = L.control({ position: 'bottomright' })
@@ -517,9 +518,9 @@ export default {
         .catch(error => { console.log(error) })
     },
     getPga: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/e8b61b8885e4069a78854472c039360a/raw/b10ee6eb561dab972f2d520c3089ec50ac5b17e7/eq_QgpAn7OW_general_information.json')
+      this.$http.get(this.$root.$options.settings.api.endpointEventPga(334))
         .then(response => {
-          this.pga = response.data.event.pga
+          this.pga = response.data.data
           this.drawPga()
         })
         .catch(error => { console.log(error) })
@@ -533,12 +534,26 @@ export default {
         .catch(error => { console.log(error) })
     },
     getStations: function() {
-      this.$http.get(this.$root.$options.settings.api.endpoints.stations)
+      this.$http.get(this.$root.$options.settings.api.endpointStations)
         .then(response => {
           this.stations = response.data.data
           this.drawStations()
         })
         .catch(error => { console.log(error) })
+    },
+    pgaLineColor: function(range) {
+      switch (range) {
+        case '<=0.15': return '#fff5f0'
+        case '0.15-0.3': return '#fee0d2'
+        case '0.3-2.8': return '#fcbba1'
+        case '2.8-6.2': return '#fc9272'
+        case '6.2-12': return '#fb6a4a'
+        case '12-22': return '#ef3b2c'
+        case '22-40': return '#cb181d'
+        case '40-75': return '#a50f15'
+        case '75-139': return '#67000d'
+        case '>139': return '#400000'
+      }
     },
     populateControlLayers: function() {
       if (!controlLayers[this.hashid]) controlLayers[this.hashid] = {}

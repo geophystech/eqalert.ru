@@ -1,25 +1,21 @@
-const baseURL = 'https://api-test.geophystech.ru/api'
-const version = 'v1'
+class Config {
+  constructor() {
+    this.authorizationType = 'Bearer'
+    this.baseURL = 'https://api-test.geophystech.ru/api'
+    this.version = 'v1'
+    this.endpointAnalyticsCumulativeCounts = `${this.baseURL}/${this.version}/analytics/cumulativeCounts`
+    this.endpointAnalyticsDensityCounts = `${this.baseURL}/${this.version}/analytics/densityCounts`
+    this.endpointAnalyticsEarthquakeCounts = `${this.baseURL}/${this.version}/analytics/earthquakeCounts`
+    this.endpointAnalyticsRMSAllocation = `${this.baseURL}/${this.version}/analytics/RMSAllocation`
+    this.endpointAnalyticsStationCounts = `${this.baseURL}/${this.version}/analytics/stationCounts`
+    this.endpointEvents = `${this.baseURL}/${this.version}/reports`
+    this.endpointStations = `${this.baseURL}/${this.version}/stations`
+    this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
+  }
 
-let config = {}
-
-config.authorizationType = 'Bearer'
-
-// Endpoints after `api/v1/`.
-config.endpoints = {
-  analyticsEarthquakeCounts: 'analytics/earthquakeCounts',
-  analyticsCumulativeCounts: 'analytics/cumulativeCounts',
-  analyticsDensityCounts: 'analytics/densityCounts',
-  analyticsStationCounts: 'analytics/stationCounts',
-  analyticsRMSAllocation: 'analytics/RMSAllocation',
-  events: 'reports',
-  stations: 'stations',
-  systemInfo: 'systemInfo'
+  endpointEventPga(hashid) {
+    return `${this.baseURL}/${this.version}/pga/${hashid}/concaveHulls`
+  }
 }
 
-// Add `baseURL` and `version` to each endpoint.
-Object.keys(config.endpoints).map((key, index) => {
-  config.endpoints[key] = `${baseURL}/${version}/${config.endpoints[key]}`
-})
-
-export default config
+export default Config

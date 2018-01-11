@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     fetchEventsCount: function() {
-      this.$http.get(this.$root.$options.settings.api.endpoints.systemInfo)
+      this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
       .then(response => { this.eventsCount = response.data.data.counters.reports })
       .catch(e => { this.errors.push(e) })
     }

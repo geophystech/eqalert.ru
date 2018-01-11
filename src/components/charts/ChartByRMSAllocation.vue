@@ -44,7 +44,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function() {
-      this.$http.get(this.$root.$options.settings.api.endpoints.analyticsRMSAllocation)
+      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsRMSAllocation)
         .then(response => {
           this.chartData.datasets[0].label = 'Распределение RMS'
           this.chartData.datasets[0].data = response.data.data.counts
