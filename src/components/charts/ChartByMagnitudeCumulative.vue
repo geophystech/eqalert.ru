@@ -55,7 +55,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function() {
-      this.$http.get(this.$root.$options.settings.api.endpoints.analyticsCumulativeCounts)
+      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsCumulativeCounts)
         .then(response => {
           this.chartData.datasets[0].label = 'Кумулятивный график повторяемости (ML)'
           this.chartData.datasets[0].data = response.data.data.counts

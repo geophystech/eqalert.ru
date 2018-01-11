@@ -47,7 +47,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function() {
-      this.$http.get(this.$root.$options.settings.api.endpoints.analyticsEarthquakeCounts)
+      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsEarthquakeCounts)
         .then(response => {
           const dates = this.prepareDates(response.data.data.dates)
           this.chartData.datasets[0].label = 'Количество землетрясений'

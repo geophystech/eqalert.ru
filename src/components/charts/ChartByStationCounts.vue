@@ -44,7 +44,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function() {
-      this.$http.get(this.$root.$options.settings.api.endpoints.analyticsStationCounts)
+      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsStationCounts)
         .then(response => {
           this.chartData.datasets[0].label = 'События по количеству станций'
           this.chartData.datasets[0].data = response.data.data.counts

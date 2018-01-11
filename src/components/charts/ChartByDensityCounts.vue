@@ -50,7 +50,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function() {
-      this.$http.get(this.$root.$options.settings.api.endpoints.analyticsDensityCounts)
+      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsDensityCounts)
         .then(response => {
           this.chartData.datasets[0].label = 'Плотностное распределение повторяемости (ML)'
           this.chartData.datasets[0].data = response.data.data.counts
