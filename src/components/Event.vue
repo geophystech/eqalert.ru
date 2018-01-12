@@ -9,9 +9,9 @@
               <span class="magnitude-type" v-for="item in event.magnitudeType" :key="item[0]">
                 <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
               </span>
-              ( <span class="magnitude">{{ event.magnitude }}</span> )
-              {{ event.datetime }}
-              <span class="processing-method">{{ event.processingMethod }}</span>
+              ( <span class="magnitude">{{ event.locValues.data.mag }}</span> )
+              {{ moment.utc(event.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}
+              <span class="processing-method">{{ event.processingMethod.short }}</span>
             </h5>
           </b-col>
         </b-row>
@@ -19,9 +19,9 @@
         <b-row>
           <b-col class="text-center">
             <b-badge
-              variant="final"
-              v-b-popover.hover.auto="'Информация о землетрясении проверена и зарегистрирована в итоговом каталоге сейсмических событий'">
-                ФИНАЛЬНЫЙ РАСЧЁТ
+              :variant="event.label.variant"
+              v-b-popover.hover.auto="event.label.description">
+                {{ event.label.text }}
             </b-badge>
           </b-col>
         </b-row>
@@ -171,13 +171,7 @@ export default {
           text: this.$router.currentRoute.params.hashid,
           active: true
         }],
-      event: {
-        datetime: '',
-        hashid: '',
-        magnitude: '4.5',
-        magnitudeType: [['M', 'L']],
-        processingMethod: 'M'
-      },
+      event: {},
       lastEvents: [],
       momentTensor: {},
       tabsUrls: {
@@ -190,41 +184,13 @@ export default {
     }
   },
   methods: {
-    convertMagnitudeType: function(type) {
-      switch (type) {
-        case 'L':
-          this.event.magnitudeType.push(['M', 'L'])
-          break
-        case 'b':
-          this.event.magnitudeType.push(['m', 'b'])
-          break
-        case 'B':
-          this.event.magnitudeType.push(['m', 'B'])
-          break
-        case 's':
-          this.event.magnitudeType.push(['M', 's'])
-          break
-        case 'S':
-          this.event.magnitudeType.push(['M', 'S'])
-          break
-        case 'W':
-          this.event.magnitudeType.push(['M', 'W'])
-          break
-        case 'G':
-          this.event.magnitudeType.push(['M', 'b'])
-          this.event.magnitudeType.push(['L', 'g'])
-          break
-        case 'C':
-          this.event.magnitudeType.push(['M', 'c'])
-          break
-        default:
-          this.event.magnitudeType.push(['M', ''])
-      }
-    },
     getEvent: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/b090c866778c02ddd63c5dc1667317f9/raw/a41ec3cd01d380d553cf1655a16d10a56d5c7979/eq_KEXKBvM0_general_information.json')
+      this.$http.get(this.$root.$options.settings.api.endpointEvent(this.$router.currentRoute.params.hashid))
         .then(response => {
-          this.event.datetime = moment.utc(response.data.event.datetime).locale('ru').format('LL в HH:mm:ss UTC')
+          this.event = response.data.data
+          this.event.processingMethod = this.processingMethod(this.event.has_auto, this.event.has_manual)
+          this.event.magnitudeType = this.magnitudeType(this.event.locValues.data.mag_t)
+          this.event.label = this.label(this.event.has_delete, this.event.has_final)
         })
         .catch(error => { console.log(error) })
     },
@@ -250,12 +216,60 @@ export default {
         setTimeout(() => { window.map[this.event.hashid][key].invalidateSize() }, 1)
       }
     },
+    label: function(deleted, final) {
+      if (deleted) {
+        return {
+          description: 'Информация о землетрясении удалена из итогового каталога сейсмических событий',
+          text: 'СОБЫТИЕ УДАЛЕНО',
+          variant: 'deleted'
+        }
+      } else if (final) {
+        return {
+          description: 'Информация о землетрясении проверена и зарегистрирована в итоговом каталоге сейсмических событий',
+          text: 'ФИНАЛЬНЫЙ РАСЧЁТ',
+          variant: 'final'
+        }
+      } else {
+        return {
+          description: 'Информация о землетрясении уточняется',
+          text: 'РАСЧЁТ ОБНОВЛЯЕТСЯ',
+          variant: 'processing'
+        }
+      }
+    },
+    magnitudeType: function(type) {
+      // Nested arrays are used because there may be multiple magnitude types.
+      // But in most cases there will be only one type.
+      switch (type) {
+        case 'L': return [['M', 'L']]
+        case 'b': return [['m', 'b']]
+        case 'B': return [['m', 'B']]
+        case 's': return [['M', 's']]
+        case 'S': return [['M', 'S']]
+        case 'W': return [['M', 'W']]
+        case 'G': return [['M', 'b'], ['L', 'g']]
+        case 'C': return [['M', 'c']]
+        default: return [['M', '']]
+      }
+    },
     populateMap: function() {
       if (!window.map[this.event.hashid]) window.map[this.event.hashid] = {}
       Object.keys(this.tabsUrls).forEach(tab => { window.map[this.event.hashid][tab] = null })
     },
+    processingMethod: function(auto, manual) {
+      if (auto && !manual) return { long: 'автоматический', short: 'A' }
+      if (auto && manual) return { long: 'смешанный', short: 'AM' }
+      if (!auto && manual) return { long: 'ручной', short: 'M' }
+
+      return { long: 'неизвестно', short: 'U' }
+    },
     switchView: function(href) {
       history.pushState({}, null, href)
+    }
+  },
+  computed: {
+    moment: function() {
+      return moment
     }
   },
   created() {
@@ -295,10 +309,21 @@ export default {
       text-transform: uppercase;
     }
 
+    .badge-deleted {
+      background-color: $color-red;
+      color: $color-white;
+    }
+
     .badge-final {
       background-color: $color-green;
       color: $color-white;
     }
+
+    .badge-processing {
+      background-color: $color-orange;
+      color: $color-white;
+    }
+
     .magnitude {
       color: $color-orange;
     }
