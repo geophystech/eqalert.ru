@@ -13,6 +13,10 @@ class Config {
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
   }
 
+  endpointEvent(hashid) {
+    return `${this.baseURL}/${this.version}/reports/${hashid}`
+  }
+
   endpointEventPga(hashid) {
     return `${this.baseURL}/${this.version}/pga/${hashid}/concaveHulls`
   }

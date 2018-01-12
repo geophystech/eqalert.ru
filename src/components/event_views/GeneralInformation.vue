@@ -23,6 +23,7 @@ import AppMap from '@/components/AppMap'
 
 export default {
   components: { AppMap },
+  props: ['hashid'],
   data() {
     return {
       items: [
@@ -46,9 +47,6 @@ export default {
     }
   },
   computed: {
-    hashid: function() {
-      return 'KEXKBvM0'
-    },
     moment: function() {
       return moment
     }

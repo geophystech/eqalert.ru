@@ -260,6 +260,7 @@ export default {
   },
   created() {
     this.getLastEvents()
+
     this.$root.$on('changed::tab', tab => {
       this.invalidateMapSize(tab.currentTab)
     })
