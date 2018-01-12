@@ -20,6 +20,7 @@ import AppMap from '@/components/AppMap'
 
 export default {
   components: { AppMap },
+  props: ['hashid'],
   data() {
     return {
       items: [
@@ -37,11 +38,6 @@ export default {
         { key: 'value', label: 'Значение', 'class': 'text-center' },
         { key: 'description', label: ' ', 'class': 'text-center' }
       ]
-    }
-  },
-  computed: {
-    hashid: function() {
-      return 'KEXKBvM0'
     }
   },
   created() {
