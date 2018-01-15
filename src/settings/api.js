@@ -17,8 +17,16 @@ class Config {
     return `${this.baseURL}/${this.version}/reports/${hashid}`
   }
 
+  endpointEventMsk64(hashid) {
+    return `${this.baseURL}/${this.version}/msk64/data/${hashid}`
+  }
+
   endpointEventPga(hashid) {
     return `${this.baseURL}/${this.version}/pga/${hashid}/concaveHulls`
+  }
+
+  endpointSettlements(hashid) {
+    return `${this.baseURL}/${this.version}/msk64/citiesAnalysis/${hashid}`
   }
 }
 

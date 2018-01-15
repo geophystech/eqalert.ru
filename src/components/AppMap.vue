@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { convertMsk64 } from '@/helpers.js'
+
 const moment = require('moment')
 require('moment/locale/ru')
 
@@ -34,7 +36,6 @@ export default {
       initializedMaps: [],
       ldos: [],
       maxZoom: 18,
-      msk64: [],
       pga: [],
       plateBoundaries: null,
       stations: null,
@@ -313,19 +314,22 @@ export default {
       // Store current tile provider to the storage
       window.map[this.hashid][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
     },
-    drawMsk64: function() {
+    drawMsk64: function(data) {
       let legendData = ''
 
-      this.msk64.forEach(msk => {
+      data.forEach(item => {
+        const value = convertMsk64(item.value)
+        const color = this.msk64Color(value)
+
         const circle = L.circle(
           [this.center[0], this.center[1]],
-          msk.distance * 1000,
-          { color: msk.color, fillColor: msk.color })
+          item.distance * 1000,
+          { color: color, fillColor: color })
 
         circle.addTo(window.map[this.hashid][this.target])
-        circle.bindPopup(`<div class="text-center"><strong>${msk.value}</strong></div>`)
+        circle.bindPopup(`<div class="text-center"><strong>${value}</strong></div>`)
 
-        legendData += `<i style="background: ${msk.color}"></i>${msk.value}<br>`
+        legendData += `<i style="background: ${color}"></i>${value}<br>`
       })
 
       const legend = L.control({ position: 'bottomright' })
@@ -510,15 +514,14 @@ export default {
         .catch(error => { console.log(error) })
     },
     getMsk64: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/a255459e6af24ddba9d8abad2bbdf793/raw/c64daf2034c66ed85e024841721c480159cb2f3d/eq_QgpAn7OW_settlements.json')
+      this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(this.hashid))
         .then(response => {
-          this.msk64 = response.data.msk64
-          this.drawMsk64()
+          this.drawMsk64(response.data.data)
         })
         .catch(error => { console.log(error) })
     },
     getPga: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEventPga(334))
+      this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.hashid))
         .then(response => {
           this.pga = response.data.data
           this.drawPga()
@@ -540,6 +543,33 @@ export default {
           this.drawStations()
         })
         .catch(error => { console.log(error) })
+    },
+    msk64Color: function(value) {
+      switch (value) {
+        case 'I': return '#ffffff'
+        case 'I-II': return '#ffffff'
+        case 'II': return '#bfccff'
+        case 'II-III': return '#bfccff'
+        case 'III': return '#9999ff'
+        case 'III-IV': return '#9999ff'
+        case 'IV': return '#80ffff'
+        case 'IV-V': return '#80ffff'
+        case 'V': return '#7df894'
+        case 'V-VI': return '#7df894'
+        case 'VI': return '#ffff00'
+        case 'VI-VII': return '#ffff00'
+        case 'VII': return '#ffc800'
+        case 'VII-VIII': return '#ffc800'
+        case 'VIII': return '#ff9100'
+        case 'VIII-IX': return '#ff9100'
+        case 'IX': return '#ff0000'
+        case 'IX-X': return '#ff0000'
+        case 'X': return '#c80000'
+        case 'X-XI': return '#c80000'
+        case 'XI': return '#800000'
+        case 'XI-XII': return '#800000'
+        case 'XII': return '#400000'
+      }
     },
     pgaLineColor: function(range) {
       switch (range) {
@@ -566,6 +596,7 @@ export default {
       this.getStations()
       this.getLastEvents()
     }
+
     this.getPlateBoundaries()
   },
   mounted() {

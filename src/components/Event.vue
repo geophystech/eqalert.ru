@@ -5,18 +5,20 @@
       <b-col cols="8">
         <b-row>
           <b-col class="text-center">
-            <h5>
+            <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-show="spinners.header" />
+
+            <h5 v-show="!spinners.header">
               <span class="magnitude-type" v-for="item in event.magnitudeType" :key="item[0]">
                 <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
               </span>
-              ( <span class="magnitude">{{ event.locValues.data.mag }}</span> )
-              {{ moment.utc(event.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}
+              ( <span class="magnitude">{{ event.magnitude }}</span> )
+              {{ moment.utc(event.datetime).locale('ru').format('LL в HH:mm:ss UTC') }}
               <span class="processing-method">{{ event.processingMethod.short }}</span>
             </h5>
           </b-col>
         </b-row>
 
-        <b-row>
+        <b-row v-show="!spinners.header">
           <b-col class="text-center">
             <b-badge
               :variant="event.label.variant"
@@ -44,7 +46,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="generalInformation" :hashid="event.hashid" />
+              <component is="generalInformation" :event="event" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -63,7 +65,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="settlements" :hashid="event.hashid" />
+              <component is="settlements" :event="event" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -74,7 +76,7 @@
         </b-row>
       </b-tab>
 
-      <b-tab title="Здания и сооружения"
+      <!-- <b-tab title="Здания и сооружения"
         :href="tabsUrls.buildings"
         :active="currentPageUrl === tabsUrls.buildings"
         @click="switchView(tabsUrls.buildings)">
@@ -82,7 +84,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="buildings" :hashid="event.hashid" />
+              <component is="buildings" :event="event" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -91,9 +93,9 @@
             </keep-alive>
           </b-col>
         </b-row>
-      </b-tab>
+      </b-tab> -->
 
-      <b-tab title="Тензор момента"
+      <!-- <b-tab title="Тензор момента"
         :href="tabsUrls.momentTensor"
         :active="currentPageUrl === tabsUrls.momentTensor"
         @click="switchView(tabsUrls.momentTensor)">
@@ -101,7 +103,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="momentTensor" :hashid="event.hashid" :momentTensorData="momentTensor" />
+              <component is="momentTensor" :event="event" :momentTensorData="momentTensor" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -110,9 +112,9 @@
             </keep-alive>
           </b-col>
         </b-row>
-      </b-tab>
+      </b-tab> -->
 
-      <b-tab title="Магистральные объекты"
+      <!-- <b-tab title="Магистральные объекты"
         :href="tabsUrls.ldos"
         :active="currentPageUrl === tabsUrls.ldos"
         @click="switchView(tabsUrls.ldos)">
@@ -120,7 +122,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="ldos" :hashid="event.hashid" />
+              <component is="ldos" :event="event" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -129,7 +131,7 @@
             </keep-alive>
           </b-col>
         </b-row>
-      </b-tab>
+      </b-tab> -->
     </b-tabs>
   </div>
 </template>
@@ -144,6 +146,7 @@ import LastEvents from '@/components/event_views/LastEvents'
 import Ldos from '@/components/event_views/Ldos'
 import MomentTensor from '@/components/event_views/MomentTensor'
 import Settlements from '@/components/event_views/Settlements'
+import Spinner from 'vue-simple-spinner'
 
 if (!window.map) window.map = {}
 
@@ -154,7 +157,8 @@ export default {
     lastEvents: LastEvents,
     ldos: Ldos,
     momentTensor: MomentTensor,
-    settlements: Settlements
+    settlements: Settlements,
+    Spinner
   },
   name: 'event',
   data() {
@@ -171,9 +175,15 @@ export default {
           text: this.$router.currentRoute.params.hashid,
           active: true
         }],
-      event: {},
+      event: {
+        label: {},
+        processingMethod: {}
+      },
       lastEvents: [],
       momentTensor: {},
+      spinners: {
+        header: true
+      },
       tabsUrls: {
         generalInformation: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid } }).href,
         settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href,
@@ -187,10 +197,14 @@ export default {
     getEvent: function() {
       this.$http.get(this.$root.$options.settings.api.endpointEvent(this.$router.currentRoute.params.hashid))
         .then(response => {
+          this.spinners.header = false
           this.event = response.data.data
-          this.event.processingMethod = this.processingMethod(this.event.has_auto, this.event.has_manual)
-          this.event.magnitudeType = this.magnitudeType(this.event.locValues.data.mag_t)
+          this.event.datetime = this.event.locValues.data.event_datetime
+          this.event.hashid = this.$router.currentRoute.params.hashid // DELETE THIS LINE IF API STARTS RETURNING HASHID
           this.event.label = this.label(this.event.has_delete, this.event.has_final)
+          this.event.magnitude = this.event.locValues.data.mag
+          this.event.magnitudeType = this.magnitudeType(this.event.locValues.data.mag_t)
+          this.event.processingMethod = this.processingMethod(this.event.has_auto, this.event.has_manual)
         })
         .catch(error => { console.log(error) })
     },
@@ -275,11 +289,10 @@ export default {
   created() {
     this.getLastEvents()
 
-    this.$root.$on('changed::tab', tab => {
-      this.invalidateMapSize(tab.currentTab)
-    })
+    this.$root.$on('changed::tab', tab => this.invalidateMapSize(tab.currentTab))
 
     this.event.hashid = this.$router.currentRoute.params.hashid
+
     this.getEvent()
     this.populateMap()
   }
