@@ -9,7 +9,7 @@
           <router-link to="events">
             <span id="events-count">
               <span class="exclamation-mark">!</span>
-              <span>{{ eventsCount }}</span>
+              <span>{{ $store.getters.totalEventsCount }}</span>
             </span>
           </router-link>
         </b-col>
@@ -34,33 +34,6 @@
       </b-row>
     </header>
 </template>
-
-<script>
-export default {
-  name: 'app-header',
-  components: {},
-  data() {
-    return {
-      eventsCount: 0
-    }
-  },
-  methods: {
-    fetchEventsCount: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
-      .then(response => { this.eventsCount = response.data.data.counters.reports })
-      .catch(e => { this.errors.push(e) })
-    }
-  },
-  created() {
-    return this.fetchEventsCount()
-  },
-  mounted() {
-    setInterval(() => {
-      this.fetchEventsCount()
-    }, 30000)
-  }
-}
-</script>
 
 <style lang="scss" scoped>
   @import '../assets/scss/global.scss';

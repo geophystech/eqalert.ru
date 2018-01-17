@@ -9,15 +9,23 @@ export default new Vuex.Store({
     api: {
       authorizationToken: ''
     },
-    currentTileProvider: ''
+    counters: {
+      totalEvents: 0
+    },
+    currentTileProvider: '',
+    msk64Config: {
+      configVersion: ''
+    },
+    pgaConfig: {
+      configVersion: ''
+    },
+    srssCoreConfig: {
+      dbVersion: ''
+    }
   },
   getters: {
-    apiAuthorizationToken: state => {
-      return state.api.authorizationToken
-    },
-    currentTileProvider: state => {
-      return state.currentTileProvider
-    },
+    apiAuthorizationToken: state => { return state.api.authorizationToken },
+    currentTileProvider: state => { return state.currentTileProvider },
     chartDataset: () => {
       return {
         datasets: [{
@@ -43,18 +51,46 @@ export default new Vuex.Store({
         }],
         labels: []
       }
-    }
+    },
+    msk64ConfigVersion: state => { return state.msk64Config.configVersion },
+    pgaConfigVersion: state => { return state.pgaConfig.configVersion },
+    srssDBVersion: state => { return state.srssCoreConfig.dbVersion },
+    totalEventsCount: state => { return state.counters.totalEvents }
   },
   mutations: {
-    set(state, { type, value }) {
-      state[type] = value
+    set(state, { key, value }) {
+      state[key] = value
+    },
+    setCounter(state, { key, value }) {
+      state.counters[key] = value
+    },
+    setMsk64Config(state, { key, value }) {
+      state.msk64Config[key] = value
+    },
+    setPgaConfig(state, { key, value }) {
+      state.pgaConfig[key] = value
+    },
+    setSrssDBVersion(state, { key, value }) {
+      state.srssCoreConfig[key] = value
     }
   },
   actions: {
     setCurrentTileProvider({ commit, state }, provider) {
       if (provider !== state.currentTileProvider) {
-        commit('set', { type: 'currentTileProvider', value: provider })
+        commit('set', { key: 'currentTileProvider', value: provider })
       }
+    },
+    setTotalEventsCount({ commit }, value) {
+      commit('setCounter', { key: 'totalEvents', value: value })
+    },
+    setMsk64ConfigVersion({ commit }, value) {
+      commit('setMsk64Config', { key: 'configVersion', value: value })
+    },
+    setPgaConfigVersion({ commit }, value) {
+      commit('setPgaConfig', { key: 'configVersion', value: value })
+    },
+    setSrssDBVersion({ commit }, value) {
+      commit('setSrssDBVersion', { key: 'dbVersion', value: value })
     }
   },
   plugins: [createPersistedState({

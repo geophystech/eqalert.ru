@@ -60,7 +60,8 @@
       <b-tab title="Ближайшие населенные пункты"
         :href="tabsUrls.settlements"
         :active="currentPageUrl === tabsUrls.settlements"
-        @click="switchView(tabsUrls.settlements)">
+        @click="switchView(tabsUrls.settlements)"
+        v-if="event.has_cities_msk64_analysis">
 
         <b-row>
           <b-col cols="8">
@@ -76,10 +77,11 @@
         </b-row>
       </b-tab>
 
-      <!-- <b-tab title="Здания и сооружения"
+      <b-tab title="Здания и сооружения"
         :href="tabsUrls.buildings"
         :active="currentPageUrl === tabsUrls.buildings"
-        @click="switchView(tabsUrls.buildings)">
+        @click="switchView(tabsUrls.buildings)"
+        v-if="event.has_buildings_msk64_analysis">
 
         <b-row>
           <b-col cols="8">
@@ -93,7 +95,7 @@
             </keep-alive>
           </b-col>
         </b-row>
-      </b-tab> -->
+      </b-tab>
 
       <!-- <b-tab title="Тензор момента"
         :href="tabsUrls.momentTensor"

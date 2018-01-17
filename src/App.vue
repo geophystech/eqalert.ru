@@ -22,9 +22,24 @@ export default {
     AppHeader,
     AppNavbar,
     AppFooter
+  },
+  created() {
+    this.fetchSystemInfo()
+  },
+  methods: {
+    fetchSystemInfo: function() {
+      this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
+      .then(response => {
+        this.$store.dispatch('setTotalEventsCount', response.data.data.counters.reports)
+        this.$store.dispatch('setMsk64ConfigVersion', response.data.data.msk64Config.data.config_version)
+        this.$store.dispatch('setPgaConfigVersion', response.data.data.pgaConfig.data.config_version)
+        this.$store.dispatch('setSrssDBVersion', response.data.data.srssCoreConfig.data.db_version)
+      })
+      .catch(e => { this.errors.push(e) })
+    }
+  },
+  mounted() {
+    setInterval(() => { this.fetchSystemInfo() }, 30000)
   }
 }
 </script>
-
-<style lang="scss">
-</style>

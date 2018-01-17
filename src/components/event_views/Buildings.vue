@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab buildings">
-    <AppMap :hashid="hashid" mapId="map-buildings" shouldDrawEpicenter="true" shouldDrawBuildings="true" target="buildings" />
+    <AppMap :hashid="event.id" mapId="map-buildings" shouldDrawEpicenter="true" :buildings="buildings" target="buildings" v-if="buildings" />
 
     <b-table
       hover
@@ -20,9 +20,10 @@ import AppMap from '@/components/AppMap'
 
 export default {
   components: { AppMap },
-  props: ['hashid'],
+  props: ['event'],
   data() {
     return {
+      buildings: [],
       items: [
         { parameter: 'Прогноз повреждений d-1', value: null, description: 'Разрушения неконструктивных элементов здания: обвалы частей перегородок, карнизов, фронтонов, дымовых труб. Значительные повреждения несущих конструкций: сквозные трещины в несущих стенах, значительные деформации каркаса, заметные сдвиги панелей, выкрашивание бетона в узлах каркаса. Разрушения несущих конструкций: проломы и вывалы в несущих стенах; развалы стыков и узлов каркаса; нарушение связей между частями здания; обрушение отдельных панелей перекрытия; обрушение крупных частей здания. Обрушение несущих стен и перекрытия, полное обрушение здания с потерей его формы' },
         { parameter: 'Прогноз повреждений d-2', value: null, description: 'Значительные повреждения материала и неконструктивных элементов здания, падение пластов штукатурки, сквозные трещины в перегородках, глубокие трещины в карнизах и фронтонах, выпадение кирпичей из труб, падение отдельных черепиц. Слабые повреждение несущих конструкций: тонкие трещины в несущих стенах, незначительные деформации и небольшие отколы бетона или раствора в узлах каркаса и в стыках панелей. Для ликвидации повреждений необходим капитальный ремонт зданий' },
@@ -45,17 +46,26 @@ export default {
   },
   methods: {
     getBuildings: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/ec3b73cb31ece1eedc4c5a86f211e0a8/raw/06781dda471ae3258dde551f17ec525fc38b41e8/eq_QgpAn7OW_buildings.json')
+      this.$http.get(this.$root.$options.settings.api.endpointEventBuildings(this.$router.currentRoute.params.hashid))
         .then(response => {
-          const msk64ConfigVersion = response.data.system_info.msk64_config_version
-          const pgaConfigVersion = response.data.system_info.pga_config_version
+          this.buildings = response.data.data
+          let damageLevels = { '0': 0, '1': 0, '2': 0, '3': 0 }
+          let damagedResidents = 0
 
-          this.items[0].value = response.data.buildings_information.damage_level_1
-          this.items[1].value = response.data.buildings_information.damage_level_2
-          this.items[2].value = response.data.buildings_information.damage_level_3
-          this.items[3].value = response.data.buildings_information.damaged_resindents
-          this.items[4].value = response.data.system_info.srss_db_version
-          this.items[5].value = response.data.buildings_information.buildings_count
+          this.buildings.forEach(building => {
+            damageLevels[`${building.damage_level}`] += 1
+            if (building.damage_level === 3) damagedResidents += building.building.data.residents
+          })
+
+          const msk64ConfigVersion = this.$store.getters.msk64ConfigVersion
+          const pgaConfigVersion = this.$store.getters.pgaConfigVersion
+
+          this.items[0].value = damageLevels['1']
+          this.items[1].value = damageLevels['2']
+          this.items[2].value = damageLevels['3']
+          this.items[3].value = damagedResidents
+          this.items[4].value = this.$store.getters.srssDBVersion
+          this.items[5].value = this.buildings.length
           this.items[6].value = `${msk64ConfigVersion} / ${pgaConfigVersion}`
         })
         .catch(error => { console.log(error) })

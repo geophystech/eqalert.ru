@@ -13,6 +13,10 @@ class Config {
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
   }
 
+  endpointEventBuildings(hashid) {
+    return `${this.baseURL}/${this.version}/msk64/damagedBuildings/${hashid}`
+  }
+
   endpointEvent(hashid) {
     return `${this.baseURL}/${this.version}/reports/${hashid}`
   }
