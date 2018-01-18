@@ -97,15 +97,16 @@
         </b-row>
       </b-tab>
 
-      <!-- <b-tab title="Тензор момента"
+      <b-tab title="Тензор момента"
         :href="tabsUrls.momentTensor"
         :active="currentPageUrl === tabsUrls.momentTensor"
-        @click="switchView(tabsUrls.momentTensor)">
+        @click="switchView(tabsUrls.momentTensor)"
+        v-if="event.has_mt">
 
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="momentTensor" :event="event" :momentTensorData="momentTensor" />
+              <component is="momentTensor" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -114,12 +115,13 @@
             </keep-alive>
           </b-col>
         </b-row>
-      </b-tab> -->
+      </b-tab>
 
-      <!-- <b-tab title="Магистральные объекты"
+      <b-tab title="Магистральные объекты"
         :href="tabsUrls.ldos"
         :active="currentPageUrl === tabsUrls.ldos"
-        @click="switchView(tabsUrls.ldos)">
+        @click="switchView(tabsUrls.ldos)"
+        v-if="event.has_long_distance_objects_analysis">
 
         <b-row>
           <b-col cols="8">
@@ -133,7 +135,7 @@
             </keep-alive>
           </b-col>
         </b-row>
-      </b-tab> -->
+      </b-tab>
     </b-tabs>
   </div>
 </template>

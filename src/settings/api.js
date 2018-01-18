@@ -29,6 +29,10 @@ class Config {
     return `${this.baseURL}/${this.version}/pga/${hashid}/concaveHulls`
   }
 
+  endpointMomentTensor(hashid) {
+    return `${this.baseURL}/${this.version}/momentTensor/${hashid}`
+  }
+
   endpointSettlements(hashid) {
     return `${this.baseURL}/${this.version}/msk64/citiesAnalysis/${hashid}`
   }

@@ -1,8 +1,12 @@
 <template>
   <div class="event-tab moment-tensor">
-    <b-row>
+    <b-row v-if="momentTensorData.image_fullsize">
       <b-col class="text-center">
-        <img :alt="hashid" :src="`https://eqalert.ru/uploads/images/moment_tensors/fullsize/${image}`" class="img-responsive" />
+        <img
+          :alt="hashid"
+          :src="momentTensorData.image_fullsize"
+          class="img-responsive"
+        />
       </b-col>
     </b-row>
 
@@ -64,7 +68,6 @@
 
 <script>
 export default {
-  props: ['hashid'],
   data() {
     return {
       fields: {
@@ -123,19 +126,15 @@ export default {
       momentTensorData: {}
     }
   },
-  computed: {
-    image: function() {
-      return this.momentTensorData.image_fullsize
-    }
-  },
   created() {
     this.getMomentTensor()
   },
   methods: {
     getMomentTensor: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/49d849c7a7719e08aa562c55d50fd0c0/raw/0168feb46134e70d6cefd25e6743cfe920c2e647/eq_QgpAn7OW_moment_tensor.json')
+      this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(this.$router.currentRoute.params.hashid))
         .then(response => {
-          this.momentTensorData = response.data.moment_tensor
+          this.momentTensorData = response.data.data[0]
+
           this.populateItems()
         })
         .catch(error => { console.log(error) })
@@ -154,7 +153,7 @@ export default {
       this.items.momentTensor[4].value = `${this.momentTensorData.dc}%`
       this.items.momentTensor[5].value = `${this.momentTensorData.clvd}%`
       this.items.momentTensor[6].value = this.momentTensorData.vrr
-      this.items.momentTensor[7].value = this.momentTensorData.mech_only
+      this.items.momentTensor[7].value = this.momentTensorData.has_mech_only
     },
     populateMomentTensorComponentsItems: function() {
       this.items.momentTensorComponents[0].value = this.momentTensorData.m_rr
