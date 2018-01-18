@@ -341,15 +341,18 @@ export default {
         legendData += `<i style="background: ${color}"></i>${value}<br>`
       })
 
-      const legend = L.control({ position: 'bottomright' })
-      legend.onAdd = function() {
-        const div = L.DomUtil.create('div', 'map-legend')
-        div.innerHTML = legendData
+      if (data.length) {
+        const legend = L.control({ position: 'bottomright' })
 
-        return div
+        legend.onAdd = function() {
+          const div = L.DomUtil.create('div', 'map-legend')
+          div.innerHTML = legendData
+
+          return div
+        }
+
+        legend.addTo(window.map[this.hashid][this.target])
       }
-
-      legend.addTo(window.map[this.hashid][this.target])
 
       if (this.shouldDrawEpicenter) this.drawEpicenter()
     },
