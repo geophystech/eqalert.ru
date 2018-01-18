@@ -151,6 +151,7 @@ import Ldos from '@/components/event_views/Ldos'
 import MomentTensor from '@/components/event_views/MomentTensor'
 import Settlements from '@/components/event_views/Settlements'
 import Spinner from 'vue-simple-spinner'
+import { round } from '@/helpers.js'
 
 if (!window.map) window.map = {}
 
@@ -213,13 +214,23 @@ export default {
         .catch(error => { console.log(error) })
     },
     getLastEvents: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/ac17699342b7c268bfeb39d7fba3ead2/raw/dc0c10cea9983e445e331a0f2b0543550ddc232b/eq_sidebar_last_events')
+      this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+        params: {
+          limit: 10,
+          show_nearest_city: 1
+        }
+      })
         .then(response => {
-          response.data.events.forEach(event => {
-            if (event.settlement.title) {
-              event.settlement.settlement = `${event.settlement.distance} км до ${event.settlement.title}`
+          response.data.data.forEach(event => {
+            event.hashid = event.id // REMOVE IT WHEN HASHID GET IMPLEMENTED IN API
+
+            const distance = round(event.nearestCity.data.ep_dis, 2)
+            const title = event.nearestCity.data.settlement.data.translation.data.title
+
+            if (title) {
+              event.settlement = `${distance} км до ${title}`
             } else {
-              event.settlement.settlement = 'Населённый пункт: нет данных'
+              event.settlement = 'Населённый пункт: нет данных'
             }
 
             this.lastEvents.push(event)

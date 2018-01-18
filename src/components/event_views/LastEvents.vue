@@ -5,10 +5,12 @@
 
       <b-row no-gutters class="event" align-v="center" v-for="event in lastEvents" :key="event.hashid">
         <router-link :to="{ name: 'Event', params: { hashid: event.hashid }}" class="d-flex align-items-center">
-          <b-col cols="2" class="magnitude text-center"><strong>{{ event.magnitude }}</strong></b-col>
+          <b-col cols="2" class="magnitude text-center"><strong>{{ event.locValues.data.mag }}</strong></b-col>
           <b-col>
-            <div class="settlement">{{ event.settlement.settlement }}</div>
-            <div class="datetime">{{ moment.utc(event.datetime).locale('ru').format('LL в HH:mm:ss UTC') }}, глубина {{ event.depth }} км</div>
+            <div class="settlement">{{ event.settlement }}</div>
+            <div class="datetime">
+              {{ moment.utc(event.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}, глубина {{ event.locValues.data.depth }} км
+            </div>
           </b-col>
         </router-link>
       </b-row>
