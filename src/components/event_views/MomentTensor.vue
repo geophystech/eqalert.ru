@@ -1,10 +1,10 @@
 <template>
   <div class="event-tab moment-tensor">
-    <b-row v-if="momentTensorData.image_fullsize">
+    <b-row v-if="momentTensorData.image_large">
       <b-col class="text-center">
         <img
-          :alt="hashid"
-          :src="momentTensorData.image_fullsize"
+          :alt="this.$router.currentRoute.params.hashid"
+          :src="momentTensorData.image_large"
           class="img-responsive"
         />
       </b-col>
