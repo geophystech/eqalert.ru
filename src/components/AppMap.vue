@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { convertMsk64 } from '@/helpers.js'
+
 const moment = require('moment')
 require('moment/locale/ru')
 
@@ -15,9 +17,9 @@ export default {
   name: 'app-map',
   components: {},
   props: [
+    'buildings',
     'hashid',
     'mapId',
-    'shouldDrawBuildings',
     'shouldDrawEpicenter',
     'shouldDrawLastEvents',
     'shouldDrawLDOs',
@@ -27,14 +29,12 @@ export default {
   ],
   data() {
     return {
-      buildings: [],
       buildingsInformation: {},
       center: [50.351, 142.395],
       events: [],
       initializedMaps: [],
       ldos: [],
       maxZoom: 18,
-      msk64: [],
       pga: [],
       plateBoundaries: null,
       stations: null,
@@ -51,13 +51,23 @@ export default {
     }
   },
   methods: {
+    buildingColor: function(damageLevel) {
+      switch (damageLevel) {
+        case 0: return 'cyan'
+        case 1: return '#008000'
+        case 2: return '#ffa500'
+        case 3: return '#ff0000'
+      }
+    },
     drawBuildings: function() {
       let markers = new L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
 
       this.buildings.forEach(building => {
-        const marker = new L.MapMarker(new L.LatLng(building.latitude, building.longitude), {
+        if (building.damage_level < 1) return
+
+        const marker = new L.MapMarker(new L.LatLng(building.building.data.lat, building.building.data.lon), {
           dropShadow: true,
-          fillColor: building.color,
+          fillColor: this.buildingColor(building.damage_level),
           gradient: true,
           innerRadius: 0,
           radius: 7
@@ -68,35 +78,35 @@ export default {
             <tbody>
               <tr>
                 <th class="align-middle" scope="row">Тип строения</th>
-                <td>${building.building_type}</td>
+                <td>${building.building.data.building_type}</td>
               </tr>
               <tr>
                 <th scope="row">Тип фундамента</th>
-                <td>${building.building_base_type}</td>
+                <td>${building.building.data.building_base_type}</td>
               </tr>
               <tr>
                 <th scope="row">Материал</th>
-                <td>${building.fabric_type}</td>
+                <td>${building.building.data.fabric_type}</td>
               </tr>
               <tr>
                 <th scope="row">Год постройки</th>
-                <td>${building.built_year}</td>
+                <td>${building.building.data.built_year}</td>
               </tr>
               <tr>
                 <th scope="row">Кол-во этажей</th>
-                <td>${building.flats}</td>
+                <td>${building.building.data.flats}</td>
               </tr>
               <tr>
                 <th scope="row">Адрес</th>
-                <td>${building.street}, д. ${building.street_number}</td>
+                <td>${building.building.data.street}, д. ${building.building.data.street_number}</td>
               </tr>
               <tr>
                 <th scope="row">Кол-во проживающих</th>
-                <td>${building.residents}</td>
+                <td>${building.building.data.residents}</td>
               </tr>
               <tr>
                 <th scope="row">Максимальная бальность</th>
-                <td>${building.max_msk64} (MSK64)</td>
+                <td>${building.building.data.max_msk64} (MSK64)</td>
               </tr>
               <tr>
                 <th scope="row">Прогноз повреждений</th>
@@ -104,7 +114,7 @@ export default {
               </tr>
               <tr>
                 <th scope="row">PGA</th>
-                <td>${building.pga}</td>
+                <td>${building.pga_value || 0.0}</td>
               </tr>
               <tr>
                 <th scope="row">По данным</th>
@@ -120,12 +130,12 @@ export default {
       window.map[this.hashid][this.target].addLayer(markers)
 
       const legend = L.control({ position: 'bottomright' })
-      legend.onAdd = function(map) {
+      legend.onAdd = map => {
         let div = L.DomUtil.create('div', 'map-legend')
         div.innerHTML =
-          `<div class="buildings-legend"><span style="background: #008000"></span><span>d-1</span></div>
-           <div class="buildings-legend"><span style="background: #ffa500"></span><span>d-2</span></div>
-           <div class="buildings-legend"><span style="background: #ff0000"></span><span>d-3</span></div>
+          `<div class="buildings-legend"><span style="background: ${this.buildingColor(1)}"></span><span>d-1</span></div>
+           <div class="buildings-legend"><span style="background: ${this.buildingColor(2)}"></span><span>d-2</span></div>
+           <div class="buildings-legend"><span style="background: ${this.buildingColor(3)}"></span><span>d-3</span></div>
           `
         return div
       }
@@ -313,19 +323,22 @@ export default {
       // Store current tile provider to the storage
       window.map[this.hashid][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
     },
-    drawMsk64: function() {
+    drawMsk64: function(data) {
       let legendData = ''
 
-      this.msk64.forEach(msk => {
+      data.forEach(item => {
+        const value = convertMsk64(item.value)
+        const color = this.msk64Color(value)
+
         const circle = L.circle(
           [this.center[0], this.center[1]],
-          msk.distance * 1000,
-          { color: msk.color, fillColor: msk.color })
+          item.distance * 1000,
+          { color: color, fillColor: color })
 
         circle.addTo(window.map[this.hashid][this.target])
-        circle.bindPopup(`<div class="text-center"><strong>${msk.value}</strong></div>`)
+        circle.bindPopup(`<div class="text-center"><strong>${value}</strong></div>`)
 
-        legendData += `<i style="background: ${msk.color}"></i>${msk.value}<br>`
+        legendData += `<i style="background: ${color}"></i>${value}<br>`
       })
 
       const legend = L.control({ position: 'bottomright' })
@@ -482,17 +495,6 @@ export default {
         return 26
       }
     },
-    getBuildings: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/ec3b73cb31ece1eedc4c5a86f211e0a8/raw/2ab7e942c9eef6b1eab3b18d341def4573c821ed/eq_QgpAn7OW_buildings.json')
-        .then(response => {
-          this.buildings = response.data.buildings.filter(building => {
-            // Show only damaged buildings.
-            return building.damage_level > 0
-          })
-          this.drawBuildings()
-        })
-        .catch(error => { console.log(error) })
-    },
     getLastEvents: function() {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
         .then(response => {
@@ -510,15 +512,14 @@ export default {
         .catch(error => { console.log(error) })
     },
     getMsk64: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/a255459e6af24ddba9d8abad2bbdf793/raw/c64daf2034c66ed85e024841721c480159cb2f3d/eq_QgpAn7OW_settlements.json')
+      this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(this.hashid))
         .then(response => {
-          this.msk64 = response.data.msk64
-          this.drawMsk64()
+          this.drawMsk64(response.data.data)
         })
         .catch(error => { console.log(error) })
     },
     getPga: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEventPga(334))
+      this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.hashid))
         .then(response => {
           this.pga = response.data.data
           this.drawPga()
@@ -540,6 +541,33 @@ export default {
           this.drawStations()
         })
         .catch(error => { console.log(error) })
+    },
+    msk64Color: function(value) {
+      switch (value) {
+        case 'I': return '#ffffff'
+        case 'I-II': return '#ffffff'
+        case 'II': return '#bfccff'
+        case 'II-III': return '#bfccff'
+        case 'III': return '#9999ff'
+        case 'III-IV': return '#9999ff'
+        case 'IV': return '#80ffff'
+        case 'IV-V': return '#80ffff'
+        case 'V': return '#7df894'
+        case 'V-VI': return '#7df894'
+        case 'VI': return '#ffff00'
+        case 'VI-VII': return '#ffff00'
+        case 'VII': return '#ffc800'
+        case 'VII-VIII': return '#ffc800'
+        case 'VIII': return '#ff9100'
+        case 'VIII-IX': return '#ff9100'
+        case 'IX': return '#ff0000'
+        case 'IX-X': return '#ff0000'
+        case 'X': return '#c80000'
+        case 'X-XI': return '#c80000'
+        case 'XI': return '#800000'
+        case 'XI-XII': return '#800000'
+        case 'XII': return '#400000'
+      }
     },
     pgaLineColor: function(range) {
       switch (range) {
@@ -566,6 +594,7 @@ export default {
       this.getStations()
       this.getLastEvents()
     }
+
     this.getPlateBoundaries()
   },
   mounted() {
@@ -575,8 +604,8 @@ export default {
       this.getPga()
     } else if (this.shouldDrawMsk64) {
       this.getMsk64()
-    } else if (this.shouldDrawBuildings) {
-      this.getBuildings()
+    } else if (this.buildings) {
+      this.drawBuildings()
     } else if (this.shouldDrawLDOs) {
       this.getLDOs()
     } else if (!this.shouldDrawLastEvents) {

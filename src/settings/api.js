@@ -13,12 +13,28 @@ class Config {
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
   }
 
+  endpointEventBuildings(hashid) {
+    return `${this.baseURL}/${this.version}/msk64/damagedBuildings/${hashid}`
+  }
+
   endpointEvent(hashid) {
     return `${this.baseURL}/${this.version}/reports/${hashid}`
   }
 
+  endpointEventMsk64(hashid) {
+    return `${this.baseURL}/${this.version}/msk64/data/${hashid}`
+  }
+
   endpointEventPga(hashid) {
     return `${this.baseURL}/${this.version}/pga/${hashid}/concaveHulls`
+  }
+
+  endpointMomentTensor(hashid) {
+    return `${this.baseURL}/${this.version}/momentTensor/${hashid}`
+  }
+
+  endpointSettlements(hashid) {
+    return `${this.baseURL}/${this.version}/msk64/citiesAnalysis/${hashid}`
   }
 }
 
