@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab buildings">
-    <AppMap :hashid="event.id" mapId="map-buildings" shouldDrawEpicenter="true" :buildings="buildings" :target="buildings" v-if="buildings.length" />
+    <AppMap :event="event" mapId="map-buildings" shouldDrawEpicenter="true" :buildings="buildings" :target="buildings" v-if="buildings.length" />
 
     <b-table
       hover

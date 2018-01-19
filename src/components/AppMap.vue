@@ -18,7 +18,7 @@ export default {
   components: {},
   props: [
     'buildings',
-    'hashid',
+    'event',
     'mapId',
     'shouldDrawEpicenter',
     'shouldDrawLastEvents',
@@ -145,7 +145,9 @@ export default {
       if (this.shouldDrawEpicenter) this.drawEpicenter()
     },
     drawEpicenter: function() {
-      const epicenter = new L.StarMarker((new L.LatLng(this.center[0], this.center[1])), {
+      const latitude = this.epicenterCoordinates.lat
+      const longitude = this.epicenterCoordinates.lon
+      const epicenter = new L.StarMarker((new L.LatLng(latitude, longitude)), {
         color: '',
         fillColor: '#ff0a0a',
         fillOpacity: 1.0,
@@ -314,7 +316,7 @@ export default {
         worldCopyJump: true,
         zoomAnimation: true,
         zoomControl: false
-      }).setView(this.center, this.zoom)
+      }).setView([this.epicenterCoordinates.lat, this.epicenterCoordinates.lon], this.zoom)
 
       L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[this.hashid][this.target])
 
@@ -327,11 +329,13 @@ export default {
       let legendData = ''
 
       data.forEach(item => {
+        const latitude = this.epicenterCoordinates.lat
+        const longitude = this.epicenterCoordinates.lon
         const value = convertMsk64(item.value)
         const color = this.msk64Color(value)
 
         const circle = L.circle(
-          [this.center[0], this.center[1]],
+          [latitude, longitude],
           item.distance * 1000,
           { color: color, fillColor: color })
 
@@ -588,6 +592,14 @@ export default {
     },
     populateControlLayers: function() {
       if (!controlLayers[this.hashid]) controlLayers[this.hashid] = {}
+    }
+  },
+  computed: {
+    epicenterCoordinates: function() {
+      return { lat: this.event.locValues.data.lat, lon: this.event.locValues.data.lon }
+    },
+    hashid: function() {
+      return this.event.id // REPLACE `.id` WITH `.hashid` WHEN API GOT HASHID SUPPORTED.
     }
   },
   created() {
