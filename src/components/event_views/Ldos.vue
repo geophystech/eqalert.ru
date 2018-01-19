@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab ldos">
-    <AppMap :hashid="hashid" mapId="map-ldos" shouldDrawEpicenter="true" shouldDrawLDOs="true" target="ldos" />
+    <AppMap :event="event" mapId="map-ldos" shouldDrawEpicenter="true" shouldDrawLDOs="true" target="ldos" v-if="event.id" />
 
     <b-table
       hover
