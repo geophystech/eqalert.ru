@@ -14,8 +14,6 @@ let boundaries = null
 let controlLayers = {}
 
 export default {
-  name: 'app-map',
-  components: {},
   props: [
     'buildings',
     'event',
@@ -618,23 +616,25 @@ export default {
     }
   },
   created() {
-    this.populateControlLayers(this.id)
+    // this.populateControlLayers(this.id)
 
-    if (this.shouldDrawLastEvents) {
-      this.getStations()
-      this.getLastEvents()
-    }
+    // if (this.shouldDrawLastEvents) {
+    //   this.getStations()
+    //   this.getLastEvents()
+    // }
 
-    this.getPlateBoundaries()
+    // this.getPlateBoundaries()
   },
   mounted() {
-    this.drawMap(this.id)
-    this.loadData(this.id)
+    // this.drawMap(this.id)
+    // this.loadData(this.id)
+    console.log(`mounted event, new value: ${this.event.id}`)
   },
   watch: {
     event: function(value) {
-      this.populateControlLayers(value.id)
-      this.loadData(value.id)
+      console.log(`changed event, new value: ${value.id}`)
+      // this.populateControlLayers(value.id)
+      // this.loadData(value.id)
     }
   }
 }
