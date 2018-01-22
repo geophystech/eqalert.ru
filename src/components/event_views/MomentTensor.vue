@@ -3,7 +3,7 @@
     <b-row v-if="momentTensorData.image_large">
       <b-col class="text-center">
         <img
-          :alt="this.$router.currentRoute.params.hashid"
+          :alt="this.$router.currentRoute.params.id"
           :src="momentTensorData.image_large"
           class="img-responsive"
         />
@@ -68,6 +68,7 @@
 
 <script>
 export default {
+  props: ['event'],
   data() {
     return {
       fields: {
@@ -127,11 +128,11 @@ export default {
     }
   },
   created() {
-    this.getMomentTensor()
+    this.getMomentTensor(this.event.id)
   },
   methods: {
-    getMomentTensor: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(this.$router.currentRoute.params.hashid))
+    getMomentTensor: function(id) {
+      this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(id))
         .then(response => {
           this.momentTensorData = response.data.data[0]
 

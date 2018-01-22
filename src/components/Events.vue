@@ -109,7 +109,7 @@ export default {
         .catch(error => { console.log(error) })
     },
     openEvent: function(item) {
-      this.$router.push({ name: 'Event', params: { hashid: item.id.toString() } }) // DELETE toString() when id is replaced by hashid!
+      this.$router.push({ name: 'Event', params: { id: item.id.toString() } }) // DELETE toString() when id is replaced by id!
     }
   },
   created() {

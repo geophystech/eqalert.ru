@@ -106,7 +106,7 @@
         <b-row>
           <b-col cols="8">
             <keep-alive>
-              <component is="momentTensor" />
+              <component is="momentTensor" :event="event" />
             </keep-alive>
           </b-col>
           <b-col cols="4">
@@ -177,7 +177,7 @@ export default {
           text: 'События',
           href: this.$router.resolve({ name: 'Events' }).href
         }, {
-          text: this.$router.currentRoute.params.hashid,
+          text: 'event',
           active: true
         }],
       event: {
@@ -190,22 +190,21 @@ export default {
         header: true
       },
       tabsUrls: {
-        generalInformation: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid } }).href,
-        settlements: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'settlements' } }).href,
-        buildings: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'buildings' } }).href,
-        momentTensor: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'moment-tensor' } }).href,
-        ldos: this.$router.resolve({ name: 'Event', params: { hashid: this.$router.currentRoute.params.hashid, tab: 'ldos' } }).href
+        generalInformation: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id } }).href,
+        settlements: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'settlements' } }).href,
+        buildings: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'buildings' } }).href,
+        momentTensor: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'moment-tensor' } }).href,
+        ldos: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'ldos' } }).href
       }
     }
   },
   methods: {
-    getEvent: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEvent(this.$router.currentRoute.params.hashid))
+    getEvent: function(id) {
+      this.$http.get(this.$root.$options.settings.api.endpointEvent(id))
         .then(response => {
           this.spinners.header = false
           this.event = response.data.data
           this.event.datetime = this.event.locValues.data.event_datetime
-          this.event.hashid = this.$router.currentRoute.params.hashid // DELETE THIS LINE IF API STARTS RETURNING HASHID
           this.event.label = this.label(this.event.has_delete, this.event.has_final)
           this.event.magnitude = this.event.locValues.data.mag
           this.event.magnitudeType = this.magnitudeType(this.event.locValues.data.mag_t)
@@ -222,8 +221,6 @@ export default {
       })
         .then(response => {
           response.data.data.forEach(event => {
-            event.hashid = event.id // REMOVE IT WHEN HASHID GET IMPLEMENTED IN API
-
             const distance = round(event.nearestCity.data.ep_dis, 2)
             const title = event.nearestCity.data.settlement.data.translation.data.title
 
@@ -238,12 +235,10 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
-    invalidateMapSize: function(target) {
+    invalidateMapSize: function(target, id) {
       const key = Object.keys(this.tabsUrls)[target]
 
-      if (window.map[this.event.hashid][key]) {
-        setTimeout(() => { window.map[this.event.hashid][key].invalidateSize() }, 1)
-      }
+      if (window.map[id][key]) setTimeout(() => { window.map[id][key].invalidateSize() }, 1)
     },
     label: function(deleted, final) {
       if (deleted) {
@@ -266,6 +261,11 @@ export default {
         }
       }
     },
+    loadEvent: function(id) {
+      this.getEvent(id)
+      this.populateMap(id)
+      this.breadcrumbs[2].text = id
+    },
     magnitudeType: function(type) {
       // Nested arrays are used because there may be multiple magnitude types.
       // But in most cases there will be only one type.
@@ -281,9 +281,9 @@ export default {
         default: return [['M', '']]
       }
     },
-    populateMap: function() {
-      if (!window.map[this.event.hashid]) window.map[this.event.hashid] = {}
-      Object.keys(this.tabsUrls).forEach(tab => { window.map[this.event.hashid][tab] = null })
+    populateMap: function(id) {
+      if (!window.map[id]) window.map[id] = {}
+      Object.keys(this.tabsUrls).forEach(tab => { window.map[id][tab] = null })
     },
     processingMethod: function(auto, manual) {
       if (auto && !manual) return { long: 'автоматический', short: 'A' }
@@ -303,13 +303,13 @@ export default {
   },
   created() {
     this.getLastEvents()
+    this.$root.$on('changed::tab', tab => this.invalidateMapSize(tab.currentTab, this.$router.currentRoute.params.id))
+    this.loadEvent(this.$router.currentRoute.params.id)
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.params.id) this.loadEvent(to.params.id)
 
-    this.$root.$on('changed::tab', tab => this.invalidateMapSize(tab.currentTab))
-
-    this.event.hashid = this.$router.currentRoute.params.hashid
-
-    this.getEvent()
-    this.populateMap()
+    next()
   }
 }
 </script>

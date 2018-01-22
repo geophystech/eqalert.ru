@@ -30,7 +30,6 @@ export default {
   data() {
     return {
       buildingsInformation: {},
-      center: [50.351, 142.395],
       events: [],
       initializedMaps: [],
       ldos: [],
@@ -59,7 +58,7 @@ export default {
         case 3: return '#ff0000'
       }
     },
-    drawBuildings: function() {
+    drawBuildings: function(id) {
       let markers = new L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
 
       this.buildings.forEach(building => {
@@ -127,7 +126,7 @@ export default {
         markers.addLayer(marker)
       })
 
-      window.map[this.hashid][this.target].addLayer(markers)
+      window.map[id][this.target].addLayer(markers)
 
       const legend = L.control({ position: 'bottomright' })
       legend.onAdd = map => {
@@ -140,11 +139,11 @@ export default {
         return div
       }
 
-      legend.addTo(window.map[this.hashid][this.target])
+      legend.addTo(window.map[id][this.target])
 
-      if (this.shouldDrawEpicenter) this.drawEpicenter()
+      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
     },
-    drawEpicenter: function() {
+    drawEpicenter: function(id) {
       const latitude = this.epicenterCoordinates.lat
       const longitude = this.epicenterCoordinates.lon
       const epicenter = new L.StarMarker((new L.LatLng(latitude, longitude)), {
@@ -157,7 +156,7 @@ export default {
       })
 
       epicenter.bindPopup('Эпицентр землетрясения')
-      window.map[this.hashid][this.target].addLayer(epicenter)
+      window.map[id][this.target].addLayer(epicenter)
     },
     drawLastEvents: function() {
       this.events.reverse().forEach((event) => {
@@ -176,7 +175,7 @@ export default {
           `<table class="table table-hover table-sm table-responsive">
             <thead>
               <tr>
-                <th class="text-center" colspan=2>${event.hashid}</th>
+                <th class="text-center" colspan=2>${event.id}</th>
               </tr>
             </thead>
             <tbody>
@@ -198,10 +197,10 @@ export default {
               </tr>
             </tbody>
           </table>
-          <div class="text-center read-more"><a href="#/events/${event.hashid}" class="btn btn-success">Подробнее</a></div>`
+          <div class="text-center read-more"><a href="#/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
 
         marker.bindPopup(message)
-        marker.addTo(window.map[this.hashid][this.target])
+        marker.addTo(window.map[this.id][this.target])
       })
 
       let legend = L.control({ position: 'bottomright' })
@@ -213,7 +212,7 @@ export default {
         div.innerHTML += '<span style="background:#808080">> 14 дн</span>'
         return div
       }
-      legend.addTo(window.map[this.hashid][this.target])
+      legend.addTo(window.map[this.id][this.target])
 
       let text = L.control({ position: 'bottomright' })
       text.onAdd = function() {
@@ -221,13 +220,13 @@ export default {
         div.innerHTML += '<p>События за последние 3 месяца</p>'
         return div
       }
-      text.addTo(window.map[this.hashid][this.target])
+      text.addTo(window.map[this.id][this.target])
     },
-    drawLDOs: function() {
+    drawLDOs: function(id) {
       this.ldos.forEach(ldo => {
         ldo.parts.forEach(part => {
           const coordinates = [[part.latitude_start, part.longitude_start], [part.latitude_end, part.longitude_end]]
-          const partPolyline = L.polyline(coordinates, { color: part.color }).addTo(window.map[this.hashid][this.target])
+          const partPolyline = L.polyline(coordinates, { color: part.color }).addTo(window.map[id][this.target])
           let message =
             `<table class="table table-hover table-sm table-responsive">
               <thead>
@@ -306,10 +305,10 @@ export default {
         })
       })
 
-      if (this.shouldDrawEpicenter) this.drawEpicenter()
+      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
     },
-    drawMap: function() {
-      window.map[this.hashid][this.target] = L.map(this.mapId, {
+    drawMap: function(id) {
+      window.map[id][this.target] = L.map(this.mapId, {
         fullscreenControl: true,
         fullscreenControlOptions: { position: 'topleft' },
         scrollWheelZoom: false,
@@ -318,14 +317,14 @@ export default {
         zoomControl: false
       }).setView([this.epicenterCoordinates.lat, this.epicenterCoordinates.lon], this.zoom)
 
-      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[this.hashid][this.target])
+      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[id][this.target])
 
-      this.drawTileLayers()
+      this.drawTileLayers(id)
 
       // Store current tile provider to the storage
-      window.map[this.hashid][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
+      window.map[id][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
     },
-    drawMsk64: function(data) {
+    drawMsk64: function(id, data) {
       let legendData = ''
 
       data.forEach(item => {
@@ -339,7 +338,7 @@ export default {
           item.distance * 1000,
           { color: color, fillColor: color })
 
-        circle.addTo(window.map[this.hashid][this.target])
+        circle.addTo(window.map[id][this.target])
         circle.bindPopup(`<div class="text-center"><strong>${value}</strong></div>`)
 
         legendData += `<i style="background: ${color}"></i>${value}<br>`
@@ -355,19 +354,19 @@ export default {
           return div
         }
 
-        legend.addTo(window.map[this.hashid][this.target])
+        legend.addTo(window.map[id][this.target])
       }
 
-      if (this.shouldDrawEpicenter) this.drawEpicenter()
+      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
     },
-    drawPga: function() {
+    drawPga: function(id) {
       let legendData = ''
 
       Object.keys(this.pga).forEach((key) => {
         const lineColor = this.pgaLineColor(this.pga[key].range)
         const pga = L.polygon(this.pga[key].data, { color: lineColor, weigh: 2 })
 
-        pga.addTo(window.map[this.hashid][this.target])
+        pga.addTo(window.map[id][this.target])
         pga.bindPopup(`Пиковое ускорение грунта: ${this.pga[key].range}%g (ускорение свободного падения)`)
 
         legendData += `<i style="background: ${lineColor}"></i>${this.pga[key].range}<br>`
@@ -382,9 +381,9 @@ export default {
         return div
       }
 
-      pgaLegend.addTo(window.map[this.hashid][this.target])
+      pgaLegend.addTo(window.map[id][this.target])
 
-      if (this.shouldDrawEpicenter) this.drawEpicenter()
+      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
     },
     drawPlateBoundaries: function() {
       boundaries = new L.GeoJSON(this.plateBoundaries, {
@@ -411,7 +410,7 @@ export default {
         }
       })
 
-      controlLayers[this.hashid][this.target].addOverlay(boundaries, 'Plate Boundaries')
+      controlLayers[this.id][this.target].addOverlay(boundaries, 'Plate Boundaries')
     },
     drawStations: function() {
       this.stations.forEach(station => {
@@ -464,15 +463,15 @@ export default {
           </table>`
 
         marker.bindPopup(message)
-        window.map[this.hashid][this.target].addLayer(marker)
+        window.map[this.id][this.target].addLayer(marker)
       })
     },
-    drawTileLayers: function() {
+    drawTileLayers: function(id) {
       // Draw stored tile provider for current user.
-      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[this.hashid][this.target])
+      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[id][this.target])
 
-      controlLayers[this.hashid][this.target] = new L.Control.Layers(this.tileProviders)
-      controlLayers[this.hashid][this.target].addTo(window.map[this.hashid][this.target])
+      controlLayers[id][this.target] = new L.Control.Layers(this.tileProviders)
+      controlLayers[id][this.target].addTo(window.map[id][this.target])
     },
     eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
@@ -510,26 +509,26 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
-    getLDOs: function() {
+    getLDOs: function(id) {
       this.$http.get('https://gist.githubusercontent.com/blackst0ne/d11aa34f71ae59da19f0a59379f0c0cd/raw/0949a047792fc84a346aa420848e0761d8609a59/eq_QgpAn7OW_ldos.json')
         .then(response => {
           this.ldos = response.data.ldos
-          this.drawLDOs()
+          this.drawLDOs(id)
         })
         .catch(error => { console.log(error) })
     },
-    getMsk64: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(this.hashid))
+    getMsk64: function(id) {
+      this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(id))
         .then(response => {
-          this.drawMsk64(response.data.data)
+          this.drawMsk64(id, response.data.data)
         })
         .catch(error => { console.log(error) })
     },
-    getPga: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.hashid))
+    getPga: function(id) {
+      this.$http.get(this.$root.$options.settings.api.endpointEventPga(id))
         .then(response => {
           this.pga = response.data.data
-          this.drawPga()
+          this.drawPga(id)
         })
         .catch(error => { console.log(error) })
     },
@@ -548,6 +547,19 @@ export default {
           this.drawStations()
         })
         .catch(error => { console.log(error) })
+    },
+    loadData: function(id) {
+      if (this.shouldDrawPga) {
+        this.getPga(id)
+      } else if (this.shouldDrawMsk64) {
+        this.getMsk64(id)
+      } else if (this.buildings) {
+        this.drawBuildings(id)
+      } else if (this.shouldDrawLDOs) {
+        this.getLDOs(id)
+      } else if (!this.shouldDrawLastEvents) {
+        this.drawEpicenter(id)
+      }
     },
     msk64Color: function(value) {
       switch (value) {
@@ -590,20 +602,23 @@ export default {
         case '>139': return '#400000'
       }
     },
-    populateControlLayers: function() {
-      if (!controlLayers[this.hashid]) controlLayers[this.hashid] = {}
+    populateControlLayers: function(id) {
+      if (!controlLayers[id]) controlLayers[id] = {}
     }
   },
   computed: {
     epicenterCoordinates: function() {
-      return { lat: this.event.locValues.data.lat, lon: this.event.locValues.data.lon }
+      if (this.event && this.event.locValues) return { lat: this.event.locValues.data.lat, lon: this.event.locValues.data.lon }
+      return { lat: 50.351, lon: 142.395 }
     },
-    hashid: function() {
-      return this.event.id // REPLACE `.id` WITH `.hashid` WHEN API GOT HASHID SUPPORTED.
+    id: function() {
+      if (this.event) return this.event.id
+
+      return 'mainpage'
     }
   },
   created() {
-    this.populateControlLayers()
+    this.populateControlLayers(this.id)
 
     if (this.shouldDrawLastEvents) {
       this.getStations()
@@ -613,18 +628,13 @@ export default {
     this.getPlateBoundaries()
   },
   mounted() {
-    this.drawMap()
-
-    if (this.shouldDrawPga) {
-      this.getPga()
-    } else if (this.shouldDrawMsk64) {
-      this.getMsk64()
-    } else if (this.buildings) {
-      this.drawBuildings()
-    } else if (this.shouldDrawLDOs) {
-      this.getLDOs()
-    } else if (!this.shouldDrawLastEvents) {
-      this.drawEpicenter()
+    this.drawMap(this.id)
+    this.loadData(this.id)
+  },
+  watch: {
+    event: function(value) {
+      this.populateControlLayers(value.id)
+      this.loadData(value.id)
     }
   }
 }

@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getBuildings: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEventBuildings(this.$router.currentRoute.params.hashid))
+      this.$http.get(this.$root.$options.settings.api.endpointEventBuildings(this.$router.currentRoute.params.id))
         .then(response => {
           this.buildings = response.data.data
           let damageLevels = { '0': 0, '1': 0, '2': 0, '3': 0 }

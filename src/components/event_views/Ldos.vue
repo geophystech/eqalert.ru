@@ -20,7 +20,7 @@ import AppMap from '@/components/AppMap'
 
 export default {
   components: { AppMap },
-  props: ['hashid'],
+  props: ['id'],
   data() {
     return {
       items: [

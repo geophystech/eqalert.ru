@@ -3,8 +3,8 @@
     <b-card header="Последние события"
             header-class="text-center">
 
-      <b-row no-gutters class="event" align-v="center" v-for="event in lastEvents" :key="event.hashid">
-        <router-link :to="{ name: 'Event', params: { hashid: event.hashid }}" class="d-flex align-items-center">
+      <b-row no-gutters class="event" align-v="center" v-for="event in lastEvents" :key="event.id">
+        <router-link :to="{ name: 'Event', params: { id: event.id } }" class="d-flex align-items-center" :key="event.id">
           <b-col cols="2" class="magnitude text-center"><strong>{{ event.locValues.data.mag }}</strong></b-col>
           <b-col>
             <div class="settlement">{{ event.settlement }}</div>

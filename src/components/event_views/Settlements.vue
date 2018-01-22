@@ -84,7 +84,7 @@ export default {
       }
     },
     getSettlements: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointSettlements(this.$router.currentRoute.params.hashid), {
+      this.$http.get(this.$root.$options.settings.api.endpointSettlements(this.$router.currentRoute.params.id), {
         params: {
           cursor: this.cursor,
           limit: 10

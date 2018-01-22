@@ -26,7 +26,7 @@ export default new Router({
       component: Events
     },
     {
-      path: '/events/:hashid/:tab?',
+      path: '/events/:id/:tab?',
       name: 'Event',
       component: Event
     },
