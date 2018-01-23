@@ -1,12 +1,13 @@
 <template>
   <div class="event">
     <component is="EventHeader" :event="event" />
+    <component is="Tabs" @onTabSwitch="onTabSwitch"/>
 
-    <b-tabs>
+    <!-- <b-tabs>
       <b-tab title="Общая информация"
-        :href="tabsUrls.generalInformation"
-        :active="currentPageUrl === tabsUrls.generalInformation"
-        @click="switchView(tabsUrls.generalInformation)">
+        :href="tabs.generalInformation"
+        :active="currentPageUrl === tabs.generalInformation"
+        @click="switchView(tabs.generalInformation)">
 
         <b-row>
           <b-col cols="8">
@@ -23,9 +24,9 @@
       </b-tab>
 
       <b-tab title="Ближайшие населенные пункты"
-        :href="tabsUrls.settlements"
-        :active="currentPageUrl === tabsUrls.settlements"
-        @click="switchView(tabsUrls.settlements)"
+        :href="tabs.settlements"
+        :active="currentPageUrl === tabs.settlements"
+        @click="switchView(tabs.settlements)"
         v-if="event.has_cities_msk64_analysis">
 
         <b-row>
@@ -43,9 +44,9 @@
       </b-tab>
 
       <b-tab title="Здания и сооружения"
-        :href="tabsUrls.buildings"
-        :active="currentPageUrl === tabsUrls.buildings"
-        @click="switchView(tabsUrls.buildings)"
+        :href="tabs.buildings"
+        :active="currentPageUrl === tabs.buildings"
+        @click="switchView(tabs.buildings)"
         v-if="event.has_buildings_msk64_analysis">
 
         <b-row>
@@ -63,9 +64,9 @@
       </b-tab>
 
       <b-tab title="Тензор момента"
-        :href="tabsUrls.momentTensor"
-        :active="currentPageUrl === tabsUrls.momentTensor"
-        @click="switchView(tabsUrls.momentTensor)"
+        :href="tabs.momentTensor"
+        :active="currentPageUrl === tabs.momentTensor"
+        @click="switchView(tabs.momentTensor)"
         v-if="event.has_mt">
 
         <b-row>
@@ -83,9 +84,9 @@
       </b-tab>
 
       <b-tab title="Магистральные объекты"
-        :href="tabsUrls.ldos"
-        :active="currentPageUrl === tabsUrls.ldos"
-        @click="switchView(tabsUrls.ldos)"
+        :href="tabs.ldos"
+        :active="currentPageUrl === tabs.ldos"
+        @click="switchView(tabs.ldos)"
         v-if="event.has_long_distance_objects_analysis">
 
         <b-row>
@@ -101,19 +102,20 @@
           </b-col>
         </b-row>
       </b-tab>
-    </b-tabs>
+    </b-tabs> -->
   </div>
 </template>
 
 <script>
 import EventHeader from '@/components/event_components/Header'
+import Tabs from '@/components/event_components/Tabs'
 // old is below
-import Buildings from '@/components/event_views/Buildings'
-import GeneralInformation from '@/components/event_views/GeneralInformation'
-import LastEvents from '@/components/event_views/LastEvents'
-import Ldos from '@/components/event_views/Ldos'
-import MomentTensor from '@/components/event_views/MomentTensor'
-import Settlements from '@/components/event_views/Settlements'
+// import Buildings from '@/components/event_views/Buildings'
+// import GeneralInformation from '@/components/event_views/GeneralInformation'
+// import LastEvents from '@/components/event_views/LastEvents'
+// import Ldos from '@/components/event_views/Ldos'
+// import MomentTensor from '@/components/event_views/MomentTensor'
+// import Settlements from '@/components/event_views/Settlements'
 import { round } from '@/helpers.js'
 
 if (!window.map) window.map = {}
@@ -121,30 +123,23 @@ if (!window.map) window.map = {}
 export default {
   components: {
     EventHeader,
-    buildings: Buildings,
-    generalInformation: GeneralInformation,
-    lastEvents: LastEvents,
-    ldos: Ldos,
-    momentTensor: MomentTensor,
-    settlements: Settlements
+    Tabs
+    // buildings: Buildings,
+    // generalInformation: GeneralInformation,
+    // lastEvents: LastEvents,
+    // ldos: Ldos,
+    // momentTensor: MomentTensor,
+    // settlements: Settlements
   },
   name: 'event',
   data() {
     return {
-      currentPageUrl: `#${this.$router.currentRoute.fullPath}`,
       event: {
         label: {},
         processingMethod: {}
       },
       lastEvents: [],
-      momentTensor: {},
-      tabsUrls: {
-        generalInformation: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id } }).href,
-        settlements: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'settlements' } }).href,
-        buildings: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'buildings' } }).href,
-        momentTensor: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'moment-tensor' } }).href,
-        ldos: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'ldos' } }).href
-      }
+      momentTensor: {}
     }
   },
   methods: {
@@ -184,7 +179,7 @@ export default {
         .catch(error => { console.log(error) })
     },
     invalidateMapSize: function(target, id) {
-      const key = Object.keys(this.tabsUrls)[target]
+      const key = Object.keys(this.tabs)[target]
 
       if (window.map[id][key]) setTimeout(() => { window.map[id][key].invalidateSize() }, 1)
     },
@@ -211,7 +206,7 @@ export default {
     },
     loadEvent: function(id) {
       this.getEvent(id)
-      this.populateMap(id)
+      // this.populateMap(id)
     },
     magnitudeType: function(type) {
       // Nested arrays are used because there may be multiple magnitude types.
@@ -228,9 +223,12 @@ export default {
         default: return [['M', '']]
       }
     },
+    onTabSwitch: function(value) {
+      console.log(value)
+    },
     populateMap: function(id) {
       if (!window.map[id]) window.map[id] = {}
-      Object.keys(this.tabsUrls).forEach(tab => { window.map[id][tab] = null })
+      Object.keys(this.tabs).forEach(tab => { window.map[id][tab] = null })
     },
     processingMethod: function(auto, manual) {
       if (auto && !manual) return { long: 'автоматический', short: 'A' }
@@ -238,14 +236,11 @@ export default {
       if (!auto && manual) return { long: 'ручной', short: 'M' }
 
       return { long: 'неизвестно', short: 'U' }
-    },
-    switchView: function(href) {
-      history.pushState({}, null, href)
     }
   },
   created() {
     this.getLastEvents()
-    this.$root.$on('changed::tab', tab => this.invalidateMapSize(tab.currentTab, this.$router.currentRoute.params.id))
+    // this.$root.$on('changed::tab', tab => this.invalidateMapSize(tab.currentTab, this.$router.currentRoute.params.id))
     this.loadEvent(this.$router.currentRoute.params.id)
   },
   beforeRouteUpdate(to, from, next) {
@@ -255,23 +250,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  @import '../assets/scss/global.scss';
-
-  .tabs {
-    .nav-tabs {
-      justify-content: center;
-
-      .nav-item{
-        a {
-          font-size: 90%;
-        }
-      }
-    }
-
-    .tab-content {
-      padding-top: 2%;
-    }
-  }
-</style>
