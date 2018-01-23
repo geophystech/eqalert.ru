@@ -1,7 +1,5 @@
 <template>
   <div class="event-tab general-information">
-    <AppMap :event="event" mapId="map-general-information" shouldDrawEpicenter="true" shouldDrawPga="true" target="generalInformation" v-if="event.id" />
-
     <b-table
       hover
       outlined
@@ -19,10 +17,7 @@
 const moment = require('moment')
 require('moment/locale/ru')
 
-import AppMap from '@/components/AppMap'
-
 export default {
-  components: { AppMap },
   props: ['event'],
   data() {
     return {
@@ -51,21 +46,29 @@ export default {
       return moment
     }
   },
+  created() {
+    this.setData(this.event)
+  },
+  methods: {
+    setData: function(data) {
+      this.items[0].value = `${data.locValues.data.lat}N`
+      this.items[0].error = `± ${data.locValues.data.lat_err} км`
+      this.items[1].value = `${data.locValues.data.lon}E`
+      this.items[1].error = `± ${data.locValues.data.lon_err} км`
+      this.items[2].value = `${data.locValues.data.depth} км`
+      this.items[2].error = `± ${data.locValues.data.depth_err} км`
+      this.items[3].value = moment.utc(data.locValues.data.event_datetime).locale('ru').format('DD.MM.YYYY в HH:mm:ss UTC')
+      this.items[3].error = `${data.locValues.data.origin_time_err} сек`
+      this.items[4].value = `${data.locValues.data.station_near} км`
+      this.items[5].value = `${data.locValues.data.hypo_gap}°`
+      this.items[6].value = data.locValues.data.rms
+      this.items[7].value = data.locValues.data.sta_num
+      this.items[8].value = data.processingMethod.long
+    }
+  },
   watch: {
-    event: function(value) {
-      this.items[0].value = `${value.locValues.data.lat}N`
-      this.items[0].error = `± ${value.locValues.data.lat_err} км`
-      this.items[1].value = `${value.locValues.data.lon}E`
-      this.items[1].error = `± ${value.locValues.data.lon_err} км`
-      this.items[2].value = `${value.locValues.data.depth} км`
-      this.items[2].error = `± ${value.locValues.data.depth_err} км`
-      this.items[3].value = moment.utc(value.locValues.data.event_datetime).locale('ru').format('DD.MM.YYYY в HH:mm:ss UTC')
-      this.items[3].error = `${value.locValues.data.origin_time_err} сек`
-      this.items[4].value = `${value.locValues.data.station_near} км`
-      this.items[5].value = `${value.locValues.data.hypo_gap}°`
-      this.items[6].value = value.locValues.data.rms
-      this.items[7].value = value.locValues.data.sta_num
-      this.items[8].value = value.processingMethod.long
+    event: function() {
+      this.setData(this.event)
     }
   }
 }

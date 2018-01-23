@@ -1,17 +1,16 @@
 <template>
   <div class="event">
-    <component is="EventHeader" :event="event" />
-    <component is="Tabs" @onTabSwitch="onTabSwitch"/>
+    <component :is="components.header" :event="event" />
+    <component :is="components.tabs" @onTabSwitch="onTabSwitch"/>
 
     <b-row>
       <b-col cols="8">
-        <keep-alive>
-          <!-- <component is="generalInformation" :event="event" /> -->
-        </keep-alive>
+        <!-- <AppMap :event="event" mapId="map-general-information" shouldDrawEpicenter="true" shouldDrawPga="true" target="generalInformation" v-if="event.id" /> -->
+        <component :is="components.currentTab" :event="event" v-if="event.id" />
       </b-col>
       <b-col cols="4">
         <keep-alive>
-          <component is="LastEvents" />
+          <component :is="components.lastEvents" />
         </keep-alive>
       </b-col>
     </b-row>
@@ -19,39 +18,40 @@
 </template>
 
 <script>
+import Buildings from '@/components/event/Buildings'
 import EventHeader from '@/components/event/Header'
+import GeneralInformation from '@/components/event/GeneralInformation'
 import LastEvents from '@/components/event/LastEvents'
+import Ldos from '@/components/event/Ldos'
+import MomentTensor from '@/components/event/MomentTensor'
+import Settlements from '@/components/event/Settlements'
 import Tabs from '@/components/event/Tabs'
-// old is below
-// import Buildings from '@/components/event_views/Buildings'
-// import GeneralInformation from '@/components/event_views/GeneralInformation'
-// import Ldos from '@/components/event_views/Ldos'
-// import MomentTensor from '@/components/event_views/MomentTensor'
-// import Settlements from '@/components/event_views/Settlements'
 
-if (!window.map) window.map = {}
+// if (!window.map) window.map = {}
 
 export default {
   components: {
     EventHeader,
     LastEvents,
-    Tabs
-    // buildings: Buildings,
-    // generalInformation: GeneralInformation,
-    // lastEvents: LastEvents,
-    // ldos: Ldos,
-    // momentTensor: MomentTensor,
-    // settlements: Settlements
+    Tabs,
+    buildings: Buildings,
+    generalInformation: GeneralInformation,
+    ldos: Ldos,
+    momentTensor: MomentTensor,
+    settlements: Settlements
   },
-  name: 'event',
   data() {
     return {
+      components: {
+        currentTab: this.$router.currentRoute.params.tab || 'generalInformation',
+        header: EventHeader,
+        lastEvents: LastEvents,
+        tabs: Tabs
+      },
       event: {
         label: {},
         processingMethod: {}
-      },
-      lastEvents: [],
-      momentTensor: {}
+      }
     }
   },
   methods: {
@@ -112,8 +112,8 @@ export default {
         default: return [['M', '']]
       }
     },
-    onTabSwitch: function(value) {
-      console.log(value)
+    onTabSwitch: function(tab) {
+      this.components.currentTab = tab
     },
     populateMap: function(id) {
       if (!window.map[id]) window.map[id] = {}
