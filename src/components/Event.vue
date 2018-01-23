@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import EventHeader from '@/components/event_components/Header'
-import LastEvents from '@/components/event_components/LastEvents'
-import Tabs from '@/components/event_components/Tabs'
+import EventHeader from '@/components/event/Header'
+import LastEvents from '@/components/event/LastEvents'
+import Tabs from '@/components/event/Tabs'
 // old is below
 // import Buildings from '@/components/event_views/Buildings'
 // import GeneralInformation from '@/components/event_views/GeneralInformation'
