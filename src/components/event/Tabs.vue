@@ -49,6 +49,11 @@
       }
     },
     methods: {
+      convertTabName: function(tab) {
+        if (!tab) return 'generalInformation'
+        if (tab === 'moment-tensor') return 'momentTensor'
+        return tab
+      },
       isTabActive: function(tab) {
         return this.activeTab === tab.href.substr(1)
       },
@@ -71,8 +76,8 @@
         // Send event back to the parent component.
         this.$emit('onTabSwitch', tab)
       },
-      setActiveTab: function(tab = this.$router.currentRoute.params.tab || 'generalInformation') {
-        this.activeTab = this.tabs[tab].href.substr(1)
+      setActiveTab: function(tab = this.$router.currentRoute.params.tab) {
+        this.activeTab = this.tabs[this.convertTabName(tab)].href.substr(1)
       },
       setAvailability: function() {
         this.tabs.buildings.available = this.event.has_buildings_msk64_analysis
