@@ -1,39 +1,13 @@
 <template>
   <b-tabs>
     <template slot="tabs">
-      <b-nav-item
-        :active="isTabActive(tabs.generalInformation)"
-        :href="tabs.generalInformation.href"
-        @click="onTabSwitch('generalInformation')">
-        {{ tabs.generalInformation.text }}
-      </b-nav-item>
-
-      <b-nav-item
-        :active="isTabActive(tabs.settlements)"
-        :href="tabs.settlements.href"
-        @click="onTabSwitch('settlements')">
-        {{ tabs.settlements.text }}
-      </b-nav-item>
-
-      <b-nav-item
-        :active="isTabActive(tabs.buildings)"
-        :href="tabs.buildings.href"
-        @click="onTabSwitch('buildings')">
-        {{ tabs.buildings.text }}
-      </b-nav-item>
-
-      <b-nav-item
-        :active="isTabActive(tabs.momentTensor)"
-        :href="tabs.momentTensor.href"
-        @click="onTabSwitch('momentTensor')">
-        {{ tabs.momentTensor.text }}
-      </b-nav-item>
-
-      <b-nav-item
-        :active="isTabActive(tabs.ldos)"
-        :href="tabs.ldos.href"
-        @click="onTabSwitch('ldos')">
-        {{ tabs.ldos.text }}
+      <b-nav-item v-for="tab in tabs"
+        :key="tab.href"
+        :active="isTabActive(tab)"
+        :href="tab.href"
+        @click="onTabSwitch(tab)"
+        v-if="isTabAvailable(tab)">
+        {{ tab.text }}
       </b-nav-item>
     </template>
   </b-tabs>
@@ -46,25 +20,30 @@
       return {
         activeTab: this.$router.currentRoute.fullPath,
         tabs: {
-          buildings: {
-            href: '#',
-            text: 'Здания и сооружения'
-          },
           generalInformation: {
+            available: true,
             href: '#',
             text: 'Общая информация'
           },
-          ldos: {
+          settlements: {
+            available: false,
             href: '#',
-            text: 'Магистральные объекты'
+            text: 'Ближайшие населенные пункты'
+          },
+          buildings: {
+            available: false,
+            href: '#',
+            text: 'Здания и сооружения'
           },
           momentTensor: {
+            available: false,
             href: '#',
             text: 'Тензор момента'
           },
-          settlements: {
+          ldos: {
+            available: false,
             href: '#',
-            text: 'Ближайшие населенные пункты'
+            text: 'Магистральные объекты'
           }
         }
       }
@@ -73,6 +52,10 @@
       isTabActive: function(tab) {
         return this.activeTab === tab.href.substr(1)
       },
+      isTabAvailable: function(tab) {
+        // Add user access rights here in the future.
+        return tab.available
+      },
       getHref: function(tab) {
         let params = { id: this.event.id }
 
@@ -80,16 +63,30 @@
 
         return this.$router.resolve({ name: 'Event', params: params }).href
       },
-      onTabSwitch: function(tab) {
+      onTabSwitch: function(object) {
+        const tab = Object.keys(this.tabs).find(key => this.tabs[key].href === object.href)
+
         this.setActiveTab(tab)
 
         // Send event back to the parent component.
         this.$emit('onTabSwitch', tab)
       },
-      setActiveTab: function(tab = this.$router.currentRoute.params.tab) {
+      setActiveTab: function(tab = this.$router.currentRoute.params.tab || 'generalInformation') {
         this.activeTab = this.tabs[tab].href.substr(1)
       },
+      setAvailability: function() {
+        this.tabs.buildings.available = this.event.has_buildings_msk64_analysis
+        this.tabs.ldos.available = this.event.has_long_distance_objects_analysis
+        this.tabs.momentTensor.available = this.event.has_mt
+        this.tabs.settlements.available = this.event.has_cities_msk64_analysis
+      },
       setData: function() {
+        this.setAvailability()
+        this.setHrefs()
+
+        this.setActiveTab()
+      },
+      setHrefs: function() {
         this.tabs.buildings.href = this.getHref('buildings')
         this.tabs.generalInformation.href = this.getHref()
         this.tabs.ldos.href = this.getHref('ldos')
@@ -103,7 +100,6 @@
     watch: {
       event: function() {
         this.setData()
-        this.setActiveTab()
       }
     }
   }

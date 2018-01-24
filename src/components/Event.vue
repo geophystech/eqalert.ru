@@ -135,7 +135,10 @@
     beforeRouteUpdate(to, from, next) {
       // Fetch data only when event id is changed.
       // Do nothing on switching tabs.
-      if (to.params.id !== this.$router.currentRoute.params.id) this.fetchData(to.params.id)
+      if (to.params.id !== this.$router.currentRoute.params.id) {
+        this.fetchData(to.params.id)
+        this.components.currentTab = 'generalInformation'
+      }
 
       next()
     }
