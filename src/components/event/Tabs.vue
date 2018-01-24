@@ -44,7 +44,7 @@
     props: ['event'],
     data() {
       return {
-        activeTab: '',
+        activeTab: this.$router.currentRoute.fullPath,
         tabs: {
           buildings: {
             href: '#',
@@ -73,7 +73,7 @@
       isTabActive: function(tab) {
         return this.activeTab === tab.href.substr(1)
       },
-      getHref: function(tab = null) {
+      getHref: function(tab) {
         let params = { id: this.event.id }
 
         if (tab) params.tab = tab
@@ -86,7 +86,7 @@
         // Send event back to the parent component.
         this.$emit('onTabSwitch', tab)
       },
-      setActiveTab: function(tab = 'generalInformation') {
+      setActiveTab: function(tab = this.$router.currentRoute.params.tab) {
         this.activeTab = this.tabs[tab].href.substr(1)
       },
       setData: function() {
@@ -99,7 +99,6 @@
     },
     created() {
       this.setData()
-      this.setActiveTab()
     },
     watch: {
       event: function() {

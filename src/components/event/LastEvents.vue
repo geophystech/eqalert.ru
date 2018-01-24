@@ -24,46 +24,46 @@
 </template>
 
 <script>
-const moment = require('moment')
-require('moment/locale/ru')
+  const moment = require('moment')
+  require('moment/locale/ru')
 
-import { round } from '@/helpers.js'
+  import { round } from '@/helpers.js'
 
-export default {
-  data() {
-    return {
-      events: []
-    }
-  },
-  methods: {
-    fetchEvents: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-        params: {
-          limit: 10,
-          show_nearest_city: 1
-        }
-      })
-        .then(response => {
-          response.data.data.forEach(event => {
-            const distance = round(event.nearestCity.data.ep_dis, 2)
-            const title = event.nearestCity.data.settlement.data.translation.data.title
-            event.settlement = title ? `${distance} км до ${title}` : 'Населённый пункт: нет данных'
-
-            this.events.push(event)
-          })
+  export default {
+    data() {
+      return {
+        events: []
+      }
+    },
+    methods: {
+      fetchEvents: function() {
+        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+          params: {
+            limit: 10,
+            show_nearest_city: 1
+          }
         })
-        .catch(error => { console.log(error) })
+          .then(response => {
+            response.data.data.forEach(event => {
+              const distance = round(event.nearestCity.data.ep_dis, 2)
+              const title = event.nearestCity.data.settlement.data.translation.data.title
+              event.settlement = title ? `${distance} км до ${title}` : 'Населённый пункт: нет данных'
+
+              this.events.push(event)
+            })
+          })
+          .catch(error => { console.log(error) })
+      }
+    },
+    computed: {
+      moment: function() {
+        return moment
+      }
+    },
+    created() {
+      this.fetchEvents()
     }
-  },
-  computed: {
-    moment: function() {
-      return moment
-    }
-  },
-  created() {
-    this.fetchEvents()
   }
-}
 </script>
 
 <style lang="scss" scoped>
