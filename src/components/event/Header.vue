@@ -24,9 +24,9 @@
       <b-row v-show="event.magnitude">
         <b-col class="text-center">
           <b-badge
-            :variant="event.label.variant"
-            v-b-popover.hover.auto="event.label.description">
-              {{ event.label.text }}
+            :variant="label.variant"
+            v-b-popover.hover.auto="label.description">
+              {{ label.text }}
           </b-badge>
         </b-col>
       </b-row>
@@ -63,7 +63,31 @@
             text: 'event',
             active: true
           }
-        ]
+        ],
+        label: {}
+      }
+    },
+    methods: {
+      setLabel: function(event) {
+        if (event.has_delete) {
+          this.label = {
+            description: 'Информация о землетрясении удалена из итогового каталога сейсмических событий',
+            text: 'СОБЫТИЕ УДАЛЕНО',
+            variant: 'deleted'
+          }
+        } else if (event.has_final) {
+          this.label = {
+            description: 'Информация о землетрясении проверена и зарегистрирована в итоговом каталоге сейсмических событий',
+            text: 'ФИНАЛЬНЫЙ РАСЧЁТ',
+            variant: 'final'
+          }
+        } else {
+          this.label = {
+            description: 'Информация о землетрясении уточняется',
+            text: 'РАСЧЁТ ОБНОВЛЯЕТСЯ',
+            variant: 'processing'
+          }
+        }
       }
     },
     computed: {
@@ -71,9 +95,13 @@
         return moment
       }
     },
+    created() {
+      this.setLabel(this.event)
+    },
     watch: {
       event: function(value) {
         this.breadcrumbs[2].text = value.id
+        this.setLabel(value.id)
       }
     }
   }

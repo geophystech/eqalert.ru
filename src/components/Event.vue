@@ -54,7 +54,6 @@
           tabs: Tabs
         },
         event: {
-          label: {},
           processingMethod: {}
         }
       }
@@ -65,7 +64,6 @@
           .then(response => {
             this.event = response.data.data
             this.event.datetime = this.event.locValues.data.event_datetime
-            this.event.label = this.label(this.event.has_delete, this.event.has_final)
             this.event.magnitude = this.event.locValues.data.mag
             this.event.magnitudeType = this.magnitudeType(this.event.locValues.data.mag_t)
             this.event.processingMethod = this.processingMethod(this.event.has_auto, this.event.has_manual)
@@ -76,27 +74,6 @@
         const key = Object.keys(this.tabs)[target]
 
         if (window.map[id][key]) setTimeout(() => { window.map[id][key].invalidateSize() }, 1)
-      },
-      label: function(deleted, final) {
-        if (deleted) {
-          return {
-            description: 'Информация о землетрясении удалена из итогового каталога сейсмических событий',
-            text: 'СОБЫТИЕ УДАЛЕНО',
-            variant: 'deleted'
-          }
-        } else if (final) {
-          return {
-            description: 'Информация о землетрясении проверена и зарегистрирована в итоговом каталоге сейсмических событий',
-            text: 'ФИНАЛЬНЫЙ РАСЧЁТ',
-            variant: 'final'
-          }
-        } else {
-          return {
-            description: 'Информация о землетрясении уточняется',
-            text: 'РАСЧЁТ ОБНОВЛЯЕТСЯ',
-            variant: 'processing'
-          }
-        }
       },
       magnitudeType: function(type) {
         // Nested arrays are used because there may be multiple magnitude types.
