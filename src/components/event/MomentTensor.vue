@@ -1,10 +1,10 @@
 <template>
   <div class="event-tab moment-tensor">
-    <b-row v-if="momentTensorData.image_large">
+    <b-row v-if="image">
       <b-col class="text-center">
         <img
-          :alt="this.$router.currentRoute.params.id"
-          :src="momentTensorData.image_large"
+          :alt="event.id"
+          :src="image"
           class="img-responsive"
         />
       </b-col>
@@ -124,59 +124,61 @@ export default {
           { axis: 'P', plunge: null, azimuth: null }
         ]
       },
-      momentTensorData: {}
+      image: ''
     }
   },
   created() {
-    this.getMomentTensor(this.event.id)
+    this.fetchData()
   },
   methods: {
-    getMomentTensor: function(id) {
-      this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(id))
+    fetchData: function() {
+      this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(this.event.id))
         .then(response => {
-          this.momentTensorData = response.data.data[0]
-
-          this.populateItems()
+          this.setData(response.data.data[0])
         })
         .catch(error => { console.log(error) })
     },
-    populateItems: function() {
-      this.populateMomentTensorItems()
-      this.populateMomentTensorComponentsItems()
-      this.populatePrincipalAxesItems()
-      this.populateNodalPlanesItems()
+    setData: function(data) {
+      this.setImage(data)
+      this.setDeviatoricItems(data)
+      this.setComponentsItems(data)
+      this.setPrincipalAxesItems(data)
+      this.setPlanesItems(data)
     },
-    populateMomentTensorItems: function() {
-      this.items.momentTensor[0].value = `${this.momentTensorData.m0}e+${this.momentTensorData.m0_exp} N-m`
-      this.items.momentTensor[1].value = this.momentTensorData.mw
-      this.items.momentTensor[2].value = `${this.momentTensorData.c_depth} км`
-      this.items.momentTensor[3].value = `${this.momentTensorData.c_time} сек`
-      this.items.momentTensor[4].value = `${this.momentTensorData.dc}%`
-      this.items.momentTensor[5].value = `${this.momentTensorData.clvd}%`
-      this.items.momentTensor[6].value = this.momentTensorData.vrr
-      this.items.momentTensor[7].value = this.momentTensorData.has_mech_only
+    setComponentsItems: function(data) {
+      this.items.momentTensorComponents[0].value = data.m_rr
+      this.items.momentTensorComponents[1].value = data.m_tt
+      this.items.momentTensorComponents[2].value = data.m_pp
+      this.items.momentTensorComponents[3].value = data.m_rt
+      this.items.momentTensorComponents[4].value = data.m_rp
+      this.items.momentTensorComponents[5].value = data.m_tp
     },
-    populateMomentTensorComponentsItems: function() {
-      this.items.momentTensorComponents[0].value = this.momentTensorData.m_rr
-      this.items.momentTensorComponents[1].value = this.momentTensorData.m_tt
-      this.items.momentTensorComponents[2].value = this.momentTensorData.m_pp
-      this.items.momentTensorComponents[3].value = this.momentTensorData.m_rt
-      this.items.momentTensorComponents[4].value = this.momentTensorData.m_rp
-      this.items.momentTensorComponents[5].value = this.momentTensorData.m_tp
+    setDeviatoricItems: function(data) {
+      this.items.momentTensor[0].value = `${data.m0}e+${data.m0_exp} N-m`
+      this.items.momentTensor[1].value = data.mw
+      this.items.momentTensor[2].value = `${data.c_depth} км`
+      this.items.momentTensor[3].value = `${data.c_time} сек`
+      this.items.momentTensor[4].value = `${data.dc}%`
+      this.items.momentTensor[5].value = `${data.clvd}%`
+      this.items.momentTensor[6].value = data.vrr
+      this.items.momentTensor[7].value = data.has_mech_only
     },
-    populatePrincipalAxesItems: function() {
-      this.items.principalAxes[0].plunge = `${this.momentTensorData.t_pl}&deg`
-      this.items.principalAxes[0].azimuth = `${this.momentTensorData.t_az}&deg`
-      this.items.principalAxes[1].plunge = `${this.momentTensorData.p_pl}&deg`
-      this.items.principalAxes[1].azimuth = `${this.momentTensorData.p_az}&deg`
+    setImage: function(data) {
+      this.image = data.image_large
     },
-    populateNodalPlanesItems: function() {
-      this.items.nodalPlanes[0].strike = `${this.momentTensorData.np1_stk}&deg`
-      this.items.nodalPlanes[0].dip = `${this.momentTensorData.np1_dip}&deg`
-      this.items.nodalPlanes[0].rake = `${this.momentTensorData.np1_rake}&deg`
-      this.items.nodalPlanes[1].strike = `${this.momentTensorData.np2_stk}&deg`
-      this.items.nodalPlanes[1].dip = `${this.momentTensorData.np2_dip}&deg`
-      this.items.nodalPlanes[1].rake = `${this.momentTensorData.np2_rake}&deg`
+    setPlanesItems: function(data) {
+      this.items.nodalPlanes[0].strike = `${data.np1_stk}&deg`
+      this.items.nodalPlanes[0].dip = `${data.np1_dip}&deg`
+      this.items.nodalPlanes[0].rake = `${data.np1_rake}&deg`
+      this.items.nodalPlanes[1].strike = `${data.np2_stk}&deg`
+      this.items.nodalPlanes[1].dip = `${data.np2_dip}&deg`
+      this.items.nodalPlanes[1].rake = `${data.np2_rake}&deg`
+    },
+    setPrincipalAxesItems: function(data) {
+      this.items.principalAxes[0].plunge = `${data.t_pl}&deg`
+      this.items.principalAxes[0].azimuth = `${data.t_az}&deg`
+      this.items.principalAxes[1].plunge = `${data.p_pl}&deg`
+      this.items.principalAxes[1].azimuth = `${data.p_az}&deg`
     }
   }
 }
