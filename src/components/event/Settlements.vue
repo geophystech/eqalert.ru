@@ -1,13 +1,13 @@
 <template>
-  <div class="event-tab settlements">
-    <AppMap :event="event" mapId="map-settlements" shouldDrawEpicenter="true" shouldDrawMsk64="true" target="settlements" v-if="event.id" />
+  <div class="event-tab">
+    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-show="!items.length" />
 
     <b-table
       hover
       outlined
       :fields="fields"
       :items="items"
-      >
+      v-show="items.length">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
       <template slot="distance" slot-scope="data">{{ data.value }} км</template>
       <template slot="msk64" slot-scope="data">
@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import AppMap from '@/components/AppMap'
+import Spinner from 'vue-simple-spinner'
 import { convertMsk64, round } from '@/helpers.js'
 
 export default {
-  components: { AppMap },
+  components: { Spinner },
   props: ['event'],
   data() {
     return {
@@ -41,7 +41,7 @@ export default {
     }
   },
   created() {
-    this.getSettlements()
+    this.fetchData()
   },
   methods: {
     description: function(value) {
@@ -83,27 +83,41 @@ export default {
           return 'Сильное повреждение или разрушение практически всех наземных и подземных сооружений. Радикальные изменения земной поверхности. Наблюдаются значительные трещины в грунтах с обширными вертикальными и горизонтальными перемещениями. Горные обвалы и обвалы берегов рек на больших площадях. Возникают озера, образуются водопады; изменяются русла рек. Определение интенсивности сотрясения (балльности) требует специального исследования.'
       }
     },
-    getSettlements: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointSettlements(this.$router.currentRoute.params.id), {
+    clearData: function() {
+      this.items = []
+    },
+    fetchData: function() {
+      this.$http.get(this.$root.$options.settings.api.endpointSettlements(this.event.id), {
         params: {
           cursor: this.cursor,
           limit: 10
         }
       })
         .then(response => {
-          response.data.data.reverse().forEach(settlement => {
-            const convertedValue = convertMsk64(settlement.msk64_value)
-            const item = {
-              description: this.description(convertedValue),
-              distance: round(settlement.ep_dis, 2),
-              msk64: convertedValue,
-              settlement: [settlement.settlement.data.translation.data.title, settlement.settlement.data.translation.data.region].join(', ')
-            }
-
-            this.items.push(item)
-          })
+          this.setData(response.data.data)
         })
         .catch(error => { console.log(error) })
+    },
+    setData(data) {
+      data.reverse().forEach(settlement => {
+        const convertedValue = convertMsk64(settlement.msk64_value)
+        const region = settlement.settlement.data.translation.data.region
+        const title = settlement.settlement.data.translation.data.title
+        const item = {
+          description: this.description(convertedValue),
+          distance: round(settlement.ep_dis, 2),
+          msk64: convertedValue,
+          settlement: [title, region].join(', ')
+        }
+
+        this.items.push(item)
+      })
+    }
+  },
+  watch: {
+    event: function() {
+      this.clearData()
+      this.fetchData()
     }
   }
 }

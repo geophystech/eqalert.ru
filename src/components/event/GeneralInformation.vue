@@ -1,5 +1,5 @@
 <template>
-  <div class="event-tab general-information">
+  <div class="event-tab">
     <b-table
       hover
       outlined

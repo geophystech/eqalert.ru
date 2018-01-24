@@ -1,12 +1,15 @@
 <template>
   <div class="event">
     <component :is="components.header" :event="event" />
-    <component :is="components.tabs" @onTabSwitch="onTabSwitch"/>
+    <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id"/>
 
     <b-row>
       <b-col cols="8">
         <!-- <AppMap :event="event" mapId="map-general-information" shouldDrawEpicenter="true" shouldDrawPga="true" target="generalInformation" v-if="event.id" /> -->
-        <component :is="components.currentTab" :event="event" v-if="event.id" />
+        <!-- <AppMap :event="event" mapId="map-settlements" shouldDrawEpicenter="true" shouldDrawMsk64="true" target="settlements" v-if="event.id" /> -->
+        <keep-alive>
+          <component :is="components.currentTab" :event="event" v-if="event.id" />
+        </keep-alive>
       </b-col>
       <b-col cols="4">
         <keep-alive>
@@ -55,7 +58,7 @@ export default {
     }
   },
   methods: {
-    getEvent: function(id) {
+    fetchData: function(id) {
       this.$http.get(this.$root.$options.settings.api.endpointEvent(id))
         .then(response => {
           this.event = response.data.data
@@ -93,10 +96,6 @@ export default {
         }
       }
     },
-    loadEvent: function(id) {
-      this.getEvent(id)
-      // this.populateMap(id)
-    },
     magnitudeType: function(type) {
       // Nested arrays are used because there may be multiple magnitude types.
       // But in most cases there will be only one type.
@@ -129,10 +128,12 @@ export default {
   },
   created() {
     // this.$root.$on('changed::tab', tab => this.invalidateMapSize(tab.currentTab, this.$router.currentRoute.params.id))
-    this.loadEvent(this.$router.currentRoute.params.id)
+    this.fetchData(this.$router.currentRoute.params.id)
   },
   beforeRouteUpdate(to, from, next) {
-    if (to.params.id) this.loadEvent(to.params.id)
+    // Fetch data only when event id is changed.
+    // Do nothing on switching tabs.
+    if (to.params.id !== this.$router.currentRoute.params.id) this.loadEvent(to.params.id)
 
     next()
   }

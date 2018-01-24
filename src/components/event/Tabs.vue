@@ -41,28 +41,29 @@
 
 <script>
   export default {
+    props: ['event'],
     data() {
       return {
-        activeTab: this.$router.currentRoute.fullPath,
+        activeTab: '',
         tabs: {
           buildings: {
-            href: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'buildings' } }).href,
+            href: '#',
             text: 'Здания и сооружения'
           },
           generalInformation: {
-            href: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id } }).href,
+            href: '#',
             text: 'Общая информация'
           },
           ldos: {
-            href: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'ldos' } }).href,
+            href: '#',
             text: 'Магистральные объекты'
           },
           momentTensor: {
-            href: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'moment-tensor' } }).href,
+            href: '#',
             text: 'Тензор момента'
           },
           settlements: {
-            href: this.$router.resolve({ name: 'Event', params: { id: this.$router.currentRoute.params.id, tab: 'settlements' } }).href,
+            href: '#',
             text: 'Ближайшие населенные пункты'
           }
         }
@@ -72,12 +73,38 @@
       isTabActive: function(tab) {
         return this.activeTab === tab.href.substr(1)
       },
+      getHref: function(tab = null) {
+        let params = { id: this.event.id }
+
+        if (tab) params.tab = tab
+
+        return this.$router.resolve({ name: 'Event', params: params }).href
+      },
       onTabSwitch: function(tab) {
-        // Change current active tab.
-        this.activeTab = this.tabs[tab].href.substr(1)
+        this.setActiveTab(tab)
 
         // Send event back to the parent component.
         this.$emit('onTabSwitch', tab)
+      },
+      setActiveTab: function(tab = 'generalInformation') {
+        this.activeTab = this.tabs[tab].href.substr(1)
+      },
+      setData: function() {
+        this.tabs.buildings.href = this.getHref('buildings')
+        this.tabs.generalInformation.href = this.getHref()
+        this.tabs.ldos.href = this.getHref('ldos')
+        this.tabs.momentTensor.href = this.getHref('moment-tensor')
+        this.tabs.settlements.href = this.getHref('settlements')
+      }
+    },
+    created() {
+      this.setData()
+      this.setActiveTab()
+    },
+    watch: {
+      event: function() {
+        this.setData()
+        this.setActiveTab()
       }
     }
   }
