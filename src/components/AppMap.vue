@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import { convertMsk64 } from '@/helpers.js'
+// import { convertMsk64 } from '@/helpers.js'
 
 const moment = require('moment')
 require('moment/locale/ru')
 
 const L = window.L
-const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
+// const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
 let boundaries = null
 let controlLayers = {}
 
@@ -35,15 +35,15 @@ export default {
       pga: [],
       plateBoundaries: null,
       stations: null,
-      tileProviders: {
-        'OpenStreetMap': new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: `<a href="http://osm.org">OpenStreetMap</a> | ${geophystechLink}`
-        }),
-        'Google Roadmap': new L.GridLayer.GoogleMutant({ attribution: geophystechLink }, 'roadmap'),
-        'Yandex Satellite': new L.Yandex('satellite', { attribution: geophystechLink }),
-        'Yandex Hybrid': new L.Yandex('hybrid', { attribution: geophystechLink }),
-        'Yandex Map': new L.Yandex('', { attribution: 'geophystechLink' })
-      },
+      // tileProviders: {
+      //   'OpenStreetMap': new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      //     attribution: `<a href="http://osm.org">OpenStreetMap</a> | ${geophystechLink}`
+      //   }),
+      //   'Google Roadmap': new L.GridLayer.GoogleMutant({ attribution: geophystechLink }, 'roadmap'),
+      //   'Yandex Satellite': new L.Yandex('satellite', { attribution: geophystechLink }),
+      //   'Yandex Hybrid': new L.Yandex('hybrid', { attribution: geophystechLink }),
+      //   'Yandex Map': new L.Yandex('', { attribution: 'geophystechLink' })
+      // },
       zoom: 5
     }
   },
@@ -141,21 +141,21 @@ export default {
 
       if (this.shouldDrawEpicenter) this.drawEpicenter(id)
     },
-    drawEpicenter: function(id) {
-      const latitude = this.epicenterCoordinates.lat
-      const longitude = this.epicenterCoordinates.lon
-      const epicenter = new L.StarMarker((new L.LatLng(latitude, longitude)), {
-        color: '',
-        fillColor: '#ff0a0a',
-        fillOpacity: 1.0,
-        numberOfPoints: 5,
-        radius: 12,
-        weight: 2
-      })
+    // drawEpicenter: function(id) {
+    //   const latitude = this.epicenterCoordinates.lat
+    //   const longitude = this.epicenterCoordinates.lon
+    //   const epicenter = new L.StarMarker((new L.LatLng(latitude, longitude)), {
+    //     color: '',
+    //     fillColor: '#ff0a0a',
+    //     fillOpacity: 1.0,
+    //     numberOfPoints: 5,
+    //     radius: 12,
+    //     weight: 2
+    //   })
 
-      epicenter.bindPopup('Эпицентр землетрясения')
-      window.map[id][this.target].addLayer(epicenter)
-    },
+    //   epicenter.bindPopup('Эпицентр землетрясения')
+    //   window.map[id][this.target].addLayer(epicenter)
+    // },
     drawLastEvents: function() {
       this.events.reverse().forEach((event) => {
         const marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
@@ -305,30 +305,31 @@ export default {
 
       if (this.shouldDrawEpicenter) this.drawEpicenter(id)
     },
-    drawMap: function(id) {
-      window.map[id][this.target] = L.map(this.mapId, {
-        fullscreenControl: true,
-        fullscreenControlOptions: { position: 'topleft' },
-        scrollWheelZoom: false,
-        worldCopyJump: true,
-        zoomAnimation: true,
-        zoomControl: false
-      }).setView([this.epicenterCoordinates.lat, this.epicenterCoordinates.lon], this.zoom)
+    // drawMap: function(id) {
+    //   window.map[id][this.target] = L.map(this.mapId, {
+    //     fullscreenControl: true,
+    //     fullscreenControlOptions: { position: 'topleft' },
+    //     scrollWheelZoom: false,
+    //     worldCopyJump: true,
+    //     zoomAnimation: true,
+    //     zoomControl: false
+    //   }).setView([this.epicenterCoordinates.lat, this.epicenterCoordinates.lon], this.zoom)
 
-      L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[id][this.target])
+    //   L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[id][this.target])
 
-      this.drawTileLayers(id)
+    //   this.drawTileLayers(id)
 
-      // Store current tile provider to the storage
-      window.map[id][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
-    },
+    //   // Store current tile provider to the storage
+    //   window.map[id][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
+    // },
     drawMsk64: function(id, data) {
       let legendData = ''
 
       data.forEach(item => {
         const latitude = this.epicenterCoordinates.lat
         const longitude = this.epicenterCoordinates.lon
-        const value = convertMsk64(item.value)
+        // const value = convertMsk64(item.value)
+        const value = item.value
         const color = this.msk64Color(value)
 
         const circle = L.circle(
@@ -464,13 +465,13 @@ export default {
         window.map[this.id][this.target].addLayer(marker)
       })
     },
-    drawTileLayers: function(id) {
-      // Draw stored tile provider for current user.
-      this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[id][this.target])
+    // drawTileLayers: function(id) {
+    //   // Draw stored tile provider for current user.
+    //   this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[id][this.target])
 
-      controlLayers[id][this.target] = new L.Control.Layers(this.tileProviders)
-      controlLayers[id][this.target].addTo(window.map[id][this.target])
-    },
+    //   controlLayers[id][this.target] = new L.Control.Layers(this.tileProviders)
+    //   controlLayers[id][this.target].addTo(window.map[id][this.target])
+    // },
     eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
         return '#ff0000'
@@ -515,21 +516,21 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
-    getMsk64: function(id) {
-      this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(id))
-        .then(response => {
-          this.drawMsk64(id, response.data.data)
-        })
-        .catch(error => { console.log(error) })
-    },
-    getPga: function(id) {
-      this.$http.get(this.$root.$options.settings.api.endpointEventPga(id))
-        .then(response => {
-          this.pga = response.data.data
-          this.drawPga(id)
-        })
-        .catch(error => { console.log(error) })
-    },
+    // getMsk64: function(id) {
+    //   this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(id))
+    //     .then(response => {
+    //       this.drawMsk64(id, response.data.data)
+    //     })
+    //     .catch(error => { console.log(error) })
+    // },
+    // getPga: function(id) {
+    //   this.$http.get(this.$root.$options.settings.api.endpointEventPga(id))
+    //     .then(response => {
+    //       this.pga = response.data.data
+    //       this.drawPga(id)
+    //     })
+    //     .catch(error => { console.log(error) })
+    // },
     getPlateBoundaries: function() {
       this.$http.get('/static/json/plate_boundaries.geojson')
         .then(response => {
@@ -559,47 +560,47 @@ export default {
         this.drawEpicenter(id)
       }
     },
-    msk64Color: function(value) {
-      switch (value) {
-        case 'I': return '#ffffff'
-        case 'I-II': return '#ffffff'
-        case 'II': return '#bfccff'
-        case 'II-III': return '#bfccff'
-        case 'III': return '#9999ff'
-        case 'III-IV': return '#9999ff'
-        case 'IV': return '#80ffff'
-        case 'IV-V': return '#80ffff'
-        case 'V': return '#7df894'
-        case 'V-VI': return '#7df894'
-        case 'VI': return '#ffff00'
-        case 'VI-VII': return '#ffff00'
-        case 'VII': return '#ffc800'
-        case 'VII-VIII': return '#ffc800'
-        case 'VIII': return '#ff9100'
-        case 'VIII-IX': return '#ff9100'
-        case 'IX': return '#ff0000'
-        case 'IX-X': return '#ff0000'
-        case 'X': return '#c80000'
-        case 'X-XI': return '#c80000'
-        case 'XI': return '#800000'
-        case 'XI-XII': return '#800000'
-        case 'XII': return '#400000'
-      }
-    },
-    pgaLineColor: function(range) {
-      switch (range) {
-        case '<=0.15': return '#fff5f0'
-        case '0.15-0.3': return '#fee0d2'
-        case '0.3-2.8': return '#fcbba1'
-        case '2.8-6.2': return '#fc9272'
-        case '6.2-12': return '#fb6a4a'
-        case '12-22': return '#ef3b2c'
-        case '22-40': return '#cb181d'
-        case '40-75': return '#a50f15'
-        case '75-139': return '#67000d'
-        case '>139': return '#400000'
-      }
-    },
+    // msk64Color: function(value) {
+    //   switch (value) {
+    //     case 'I': return '#ffffff'
+    //     case 'I-II': return '#ffffff'
+    //     case 'II': return '#bfccff'
+    //     case 'II-III': return '#bfccff'
+    //     case 'III': return '#9999ff'
+    //     case 'III-IV': return '#9999ff'
+    //     case 'IV': return '#80ffff'
+    //     case 'IV-V': return '#80ffff'
+    //     case 'V': return '#7df894'
+    //     case 'V-VI': return '#7df894'
+    //     case 'VI': return '#ffff00'
+    //     case 'VI-VII': return '#ffff00'
+    //     case 'VII': return '#ffc800'
+    //     case 'VII-VIII': return '#ffc800'
+    //     case 'VIII': return '#ff9100'
+    //     case 'VIII-IX': return '#ff9100'
+    //     case 'IX': return '#ff0000'
+    //     case 'IX-X': return '#ff0000'
+    //     case 'X': return '#c80000'
+    //     case 'X-XI': return '#c80000'
+    //     case 'XI': return '#800000'
+    //     case 'XI-XII': return '#800000'
+    //     case 'XII': return '#400000'
+    //   }
+    // },
+    // pgaLineColor: function(range) {
+    //   switch (range) {
+    //     case '<=0.15': return '#fff5f0'
+    //     case '0.15-0.3': return '#fee0d2'
+    //     case '0.3-2.8': return '#fcbba1'
+    //     case '2.8-6.2': return '#fc9272'
+    //     case '6.2-12': return '#fb6a4a'
+    //     case '12-22': return '#ef3b2c'
+    //     case '22-40': return '#cb181d'
+    //     case '40-75': return '#a50f15'
+    //     case '75-139': return '#67000d'
+    //     case '>139': return '#400000'
+    //   }
+    // },
     populateControlLayers: function(id) {
       if (!controlLayers[id]) controlLayers[id] = {}
     }

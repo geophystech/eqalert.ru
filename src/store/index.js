@@ -96,7 +96,7 @@ export default new Vuex.Store({
   plugins: [createPersistedState({
     filter: (mutation) => {
       // Store in localStorage only currentTileProvider
-      if (mutation.payload.type === 'currentTileProvider') return true
+      if (mutation.payload.key === 'currentTileProvider') return true
     }
   })]
 })

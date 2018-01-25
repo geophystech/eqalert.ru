@@ -75,5 +75,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/scss/event.scss';
+  @import '../../assets/scss/event';
 </style>

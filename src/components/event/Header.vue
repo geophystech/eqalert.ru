@@ -108,7 +108,7 @@
 </script>
 
 <style lang="scss">
-  @import '../../assets/scss/global.scss';
+  @import '../../assets/scss/global';
 
   .event-header {
     margin-bottom: 3%;

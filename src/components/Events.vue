@@ -29,7 +29,7 @@
             {{ moment.utc(data.item.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}
           </template>
           <template slot="settlement" slot-scope="data">
-            <span v-if="data.item.nearestCity.data.settlement.data.translation.data.title === null">Нет данных</span>
+            <span v-if="!data.item.nearestCity">Нет данных</span>
             <span v-else>
               {{ round(data.item.nearestCity.data.ep_dis, 1) }} км до {{ data.item.nearestCity.data.settlement.data.translation.data.title }}
             </span>

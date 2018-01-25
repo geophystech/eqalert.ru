@@ -22,7 +22,8 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import { convertMsk64, round } from '@/helpers.js'
+  import { convertMsk64 } from '@/map_functions.js'
+  import { round } from '@/helpers.js'
 
   export default {
     components: { Spinner },
@@ -124,7 +125,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/scss/event.scss';
+  @import '../../assets/scss/event';
 
   $border-radius: 4px;
   $color-gray-light-4: #ebeaea;

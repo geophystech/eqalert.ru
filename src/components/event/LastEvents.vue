@@ -45,9 +45,13 @@
         })
           .then(response => {
             response.data.data.forEach(event => {
-              const distance = round(event.nearestCity.data.ep_dis, 2)
-              const title = event.nearestCity.data.settlement.data.translation.data.title
-              event.settlement = title ? `${distance} км до ${title}` : 'Населённый пункт: нет данных'
+              if (event.nearestCity) {
+                const distance = round(event.nearestCity.data.ep_dis, 2)
+                const title = event.nearestCity.data.settlement.data.translation.data.title
+                event.settlement = `${distance} км до ${title}`
+              } else {
+                event.settlement = 'Населённый пункт: нет данных'
+              }
 
               this.events.push(event)
             })

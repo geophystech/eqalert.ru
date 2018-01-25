@@ -5,9 +5,9 @@
 
     <b-row>
       <b-col cols="8">
-        <!-- <AppMap :event="event" mapId="map-general-information" shouldDrawEpicenter="true" shouldDrawPga="true" target="generalInformation" v-if="event.id" /> -->
-        <!-- <AppMap :event="event" mapId="map-settlements" shouldDrawEpicenter="true" shouldDrawMsk64="true" target="settlements" v-if="event.id" /> -->
-        <!-- <AppMap :event="event" mapId="map-buildings" shouldDrawEpicenter="true" :buildings="buildings" :target="buildings" v-if="buildings.length" /> -->
+        <keep-alive>
+          <component :is="components.maps[components.currentTab]" :tab="components.currentTab" :event="event" v-if="event.id" />
+        </keep-alive>
 
         <keep-alive>
           <component :is="components.currentTab" :event="event" v-if="event.id" />
@@ -27,7 +27,11 @@
   import EventHeader from '@/components/event/Header'
   import GeneralInformation from '@/components/event/GeneralInformation'
   import LastEvents from '@/components/event/LastEvents'
-  import Ldos from '@/components/event/Ldos'
+  import LDOs from '@/components/event/LDOs'
+  import MapBuildings from '@/components/maps/Buildings'
+  import MapGeneralInformation from '@/components/maps/GeneralInformation'
+  import MapLDOs from '@/components/maps/LDOs'
+  import MapSettlements from '@/components/maps/Settlements'
   import MomentTensor from '@/components/event/MomentTensor'
   import Settlements from '@/components/event/Settlements'
   import Tabs from '@/components/event/Tabs'
@@ -36,12 +40,9 @@
 
   export default {
     components: {
-      EventHeader,
-      LastEvents,
-      Tabs,
       buildings: Buildings,
       generalInformation: GeneralInformation,
-      ldos: Ldos,
+      ldos: LDOs,
       momentTensor: MomentTensor,
       settlements: Settlements
     },
@@ -51,6 +52,12 @@
           currentTab: this.$router.currentRoute.params.tab || 'generalInformation',
           header: EventHeader,
           lastEvents: LastEvents,
+          maps: {
+            buildings: MapBuildings,
+            generalInformation: MapGeneralInformation,
+            ldos: MapLDOs,
+            settlements: MapSettlements
+          },
           tabs: Tabs
         },
         event: {

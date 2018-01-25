@@ -1,0 +1,83 @@
+.map {
+  height: 450px;
+  margin-bottom: 5%;
+
+  .magnitude-color {
+    color: red;
+    font-size: 140%;
+    font-weight: bold;
+  }
+
+  .read-more {
+    a {
+      color: white;
+      padding: 3px 5px;
+      font-size: 100%;
+      line-height: 1.5;
+    }
+  }
+
+  // Подпись.
+  .map-text {
+    background-color: rgba(255, 255, 255, .5);
+    border-radius: 2px;
+    bottom: -5px;
+    font-size: 120%;
+
+    p {
+      color: #000;
+      font-family: "Open Sans Light";
+      max-height: 10px;
+      padding-left: 27px;
+      padding-right: 35px;
+    }
+  }
+
+  .map-legend {
+    background: rgba(255, 255, 255, .8);
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+    color: #555;
+    line-height: 15px;
+    padding: 6px 8px;
+    text-align: left;
+
+    i {
+      float: left;
+      height: 15px;
+      margin-right: 8px;
+      opacity: .7;
+      width: 15px;
+    }
+
+    span {
+      display: inline-block;
+      padding: 5px;
+      text-align: center;
+      width: 70px;
+    }
+
+    .buildings-legend {
+      width: 50px;
+
+      span:first-child {
+        width: 10px;
+      }
+
+      span:last-child {
+        margin-left: 10px;
+        width: auto;
+      }
+    }
+  }
+
+  /* ZoomHome plugin */
+  .leaflet-control-zoomhome-home i.fa-home {
+    font-size: 160%;
+  }
+
+  a.leaflet-control-zoomhome-in,
+  a.leaflet-control-zoomhome-out {
+    font-size: 150%;
+  }
+}
