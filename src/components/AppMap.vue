@@ -3,15 +3,10 @@
 </template>
 
 <script>
-// import { convertMsk64 } from '@/helpers.js'
 
 const moment = require('moment')
 require('moment/locale/ru')
 
-const L = window.L
-// const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
-let boundaries = null
-let controlLayers = {}
 
 export default {
   props: [
@@ -27,135 +22,15 @@ export default {
   ],
   data() {
     return {
-      buildingsInformation: {},
       events: [],
-      initializedMaps: [],
       ldos: [],
       maxZoom: 18,
-      pga: [],
       plateBoundaries: null,
       stations: null,
-      // tileProviders: {
-      //   'OpenStreetMap': new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      //     attribution: `<a href="http://osm.org">OpenStreetMap</a> | ${geophystechLink}`
-      //   }),
-      //   'Google Roadmap': new L.GridLayer.GoogleMutant({ attribution: geophystechLink }, 'roadmap'),
-      //   'Yandex Satellite': new L.Yandex('satellite', { attribution: geophystechLink }),
-      //   'Yandex Hybrid': new L.Yandex('hybrid', { attribution: geophystechLink }),
-      //   'Yandex Map': new L.Yandex('', { attribution: 'geophystechLink' })
-      // },
       zoom: 5
     }
   },
   methods: {
-    // buildingColor: function(damageLevel) {
-    //   switch (damageLevel) {
-    //     case 0: return 'cyan'
-    //     case 1: return '#008000'
-    //     case 2: return '#ffa500'
-    //     case 3: return '#ff0000'
-    //   }
-    // },
-    // drawBuildings: function(id) {
-    //   let markers = new L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
-
-    //   this.buildings.forEach(building => {
-    //     if (building.damage_level < 1) return
-
-    //     const marker = new L.MapMarker(new L.LatLng(building.building.data.lat, building.building.data.lon), {
-    //       dropShadow: true,
-    //       fillColor: this.buildingColor(building.damage_level),
-    //       gradient: true,
-    //       innerRadius: 0,
-    //       radius: 7
-    //     })
-
-    //     const message =
-    //       `<table class="table table-hover table-sm table-responsive">
-    //         <tbody>
-    //           <tr>
-    //             <th class="align-middle" scope="row">Тип строения</th>
-    //             <td>${building.building.data.building_type}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Тип фундамента</th>
-    //             <td>${building.building.data.building_base_type}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Материал</th>
-    //             <td>${building.building.data.fabric_type}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Год постройки</th>
-    //             <td>${building.building.data.built_year}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Кол-во этажей</th>
-    //             <td>${building.building.data.flats}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Адрес</th>
-    //             <td>${building.building.data.street}, д. ${building.building.data.street_number}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Кол-во проживающих</th>
-    //             <td>${building.building.data.residents}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Максимальная бальность</th>
-    //             <td>${building.building.data.max_msk64} (MSK64)</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">Прогноз повреждений</th>
-    //             <td>d-${building.damage_level}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">PGA</th>
-    //             <td>${building.pga_value || 0.0}</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">По данным</th>
-    //             <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
-    //           </tr>
-    //         </tbody>
-    //       </table>`
-
-    //     marker.bindPopup(message)
-    //     markers.addLayer(marker)
-    //   })
-
-    //   window.map[id][this.target].addLayer(markers)
-
-    //   const legend = L.control({ position: 'bottomright' })
-    //   legend.onAdd = map => {
-    //     let div = L.DomUtil.create('div', 'map-legend')
-    //     div.innerHTML =
-    //       `<div class="buildings-legend"><span style="background: ${this.buildingColor(1)}"></span><span>d-1</span></div>
-    //        <div class="buildings-legend"><span style="background: ${this.buildingColor(2)}"></span><span>d-2</span></div>
-    //        <div class="buildings-legend"><span style="background: ${this.buildingColor(3)}"></span><span>d-3</span></div>
-    //       `
-    //     return div
-    //   }
-
-    //   legend.addTo(window.map[id][this.target])
-
-    //   if (this.shouldDrawEpicenter) this.drawEpicenter(id)
-    // },
-    // drawEpicenter: function(id) {
-    //   const latitude = this.epicenterCoordinates.lat
-    //   const longitude = this.epicenterCoordinates.lon
-    //   const epicenter = new L.StarMarker((new L.LatLng(latitude, longitude)), {
-    //     color: '',
-    //     fillColor: '#ff0a0a',
-    //     fillOpacity: 1.0,
-    //     numberOfPoints: 5,
-    //     radius: 12,
-    //     weight: 2
-    //   })
-
-    //   epicenter.bindPopup('Эпицентр землетрясения')
-    //   window.map[id][this.target].addLayer(epicenter)
-    // },
     drawLastEvents: function() {
       this.events.reverse().forEach((event) => {
         const marker = new L.RegularPolygonMarker(new L.LatLng(event.latitude, event.longitude), {
@@ -305,85 +180,6 @@ export default {
 
       if (this.shouldDrawEpicenter) this.drawEpicenter(id)
     },
-    // drawMap: function(id) {
-    //   window.map[id][this.target] = L.map(this.mapId, {
-    //     fullscreenControl: true,
-    //     fullscreenControlOptions: { position: 'topleft' },
-    //     scrollWheelZoom: false,
-    //     worldCopyJump: true,
-    //     zoomAnimation: true,
-    //     zoomControl: false
-    //   }).setView([this.epicenterCoordinates.lat, this.epicenterCoordinates.lon], this.zoom)
-
-    //   L.Control.zoomHome({ zoomHomeIcon: 'home' }).addTo(window.map[id][this.target])
-
-    //   this.drawTileLayers(id)
-
-    //   // Store current tile provider to the storage
-    //   window.map[id][this.target].on('baselayerchange', event => { this.$store.dispatch('setCurrentTileProvider', event.name) })
-    // },
-    drawMsk64: function(id, data) {
-      let legendData = ''
-
-      data.forEach(item => {
-        const latitude = this.epicenterCoordinates.lat
-        const longitude = this.epicenterCoordinates.lon
-        // const value = convertMsk64(item.value)
-        const value = item.value
-        const color = this.msk64Color(value)
-
-        const circle = L.circle(
-          [latitude, longitude],
-          item.distance * 1000,
-          { color: color, fillColor: color })
-
-        circle.addTo(window.map[id][this.target])
-        circle.bindPopup(`<div class="text-center"><strong>${value}</strong></div>`)
-
-        legendData += `<i style="background: ${color}"></i>${value}<br>`
-      })
-
-      if (data.length) {
-        const legend = L.control({ position: 'bottomright' })
-
-        legend.onAdd = function() {
-          const div = L.DomUtil.create('div', 'map-legend')
-          div.innerHTML = legendData
-
-          return div
-        }
-
-        legend.addTo(window.map[id][this.target])
-      }
-
-      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
-    },
-    drawPga: function(id) {
-      let legendData = ''
-
-      Object.keys(this.pga).forEach((key) => {
-        const lineColor = this.pgaLineColor(this.pga[key].range)
-        const pga = L.polygon(this.pga[key].data, { color: lineColor, weigh: 2 })
-
-        pga.addTo(window.map[id][this.target])
-        pga.bindPopup(`Пиковое ускорение грунта: ${this.pga[key].range}%g (ускорение свободного падения)`)
-
-        legendData += `<i style="background: ${lineColor}"></i>${this.pga[key].range}<br>`
-      })
-
-      let pgaLegend = L.control({ position: 'bottomright' })
-      pgaLegend.onAdd = (map) => {
-        const div = L.DomUtil.create('div', 'map-legend')
-        div.innerHTML += '<h6>%g</h6>'
-        div.innerHTML += legendData
-
-        return div
-      }
-
-      pgaLegend.addTo(window.map[id][this.target])
-
-      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
-    },
     drawPlateBoundaries: function() {
       boundaries = new L.GeoJSON(this.plateBoundaries, {
         style: {
@@ -465,13 +261,6 @@ export default {
         window.map[this.id][this.target].addLayer(marker)
       })
     },
-    // drawTileLayers: function(id) {
-    //   // Draw stored tile provider for current user.
-    //   this.tileProviders[this.$store.getters.currentTileProvider || Object.keys(this.tileProviders)[0]].addTo(window.map[id][this.target])
-
-    //   controlLayers[id][this.target] = new L.Control.Layers(this.tileProviders)
-    //   controlLayers[id][this.target].addTo(window.map[id][this.target])
-    // },
     eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
         return '#ff0000'
@@ -516,21 +305,6 @@ export default {
         })
         .catch(error => { console.log(error) })
     },
-    // getMsk64: function(id) {
-    //   this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(id))
-    //     .then(response => {
-    //       this.drawMsk64(id, response.data.data)
-    //     })
-    //     .catch(error => { console.log(error) })
-    // },
-    // getPga: function(id) {
-    //   this.$http.get(this.$root.$options.settings.api.endpointEventPga(id))
-    //     .then(response => {
-    //       this.pga = response.data.data
-    //       this.drawPga(id)
-    //     })
-    //     .catch(error => { console.log(error) })
-    // },
     getPlateBoundaries: function() {
       this.$http.get('/static/json/plate_boundaries.geojson')
         .then(response => {
@@ -560,50 +334,6 @@ export default {
         this.drawEpicenter(id)
       }
     },
-    // msk64Color: function(value) {
-    //   switch (value) {
-    //     case 'I': return '#ffffff'
-    //     case 'I-II': return '#ffffff'
-    //     case 'II': return '#bfccff'
-    //     case 'II-III': return '#bfccff'
-    //     case 'III': return '#9999ff'
-    //     case 'III-IV': return '#9999ff'
-    //     case 'IV': return '#80ffff'
-    //     case 'IV-V': return '#80ffff'
-    //     case 'V': return '#7df894'
-    //     case 'V-VI': return '#7df894'
-    //     case 'VI': return '#ffff00'
-    //     case 'VI-VII': return '#ffff00'
-    //     case 'VII': return '#ffc800'
-    //     case 'VII-VIII': return '#ffc800'
-    //     case 'VIII': return '#ff9100'
-    //     case 'VIII-IX': return '#ff9100'
-    //     case 'IX': return '#ff0000'
-    //     case 'IX-X': return '#ff0000'
-    //     case 'X': return '#c80000'
-    //     case 'X-XI': return '#c80000'
-    //     case 'XI': return '#800000'
-    //     case 'XI-XII': return '#800000'
-    //     case 'XII': return '#400000'
-    //   }
-    // },
-    // pgaLineColor: function(range) {
-    //   switch (range) {
-    //     case '<=0.15': return '#fff5f0'
-    //     case '0.15-0.3': return '#fee0d2'
-    //     case '0.3-2.8': return '#fcbba1'
-    //     case '2.8-6.2': return '#fc9272'
-    //     case '6.2-12': return '#fb6a4a'
-    //     case '12-22': return '#ef3b2c'
-    //     case '22-40': return '#cb181d'
-    //     case '40-75': return '#a50f15'
-    //     case '75-139': return '#67000d'
-    //     case '>139': return '#400000'
-    //   }
-    // },
-    populateControlLayers: function(id) {
-      if (!controlLayers[id]) controlLayers[id] = {}
-    }
   },
   computed: {
     epicenterCoordinates: function() {
@@ -629,11 +359,9 @@ export default {
   mounted() {
     // this.drawMap(this.id)
     // this.loadData(this.id)
-    console.log(`mounted event, new value: ${this.event.id}`)
   },
   watch: {
     event: function(value) {
-      console.log(`changed event, new value: ${value.id}`)
       // this.populateControlLayers(value.id)
       // this.loadData(value.id)
     }
