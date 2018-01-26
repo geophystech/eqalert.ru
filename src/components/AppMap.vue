@@ -4,9 +4,12 @@
 
 <script>
 
+const L = window.L
+let boundaries = null
+let controlLayers = {}
+
 const moment = require('moment')
 require('moment/locale/ru')
-
 
 export default {
   props: [
@@ -333,7 +336,7 @@ export default {
       } else if (!this.shouldDrawLastEvents) {
         this.drawEpicenter(id)
       }
-    },
+    }
   },
   computed: {
     epicenterCoordinates: function() {
