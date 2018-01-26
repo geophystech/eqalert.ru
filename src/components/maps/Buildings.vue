@@ -126,6 +126,9 @@
 
       this.$root.$on('onMapDataFetched', data => { this.addData(data) })
     },
+    beforeDestroy() {
+      this.$root.$off('onMapDataFetched')
+    },
     mounted() {
       this.createMap()
     }
