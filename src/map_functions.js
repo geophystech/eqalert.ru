@@ -23,6 +23,15 @@ export function addEpicenter(map, coordinates) {
   map.addLayer(epicenter)
 }
 
+export function buildingColor(damageLevel) {
+  switch (damageLevel) {
+    case 0: return 'cyan'
+    case 1: return '#008000'
+    case 2: return '#ffa500'
+    case 3: return '#ff0000'
+  }
+}
+
 export function convertMsk64(value) {
   if (value >= -Infinity && value < 1.24) return 'I'
   if (value >= 1.25 && value < 1.75) return 'I-II'

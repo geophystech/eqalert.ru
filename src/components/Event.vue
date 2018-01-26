@@ -36,8 +36,6 @@
   import Settlements from '@/components/event/Settlements'
   import Tabs from '@/components/event/Tabs'
 
-  // if (!window.map) window.map = {}
-
   export default {
     components: {
       buildings: Buildings,
@@ -77,11 +75,6 @@
           })
           .catch(error => { console.log(error) })
       },
-      invalidateMapSize: function(target, id) {
-        const key = Object.keys(this.tabs)[target]
-
-        if (window.map[id][key]) setTimeout(() => { window.map[id][key].invalidateSize() }, 1)
-      },
       magnitudeType: function(type) {
         // Nested arrays are used because there may be multiple magnitude types.
         // But in most cases there will be only one type.
@@ -100,10 +93,6 @@
       onTabSwitch: function(tab) {
         this.components.currentTab = tab
       },
-      populateMap: function(id) {
-        if (!window.map[id]) window.map[id] = {}
-        Object.keys(this.tabs).forEach(tab => { window.map[id][tab] = null })
-      },
       processingMethod: function(auto, manual) {
         if (auto && !manual) return { long: 'автоматический', short: 'A' }
         if (auto && manual) return { long: 'смешанный', short: 'AM' }
@@ -113,7 +102,6 @@
       }
     },
     created() {
-      // this.$root.$on('changed::tab', tab => this.invalidateMapSize(tab.currentTab, this.$router.currentRoute.params.id))
       this.fetchData(this.$router.currentRoute.params.id)
     },
     beforeRouteUpdate(to, from, next) {

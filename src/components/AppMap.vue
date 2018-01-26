@@ -48,99 +48,99 @@ export default {
     }
   },
   methods: {
-    buildingColor: function(damageLevel) {
-      switch (damageLevel) {
-        case 0: return 'cyan'
-        case 1: return '#008000'
-        case 2: return '#ffa500'
-        case 3: return '#ff0000'
-      }
-    },
-    drawBuildings: function(id) {
-      let markers = new L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
+    // buildingColor: function(damageLevel) {
+    //   switch (damageLevel) {
+    //     case 0: return 'cyan'
+    //     case 1: return '#008000'
+    //     case 2: return '#ffa500'
+    //     case 3: return '#ff0000'
+    //   }
+    // },
+    // drawBuildings: function(id) {
+    //   let markers = new L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
 
-      this.buildings.forEach(building => {
-        if (building.damage_level < 1) return
+    //   this.buildings.forEach(building => {
+    //     if (building.damage_level < 1) return
 
-        const marker = new L.MapMarker(new L.LatLng(building.building.data.lat, building.building.data.lon), {
-          dropShadow: true,
-          fillColor: this.buildingColor(building.damage_level),
-          gradient: true,
-          innerRadius: 0,
-          radius: 7
-        })
+    //     const marker = new L.MapMarker(new L.LatLng(building.building.data.lat, building.building.data.lon), {
+    //       dropShadow: true,
+    //       fillColor: this.buildingColor(building.damage_level),
+    //       gradient: true,
+    //       innerRadius: 0,
+    //       radius: 7
+    //     })
 
-        const message =
-          `<table class="table table-hover table-sm table-responsive">
-            <tbody>
-              <tr>
-                <th class="align-middle" scope="row">Тип строения</th>
-                <td>${building.building.data.building_type}</td>
-              </tr>
-              <tr>
-                <th scope="row">Тип фундамента</th>
-                <td>${building.building.data.building_base_type}</td>
-              </tr>
-              <tr>
-                <th scope="row">Материал</th>
-                <td>${building.building.data.fabric_type}</td>
-              </tr>
-              <tr>
-                <th scope="row">Год постройки</th>
-                <td>${building.building.data.built_year}</td>
-              </tr>
-              <tr>
-                <th scope="row">Кол-во этажей</th>
-                <td>${building.building.data.flats}</td>
-              </tr>
-              <tr>
-                <th scope="row">Адрес</th>
-                <td>${building.building.data.street}, д. ${building.building.data.street_number}</td>
-              </tr>
-              <tr>
-                <th scope="row">Кол-во проживающих</th>
-                <td>${building.building.data.residents}</td>
-              </tr>
-              <tr>
-                <th scope="row">Максимальная бальность</th>
-                <td>${building.building.data.max_msk64} (MSK64)</td>
-              </tr>
-              <tr>
-                <th scope="row">Прогноз повреждений</th>
-                <td>d-${building.damage_level}</td>
-              </tr>
-              <tr>
-                <th scope="row">PGA</th>
-                <td>${building.pga_value || 0.0}</td>
-              </tr>
-              <tr>
-                <th scope="row">По данным</th>
-                <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
-              </tr>
-            </tbody>
-          </table>`
+    //     const message =
+    //       `<table class="table table-hover table-sm table-responsive">
+    //         <tbody>
+    //           <tr>
+    //             <th class="align-middle" scope="row">Тип строения</th>
+    //             <td>${building.building.data.building_type}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Тип фундамента</th>
+    //             <td>${building.building.data.building_base_type}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Материал</th>
+    //             <td>${building.building.data.fabric_type}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Год постройки</th>
+    //             <td>${building.building.data.built_year}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Кол-во этажей</th>
+    //             <td>${building.building.data.flats}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Адрес</th>
+    //             <td>${building.building.data.street}, д. ${building.building.data.street_number}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Кол-во проживающих</th>
+    //             <td>${building.building.data.residents}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Максимальная бальность</th>
+    //             <td>${building.building.data.max_msk64} (MSK64)</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">Прогноз повреждений</th>
+    //             <td>d-${building.damage_level}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">PGA</th>
+    //             <td>${building.pga_value || 0.0}</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">По данным</th>
+    //             <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
+    //           </tr>
+    //         </tbody>
+    //       </table>`
 
-        marker.bindPopup(message)
-        markers.addLayer(marker)
-      })
+    //     marker.bindPopup(message)
+    //     markers.addLayer(marker)
+    //   })
 
-      window.map[id][this.target].addLayer(markers)
+    //   window.map[id][this.target].addLayer(markers)
 
-      const legend = L.control({ position: 'bottomright' })
-      legend.onAdd = map => {
-        let div = L.DomUtil.create('div', 'map-legend')
-        div.innerHTML =
-          `<div class="buildings-legend"><span style="background: ${this.buildingColor(1)}"></span><span>d-1</span></div>
-           <div class="buildings-legend"><span style="background: ${this.buildingColor(2)}"></span><span>d-2</span></div>
-           <div class="buildings-legend"><span style="background: ${this.buildingColor(3)}"></span><span>d-3</span></div>
-          `
-        return div
-      }
+    //   const legend = L.control({ position: 'bottomright' })
+    //   legend.onAdd = map => {
+    //     let div = L.DomUtil.create('div', 'map-legend')
+    //     div.innerHTML =
+    //       `<div class="buildings-legend"><span style="background: ${this.buildingColor(1)}"></span><span>d-1</span></div>
+    //        <div class="buildings-legend"><span style="background: ${this.buildingColor(2)}"></span><span>d-2</span></div>
+    //        <div class="buildings-legend"><span style="background: ${this.buildingColor(3)}"></span><span>d-3</span></div>
+    //       `
+    //     return div
+    //   }
 
-      legend.addTo(window.map[id][this.target])
+    //   legend.addTo(window.map[id][this.target])
 
-      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
-    },
+    //   if (this.shouldDrawEpicenter) this.drawEpicenter(id)
+    // },
     // drawEpicenter: function(id) {
     //   const latitude = this.epicenterCoordinates.lat
     //   const longitude = this.epicenterCoordinates.lon
