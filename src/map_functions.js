@@ -21,6 +21,8 @@ export function addEpicenter(map, coordinates) {
 
   epicenter.bindPopup('Эпицентр землетрясения')
   map.addLayer(epicenter)
+
+  return epicenter
 }
 
 export function buildingColor(damageLevel) {
@@ -74,8 +76,9 @@ export function createMap(id, coordinates, store) {
     zoomAnimation: true,
     zoomControl: false
   }
-  const map = window.L.map(id, options).setView(coordinates, 5)
+  const map = window.L.map(id, options)
 
+  setView(map, coordinates)
   currentTileProvider(store).addTo(map)
   layersControl().addTo(map)
   zoomHome().addTo(map)
@@ -118,6 +121,14 @@ export function msk64Color(value) {
     case 'XI-XII': return '#800000'
     case 'XII': return '#400000'
   }
+}
+
+export function removeEpicenter(map, epicenter) {
+  map.removeLayer(epicenter)
+}
+
+export function setView(map, coordinates, zoom = 5) {
+  map.setView(coordinates, zoom)
 }
 
 function tileProviders() {

@@ -1,17 +1,21 @@
 <template>
-  <div class="map" :id="mapId" />
+  <div class="map" :id="map.id" />
 </template>
 
 <script>
-  import { addEpicenter, createMap, id } from '@/map_functions.js'
+  import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
 
   export default {
     props: ['event', 'tab'],
     data() {
       return {
         coordinates: [],
-        map: null,
-        mapId: ''
+        map: {
+          epicenter: null,
+          id: null,
+          object: null,
+          pga: []
+        }
       }
     },
     methods: {
@@ -22,7 +26,8 @@
           const lineColor = this.pgaLineColor(data[key].range)
           const pga = window.L.polygon(data[key].data, { color: lineColor, weigh: 2 })
 
-          pga.addTo(this.map)
+          this.map.pga.push(pga)
+          pga.addTo(this.map.object)
           pga.bindPopup(`Пиковое ускорение грунта: ${data[key].range}%g (ускорение свободного падения)`)
 
           legendData += `<i style="background: ${lineColor}"></i>${data[key].range}<br>`
@@ -38,17 +43,21 @@
           return div
         }
 
-        pgaLegend.addTo(this.map)
+        pgaLegend.addTo(this.map.object)
 
-        addEpicenter(this.map, this.coordinates)
+        this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
       },
       createMap: function() {
-        this.map = createMap(this.mapId, this.coordinates)
+        this.map.object = createMap(this.map.id, this.coordinates)
       },
       fetchData: function() {
         this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.event.id))
           .then(response => { this.addData(response.data.data) })
           .catch(error => { console.log(error) })
+      },
+      initialize: function() {
+        this.map.id = id(this.event.id, this.tab)
+        this.coordinates = [this.event.locValues.data.lat, this.event.locValues.data.lon]
       },
       pgaLineColor: function(range) {
         switch (range) {
@@ -63,15 +72,31 @@
           case '75-139': return '#67000d'
           case '>139': return '#400000'
         }
+      },
+      removeData: function() {
+        // Remove legend div and PGA polylines.
+        this.$el.querySelector('.map-legend').remove()
+        this.map.pga.forEach(layer => { this.map.object.removeLayer(layer) })
+      },
+      resetMap: function() {
+        removeEpicenter(this.map.object, this.map.epicenter)
+        this.removeData()
+        setView(this.map.object, this.coordinates)
       }
     },
     created() {
-      this.mapId = id(this.event.id, this.tab)
-      this.coordinates.push(this.event.locValues.data.lat, this.event.locValues.data.lon)
+      this.initialize()
     },
     mounted() {
       this.createMap()
       this.fetchData()
+    },
+    watch: {
+      event: function(data) {
+        this.initialize()
+        this.resetMap()
+        this.fetchData()
+      }
     }
   }
 </script>

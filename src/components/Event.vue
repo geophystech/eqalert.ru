@@ -66,13 +66,7 @@
     methods: {
       fetchData: function(id) {
         this.$http.get(this.$root.$options.settings.api.endpointEvent(id))
-          .then(response => {
-            this.event = response.data.data
-            this.event.datetime = this.event.locValues.data.event_datetime
-            this.event.magnitude = this.event.locValues.data.mag
-            this.event.magnitudeType = this.magnitudeType(this.event.locValues.data.mag_t)
-            this.event.processingMethod = this.processingMethod(this.event.has_auto, this.event.has_manual)
-          })
+          .then(response => { this.setData(response.data.data) })
           .catch(error => { console.log(error) })
       },
       magnitudeType: function(type) {
@@ -99,6 +93,13 @@
         if (!auto && manual) return { long: 'ручной', short: 'M' }
 
         return { long: 'неизвестно', short: 'U' }
+      },
+      setData: function(data) {
+        this.event = data
+        this.event.datetime = data.locValues.data.event_datetime
+        this.event.magnitude = data.locValues.data.mag
+        this.event.magnitudeType = this.magnitudeType(data.locValues.data.mag_t)
+        this.event.processingMethod = this.processingMethod(data.has_auto, data.has_manual)
       }
     },
     created() {
