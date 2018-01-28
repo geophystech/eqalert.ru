@@ -33,18 +33,20 @@
           legendData += `<i style="background: ${lineColor}"></i>${data[key].range}<br>`
         })
 
-        let pgaLegend = window.L.control({ position: 'bottomright' })
+        // Show map legend just once.
+        if (!this.$el.querySelector('.map-legend')) {
+          let pgaLegend = window.L.control({ position: 'bottomright' })
 
-        pgaLegend.onAdd = (map) => {
-          const div = window.L.DomUtil.create('div', 'map-legend')
-          div.innerHTML += '<h6>%g</h6>'
-          div.innerHTML += legendData
+          pgaLegend.onAdd = (map) => {
+            const div = window.L.DomUtil.create('div', 'map-legend')
+            div.innerHTML += '<h6>%g</h6>'
+            div.innerHTML += legendData
 
-          return div
+            return div
+          }
+
+          pgaLegend.addTo(this.map.object)
         }
-
-        pgaLegend.addTo(this.map.object)
-
         this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
       },
       createMap: function() {
@@ -74,8 +76,7 @@
         }
       },
       removeData: function() {
-        // Remove legend div and PGA polylines.
-        this.$el.querySelector('.map-legend').remove()
+        // Remove PGA polylines.
         this.map.pga.forEach(layer => { this.map.object.removeLayer(layer) })
       },
       resetMap: function() {
