@@ -1,17 +1,21 @@
 <template>
-  <div class="map" :id="mapId" />
+  <div class="map" :id="map.id" />
 </template>
 
 <script>
-  import { addEpicenter, buildingColor, createMap, id } from '@/map_functions.js'
+  import { addEpicenter, buildingColor, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
 
   export default {
     props: ['event', 'tab'],
     data() {
       return {
         coordinates: [],
-        map: null,
-        mapId: ''
+        map: {
+          epicenter: null,
+          id: null,
+          object: null,
+          markers: []
+        }
       }
     },
     methods: {
@@ -99,30 +103,46 @@
           markers.addLayer(marker)
         })
 
-        this.map.addLayer(markers)
+        this.map.markers = markers
+        this.map.object.addLayer(markers)
 
-        const legend = window.L.control({ position: 'bottomright' })
+        if (!this.$el.querySelector('.map-legend')) {
+          const legend = window.L.control({ position: 'bottomright' })
 
-        legend.onAdd = map => {
-          let div = window.L.DomUtil.create('div', 'map-legend')
-          div.innerHTML =
-            `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
-            <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
-            <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3</span></div>
-            `
-          return div
+          legend.onAdd = map => {
+            let div = window.L.DomUtil.create('div', 'map-legend')
+            div.innerHTML =
+              `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
+              <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
+              <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3</span></div>
+              `
+            return div
+          }
+
+          legend.addTo(this.map.object)
         }
 
-        legend.addTo(this.map)
-        addEpicenter(this.map, this.coordinates)
+        this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
       },
       createMap: function() {
-        this.map = createMap(this.mapId, this.coordinates)
+        this.map.object = createMap(this.map.id, this.coordinates)
+      },
+      initialize: function() {
+        this.map.id = id(this.event.id, this.tab)
+        this.coordinates = [this.event.locValues.data.lat, this.event.locValues.data.lon]
+      },
+      removeData: function() {
+        // Remove building markers.
+        this.map.object.removeLayer(this.map.markers)
+      },
+      resetMap: function() {
+        removeEpicenter(this.map.object, this.map.epicenter)
+        this.removeData()
+        setView(this.map.object, this.coordinates)
       }
     },
     created() {
-      this.mapId = id(this.event.id, this.tab)
-      this.coordinates.push(this.event.locValues.data.lat, this.event.locValues.data.lon)
+      this.initialize()
 
       this.$root.$on('onMapDataFetched', data => { this.addData(data) })
     },
@@ -131,6 +151,12 @@
     },
     mounted() {
       this.createMap()
+    },
+    watch: {
+      event: function(data) {
+        this.initialize()
+        this.resetMap()
+      }
     }
   }
 </script>
