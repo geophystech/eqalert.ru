@@ -125,60 +125,6 @@ export default {
 
       controlLayers[this.id][this.target].addOverlay(boundaries, 'Plate Boundaries')
     },
-    drawStations: function() {
-      this.stations.forEach(station => {
-        let marker = new L.RegularPolygonMarker(new L.LatLng(station.sta_lat, station.sta_lon), {
-          numberOfSides: 3,
-          rotation: 30.0,
-          radius: 7,
-          fillOpacity: 1.0,
-          color: false,
-          fillColor: this.$root.$options.settings.stations.colors[station.scnl_network]
-        })
-
-        let message =
-          `<table class="table table-hover table-sm table-responsive">
-            <thead>
-              <tr>
-                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Каналов</th>
-                <td>${station.channel_num}</td>
-              </tr>
-              <tr>
-                <th scope="row">Высота</th>
-                <td>${station.sta_elevation}</td>
-              </tr>
-              <tr>
-                <th scope="row">Тип датчика</th>
-                <td>${station.instrument}</td>
-              </tr>
-              <tr>
-                <th scope="row">Регистратор</th>
-                <td>${station.datalogger}</td>
-              </tr>
-              <tr>
-                <th scope="row">Частота дискр.</th>
-                <td>${station.sample_rate}</td>
-              </tr>
-              <tr>
-                <th scope="row">Телеметрия</th>
-                <td>${station.has_realtime}</td>
-              </tr>
-              <tr>
-                <th scope="row">Оператор</th>
-                <td>${station.operator}</td>
-              </tr>
-            </tbody>
-          </table>`
-
-        marker.bindPopup(message)
-        window.map[this.id][this.target].addLayer(marker)
-      })
-    },
     eventColor: function(timeDifference) {
       if (timeDifference <= 24) {
         return '#ff0000'
@@ -207,27 +153,11 @@ export default {
         return 26
       }
     },
-    getLastEvents: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/123a377666c3fb31c3892cc3dfa3229d/raw/0b88f16059653b841ddb944b57e2ff5c65cba163/eq_last_events.json')
-        .then(response => {
-          this.events = response.data.events
-          this.drawLastEvents()
-        })
-        .catch(error => { console.log(error) })
-    },
     getPlateBoundaries: function() {
       this.$http.get('/static/json/plate_boundaries.geojson')
         .then(response => {
           this.plateBoundaries = response.data
           this.drawPlateBoundaries()
-        })
-        .catch(error => { console.log(error) })
-    },
-    getStations: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointStations)
-        .then(response => {
-          this.stations = response.data.data
-          this.drawStations()
         })
         .catch(error => { console.log(error) })
     },
