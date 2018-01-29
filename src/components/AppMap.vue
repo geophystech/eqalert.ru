@@ -98,91 +98,6 @@ export default {
       }
       text.addTo(window.map[this.id][this.target])
     },
-    drawLDOs: function(id) {
-      this.ldos.forEach(ldo => {
-        ldo.parts.forEach(part => {
-          const coordinates = [[part.latitude_start, part.longitude_start], [part.latitude_end, part.longitude_end]]
-          const partPolyline = L.polyline(coordinates, { color: part.color }).addTo(window.map[id][this.target])
-          let message =
-            `<table class="table table-hover table-sm table-responsive">
-              <thead>
-                <tr>
-                  <th class="text-center" colspan=2>Общая информация</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th class="align-middle" scope="row">Наименование</th>
-                  <td>${ldo.name}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Количество анализируемых участков</th>
-                  <td>${ldo.parts_number}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Год постройки</th>
-                  <td>${part.built_year}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Глубина залегания</th>
-                  <td>${part.height}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Материал конструкций</th>
-                  <td>${part.fabric_type}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Тип грунта</th>
-                  <td>${part.soil_type}</td>
-                </tr>
-
-                <tr>
-                  <th class="text-center" colspan=2>Информация о сейсмических воздействиях</th>
-                </tr>`
-
-          if (part.has_damage === true) {
-            message +=
-              `<tr>
-                <th scope="row">PGA</th>
-                <td>${part.pga_value}</td>
-              </tr>
-              <tr>
-                <th scope="row">Вероятность повреждения</th>
-                <td>${part.damage}</td>
-              </tr>`
-          } else {
-            message +=
-              `<tr>
-                <td class="text-center" colspan=2>сейсмическое воздействие не оказано</t>
-               </tr>`
-          }
-
-          message +=
-            `   <tr>
-                  <th scope="row">Примечания</th>
-                  <td>${part.notes}</td>
-                </tr>
-              </tbody>
-            </table>`
-
-          partPolyline.bindPopup(message)
-
-          let partColor = null
-
-          partPolyline.on('mouseover', function(event) {
-            partColor = this.options.color
-
-            partPolyline.setStyle({ color: 'cyan' })
-          })
-
-          partPolyline.on('mouseout', function(event) {
-            partPolyline.setStyle({ color: partColor })
-          })
-        })
-      })
-
-      if (this.shouldDrawEpicenter) this.drawEpicenter(id)
-    },
     drawPlateBoundaries: function() {
       boundaries = new L.GeoJSON(this.plateBoundaries, {
         style: {
@@ -297,14 +212,6 @@ export default {
         .then(response => {
           this.events = response.data.events
           this.drawLastEvents()
-        })
-        .catch(error => { console.log(error) })
-    },
-    getLDOs: function(id) {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/d11aa34f71ae59da19f0a59379f0c0cd/raw/0949a047792fc84a346aa420848e0761d8609a59/eq_QgpAn7OW_ldos.json')
-        .then(response => {
-          this.ldos = response.data.ldos
-          this.drawLDOs(id)
         })
         .catch(error => { console.log(error) })
     },

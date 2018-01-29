@@ -133,7 +133,7 @@
       },
       removeData: function() {
         // Remove building markers.
-        this.map.object.removeLayer(this.map.markers)
+        if (this.map.markers) this.map.object.removeLayer(this.map.markers)
       },
       resetMap: function() {
         removeEpicenter(this.map.object, this.map.epicenter)

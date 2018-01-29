@@ -124,6 +124,7 @@ export function msk64Color(value) {
 }
 
 export function removeEpicenter(map, epicenter) {
+  if (!epicenter) return
   map.removeLayer(epicenter)
 }
 
