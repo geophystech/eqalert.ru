@@ -144,10 +144,10 @@
     created() {
       this.initialize()
 
-      this.$root.$on('onMapDataFetched', data => { this.addData(data) })
+      this.$root.$on('onMapBuildingsDataFetched', data => { this.addData(data) })
     },
     beforeDestroy() {
-      this.$root.$off('onMapDataFetched')
+      this.$root.$off('onMapBuildingsDataFetched')
     },
     mounted() {
       this.createMap()

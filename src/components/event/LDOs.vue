@@ -47,7 +47,20 @@ export default {
     this.fetchData()
   },
   methods: {
-    addData: function(data) {
+    fetchData: function() {
+      this.$http.get(this.$root.$options.settings.api.endpointEventLDOs(this.event.id), {
+        params: {
+          customer_ids: [1], // Change id(s) when the user management is implemented.
+          show_all_parts: 1
+        }
+      })
+        .then(response => {
+          this.$root.$emit('onMapLDOsDataFetched', response.data.data)
+          this.setData(response.data.data)
+        })
+        .catch(error => { console.log(error) })
+    },
+    setData: function(data) {
       const damagedParts = { '1': 0, '2': 0, '3': 0 }
 
       data.forEach(ldo => {
@@ -69,16 +82,6 @@ export default {
       this.items[5].value = data.length
       this.items[6].value = `${msk64ConfigVersion} / ${pgaConfigVersion}`
       this.spinner = false
-    },
-    fetchData: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEventLDOs(this.event.id), {
-        params: {
-          customer_ids: [1], // Change id(s) when the user management is implemented.
-          show_all_parts: 1
-        }
-      })
-        .then(response => { this.addData(response.data.data) })
-        .catch(error => { console.log(error) })
     }
   }
 }

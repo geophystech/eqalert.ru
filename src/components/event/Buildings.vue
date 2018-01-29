@@ -42,7 +42,7 @@
       fetchData: function() {
         this.$http.get(this.$root.$options.settings.api.endpointEventBuildings(this.event.id))
           .then(response => {
-            this.$root.$emit('onMapDataFetched', response.data.data)
+            this.$root.$emit('onMapBuildingsDataFetched', response.data.data)
             this.setData(response.data.data)
           })
           .catch(error => { console.log(error) })
