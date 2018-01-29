@@ -21,6 +21,10 @@ class Config {
     return `${this.baseURL}/${this.version}/reports/${id}`
   }
 
+  endpointEventLDOs(id) {
+    return `${this.baseURL}/${this.version}/pga/damagedLongDistanceObjects/${id}`
+  }
+
   endpointEventMsk64(id) {
     return `${this.baseURL}/${this.version}/msk64/data/${id}`
   }
@@ -29,12 +33,12 @@ class Config {
     return `${this.baseURL}/${this.version}/pga/${id}/concaveHulls`
   }
 
-  endpointMomentTensor(id) {
-    return `${this.baseURL}/${this.version}/momentTensor/${id}`
+  endpointEventSettlements(id) {
+    return `${this.baseURL}/${this.version}/msk64/citiesAnalysis/${id}`
   }
 
-  endpointSettlements(id) {
-    return `${this.baseURL}/${this.version}/msk64/citiesAnalysis/${id}`
+  endpointMomentTensor(id) {
+    return `${this.baseURL}/${this.version}/momentTensor/${id}`
   }
 }
 

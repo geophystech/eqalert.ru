@@ -8,7 +8,7 @@
     <b-row no-gutters>
       <Filters />
       <b-col class="all-events">
-        <Spinner line-fg-color="#337ab7" :line-size="1" v-show="spinners.loadMoreEvents && !events.length" />
+        <Spinner line-fg-color="#337ab7" :line-size="1" v-if="spinners.loadMoreEvents && !events.length" />
 
         <b-table
           hover
@@ -17,7 +17,7 @@
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           @row-clicked="openEvent"
-          v-show="events.length" >
+          v-if="events.length" >
           <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
           <template slot="magnitude" slot-scope="data">
             <span :class="{ 'highlight-event': data.item.locValues.data.mag > highlightEventTreshold }">
@@ -36,8 +36,8 @@
           </template>
           <template slot="bottom-row" slot-scope="data">
             <td :colspan="data.columns">
-              <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-show="spinners.loadMoreEvents" />
-              <a href="javascript:void(0)" @click.prevent="getEvents" v-if="cursor" v-show="!spinners.loadMoreEvents">Показать больше событий</a>
+              <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="spinners.loadMoreEvents" />
+              <a href="javascript:void(0)" @click.prevent="getEvents" v-if="cursor && !spinners.loadMoreEvents">Показать больше событий</a>
               <span v-else>Загружены все события</span>
             </td>
           </template>

@@ -6,9 +6,9 @@
     <b-col cols="8">
       <b-row>
         <b-col class="text-center">
-          <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-show="!event.magnitude" />
+          <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="!event.magnitude" />
 
-          <h5 v-show="event.magnitude">
+          <h5 v-if="event.magnitude">
             <span class="magnitude-type" v-for="item in event.magnitudeType" :key="item[0]">
               <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
             </span>
@@ -21,7 +21,7 @@
         </b-col>
       </b-row>
 
-      <b-row v-show="event.magnitude">
+      <b-row v-if="event.magnitude">
         <b-col class="text-center">
           <b-badge
             :variant="label.variant"

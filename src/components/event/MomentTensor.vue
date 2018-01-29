@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab">
-    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-show="!image" />
+    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="!image" />
 
     <b-row v-if="image">
       <b-col class="text-center">

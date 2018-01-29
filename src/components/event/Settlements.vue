@@ -1,13 +1,13 @@
 <template>
   <div class="event-tab">
-    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-show="!items.length" />
+    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="!items.length" />
 
     <b-table
       hover
       outlined
       :fields="fields"
       :items="items"
-      v-show="items.length">
+      v-if="items.length">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
       <template slot="distance" slot-scope="data">{{ data.value }} км</template>
       <template slot="msk64" slot-scope="data">
@@ -88,7 +88,7 @@
         this.items = []
       },
       fetchData: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointSettlements(this.event.id), {
+        this.$http.get(this.$root.$options.settings.api.endpointEventSettlements(this.event.id), {
           params: {
             cursor: this.cursor,
             limit: 10
