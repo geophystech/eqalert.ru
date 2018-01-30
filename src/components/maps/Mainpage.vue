@@ -154,7 +154,6 @@
       },
       createMap: function() {
         this.map.object = createMap(this.map.id, this.map.coordinates)
-        console.log(this.map.object)
       },
       eventColor: function(timeDifference) {
         if (timeDifference <= 24) {
