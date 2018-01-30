@@ -1,0 +1,27 @@
+eqalert.ru – the real-time information resource
+about earthquakes, seismic impacts and hazards
+
+Copyright 2018 The GEOPHSYTECH LLC
+
+This product includes software developed at
+GEOPHYSTECH LLC (https://geophystech.ru/).
+
+Used components and their licences:
+
+1. axios: MIT.
+2. bootstrap: MIT.
+3. chart.js: MIT.
+4. vue: MIT.
+5. vue-axios: MIT.
+6. vue-chartjs: MIT.
+7. vue-markdown: MIT.
+8. vue-router: MIT.
+9. vue-simple-spinner: MIT.
+10. vuex: MIT.
+11. vuex-persistedstate: MIT.
+12. leaflet: BSD 2-Clause.
+13. Leaflet.fullscreen: ISC.
+14. leaflet-dvf: MIT.
+15. leaflet.zoomhome: CC-BY-SA-3.0.
+16. Leaflet.markercluster: MIT.
+17. Leaflet.GoogleMutant: "THE BEER-WARE LICENSE".
