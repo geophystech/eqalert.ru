@@ -1,6 +1,6 @@
 <template>
   <div class="mainpage">
-    <AppMap hashid="mainpage" mapId="mainpage-map" target="mainpage" shouldDrawLastEvents="true" />
+    <MainpageMap />
 
     <b-container>
       <b-row>
@@ -10,16 +10,16 @@
               <b-row class="d-flex justify-content-center header">
                 <h4>Тензор момента</h4>
               </b-row>
-              <b-row class="event" align-v="center" v-for="event in events" :key="event.hashid">
-                <router-link :to="{ name: 'Event', params: { hashid: event.hashid }}" class="d-flex align-items-center">
+              <b-row class="event" align-v="center" v-for="event in events" :key="event.id">
+                <router-link :to="{ name: 'Event', params: { id: event.id }}" class="d-flex align-items-center">
                   <b-col cols="2" class="magnitude text-center">{{ event.magnitude }}</b-col>
                   <b-col>
                     <div class="settlement">{{ event.nearest_settlement.distance }} км до {{ event.nearest_settlement.title }}</div>
                     <div class="datetime">{{ moment.utc(event.datetime).locale('ru').format('LL в HH:mm:ss UTC') }}, глубина {{ event.depth }} км</div>
                   </b-col>
                   <b-col cols="2" class="moment-tensor text-center">
-                    <router-link :to="{ name: 'MomentTensor', params: { hashid: event.hashid }}">
-                      <img :alt="event.hashid" :src="'https://eqalert.ru/uploads/images/moment_tensors/preview/' + event.moment_tensor.image_preview" class="img-responsive" />
+                    <router-link :to="{ name: 'Event', params: { id: event.id, tab: 'moment-tensor' }}">
+                      <img :alt="event.id" :src="'https://eqalert.ru/uploads/images/moment_tensors/preview/' + event.moment_tensor.image_preview" class="img-responsive" />
                     </router-link>
                   </b-col>
                 </router-link>
@@ -79,18 +79,15 @@
 </template>
 
 <script>
-import AppMap from '@/components/AppMap'
 import ChartByDatetime from '@/components/charts/ChartByDatetime'
 import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
+import MainpageMap from '@/components/maps/Mainpage'
 
 const moment = require('moment')
 require('moment/locale/ru')
 
-if (!window.map) window.map = { mainpage: { mainpage: null } }
-
 export default {
-  name: 'mainpage',
-  components: { AppMap, ChartByDatetime, ChartByMagnitudeCumulative },
+  components: { ChartByDatetime, ChartByMagnitudeCumulative, MainpageMap },
   data() {
     return {
       events: []

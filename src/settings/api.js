@@ -13,28 +13,32 @@ class Config {
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
   }
 
-  endpointEventBuildings(hashid) {
-    return `${this.baseURL}/${this.version}/msk64/damagedBuildings/${hashid}`
+  endpointEventBuildings(id) {
+    return `${this.baseURL}/${this.version}/msk64/damagedBuildings/${id}`
   }
 
-  endpointEvent(hashid) {
-    return `${this.baseURL}/${this.version}/reports/${hashid}`
+  endpointEvent(id) {
+    return `${this.baseURL}/${this.version}/reports/${id}`
   }
 
-  endpointEventMsk64(hashid) {
-    return `${this.baseURL}/${this.version}/msk64/data/${hashid}`
+  endpointEventLDOs(id) {
+    return `${this.baseURL}/${this.version}/pga/damagedLongDistanceObjects/${id}`
   }
 
-  endpointEventPga(hashid) {
-    return `${this.baseURL}/${this.version}/pga/${hashid}/concaveHulls`
+  endpointEventMsk64(id) {
+    return `${this.baseURL}/${this.version}/msk64/data/${id}`
   }
 
-  endpointMomentTensor(hashid) {
-    return `${this.baseURL}/${this.version}/momentTensor/${hashid}`
+  endpointEventPga(id) {
+    return `${this.baseURL}/${this.version}/pga/${id}/concaveHulls`
   }
 
-  endpointSettlements(hashid) {
-    return `${this.baseURL}/${this.version}/msk64/citiesAnalysis/${hashid}`
+  endpointEventSettlements(id) {
+    return `${this.baseURL}/${this.version}/msk64/citiesAnalysis/${id}`
+  }
+
+  endpointMomentTensor(id) {
+    return `${this.baseURL}/${this.version}/momentTensor/${id}`
   }
 }
 

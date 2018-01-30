@@ -1,12 +1,13 @@
 <template>
-  <div class="event-tab ldos">
-    <AppMap :event="event" mapId="map-ldos" shouldDrawEpicenter="true" shouldDrawLDOs="true" target="ldos" v-if="event.id" />
+  <div class="event-tab">
+    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="spinner" />
 
     <b-table
       hover
       outlined
       :fields="fields"
-      :items="items">
+      :items="items"
+      v-if="!spinner">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
       <template slot="description" slot-scope="data">
         <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.auto="data.value" />
@@ -16,11 +17,11 @@
 </template>
 
 <script>
-import AppMap from '@/components/AppMap'
+import Spinner from 'vue-simple-spinner'
 
 export default {
-  components: { AppMap },
-  props: ['hashid'],
+  components: { Spinner },
+  props: ['event'],
   data() {
     return {
       items: [
@@ -37,34 +38,54 @@ export default {
         { key: 'parameter', label: 'Параметр' },
         { key: 'value', label: 'Значение', 'class': 'text-center' },
         { key: 'description', label: ' ', 'class': 'text-center' }
-      ]
+      ],
+      spinner: true
     }
   },
   created() {
-    this.getLDOs()
+    this.fetchData()
   },
   methods: {
-    getLDOs: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/d11aa34f71ae59da19f0a59379f0c0cd/raw/0949a047792fc84a346aa420848e0761d8609a59/eq_QgpAn7OW_ldos.json')
+    fetchData: function() {
+      this.$http.get(this.$root.$options.settings.api.endpointEventLDOs(this.event.id), {
+        params: {
+          customer_ids: [1], // Change id(s) when the user management is implemented.
+          show_all_parts: 1
+        }
+      })
         .then(response => {
-          const msk64ConfigVersion = response.data.system_info.msk64_config_version
-          const pgaConfigVersion = response.data.system_info.pga_config_version
-          const damagedSum = response.data.damaged_count.level_1 + response.data.damaged_count.level_2
-
-          this.items[0].value = response.data.damaged_count.level_1
-          this.items[1].value = response.data.damaged_count.level_2
-          this.items[2].value = response.data.damaged_count.level_3
-          this.items[3].value = damagedSum
-          this.items[4].value = response.data.system_info.srss_db_version
-          this.items[5].value = response.data.ldos.length
-          this.items[6].value = `${msk64ConfigVersion} / ${pgaConfigVersion}`
+          this.$root.$emit('onMapLDOsDataFetched', response.data.data)
+          this.setData(response.data.data)
         })
         .catch(error => { console.log(error) })
+    },
+    setData: function(data) {
+      const damagedParts = { '1': 0, '2': 0, '3': 0 }
+
+      data.forEach(ldo => {
+        ldo.parts.data.forEach(part => {
+          if (!part.damage || part.damage.data.damage_level < 1) return
+
+          damagedParts[`${part.damage.data.damage_level}`] += 1
+        })
+      })
+
+      const msk64ConfigVersion = this.$store.getters.msk64ConfigVersion
+      const pgaConfigVersion = this.$store.getters.pgaConfigVersion
+
+      this.items[0].value = damagedParts['1']
+      this.items[1].value = damagedParts['2']
+      this.items[2].value = damagedParts['3']
+      this.items[3].value = damagedParts['1'] + damagedParts['2']
+      this.items[4].value = this.$store.getters.srssDBVersion
+      this.items[5].value = data.length
+      this.items[6].value = `${msk64ConfigVersion} / ${pgaConfigVersion}`
+      this.spinner = false
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/scss/event.scss';
+  @import '../../assets/scss/event';
 </style>
