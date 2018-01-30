@@ -25,6 +25,35 @@ export function addEpicenter(map, coordinates) {
   return epicenter
 }
 
+export function addPlateBoundaries(controls) {
+  const boundaries = new window.L.GeoJSON(store.getters.plateBoundaries, {
+    style: {
+      color: '#8A0707',
+      weight: 2
+    },
+    onEachFeature: function(feature, layer) {
+      const message =
+        `Обновленная модель границ тектонических плит.
+        <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
+        P.Bird, 2003</a>`
+
+      layer.on('mouseover', function(event) { return this.bindPopup(message).openPopup(event.latlng) })
+
+      layer.on('mouseout', function(event) {
+        const popups = document.getElementsByClassName('leaflet-popup')
+
+        Array.from(popups).forEach((popup) => {
+          popup.addEventListener('mouseleave', () => {
+            return layer.closePopup()
+          })
+        })
+      })
+    }
+  })
+
+  controls.addOverlay(boundaries, 'Plate Boundaries')
+}
+
 export function buildingColor(damageLevel) {
   switch (damageLevel) {
     case 0: return 'cyan'
@@ -92,7 +121,10 @@ export function id(id, tab) {
 }
 
 function layersControl() {
-  return new window.L.Control.Layers(tileProviders())
+  const controls = new window.L.Control.Layers(tileProviders())
+  addPlateBoundaries(controls)
+
+  return controls
 }
 
 export function msk64Color(value) {

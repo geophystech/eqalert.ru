@@ -19,6 +19,7 @@ export default new Vuex.Store({
     pgaConfig: {
       configVersion: ''
     },
+    plateBoundaries: [],
     srssCoreConfig: {
       dbVersion: ''
     }
@@ -54,6 +55,7 @@ export default new Vuex.Store({
     },
     msk64ConfigVersion: state => { return state.msk64Config.configVersion },
     pgaConfigVersion: state => { return state.pgaConfig.configVersion },
+    plateBoundaries: state => { return state.plateBoundaries },
     srssDBVersion: state => { return state.srssCoreConfig.dbVersion },
     totalEventsCount: state => { return state.counters.totalEvents }
   },
@@ -80,6 +82,11 @@ export default new Vuex.Store({
         commit('set', { key: 'currentTileProvider', value: provider })
       }
     },
+    setPlateBoundaries({ commit, state }, value) {
+      if (value !== state.plateBoundaries) {
+        commit('set', { key: 'plateBoundaries', value: value })
+      }
+    },
     setTotalEventsCount({ commit }, value) {
       commit('setCounter', { key: 'totalEvents', value: value })
     },
@@ -95,8 +102,12 @@ export default new Vuex.Store({
   },
   plugins: [createPersistedState({
     filter: (mutation) => {
-      // Store in localStorage only currentTileProvider
-      if (mutation.payload.key === 'currentTileProvider') return true
+      // Store in localStorage only currentTileProvider or plateBoundaries.
+      switch (mutation.payload.key) {
+        case 'currentTileProvider':
+        case 'plateBoundaries': return true
+        default: return false
+      }
     }
   })]
 })

@@ -27,6 +27,11 @@ export default {
     this.fetchSystemInfo()
   },
   methods: {
+    fetchPlateBoundaries: function() {
+      this.$http.get('/static/json/plate_boundaries.geojson')
+        .then(response => { this.$store.dispatch('setPlateBoundaries', response.data) })
+        .catch(error => { console.log(error) })
+    },
     fetchSystemInfo: function() {
       this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
       .then(response => {
@@ -40,6 +45,7 @@ export default {
   },
   mounted() {
     setInterval(() => { this.fetchSystemInfo() }, 30000)
+    this.fetchPlateBoundaries()
   }
 }
 </script>

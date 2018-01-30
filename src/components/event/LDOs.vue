@@ -17,11 +17,10 @@
 </template>
 
 <script>
-import AppMap from '@/components/AppMap'
 import Spinner from 'vue-simple-spinner'
 
 export default {
-  components: { AppMap, Spinner },
+  components: { Spinner },
   props: ['event'],
   data() {
     return {
