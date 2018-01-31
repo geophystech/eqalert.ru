@@ -6,25 +6,7 @@
       <b-row>
         <b-col class="events-analytics-block">
           <b-row>
-            <b-col class="last-events">
-              <b-row class="d-flex justify-content-center header">
-                <h4>Тензор момента</h4>
-              </b-row>
-              <b-row class="event" align-v="center" v-for="event in events" :key="event.id">
-                <router-link :to="{ name: 'Event', params: { id: event.hashid }}" class="d-flex align-items-center">
-                  <b-col cols="2" class="magnitude text-center">{{ event.magnitude }}</b-col>
-                  <b-col>
-                    <div class="settlement">{{ event.nearest_settlement.distance }} км до {{ event.nearest_settlement.title }}</div>
-                    <div class="datetime">{{ moment.utc(event.datetime).locale('ru').format('LL в HH:mm:ss UTC') }}, глубина {{ event.depth }} км</div>
-                  </b-col>
-                  <b-col cols="2" class="moment-tensor text-center">
-                    <router-link :to="{ name: 'Event', params: { id: event.hashid, tab: 'moment-tensor' }}">
-                      <img :alt="event.id" :src="'https://eqalert.ru/uploads/images/moment_tensors/preview/' + event.moment_tensor.image_preview" class="img-responsive" />
-                    </router-link>
-                  </b-col>
-                </router-link>
-              </b-row>
-            </b-col>
+            <MainpageLastEvents />
 
             <b-col>
               <b-row class="d-flex justify-content-center header">
@@ -79,41 +61,21 @@
 </template>
 
 <script>
-import ChartByDatetime from '@/components/charts/ChartByDatetime'
-import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
-import MainpageMap from '@/components/maps/Mainpage'
+  import ChartByDatetime from '@/components/charts/ChartByDatetime'
+  import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
+  import MainpageLastEvents from '@/components/MainpageLastEvents'
+  import MainpageMap from '@/components/maps/Mainpage'
 
-const moment = require('moment')
-require('moment/locale/ru')
-
-export default {
-  components: { ChartByDatetime, ChartByMagnitudeCumulative, MainpageMap },
-  data() {
-    return {
-      events: []
-    }
-  },
-  computed: {
-    moment: function() {
-      return moment
-    }
-  },
-  created() {
-    this.getEvents()
-  },
-  methods: {
-    getEvents: function() {
-      this.$http.get('https://gist.githubusercontent.com/blackst0ne/14feed1393937c7ae8681177f35bb68e/raw/c9d4f89e110a27a217a4d4ea3e65a3d7349a4429/eq_last_events_with_moment_tensor.json')
-        .then(response => {
-          this.events = response.data.events
-        })
-        .catch(error => { console.log(error) })
-    }
+  export default {
+    components: {
+      ChartByDatetime,
+      ChartByMagnitudeCumulative,
+      MainpageLastEvents,
+      MainpageMap }
   }
-}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../assets/scss/global.scss';
 
   $border: 1px $color-gray-light solid;

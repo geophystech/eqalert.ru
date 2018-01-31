@@ -1,0 +1,74 @@
+<template>
+  <b-col class="last-events">
+    <b-row class="d-flex justify-content-center header">
+      <h4>Тензор момента</h4>
+    </b-row>
+    <b-row class="event" align-v="center" v-for="event in events" :key="event.id">
+      <router-link :to="{ name: 'Event', params: { id: event.id }}" class="d-flex align-items-center">
+        <b-col cols="2" class="magnitude text-center">{{ event.locValues.data.mag }}</b-col>
+        <b-col>
+          <div class="settlement">
+            {{ event.nearestCity.data.ep_dis }} км до {{ event.nearestCity.data.settlement.data.translation.data.title }}
+          </div>
+          <div class="datetime">
+            {{ moment.utc(event.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}, глубина {{ event.depth }} км
+          </div>
+        </b-col>
+        <b-col cols="2" class="moment-tensor text-center">
+          <router-link :to="{ name: 'Event', params: { id: event.id, tab: 'moment-tensor' }}">
+            <img :alt="event.id" :src="images[`${event.id}`]" class="img-responsive" />
+          </router-link>
+        </b-col>
+      </router-link>
+    </b-row>
+  </b-col>
+</template>
+
+<script>
+  const moment = require('moment')
+  require('moment/locale/ru')
+
+  export default {
+    data() {
+      return {
+        events: [],
+        images: {}
+      }
+    },
+    computed: {
+      moment: function() {
+        return moment
+      }
+    },
+    created() {
+      this.fetchData()
+    },
+    methods: {
+      fetchData: function() {
+        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+          params: {
+            limit: 9,
+            has_mt: 1,
+            show_nearest_city: 1
+          }
+        })
+          .then(response => { this.fetchImages(response.data.data) })
+          .catch(error => { console.log(error) })
+      },
+      fetchImages: function(events) {
+        events.forEach(event => {
+          this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(event.id))
+            .then(response => {
+              this.images[`${event.id}`] = response.data.data[0].image_small
+              this.events.push(event)
+            })
+            .catch(error => { console.log(error) })
+        })
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+
+</style>

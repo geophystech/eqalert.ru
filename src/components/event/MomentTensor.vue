@@ -138,9 +138,7 @@
     methods: {
       fetchData: function() {
         this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(this.event.id))
-          .then(response => {
-            this.setData(response.data.data[0])
-          })
+          .then(response => { this.setData(response.data.data[0]) })
           .catch(error => { console.log(error) })
       },
       setData: function(data) {
