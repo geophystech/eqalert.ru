@@ -15,7 +15,7 @@
       </b-col>
       <b-col cols="4">
         <keep-alive>
-          <component :is="components.lastEvents" />
+          <component :is="components.lastEvents" :event="event"/>
         </keep-alive>
       </b-col>
     </b-row>
