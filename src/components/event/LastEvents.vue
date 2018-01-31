@@ -3,7 +3,7 @@
     <b-card header="Последние события"
             header-class="text-center">
 
-      <b-row no-gutters class="event" align-v="center" v-for="event in events" :key="event.id">
+      <b-row no-gutters :class="{ event: true, 'highlight-event': highlightEvent(event.id) }" align-v="center" v-for="event in events" :key="event.id">
         <router-link :to="{ name: 'Event', params: { id: event.id } }" class="d-flex align-items-center" :key="event.id">
           <b-col cols="2" class="magnitude text-center">
             <strong>{{ event.locValues.data.mag }}</strong>
@@ -30,6 +30,7 @@
   import { round } from '@/helpers.js'
 
   export default {
+    props: ['event'],
     data() {
       return {
         events: []
@@ -57,6 +58,9 @@
             })
           })
           .catch(error => { console.log(error) })
+      },
+      highlightEvent: function(id) {
+        return id === this.event.id
       }
     },
     computed: {
@@ -134,6 +138,10 @@
           text-decoration: none;
         }
       }
+    }
+
+    .highlight-event {
+      background-color: #fcf1e6;
     }
   }
 </style>
