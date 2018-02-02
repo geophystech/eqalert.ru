@@ -11,6 +11,7 @@ class Config {
     this.endpointEvents = `${this.baseURL}/${this.version}/reports`
     this.endpointStations = `${this.baseURL}/${this.version}/stations`
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
+    this.endpointUserRegistration = `${this.baseURL}/${this.version}/user/register`
   }
 
   endpointEventBuildings(id) {
