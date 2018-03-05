@@ -5,6 +5,7 @@ import Analytics from '@/components/Analytics'
 import Event from '@/components/Event'
 import Events from '@/components/Events'
 import StaticPage from '@/components/StaticPage'
+import UserRegistration from '@/components/users/Registration'
 
 Vue.use(Router)
 
@@ -14,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'Mainpage',
       component: Mainpage
+    },
+    {
+      path: '/register',
+      name: 'UserRegistration',
+      component: UserRegistration
     },
     {
       path: '/analytics',
