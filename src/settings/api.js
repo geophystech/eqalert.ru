@@ -9,6 +9,7 @@ class Config {
     this.endpointAnalyticsRMSAllocation = `${this.baseURL}/${this.version}/analytics/RMSAllocation`
     this.endpointAnalyticsStationCounts = `${this.baseURL}/${this.version}/analytics/stationCounts`
     this.endpointEvents = `${this.baseURL}/${this.version}/reports`
+    this.endpointPurposesList = `${this.baseURL}/${this.version}/user/purposesList`
     this.endpointStations = `${this.baseURL}/${this.version}/stations`
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
     this.endpointUserRegistration = `${this.baseURL}/${this.version}/user/register`
