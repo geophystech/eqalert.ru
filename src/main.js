@@ -23,7 +23,7 @@ Vue.use(BootstrapVue)
 const apiSettings = new ApiSettings()
 
 // Set axios authorization headers.
-const apiToken = store.getters.apiAuthorizationToken
+const apiToken = store.getters.user.token
 const apiType = apiSettings.authorizationType
 
 if (apiToken) axios.defaults.headers.common['Authorization'] = `${apiType} ${apiToken}`
