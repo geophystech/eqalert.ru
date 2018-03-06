@@ -15,6 +15,10 @@ class Config {
     this.endpointUserRegistration = `${this.baseURL}/${this.version}/user/register`
   }
 
+  endpointEmailConfirmation(token) {
+    return `${this.baseURL}/${this.version}/user/emailConfirm/${token}`
+  }
+
   endpointEventBuildings(id) {
     return `${this.baseURL}/${this.version}/msk64/damagedBuildings/${id}`
   }

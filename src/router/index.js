@@ -5,6 +5,8 @@ import Analytics from '@/components/Analytics'
 import Event from '@/components/Event'
 import Events from '@/components/Events'
 import StaticPage from '@/components/StaticPage'
+import UserAuthorization from '@/components/users/Authorization'
+import UserEmailConfirmation from '@/components/users/Confirmation'
 import UserRegistration from '@/components/users/Registration'
 
 Vue.use(Router)
@@ -20,6 +22,16 @@ export default new Router({
       path: '/register',
       name: 'UserRegistration',
       component: UserRegistration
+    },
+    {
+      path: '/register/confirm/:token',
+      name: 'UserEmailConfirmation',
+      component: UserEmailConfirmation
+    },
+    {
+      path: '/sign_in',
+      name: 'UserAuthorization',
+      component: UserAuthorization
     },
     {
       path: '/analytics',
