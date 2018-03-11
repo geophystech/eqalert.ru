@@ -16,7 +16,7 @@
         </b-col>
         <b-col cols="2" class="moment-tensor text-center">
           <router-link :to="{ name: 'Event', params: { id: event.id, tab: 'moment-tensor' }}">
-            <img :alt="event.id" :src="images[`${event.id}`]" class="img-responsive" />
+            <img :alt="event.id" :src="event.momentTensorImg.data.image_small" class="img-responsive" />
           </router-link>
         </b-col>
       </router-link>
@@ -31,8 +31,7 @@
   export default {
     data() {
       return {
-        events: [],
-        images: {}
+        events: []
       }
     },
     computed: {
@@ -47,23 +46,15 @@
       fetchData: function() {
         this.$http.get(this.$root.$options.settings.api.endpointEvents, {
           params: {
+            include: 'nearestCity,momentTensorImg',
             limit: 9,
-            has_mt: 1,
-            show_nearest_city: 1
+            has_mt: 1
           }
         })
-          .then(response => { this.fetchImages(response.data.data) })
+          .then(response => {
+            this.events = this.events.concat(response.data.data)
+          })
           .catch(error => { console.log(error) })
-      },
-      fetchImages: function(events) {
-        events.forEach(event => {
-          this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(event.id))
-            .then(response => {
-              this.images[`${event.id}`] = response.data.data[0].image_small
-              this.events.push(event)
-            })
-            .catch(error => { console.log(error) })
-        })
       }
     }
   }
