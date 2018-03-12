@@ -14,9 +14,6 @@ export default {
     }
   },
   mutations: {
-    setUser(state, { key, value }) {
-      state[key] = value
-    },
     authorizeUser(state, values) {
       state.authorized = true
       state.accessToken = values.accessToken
