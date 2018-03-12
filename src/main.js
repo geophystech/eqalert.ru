@@ -11,7 +11,7 @@ import VueAxios from 'vue-axios'
 import ApiSettings from './settings/api.js'
 import EventsSettings from './settings/events.js'
 import StationsSettings from './settings/stations.js'
-import axiosSetAuthorizationHeaders from './helpers/axios'
+import { axiosSetAuthorizationHeaders } from './helpers/axios'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

@@ -12,6 +12,7 @@ class Config {
     this.endpointPurposesList = `${this.baseURL}/${this.version}/user/purposesList`
     this.endpointStations = `${this.baseURL}/${this.version}/stations`
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
+    this.endpointUserAuthorization = `https://oauth-client-test.geophystech.ru/token`
     this.endpointUserRegistration = `${this.baseURL}/${this.version}/user/register`
   }
 

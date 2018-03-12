@@ -19,7 +19,8 @@ export default new Vuex.Store({
       switch (mutation.type) {
         case 'setCurrentTileProvider':
         case 'setPlateBoundaries':
-        case 'setUser': return true
+        case 'authorizeUser':
+        case 'unauthorizeUser': return true
         default: return false
       }
     }

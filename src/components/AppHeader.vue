@@ -33,10 +33,10 @@
             </a>
           </span>
           <span v-else>
-            <a href="javascript:void(0)" v-on:click="signIn">
+            <router-link :to="{ name: 'Authorization' }" key="sign-in">
               Войти
               <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
-            </a>
+            </router-link>
           </span>
         </b-col>
       </b-row>
