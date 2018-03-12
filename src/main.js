@@ -11,6 +11,7 @@ import VueAxios from 'vue-axios'
 import ApiSettings from './settings/api.js'
 import EventsSettings from './settings/events.js'
 import StationsSettings from './settings/stations.js'
+import axiosSetAuthorizationHeaders from './helpers/axios'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -20,13 +21,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 
-const apiSettings = new ApiSettings()
-
-// Set axios authorization headers.
-const apiToken = store.getters.user.token
-const apiType = apiSettings.authorizationType
-
-if (apiToken) axios.defaults.headers.common['Authorization'] = `${apiType} ${apiToken}`
+axiosSetAuthorizationHeaders()
 
 /* eslint-disable no-new */
 new Vue({
@@ -34,7 +29,7 @@ new Vue({
   router,
   store,
   settings: {
-    api: apiSettings,
+    api: new ApiSettings(),
     events: EventsSettings,
     stations: StationsSettings
   },

@@ -26,14 +26,34 @@
             <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
           </span>
 
-          <router-link to="events">
-            Войти
-            <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
-          </router-link>
+          <span v-if="$store.getters.user.authorized">
+            <a href="javascript:void(0)" v-on:click="signOut" key="sign-out">
+              Выйти
+              <i class="fa fa-times"></i>
+            </a>
+          </span>
+          <span v-else>
+            <a href="javascript:void(0)" v-on:click="signIn">
+              Войти
+              <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
+            </a>
+          </span>
         </b-col>
       </b-row>
     </header>
 </template>
+
+<script>
+  export default {
+    methods: {
+      signOut: function() {
+        this.$store.dispatch('signOut')
+        this.$router.go()
+      }
+    }
+  }
+</script>
+
 
 <style lang="scss" scoped>
   @import '../assets/scss/global.scss';

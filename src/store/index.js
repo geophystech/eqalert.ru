@@ -5,6 +5,7 @@ import app from './app'
 import user from './user'
 
 import createPersistedState from 'vuex-persistedstate'
+import axiosAuthorizationHeaders from './plugins/axios'
 
 Vue.use(Vuex)
 
@@ -13,7 +14,7 @@ export default new Vuex.Store({
     app: app,
     user: user
   },
-  plugins: [createPersistedState({
+  plugins: [axiosAuthorizationHeaders, createPersistedState({
     filter: (mutation) => {
       switch (mutation.type) {
         case 'setCurrentTileProvider':

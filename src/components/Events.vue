@@ -54,7 +54,7 @@ require('moment/locale/ru')
 import CountersHeader from '@/components/CountersHeader.vue'
 import Filters from '@/components/Filters.vue'
 import Spinner from 'vue-simple-spinner'
-import { round } from '@/helpers.js'
+import { round } from '@/helpers/math.js'
 
 export default {
   components: { CountersHeader, Filters, Spinner },
