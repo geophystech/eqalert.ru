@@ -76,6 +76,7 @@
           submitButtonDisabled: false,
           validated: false
         },
+        redirectTo: '?',
         validationError: ''
       }
     },
@@ -108,7 +109,7 @@
         this.$http.post(this.$root.$options.settings.api.endpointUserAuthorization, payload)
           .then(response => {
             this.$store.dispatch('authorizeUser', { accessToken: response.data.access_token, refreshToken: response.data.refresh_token })
-            this.$router.push('/')
+            this.$router.push(this.redirectTo)
           })
           .catch(error => {
             if (error.response) {
@@ -120,6 +121,11 @@
             }
           })
       }
+    },
+    beforeRouteEnter: (to, from, next) => {
+      next(vm => {
+        vm.redirectTo = from.path
+      })
     }
   }
 </script>
