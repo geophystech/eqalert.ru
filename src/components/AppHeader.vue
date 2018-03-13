@@ -33,7 +33,7 @@
             </a>
           </span>
           <span v-else>
-            <router-link :to="{ name: 'Authorization' }" key="sign-in">
+            <router-link :to="{ name: 'UserAuthorization' }" key="sign-in">
               Войти
               <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
             </router-link>

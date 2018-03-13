@@ -7,11 +7,11 @@
     </b-row>
 
     <b-row>
-      <b-col class="sign-in-form" cols="6" offset="3">
+      <b-col cols="6" offset="3">
         <div class="validation-error">{{ validationError }}</div>
 
-        <b-form @submit.prevent="onSubmit"
-                class="text-center"
+        <b-form class="sign-in-form"
+                @submit.prevent="onSubmit"
                 :validated="form.validated"
                 novalidate>
           <b-form-group>
@@ -40,12 +40,26 @@
             <b-form-invalid-feedback>{{ form.messages.password }}</b-form-invalid-feedback>
           </b-form-group>
 
+          <b-form-group>
+            <b-form-checkbox v-model="form.fields.rememberme.value">Запомнить меня</b-form-checkbox>
+
+            <router-link :to="{ name: 'UserResetPassword' }" key="reset-password" class="reset-password-link">
+              Сбросить пароль
+            </router-link>
+          </b-form-group>
+
           <b-button type="submit"
-                    variant="sign-in"
+                    variant="send-request"
                     :disabled="form.submitButtonDisabled">
                     Войти
           </b-button>
         </b-form>
+
+        <div class="registration-block">
+          <router-link :to="{ name: 'UserRegistration' }" key="registration">
+            Зарегистрироваться
+          </router-link>
+        </div>
       </b-col>
     </b-row>
   </div>
@@ -67,7 +81,8 @@
         form: {
           fields: {
             email: { value: '', disabled: false, state: null },
-            password: { value: '', disabled: false, state: null }
+            password: { value: '', disabled: false, state: null },
+            rememberme: { value: '', disabled: false }
           },
           messages: {
             email: 'Некорректная электронная почта',
@@ -148,6 +163,29 @@
 
   .validation-error {
     color: red;
+    text-align: center;
+  }
+
+  .sign-in-form {
+    border-bottom: 1px solid $color-gray-light;
+    padding-bottom: 5%;
+
+    .btn {
+      width: 100%;
+    }
+
+    .btn-send-request {
+      background-color: $color-blue;
+      color: $color-white;
+    }
+
+    .reset-password-link {
+      float: right;
+    }
+  }
+
+  .registration-block {
+    padding-top: 3%;
     text-align: center;
   }
 </style>
