@@ -41,7 +41,7 @@
           </b-form-group>
 
           <b-form-group>
-            <b-form-checkbox v-model="form.fields.rememberme.value">Запомнить меня</b-form-checkbox>
+            <b-form-checkbox v-model="form.fields.rememberMe.value">Запомнить меня</b-form-checkbox>
 
             <router-link :to="{ name: 'UserResetPassword' }" key="reset-password" class="reset-password-link">
               Сбросить пароль
@@ -82,7 +82,7 @@
           fields: {
             email: { value: '', disabled: false, state: null },
             password: { value: '', disabled: false, state: null },
-            rememberme: { value: '', disabled: false }
+            rememberMe: { value: '', disabled: false }
           },
           messages: {
             email: 'Некорректная электронная почта',
@@ -123,7 +123,11 @@
 
         this.$http.post(this.$root.$options.settings.api.endpointUserAuthorization, payload)
           .then(response => {
-            this.$store.dispatch('authorizeUser', { accessToken: response.data.access_token, refreshToken: response.data.refresh_token })
+            this.$store.dispatch('authorizeUser', {
+              accessToken: response.data.access_token,
+              refreshToken: response.data.refresh_token,
+              rememberMe: this.form.fields.rememberMe.value
+            })
             this.$router.push(this.redirectTo)
           })
           .catch(error => {

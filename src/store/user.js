@@ -29,7 +29,8 @@ export default {
     authorizeUser({ commit, state }, values) {
       commit('authorizeUser', {
         accessToken: values.accessToken,
-        refreshToken: values.refreshToken
+        refreshToken: values.refreshToken,
+        rememberMe: values.rememberMe
       })
     },
     signOut({ commit, state }) {
