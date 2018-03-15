@@ -22,7 +22,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(IdleVue, {
-  idleTime: 10000,
+  idleTime: 600000,
   startAtIdle: true,
   store
 })
