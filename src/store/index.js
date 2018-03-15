@@ -6,6 +6,7 @@ import user from './user'
 
 import createPersistedState from 'vuex-persistedstate'
 import axiosAuthorizationHeaders from './plugins/axios'
+import userActivity from './plugins/user_activity'
 
 Vue.use(Vuex)
 
@@ -24,5 +25,5 @@ export default new Vuex.Store({
         default: return false
       }
     }
-  })]
+  }), userActivity]
 })

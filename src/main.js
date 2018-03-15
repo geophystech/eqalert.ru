@@ -7,6 +7,7 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import IdleVue from 'idle-vue'
 
 import ApiSettings from './settings/api.js'
 import EventsSettings from './settings/events.js'
@@ -20,6 +21,11 @@ Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
+Vue.use(IdleVue, {
+  idleTime: 10000,
+  startAtIdle: true,
+  store
+})
 
 axiosSetAuthorizationHeaders()
 
