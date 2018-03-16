@@ -11,7 +11,7 @@
         <div class="validation-error">{{ validationError }}</div>
 
         <b-form class="sign-in-form"
-                @submit.prevent="onSubmit"
+                ref="form"
                 :validated="form.validated"
                 novalidate>
           <b-form-group>
@@ -39,21 +39,22 @@
             </b-form-input>
             <b-form-invalid-feedback>{{ form.messages.password }}</b-form-invalid-feedback>
           </b-form-group>
-
-          <b-form-group>
-            <b-form-checkbox v-model="form.fields.rememberMe.value">Запомнить меня</b-form-checkbox>
-
-            <router-link :to="{ name: 'UserResetPassword' }" key="reset-password" class="reset-password-link">
-              Сбросить пароль
-            </router-link>
-          </b-form-group>
-
-          <b-button type="submit"
-                    variant="send-request"
-                    :disabled="form.submitButtonDisabled">
-                    Войти
-          </b-button>
         </b-form>
+
+        <b-form-group>
+          <b-form-checkbox v-model="form.fields.rememberMe.value">Запомнить меня</b-form-checkbox>
+
+          <router-link :to="{ name: 'UserResetPassword' }" key="reset-password" class="reset-password-link">
+            Сбросить пароль
+          </router-link>
+        </b-form-group>
+
+        <b-button type="submit"
+                  variant="send-request"
+                  :disabled="form.submitButtonDisabled"
+                  v-on:click="onSubmit">
+                  Войти
+        </b-button>
 
         <div class="registration-block">
           <router-link :to="{ name: 'UserRegistration' }" key="registration">
@@ -109,10 +110,10 @@
       disableFields: function() {
         this.changeFieldsDisabledState(true)
       },
-      onSubmit: function(event) {
+      onSubmit: function() {
         this.form.validated = true
 
-        if (!event.target.checkValidity()) return
+        if (!this.$refs.form.checkValidity()) return
 
         const payload = {
           password: this.form.fields.password.value,
@@ -172,20 +173,21 @@
 
   .sign-in-form {
     border-bottom: 1px solid $color-gray-light;
-    padding-bottom: 5%;
+    padding-bottom: 3%;
+    margin-bottom: 3%;
+  }
 
-    .btn {
-      width: 100%;
-    }
+  .btn {
+    width: 100%;
+  }
 
-    .btn-send-request {
-      background-color: $color-blue;
-      color: $color-white;
-    }
+  .btn-send-request {
+    background-color: $color-blue;
+    color: $color-white;
+  }
 
-    .reset-password-link {
-      float: right;
-    }
+  .reset-password-link {
+    float: right;
   }
 
   .registration-block {
