@@ -8,6 +8,7 @@ import StaticPage from '@/components/StaticPage'
 import UserEmailConfirmation from '@/components/users/Confirmation'
 import UserAuthorization from '@/components/users/Authorization'
 import UserRegistration from '@/components/users/Registration'
+import UserConfirmPassword from '@/components/users/ConfirmPassword'
 import UserResetPassword from '@/components/users/ResetPassword'
 
 Vue.use(Router)
@@ -22,42 +23,56 @@ export default new Router({
     {
       path: '/register',
       name: 'UserRegistration',
-      component: UserRegistration
+      component: UserRegistration,
+      meta: { redirectable: false }
     },
     {
       path: '/register/confirm/:token',
       name: 'UserEmailConfirmation',
-      component: UserEmailConfirmation
+      component: UserEmailConfirmation,
+      meta: { redirectable: false }
     },
     {
       path: '/sign-in',
       name: 'UserAuthorization',
-      component: UserAuthorization
+      component: UserAuthorization,
+      meta: { redirectable: false }
+    },
+    {
+      path: '/password/confirm/:token',
+      name: 'UserConfirmPassword',
+      component: UserConfirmPassword,
+      meta: { redirectable: false }
     },
     {
       path: '/password/reset',
       name: 'UserResetPassword',
-      component: UserResetPassword
+      component: UserResetPassword,
+      meta: { redirectable: false }
     },
     {
       path: '/analytics',
       name: 'Analytics',
-      component: Analytics
+      component: Analytics,
+      meta: { redirectable: true }
     },
     {
       path: '/events',
       name: 'Events',
-      component: Events
+      component: Events,
+      meta: { redirectable: true }
     },
     {
       path: '/events/:id/:tab?',
       name: 'Event',
-      component: Event
+      component: Event,
+      meta: { redirectable: true }
     },
     {
       path: '/:page',
       name: 'StaticPage',
-      component: StaticPage
+      component: StaticPage,
+      meta: { redirectable: true }
     }
   ]
 })

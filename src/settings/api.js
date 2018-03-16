@@ -15,6 +15,8 @@ class Config {
     this.endpointUserAuthorization = `https://oauth-client-test.geophystech.ru/token`
     this.endpointUserRegistration = `${this.baseURL}/${this.version}/user/register`
     this.endpointUserResetPassword = `${this.baseURL}/${this.version}/user/resetPassword`
+    this.endpointUserResetPasswordCheck = `${this.baseURL}/${this.version}/user/resetPasswordCheck`
+    this.endpointUserResetPasswordComplete = `${this.baseURL}/${this.version}/user/resetPasswordComplete`
   }
 
   endpointEmailConfirmation(token) {
