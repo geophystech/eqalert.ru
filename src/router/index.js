@@ -35,7 +35,7 @@ export default new Router({
       component: UserAuthorization
     },
     {
-      path: '/reset-password',
+      path: '/password/reset',
       name: 'UserResetPassword',
       component: UserResetPassword
     },

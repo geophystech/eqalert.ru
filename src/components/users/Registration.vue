@@ -209,7 +209,9 @@
         this.disableFields()
 
         this.$http.post(this.$root.$options.settings.api.endpointUserRegistration, payload)
-          .then(response => { this.registrationComplete = true })
+          .then(response => {
+            this.registrationComplete = true
+          })
           .catch(error => {
             if (error.response) {
               this.showValidationErrors(error.response.data.errors.data)
