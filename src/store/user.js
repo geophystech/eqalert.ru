@@ -1,31 +1,44 @@
 export default {
   state: {
     authorized: false,
-    token: null,
-    refreshToken: null
+    accessToken: null,
+    refreshToken: null,
+    rememberMe: false
   },
   getters: {
     user: state => {
       return {
         authorized: state.authorized,
-        token: state.token,
-        refreshToken: state.refreshToken
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
+        rememberMe: state.rememberMe
       }
     }
   },
   mutations: {
-    setUser(state, { key, value }) {
-      state[key] = value
+    authorizeUser(state, values) {
+      state.authorized = true
+      state.accessToken = values.accessToken
+      state.refreshToken = values.refreshToken
+      state.rememberMe = values.rememberMe
+    },
+    unauthorizeUser(state, values) {
+      state.authorized = false
+      state.accessToken = null
+      state.refreshToken = null
+      state.rememberMe = null
     }
   },
   actions: {
-    setUserAuthorized({ commit, state }, value) {
-      commit('setUser', { key: 'authorized', value: value })
+    authorizeUser({ commit, state }, values) {
+      commit('authorizeUser', {
+        accessToken: values.accessToken,
+        refreshToken: values.refreshToken,
+        rememberMe: values.rememberMe
+      })
     },
-    setUserTokens({ commit, state }, value) {
-      commit('setUser', { key: 'token', value: value.token })
-      commit('setUser', { key: 'refreshToken', value: value.refreshToken })
-      commit('setUser', { key: 'authorized', value: true })
+    signOut({ commit, state }) {
+      commit('unauthorizeUser')
     }
   }
 }

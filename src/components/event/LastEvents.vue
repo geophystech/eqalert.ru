@@ -27,7 +27,7 @@
   const moment = require('moment')
   require('moment/locale/ru')
 
-  import { round } from '@/helpers.js'
+  import { round } from '@/helpers/math.js'
 
   export default {
     props: ['event'],

@@ -23,7 +23,7 @@
 <script>
   import Spinner from 'vue-simple-spinner'
   import { convertMsk64 } from '@/map_functions.js'
-  import { round } from '@/helpers.js'
+  import { round } from '@/helpers/math.js'
 
   export default {
     components: { Spinner },
