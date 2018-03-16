@@ -92,7 +92,7 @@
           submitButtonDisabled: false,
           validated: false
         },
-        redirectTo: '?',
+        redirectTo: '/',
         validationError: ''
       }
     },
@@ -144,7 +144,7 @@
     },
     beforeRouteEnter: (to, from, next) => {
       next(vm => {
-        vm.redirectTo = from.path
+        if (from.meta.redirectable) vm.redirectTo = from.path
       })
     }
   }

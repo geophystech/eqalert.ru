@@ -1,44 +1,48 @@
 <template>
-  <div class="reset">
+  <div class="confirm-password">
     <b-row class="breadcrumbs" no-gutters>
       <b-col cols="12">
         <b-breadcrumb :items="breadcrumbs" />
       </b-col>
     </b-row>
 
-    <b-row v-if="resetComplete">
+    <b-row v-if="passwordChanged">
       <b-col class="complete" cols="8" offset="2" align="center">
-        <h5>Готово!</h5>
-        <p>На указанный электронный адрес отправлено письмо. </p>
-        <p>Вам осталось только открыть это письмо и нажать на кнопку "Сменить пароль".</p>
+        <h5>Пароль изменён</h5>
+
+        <router-link :to="{ name: 'UserAuthorization' }" key="authorization">
+          Войти
+          <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
+        </router-link>
       </b-col>
     </b-row>
 
-    <b-row v-if="!resetComplete">
+    <b-row v-if="!passwordChanged">
       <b-col cols="6" offset="3">
         <div class="validation-error">{{ validationError }}</div>
 
-        <b-form class="reset-form"
+        <b-form class="confirm-password-form"
                 @submit.prevent="onSubmit"
                 :validated="form.validated"
                 novalidate>
+
           <b-form-group>
-            <b-form-input type="email"
-                          :disabled="form.fields.email.disabled"
-                          :state="form.fields.email.state"
-                          v-model="form.fields.email.value"
+            <b-form-input type="password"
+                          :disabled="form.fields.password.disabled"
+                          :state="form.fields.password.state"
+                          v-model="form.fields.password.value"
+                          placeholder="Новый пароль"
+                          minlength="6"
                           maxlength="150"
-                          pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
-                          placeholder="Электронная почта"
                           required>
             </b-form-input>
-            <b-form-invalid-feedback>{{ form.messages.email }}</b-form-invalid-feedback>
+            <b-form-invalid-feedback>{{ form.messages.password }}</b-form-invalid-feedback>
           </b-form-group>
 
           <b-button type="submit"
                     variant="send-request"
                     :disabled="form.submitButtonDisabled">
-                    Сбросить пароль
+                    Сменить пароль
           </b-button>
         </b-form>
       </b-col>
@@ -55,21 +59,22 @@
             text: 'Главная',
             href: this.$router.resolve({ name: 'Mainpage' }).href
           }, {
-            text: 'Сбросить пароль',
+            text: 'Смена пароля',
             active: true
           }
         ],
+        email: null,
         form: {
           fields: {
-            email: { value: '', disabled: false, state: null }
+            password: { value: '', disabled: false, state: null }
           },
           messages: {
-            email: 'Некорректная электронная почта'
+            password: 'Некорректный пароль'
           },
           submitButtonDisabled: false,
           validated: false
         },
-        resetComplete: false,
+        passwordChanged: false,
         validationError: ''
       }
     },
@@ -93,18 +98,19 @@
         if (!event.target.checkValidity()) return
 
         const payload = {
-          email: this.form.fields.email.value
+          token: this.$router.currentRoute.params.token,
+          password: this.form.fields.password.value
         }
 
         this.disableFields()
 
-        this.$http.post(this.$root.$options.settings.api.endpointUserResetPassword, payload)
+        this.$http.post(this.$root.$options.settings.api.endpointUserResetPasswordComplete, payload)
           .then(response => {
-            this.resetComplete = true
+            this.passwordChanged = true
           })
           .catch(error => {
             if (error.response) {
-              this.validationError = error.response.data.errors.data.email[0]
+              this.validationError = error.response.data.email[0]
 
               this.enableFields()
             } else {
@@ -135,6 +141,12 @@
   .validation-error {
     color: red;
     text-align: center;
+  }
+
+  .confirm-password-form {
+    border-bottom: 1px solid $color-gray-light;
+    padding-bottom: 3%;
+    margin-bottom: 3%;
   }
 
   .btn {
