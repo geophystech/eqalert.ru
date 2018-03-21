@@ -87,6 +87,9 @@ export default {
       return round
     }
   },
+  metaInfo: {
+    title: 'События'
+  },
   methods: {
     getEvents: function() {
       this.spinners.loadMoreEvents = true

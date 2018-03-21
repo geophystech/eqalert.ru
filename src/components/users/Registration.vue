@@ -166,6 +166,9 @@
     created() {
       this.getPurposesList()
     },
+    metaInfo: {
+      title: 'Регистрация'
+    },
     methods: {
       enableFields: function() {
         this.changeFieldsDisabledState(false)

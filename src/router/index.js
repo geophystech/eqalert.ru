@@ -4,6 +4,7 @@ import Mainpage from '@/components/Mainpage'
 import Analytics from '@/components/Analytics'
 import Event from '@/components/Event'
 import Events from '@/components/Events'
+import Meta from 'vue-meta'
 import StaticPage from '@/components/StaticPage'
 import UserEmailConfirmation from '@/components/users/Confirmation'
 import UserAuthentication from '@/components/users/Authentication'
@@ -12,6 +13,7 @@ import UserConfirmPassword from '@/components/users/ConfirmPassword'
 import UserResetPassword from '@/components/users/ResetPassword'
 
 Vue.use(Router)
+Vue.use(Meta)
 
 export default new Router({
   routes: [

@@ -48,11 +48,24 @@
         }
       }
     },
+    metaInfo() {
+      return {
+        title: `${this.currentTabName()} | ${this.event.id}`
+      }
+    },
     methods: {
       convertTabName: function(tab) {
         if (!tab) return 'generalInformation'
         if (tab === 'moment-tensor') return 'momentTensor'
         return tab
+      },
+      currentTabName: function() {
+        const currentTab = Object.keys(this.tabs).find(key => {
+          return this.tabs[key].href.substr(1) === this.activeTab
+        })
+
+        if (currentTab) return this.tabs[currentTab].text
+        return 'Информация о событии'
       },
       isTabActive: function(tab) {
         return this.activeTab === tab.href.substr(1)
@@ -101,6 +114,7 @@
     },
     created() {
       this.setData()
+      this.currentTabName()
     },
     watch: {
       event: function() {

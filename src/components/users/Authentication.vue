@@ -97,6 +97,9 @@
         validationError: ''
       }
     },
+    metaInfo: {
+      title: 'Вход'
+    },
     methods: {
       enableFields: function() {
         this.changeFieldsDisabledState(false)

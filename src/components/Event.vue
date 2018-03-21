@@ -66,8 +66,12 @@
     methods: {
       fetchData: function(id) {
         this.$http.get(this.$root.$options.settings.api.endpointEvent(id))
-          .then(response => { this.setData(response.data.data) })
-          .catch(error => { console.log(error) })
+          .then(response => {
+            this.setData(response.data.data)
+          })
+          .catch(error => {
+            console.log(error)
+          })
       },
       magnitudeType: function(type) {
         // Nested arrays are used because there may be multiple magnitude types.
