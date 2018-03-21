@@ -138,8 +138,12 @@
     methods: {
       fetchData: function() {
         this.$http.get(this.$root.$options.settings.api.endpointMomentTensor(this.event.id))
-          .then(response => { this.setData(response.data.data[0]) })
-          .catch(error => { console.log(error) })
+          .then(response => {
+            this.setData(response.data.data[0])
+          })
+          .catch(error => {
+            console.log(error)
+          })
       },
       setData: function(data) {
         this.setImage(data)
@@ -167,7 +171,7 @@
         this.items.momentTensor[7].value = data.has_mech_only
       },
       setImage: function(data) {
-        this.image = data.image_large
+        this.image = data.beachball.svg
       },
       setPlanesItems: function(data) {
         this.items.nodalPlanes[0].strike = `${data.np1_stk}&deg`

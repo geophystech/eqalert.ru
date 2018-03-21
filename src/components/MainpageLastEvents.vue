@@ -16,7 +16,7 @@
         </b-col>
         <b-col cols="2" class="moment-tensor text-center">
           <router-link :to="{ name: 'Event', params: { id: event.id, tab: 'moment-tensor' }}">
-            <img :alt="event.id" :src="event.momentTensorImg.data.image_small" class="img-responsive" />
+            <img :alt="event.id" :src="event.momentTensorImg.data.beachball.svg" class="img-responsive" />
           </router-link>
         </b-col>
       </router-link>
