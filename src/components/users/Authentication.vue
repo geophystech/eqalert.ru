@@ -12,6 +12,7 @@
 
         <b-form class="sign-in-form"
                 ref="form"
+                @keyup.enter="onSubmit"
                 :validated="form.validated"
                 novalidate>
           <b-form-group>
