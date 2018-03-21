@@ -78,6 +78,9 @@
         validationError: ''
       }
     },
+    metaInfo: {
+      title: 'Смена пароля'
+    },
     methods: {
       enableFields: function() {
         this.changeFieldsDisabledState(false)

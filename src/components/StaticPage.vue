@@ -12,23 +12,36 @@ export default {
   components: { VueMarkdown },
   data() {
     return {
-      content: ''
+      content: '',
+      page: this.$router.currentRoute.params.page,
+      pages: {
+        about: 'О сервисе',
+        stations: 'Сеть станций'
+      }
+    }
+  },
+  metaInfo() {
+    return {
+      title: this.pages[this.page]
     }
   },
   methods: {
-    getContent: function(page = this.$router.currentRoute.params.page) {
-      this.$http.get(`/static/markdown/${page}.md`)
+    getContent: function(page = this.page) {
+      this.$http.get(`/static/markdown/${this.page}.md`)
         .then(response => {
           this.content = response.data
         })
-        .catch(error => { console.log(error) })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   created() {
     this.getContent()
   },
   beforeRouteUpdate(to, from, next) {
-    this.getContent(to.params.page)
+    this.page = to.params.page
+    this.getContent()
     next()
   }
 }

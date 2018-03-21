@@ -17,6 +17,19 @@ import AppNavbar from '@/components/AppNavbar'
 import AppFooter from '@/components/AppFooter'
 
 export default {
+  metaInfo: {
+    htmlAttrs: {
+      lang: 'ru'
+    },
+    meta: [
+      { charset: 'utf-8' },
+      { content: 'width=device-width, initial-scale=1', name: 'viewport' },
+      { description: 'Eqalert.ru – информационная служба реального времени о землетрясениях, сейсмических воздействиях и опасности' },
+      { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, магнитуда, механизм очага, тензор момента, архив' }
+    ],
+    title: 'Главная',
+    titleTemplate: '%s | EQA!ert.ru'
+  },
   name: 'app',
   components: {
     AppHeader,

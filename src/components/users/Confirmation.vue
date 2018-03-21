@@ -39,6 +39,9 @@
     created() {
       this.confirmEmail(this.$router.currentRoute.params.token)
     },
+    metaInfo: {
+      title: 'Подтверждение емэйла'
+    },
     methods: {
       confirmEmail: function(token) {
         this.$http.post(this.$root.$options.settings.api.endpointEmailConfirmation(token))

@@ -73,6 +73,9 @@
         validationError: ''
       }
     },
+    metaInfo: {
+      title: 'Сбросить пароль'
+    },
     methods: {
       enableFields: function() {
         this.changeFieldsDisabledState(false)

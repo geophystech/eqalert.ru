@@ -53,6 +53,9 @@
         endDate: ''
       }
     },
+    metaInfo: {
+      title: 'Аналитика'
+    },
     methods: {
       // The method is used to get data from the `ChartByDatetime` component.
       chartByDatetimeUpdate: function(data) {
