@@ -40,7 +40,9 @@ export function axiosAddRefreshTokenInterceptor() {
             rememberMe: store.getters.user.rememberMe
           })
 
-          errorResponse.config.headers['Authorization'] = `Bearer ${response.data.access_token}`
+          const apiSettings = new ApiSettings()
+
+          errorResponse.config.headers['Authorization'] = `${apiSettings.authorizationType} ${response.data.access_token}`
           axiosAddRefreshTokenInterceptor()
 
           return axios(errorResponse.config)

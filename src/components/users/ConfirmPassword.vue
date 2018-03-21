@@ -10,7 +10,7 @@
       <b-col class="complete" cols="8" offset="2" align="center">
         <h5>Пароль изменён</h5>
 
-        <router-link :to="{ name: 'UserAuthentication' }" key="authorization">
+        <router-link :to="{ name: 'UserAuthentication' }" key="authentication">
           Войти
           <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
         </router-link>

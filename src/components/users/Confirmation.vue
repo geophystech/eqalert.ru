@@ -10,7 +10,7 @@
       <b-col cols="8" offset="2" align="center">
         <h5 :class="status">{{ message }}</h5>
 
-        <router-link :to="{ name: 'UserAuthentication' }" key="authorization" v-if="status === 'success'">
+        <router-link :to="{ name: 'UserAuthentication' }" key="authentication" v-if="status === 'success'">
           Войти
           <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
         </router-link>
