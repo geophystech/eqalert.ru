@@ -65,6 +65,7 @@
         })
 
         if (currentTab) return this.tabs[currentTab].text
+
         return 'Информация о событии'
       },
       isTabActive: function(tab) {
