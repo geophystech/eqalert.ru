@@ -26,14 +26,14 @@
             <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
           </span>
 
-          <span v-if="$store.getters.user.authorized">
+          <span v-if="$store.getters.user.authenticated">
             <a href="javascript:void(0)" v-on:click="signOut" key="sign-out">
               Выйти
               <i class="fa fa-times"></i>
             </a>
           </span>
           <span v-else>
-            <router-link :to="{ name: 'UserAuthorization' }" key="sign-in">
+            <router-link :to="{ name: 'UserAuthentication' }" key="sign-in">
               Войти
               <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
             </router-link>
