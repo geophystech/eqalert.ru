@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import app from './app'
+import requests from './requests'
 import user from './user'
 
 import createPersistedState from 'vuex-persistedstate'
@@ -13,6 +14,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     app: app,
+    requests: requests,
     user: user
   },
   plugins: [axiosAuthorizationHeaders, createPersistedState({
@@ -20,10 +22,11 @@ export default new Vuex.Store({
       switch (mutation.type) {
         case 'setCurrentTileProvider':
         case 'setPlateBoundaries':
-        case 'authorizeUser':
-        case 'unauthorizeUser': return true
+        case 'authenticateUser':
+        case 'unauthenticateUser': return true
         default: return false
       }
-    }
+    },
+    key: 'eqalert.ru'
   }), userActivity]
 })

@@ -40,7 +40,7 @@ export default {
         this.$store.dispatch('setPgaConfigVersion', response.data.data.pgaConfig.data.config_version)
         this.$store.dispatch('setSrssDBVersion', response.data.data.srssCoreConfig.data.db_version)
       })
-      .catch(e => { this.errors.push(e) })
+      .catch(error => { console.log(error) })
     }
   },
   mounted() {

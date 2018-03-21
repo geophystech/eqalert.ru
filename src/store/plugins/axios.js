@@ -3,10 +3,11 @@ import { axiosSetAuthorizationHeaders, axiosRemoveAuthorizationHeaders } from '.
 const axiosAuthorizationHeaders = store => {
   store.subscribe((mutation, state) => {
     switch (mutation.type) {
-      case 'authorizeUser':
+      case 'authenticateUser':
         axiosSetAuthorizationHeaders()
         break
-      case 'unauthorizeUser':
+      case 'lockRequests':
+      case 'unauthenticateUser':
         axiosRemoveAuthorizationHeaders()
         break
     }

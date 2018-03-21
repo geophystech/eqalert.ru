@@ -1,8 +1,5 @@
 export default {
   state: {
-    api: {
-      authorizationToken: ''
-    },
     counters: {
       totalEvents: 0
     },
@@ -19,8 +16,9 @@ export default {
     }
   },
   getters: {
-    apiAuthorizationToken: state => { return state.api.authorizationToken },
-    currentTileProvider: state => { return state.currentTileProvider },
+    currentTileProvider: state => {
+      return state.currentTileProvider
+    },
     chartDataset: () => {
       return {
         datasets: [{

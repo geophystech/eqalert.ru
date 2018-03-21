@@ -6,7 +6,7 @@ import Event from '@/components/Event'
 import Events from '@/components/Events'
 import StaticPage from '@/components/StaticPage'
 import UserEmailConfirmation from '@/components/users/Confirmation'
-import UserAuthorization from '@/components/users/Authorization'
+import UserAuthentication from '@/components/users/Authentication'
 import UserRegistration from '@/components/users/Registration'
 import UserConfirmPassword from '@/components/users/ConfirmPassword'
 import UserResetPassword from '@/components/users/ResetPassword'
@@ -34,8 +34,8 @@ export default new Router({
     },
     {
       path: '/sign-in',
-      name: 'UserAuthorization',
-      component: UserAuthorization,
+      name: 'UserAuthentication',
+      component: UserAuthentication,
       meta: { redirectable: false }
     },
     {

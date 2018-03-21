@@ -2,6 +2,7 @@ class Config {
   constructor() {
     this.authorizationType = 'Bearer'
     this.baseURL = 'https://api-test.geophystech.ru/api'
+    this.oauthBaseURL = 'https://oauth-client-test.geophystech.ru'
     this.version = 'v1'
     this.endpointAnalyticsCumulativeCounts = `${this.baseURL}/${this.version}/analytics/cumulativeCounts`
     this.endpointAnalyticsDensityCounts = `${this.baseURL}/${this.version}/analytics/densityCounts`
@@ -12,7 +13,8 @@ class Config {
     this.endpointPurposesList = `${this.baseURL}/${this.version}/user/purposesList`
     this.endpointStations = `${this.baseURL}/${this.version}/stations`
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
-    this.endpointUserAuthorization = `https://oauth-client-test.geophystech.ru/token`
+    this.endpointUserAuthentication = `${this.oauthBaseURL}/token`
+    this.endpointUserRefreshToken = `${this.oauthBaseURL}/refreshToken`
     this.endpointUserRegistration = `${this.baseURL}/${this.version}/user/register`
     this.endpointUserResetPassword = `${this.baseURL}/${this.version}/user/resetPassword`
     this.endpointUserResetPasswordCheck = `${this.baseURL}/${this.version}/user/resetPasswordCheck`
