@@ -97,12 +97,14 @@ export default {
   },
   methods: {
     getEvents: function(data) {
-      Object.assign(this.apiParams, data)
+      let params = this.apiParams
+
+      Object.assign(params, data)
 
       this.spinners.loadMoreEvents = true
       this.disabledFilters = true
 
-      this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: this.apiParams })
+      this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params })
         .then(response => {
           this.spinners.loadMoreEvents = false
 

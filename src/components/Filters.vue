@@ -116,7 +116,7 @@
 
     <b-row class="filter" no-gutters>
       <b-col class="text-center">
-        <b-button size="sm" :disabled="disabled">Сбросить фильтры</b-button>
+        <b-button size="sm" :disabled="disabled" @click="resetFields">Сбросить фильтры</b-button>
       </b-col>
     </b-row>
   </b-col>
@@ -154,6 +154,13 @@
         })
 
         this.$emit('filtersUpdated', convertedFilters)
+      },
+      resetFields: function() {
+        Object.keys(this.filters).map(key => {
+          this.filters[key] = null
+        })
+
+        this.filtersUpdated()
       }
     }
   }
