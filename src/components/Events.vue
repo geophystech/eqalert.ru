@@ -116,6 +116,8 @@ export default {
 
           this.apiParams.cursor = response.data.meta.cursor.next
 
+          if (!response.data.data.length) return
+
           this.startDate = moment.utc(this.events[this.events.length - 1].locValues.data.event_datetime).locale('ru').format('L')
           this.endDate = moment.utc(this.events[0].locValues.data.event_datetime).locale('ru').format('L')
         })

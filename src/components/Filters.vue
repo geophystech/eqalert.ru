@@ -106,7 +106,7 @@
       <b-col>
         <b-row no-gutters class="filter-inputs">
           <b-col>
-            <b-form-checkbox v-model="filters.hasMt" :disabled="disabled" @change="filtersUpdated()" >
+            <b-form-checkbox v-model="filters.hasMt" :disabled="disabled" @change="filtersUpdated()">
               Только с тензором момента
             </b-form-checkbox>
           </b-col>
@@ -146,14 +146,21 @@
     },
     methods: {
       filtersUpdated: function() {
-        // ADD TIMEOUTS
-        let convertedFilters = {}
+        setTimeout(() => {
+          let convertedFilters = {}
 
-        Object.keys(this.filters).map(key => {
-          convertedFilters[camelToUnderscore(key)] = this.filters[key]
-        })
-
-        this.$emit('filtersUpdated', convertedFilters)
+          Object.keys(this.filters).map(key => {
+            convertedFilters[camelToUnderscore(key)] = this.prepareValue(this.filters[key])
+          })
+          this.$emit('filtersUpdated', convertedFilters)
+        }, 500)
+      },
+      prepareValue: function(value) {
+        switch (value) {
+          case true: return 1
+          case false: return null
+          default: return value
+        }
       },
       resetFields: function() {
         Object.keys(this.filters).map(key => {
