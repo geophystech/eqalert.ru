@@ -63,7 +63,7 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
             <b-input-group left="Минимум">
-              <b-form-input v-model.number.trim="filters.staNumMin" placeholder="145.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
+              <b-form-input v-model.number.trim="filters.staNumMin" placeholder="1" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -95,7 +95,7 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
             <b-input-group left="Максимум">
-              <b-form-input v-model.number.trim="filters.rmsMax" placeholder="145.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
+              <b-form-input v-model.number.trim="filters.rmsMax" placeholder="0.9" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -147,13 +147,14 @@
     methods: {
       filtersUpdated: function() {
         setTimeout(() => {
+          this.updateURL()
           let convertedFilters = {}
 
           Object.keys(this.filters).map(key => {
             convertedFilters[camelToUnderscore(key)] = this.prepareValue(this.filters[key])
           })
           this.$emit('filtersUpdated', convertedFilters)
-        }, 500)
+        }, 300)
       },
       prepareValue: function(value) {
         switch (value) {
@@ -168,6 +169,18 @@
         })
 
         this.filtersUpdated()
+      },
+      updateURL: function() {
+        const query = Object.keys(this.filters)
+          .filter(key => {
+            if (this.filters[key] !== null) return key
+          })
+          .reduce((object, key) => {
+            object[key] = this.filters[key]
+            return object
+          }, {})
+
+        this.$router.replace({ name: this.$route.name, query: query })
       }
     }
   }
