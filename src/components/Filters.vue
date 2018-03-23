@@ -144,8 +144,11 @@
         }
       }
     },
+    beforeMount() {
+      this.parseURL()
+    },
     methods: {
-      filtersUpdated: function() {
+      filtersUpdated: function(delay = 300) {
         setTimeout(() => {
           this.updateURL()
           let convertedFilters = {}
@@ -154,7 +157,24 @@
             convertedFilters[camelToUnderscore(key)] = this.prepareValue(this.filters[key])
           })
           this.$emit('filtersUpdated', convertedFilters)
-        }, 300)
+        }, delay)
+      },
+      parseURL: function() {
+        Object.keys(this.$route.query).forEach(key => {
+          if (key in this.filters) {
+            if (key === 'hasMt') {
+              if (this.$route.query[key] === 'true') {
+                this.filters[key] = true
+              } else {
+                this.filters[key] = false
+              }
+            } else {
+              this.filters[key] = parseInt(this.$route.query[key])
+            }
+          }
+
+          this.filtersUpdated(0)
+        })
       },
       prepareValue: function(value) {
         switch (value) {
