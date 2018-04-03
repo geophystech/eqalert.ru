@@ -169,7 +169,7 @@
                 this.filters[key] = false
               }
             } else {
-              this.filters[key] = parseInt(this.$route.query[key])
+              this.filters[key] = parseFloat(this.$route.query[key])
             }
           }
 
