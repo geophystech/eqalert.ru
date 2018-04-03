@@ -6,13 +6,13 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
             <b-input-group left="От">
-              <b-form-input v-model.trim="filters.magMin" placeholder="2.5" />
+              <b-form-input v-model.number.trim="filters.magMin" placeholder="2.5" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
             <b-input-group left="До">
-              <b-form-input v-model.trim="filters.magMax" placeholder="10.0" />
+              <b-form-input v-model.number.trim="filters.magMax" placeholder="10.0" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -25,13 +25,13 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
             <b-input-group left="От">
-              <b-form-input v-model.trim="filters.latMin" placeholder="51.1" />
+              <b-form-input v-model.number.trim="filters.latMin" placeholder="51.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
             <b-input-group left="До">
-              <b-form-input v-model.trim="filters.latMax" placeholder="70.1" />
+              <b-form-input v-model.number.trim="filters.latMax" placeholder="70.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -44,13 +44,13 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
             <b-input-group left="От">
-              <b-form-input v-model.trim="filters.lonMin" placeholder="145.1" />
+              <b-form-input v-model.number.trim="filters.lonMin" placeholder="145.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
             <b-input-group left="До">
-              <b-form-input v-model.trim="filters.lonMax" placeholder="190.1" />
+              <b-form-input v-model.number.trim="filters.lonMax" placeholder="190.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -63,7 +63,7 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
             <b-input-group left="Минимум">
-              <b-form-input v-model.trim="filters.staNumMin" placeholder="145.1" />
+              <b-form-input v-model.number.trim="filters.staNumMin" placeholder="1" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -76,13 +76,13 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
             <b-input-group left="От">
-              <b-form-input v-model.trim="filters.depthMin" placeholder="0" />
+              <b-form-input v-model.number.trim="filters.depthMin" placeholder="0" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
             <b-input-group left="До">
-              <b-form-input v-model.trim="filters.depthMax" placeholder="10" />
+              <b-form-input v-model.number.trim="filters.depthMax" placeholder="10" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -95,7 +95,7 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
             <b-input-group left="Максимум">
-              <b-form-input v-model.trim="filters.rmsMax" placeholder="145.1" />
+              <b-form-input v-model.number.trim="filters.rmsMax" placeholder="0.9" :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -106,7 +106,7 @@
       <b-col>
         <b-row no-gutters class="filter-inputs">
           <b-col>
-            <b-form-checkbox v-model="filters.hasMt">
+            <b-form-checkbox v-model="filters.hasMt" :disabled="disabled" @change="filtersUpdated()">
               Только с тензором момента
             </b-form-checkbox>
           </b-col>
@@ -116,29 +116,91 @@
 
     <b-row class="filter" no-gutters>
       <b-col class="text-center">
-        <b-button size="sm">Сбросить фильтры</b-button>
+        <b-button size="sm" :disabled="disabled" @click="resetFields">Сбросить фильтры</b-button>
       </b-col>
     </b-row>
   </b-col>
 </template>
 
 <script>
+  import { camelToUnderscore } from '@/helpers/string'
+
   export default {
+    props: ['disabled'],
     data() {
       return {
         filters: {
-          depthMax: '',
-          depthMin: '',
-          hasMt: '',
-          magMax: '',
-          magMin: '',
-          latMax: '',
-          latMin: '',
-          lonMax: '',
-          lonMin: '',
-          rmsMax: '',
-          staNumMin: ''
+          depthMax: null,
+          depthMin: null,
+          hasMt: null,
+          magMax: null,
+          magMin: null,
+          latMax: null,
+          latMin: null,
+          lonMax: null,
+          lonMin: null,
+          rmsMax: null,
+          staNumMin: null
         }
+      }
+    },
+    beforeMount() {
+      this.parseURL()
+    },
+    methods: {
+      filtersUpdated: function(delay = 300) {
+        setTimeout(() => {
+          this.updateURL()
+          let convertedFilters = {}
+
+          Object.keys(this.filters).map(key => {
+            convertedFilters[camelToUnderscore(key)] = this.prepareValue(this.filters[key])
+          })
+          this.$emit('filtersUpdated', convertedFilters)
+        }, delay)
+      },
+      parseURL: function() {
+        Object.keys(this.$route.query).forEach(key => {
+          if (key in this.filters) {
+            if (key === 'hasMt') {
+              if (this.$route.query[key] === 'true') {
+                this.filters[key] = true
+              } else {
+                this.filters[key] = false
+              }
+            } else {
+              this.filters[key] = parseFloat(this.$route.query[key])
+            }
+          }
+
+          this.filtersUpdated(0)
+        })
+      },
+      prepareValue: function(value) {
+        switch (value) {
+          case true: return 1
+          case false: return null
+          default: return value
+        }
+      },
+      resetFields: function() {
+        Object.keys(this.filters).map(key => {
+          this.filters[key] = null
+        })
+
+        this.filtersUpdated()
+      },
+      updateURL: function() {
+        const query = Object.keys(this.filters)
+          .filter(key => {
+            if (this.filters[key] !== null) return key
+          })
+          .reduce((object, key) => {
+            object[key] = this.filters[key]
+            return object
+          }, {})
+
+        this.$router.replace({ name: this.$route.name, query: query })
       }
     }
   }

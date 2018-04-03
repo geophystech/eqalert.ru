@@ -6,7 +6,7 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <Filters />
+      <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" />
       <b-col class="all-events">
         <Spinner line-fg-color="#337ab7" :line-size="1" v-if="spinners.loadMoreEvents && !events.length" />
 
@@ -37,7 +37,7 @@
           <template slot="bottom-row" slot-scope="data">
             <td :colspan="data.columns">
               <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="spinners.loadMoreEvents" />
-              <a href="javascript:void(0)" @click.prevent="getEvents" v-if="cursor && !spinners.loadMoreEvents">Показать больше событий</a>
+              <a href="javascript:void(0)" @click.prevent="loadMoreEvents" v-if="apiParams.cursor && !spinners.loadMoreEvents">Показать больше событий</a>
               <span v-else>Загружены все события</span>
             </td>
           </template>
@@ -60,8 +60,13 @@ export default {
   components: { CountersHeader, Filters, Spinner },
   data() {
     return {
-      cursor: '',
+      apiParams: {
+        cursor: '',
+        limit: 10,
+        show_nearest_city: 1
+      },
       events: [],
+      disabledFilters: false,
       fields: [
         { key: 'index', label: '#' },
         { key: 'magnitude', label: 'Магнитуда', sortable: true },
@@ -91,25 +96,39 @@ export default {
     title: 'События'
   },
   methods: {
-    getEvents: function() {
-      this.spinners.loadMoreEvents = true
+    getEvents: function(data) {
+      let params = this.apiParams
 
-      this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-        params: {
-          cursor: this.cursor,
-          limit: 10,
-          show_nearest_city: 1
-        }
-      })
+      Object.assign(params, data)
+
+      this.spinners.loadMoreEvents = true
+      this.disabledFilters = true
+
+      this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params })
         .then(response => {
           this.spinners.loadMoreEvents = false
-          this.events = this.events.concat(response.data.data)
-          this.cursor = response.data.meta.cursor.next
+
+          if (data) {
+            this.events = response.data.data
+          } else {
+            this.events = this.events.concat(response.data.data)
+          }
+
+          this.apiParams.cursor = response.data.meta.cursor.next
+
+          if (!response.data.data.length) return
 
           this.startDate = moment.utc(this.events[this.events.length - 1].locValues.data.event_datetime).locale('ru').format('L')
           this.endDate = moment.utc(this.events[0].locValues.data.event_datetime).locale('ru').format('L')
         })
-        .catch(error => { console.log(error) })
+        .catch(error => {
+          console.log(error)
+        })
+
+      this.disabledFilters = false
+    },
+    loadMoreEvents: function() {
+      this.getEvents()
     },
     openEvent: function(item) {
       this.$router.push({ name: 'Event', params: { id: item.id } })
