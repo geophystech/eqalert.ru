@@ -5,6 +5,7 @@ const moment = require('moment')
 require('moment/locale/ru')
 
 export default Line.extend({
+  props: ['filtersParams'],
   data() {
     return {
       chartData: this.$store.getters.chartDataset,
@@ -46,8 +47,8 @@ export default Line.extend({
     this.drawChart()
   },
   methods: {
-    drawChart: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsEarthquakeCounts)
+    drawChart: function(params = {}) {
+      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsEarthquakeCounts, { params: params })
         .then(response => {
           const dates = this.prepareDates(response.data.data.dates)
           this.chartData.datasets[0].label = 'Количество землетрясений'
@@ -72,6 +73,11 @@ export default Line.extend({
 
         return _date
       })
+    }
+  },
+  watch: {
+    filtersParams: function(data) {
+      this.drawChart(data)
     }
   }
 })

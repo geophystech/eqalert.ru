@@ -2,6 +2,7 @@
 import { Line } from 'vue-chartjs'
 
 export default Line.extend({
+  props: ['filtersParams'],
   data() {
     return {
       chartData: this.$store.getters.chartDataset,
@@ -54,8 +55,8 @@ export default Line.extend({
     this.drawChart()
   },
   methods: {
-    drawChart: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsCumulativeCounts)
+    drawChart: function(params = {}) {
+      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsCumulativeCounts, { params: params })
         .then(response => {
           this.chartData.datasets[0].label = 'Кумулятивный график повторяемости (ML)'
           this.chartData.datasets[0].data = response.data.data.counts
@@ -64,6 +65,11 @@ export default Line.extend({
           this.renderChart(this.chartData, this.options)
         })
         .catch(error => { console.log(error) })
+    }
+  },
+  watch: {
+    filtersParams: function(data) {
+      this.drawChart(data)
     }
   }
 })

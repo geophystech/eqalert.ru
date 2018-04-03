@@ -6,22 +6,22 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <Filters />
+      <Filters :disabled="disabledFilters" @filtersUpdated="filtersUpdated" />
       <b-col>
         <h4 class="text-center">Количество землетрясений</h4>
-        <ChartByDatetime :height="200" @update="chartByDatetimeUpdate" />
+        <ChartByDatetime :height="200" @update="chartByDatetimeUpdate" :filtersParams="filtersParams" />
 
         <h4 class="text-center">Кумулятивный график повторяемости (ML)</h4>
-        <ChartByMagnitudeCumulative :height="200" />
+        <ChartByMagnitudeCumulative :height="200" :filtersParams="filtersParams" />
 
         <h4 class="text-center">Плотностное распределение повторяемости (ML)</h4>
-        <ChartByDensityCounts :height="200" />
+        <ChartByDensityCounts :height="200" :filtersParams="filtersParams" />
 
         <h4 class="text-center">События по количеству станций</h4>
-        <ChartByStationCounts :height="200" />
+        <ChartByStationCounts :height="200" :filtersParams="filtersParams" />
 
         <h4 class="text-center">Распределение RMS</h4>
-        <ChartByRMSAllocation :height="200" />
+        <ChartByRMSAllocation :height="200" :filtersParams="filtersParams" />
       </b-col>
     </b-row>
   </div>
@@ -48,9 +48,11 @@
     },
     data() {
       return {
+        disabledFilters: false,
+        endDate: '',
         eventsCount: 0,
-        startDate: '',
-        endDate: ''
+        filtersParams: {},
+        startDate: ''
       }
     },
     metaInfo: {
@@ -62,6 +64,9 @@
         this.eventsCount = data.eventsCount
         this.startDate = data.startDate
         this.endDate = data.endDate
+      },
+      filtersUpdated: function(data) {
+        this.filtersParams = data
       }
     }
   }
