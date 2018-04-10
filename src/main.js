@@ -8,6 +8,7 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import IdleVue from 'idle-vue'
+import Toasted from 'vue-toasted'
 
 import VueAnalytics from 'vue-analytics'
 import VueYandexMetrika from 'vue-yandex-metrika'
@@ -24,6 +25,11 @@ Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
+Vue.use(Toasted, {
+  duration: 5000,
+  iconPack: 'fontawesome',
+  position: 'top-center'
+})
 
 Vue.use(IdleVue, {
   idleTime: 600000,
