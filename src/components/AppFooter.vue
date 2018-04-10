@@ -24,9 +24,9 @@
 <script>
 export default {
   name: 'app-footer',
-  data() {
-    return {
-      currentYear: (new Date()).getFullYear()
+  computed: {
+    currentYear: function() {
+      return (new Date()).getFullYear()
     }
   }
 }
