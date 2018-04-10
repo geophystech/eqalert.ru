@@ -27,6 +27,7 @@
     "vue-moment": "^2.0.2",
     "vue-router": "^2.7.0",
     "vue-simple-spinner": "^1.2.8",
+    "vue-yandex-metrika": "^1.6.1",
     "vuex": "^2.4.0",
     "vuex-persistedstate": "^2.0.0"
   },

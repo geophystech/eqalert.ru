@@ -8,7 +8,9 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import IdleVue from 'idle-vue'
+
 import VueAnalytics from 'vue-analytics'
+import VueYandexMetrika from 'vue-yandex-metrika'
 
 import ApiSettings from './settings/api.js'
 import EventsSettings from './settings/events.js'
@@ -38,6 +40,12 @@ Vue.use(VueAnalytics, {
   debug: {
     sendHitTask: process.env.NODE_ENV === 'production'
   }
+})
+
+Vue.use(VueYandexMetrika, {
+  id: 36378850,
+  router: router,
+  env: process.env.NODE_ENV
 })
 
 axiosSetAuthorizationHeaders()
