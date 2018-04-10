@@ -1,7 +1,9 @@
 <template>
   <b-col class="last-events">
     <b-row class="d-flex justify-content-center header">
-      <h4>Тензор момента</h4>
+      <h4>
+        <router-link :to="{ name: 'Events', query: { hasMt: 1 } }" key="events">Тензор момента</router-link>
+      </h4>
     </b-row>
     <b-row class="event" align-v="center" v-for="event in events" :key="event.id">
       <router-link :to="{ name: 'Event', params: { id: event.id }}" class="d-flex align-items-center">

@@ -116,7 +116,7 @@
 
     <b-row class="filter" no-gutters>
       <b-col class="text-center">
-        <b-button size="sm" :disabled="disabled" @click="resetFields">Сбросить фильтры</b-button>
+        <b-button size="sm" :disabled="disabled" @click="resetFields(true)">Сбросить фильтры</b-button>
       </b-col>
     </b-row>
   </b-col>
@@ -147,6 +147,11 @@
     beforeMount() {
       this.parseURL()
     },
+    watch: {
+      $route: function(data) {
+        this.parseURL()
+      }
+    },
     methods: {
       filtersUpdated: function(delay = 300) {
         setTimeout(() => {
@@ -156,39 +161,42 @@
           Object.keys(this.filters).map(key => {
             convertedFilters[camelToUnderscore(key)] = this.prepareValue(this.filters[key])
           })
+          console.log(convertedFilters)
           this.$emit('filtersUpdated', convertedFilters)
         }, delay)
       },
       parseURL: function() {
+        this.resetFields()
+
         Object.keys(this.$route.query).forEach(key => {
           if (key in this.filters) {
             if (key === 'hasMt') {
-              if (this.$route.query[key] === 'true') {
-                this.filters[key] = true
-              } else {
-                this.filters[key] = false
-              }
+              this.filters[key] = this.prepareValue(this.$route.query[key])
             } else {
               this.filters[key] = parseFloat(this.$route.query[key])
             }
           }
-
-          this.filtersUpdated(0)
         })
+
+        this.filtersUpdated(0)
       },
       prepareValue: function(value) {
         switch (value) {
+          case '1': return true
+          case 1: return true
+          case '0': return null
+          case 0: return null
           case true: return 1
           case false: return null
           default: return value
         }
       },
-      resetFields: function() {
+      resetFields: function(reloadEvents = false) {
         Object.keys(this.filters).map(key => {
           this.filters[key] = null
         })
 
-        this.filtersUpdated()
+        if (reloadEvents) this.filtersUpdated()
       },
       updateURL: function() {
         const query = Object.keys(this.filters)
@@ -196,7 +204,7 @@
             if (this.filters[key] !== null) return key
           })
           .reduce((object, key) => {
-            object[key] = this.filters[key]
+            object[key] = this.prepareValue(this.filters[key])
             return object
           }, {})
 

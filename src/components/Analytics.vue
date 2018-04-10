@@ -6,7 +6,7 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <Filters :disabled="disabledFilters" @filtersUpdated="filtersUpdated" />
+      <Filters :disabled="disabledFilters" @filtersUpdated="filtersUpdated" key="analytics-filters" />
       <b-col>
         <h4 class="text-center">Количество землетрясений</h4>
         <ChartByDatetime :height="200" @update="chartByDatetimeUpdate" :filtersParams="filtersParams" />

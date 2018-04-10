@@ -22,7 +22,7 @@
 
         <b-col class="align-items-center d-flex justify-content-end">
           <span class="mr-auto" id="page-links">
-            <router-link to="events">Тензор момента</router-link>
+            <router-link :to="{ name: 'Events', query: { hasMt: 1 } }" key="events-with-mt">Тензор момента</router-link>
             <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
           </span>
 
