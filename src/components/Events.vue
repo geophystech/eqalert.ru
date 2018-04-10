@@ -6,7 +6,7 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" />
+      <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" key="mainpage-filters" />
       <b-col class="all-events">
         <Spinner line-fg-color="#337ab7" :line-size="1" v-if="spinners.loadMoreEvents && !events.length" />
 
@@ -99,7 +99,11 @@ export default {
     getEvents: function(data) {
       let params = this.apiParams
 
-      Object.assign(params, data)
+      // Use cursor only on loadMoreEvents()
+      if (typeof data === 'object') {
+        params.cursor = null
+        Object.assign(params, data)
+      }
 
       this.spinners.loadMoreEvents = true
       this.disabledFilters = true
@@ -108,7 +112,7 @@ export default {
         .then(response => {
           this.spinners.loadMoreEvents = false
 
-          if (data) {
+          if (typeof data === 'object') {
             this.events = response.data.data
           } else {
             this.events = this.events.concat(response.data.data)
