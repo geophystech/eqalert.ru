@@ -8,6 +8,7 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import IdleVue from 'idle-vue'
+import VueAnalytics from 'vue-analytics'
 
 import ApiSettings from './settings/api.js'
 import EventsSettings from './settings/events.js'
@@ -21,10 +22,22 @@ Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
+
 Vue.use(IdleVue, {
   idleTime: 600000,
   startAtIdle: true,
   store
+})
+
+Vue.use(VueAnalytics, {
+  id: 'UA-47326418-4',
+  router,
+  autoTracking: {
+    skipSamePath: true
+  },
+  debug: {
+    sendHitTask: process.env.NODE_ENV === 'production'
+  }
 })
 
 axiosSetAuthorizationHeaders()
