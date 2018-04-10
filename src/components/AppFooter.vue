@@ -3,7 +3,7 @@
   	<b-row no-gutters>
       <b-col>
         <b-row no-gutters>
-          © 2016 - 2017 Eqalert.ru
+          © 2016 &mdash; {{ currentYear }} Eqalert.ru
         </b-row>
         <b-row no-gutters>
           <a href="https://goo.gl/forms/i48vp55kTjL2d9Wk1">Обратная связь</a>
@@ -23,7 +23,12 @@
 
 <script>
 export default {
-  name: 'app-footer'
+  name: 'app-footer',
+  computed: {
+    currentYear: function() {
+      return (new Date()).getFullYear()
+    }
+  }
 }
 </script>
 
