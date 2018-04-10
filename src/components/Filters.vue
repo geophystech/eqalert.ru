@@ -161,7 +161,7 @@
           Object.keys(this.filters).map(key => {
             convertedFilters[camelToUnderscore(key)] = this.prepareValue(this.filters[key])
           })
-          console.log(convertedFilters)
+
           this.$emit('filtersUpdated', convertedFilters)
         }, delay)
       },

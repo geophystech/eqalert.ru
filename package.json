@@ -19,6 +19,7 @@
     "chart.js": "^2.7.0",
     "idle-vue": "^2.0.5",
     "vue": "^2.4.2",
+    "vue-analytics": "^5.10.2",
     "vue-axios": "^2.0.2",
     "vue-chartjs": "^2.8.7",
     "vue-markdown": "^2.2.4",
