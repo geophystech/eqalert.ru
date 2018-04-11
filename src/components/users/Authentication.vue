@@ -8,8 +8,6 @@
 
     <b-row>
       <b-col cols="6" offset="3">
-        <div class="validation-error">{{ validationError }}</div>
-
         <b-form class="sign-in-form"
                 ref="form"
                 @keyup.enter="onSubmit"
@@ -133,11 +131,13 @@
               refreshToken: response.data.refresh_token,
               rememberMe: this.form.fields.rememberMe.value
             })
+
+            this.$toasted.success(`Добро пожаловать!`, { icon: 'check' })
             this.$router.push(this.redirectTo)
           })
           .catch(error => {
             if (error.response) {
-              this.validationError = error.response.data.message
+              this.$toasted.error(`${error.response.data.error.message}`, { icon: 'times' })
 
               this.enableFields()
             } else {
