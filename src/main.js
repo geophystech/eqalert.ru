@@ -26,9 +26,12 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(Toasted, {
+  router,
+  className: 'toast-message',
   duration: 5000,
   iconPack: 'fontawesome',
-  position: 'top-center'
+  position: 'top-center',
+  theme: 'primary'
 })
 
 Vue.use(IdleVue, {
