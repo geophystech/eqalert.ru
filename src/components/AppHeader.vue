@@ -47,6 +47,7 @@
   export default {
     methods: {
       signOut: function() {
+        this.$toasted.success(`Вы вышли из сайта`, { icon: 'check' })
         this.$store.dispatch('signOut')
         this.$router.go()
       }
