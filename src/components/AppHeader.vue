@@ -2,9 +2,11 @@
     <header id="header">
       <b-row class="align-items-center">
         <b-col class="align-items-center d-flex justify-content-end">
-          <router-link to="/" alt="eqalert.ru" class="mr-auto">
-            <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
-          </router-link>
+          <span class="mr-auto" id="logo">
+            <router-link to="/" alt="eqalert.ru">
+              <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
+            </router-link>
+          </span>
 
           <router-link to="events">
             <span id="events-count">
