@@ -60,27 +60,13 @@ describe('AppHeader.vue', () => {
     })
   })
 
-  describe('user authentication block', () => {
-    describe('when not authenticated', () => {
-      const signInOutContainer = wrapper.find('.sign-in-out')
-      const icon = signInOutContainer.find('i')
-      const link = signInOutContainer.find('a')
-
-      it('renders correct link', () => {
-        expect(link.attributes().href).to.equal('#/sign-in')
-        expect(link.text()).to.equal('Войти')
-
-        expect(icon.classes()).to.contain('fa')
-        expect(icon.classes()).to.contain('fa-long-arrow-right')
-        expect(icon.classes()).to.contain('align-middle')
-      })
-    })
-
-    describe('when authenticated', () => {
+  describe('dynamic elements', () => {
+    describe('events count', () => {
       const $store = {
         getters: {
+          totalEventsCount: 100500,
           user: {
-            authenticated: true
+            authenticated: false
           }
         }
       }
@@ -92,17 +78,57 @@ describe('AppHeader.vue', () => {
         }
       })
 
-      const signInOutContainer = wrapper.find('.sign-in-out')
-      const icon = signInOutContainer.find('i')
-      const link = signInOutContainer.find('a')
+      it('renders events count', () => {
+        const count = wrapper.find('#events-count').findAll('span').at(2)
 
-      it('renders correct link', () => {
-        expect(link.attributes().href).to.equal('javascript:void(0)')
-        expect(link.text()).to.equal('Выйти')
+        expect(count.text()).to.equal('100500')
+      })
+    })
 
-        expect(icon.classes()).to.contain('fa')
-        expect(icon.classes()).to.contain('fa-times')
-        expect(icon.classes()).to.not.contain('align-middle')
+    describe('user authentication block', () => {
+      describe('when not authenticated', () => {
+        const signInOutContainer = wrapper.find('.sign-in-out')
+        const icon = signInOutContainer.find('i')
+        const link = signInOutContainer.find('a')
+
+        it('renders correct link', () => {
+          expect(link.attributes().href).to.equal('#/sign-in')
+          expect(link.text()).to.equal('Войти')
+
+          expect(icon.classes()).to.contain('fa')
+          expect(icon.classes()).to.contain('fa-long-arrow-right')
+          expect(icon.classes()).to.contain('align-middle')
+        })
+      })
+
+      describe('when authenticated', () => {
+        const $store = {
+          getters: {
+            user: {
+              authenticated: true
+            }
+          }
+        }
+
+        const wrapper = shallowMount(AppHeader, {
+          router,
+          mocks: {
+            $store
+          }
+        })
+
+        const signInOutContainer = wrapper.find('.sign-in-out')
+        const icon = signInOutContainer.find('i')
+        const link = signInOutContainer.find('a')
+
+        it('renders correct link', () => {
+          expect(link.attributes().href).to.equal('javascript:void(0)')
+          expect(link.text()).to.equal('Выйти')
+
+          expect(icon.classes()).to.contain('fa')
+          expect(icon.classes()).to.contain('fa-times')
+          expect(icon.classes()).to.not.contain('align-middle')
+        })
       })
     })
   })
