@@ -1,48 +1,109 @@
-import Vue from 'vue'
 import router from '@/router'
-import store from '@/store'
+import { shallowMount } from '@vue/test-utils'
+
 import AppHeader from '@/components/AppHeader'
 
 describe('AppHeader.vue', () => {
-  const Constructor = Vue.extend(AppHeader)
-  const vm = new Constructor({ router, store }).$mount()
+  const $store = {
+    getters: {
+      user: {
+        authenticated: false
+      }
+    }
+  }
 
-  it('renders logo', () => {
-    const logoContainer = vm.$el.querySelector('#logo')
-    const logoLink = logoContainer.querySelector('a')
-    const logoImage = logoLink.querySelector('img')
-
-    expect(logoContainer.classList.contains('mr-auto')).to.equal(true)
-
-    expect(logoLink.getAttribute('alt')).to.equal('eqalert.ru')
-    expect(logoLink.getAttribute('href')).to.equal('#/')
-
-    expect(logoImage.getAttribute('alt')).to.equal('EQA!ert')
-    expect(logoImage.getAttribute('src')).to.not.be.empty
+  const wrapper = shallowMount(AppHeader, {
+    router,
+    mocks: {
+      $store
+    }
   })
 
-  it('renders links', () => {
-    const DYFILinkContainer = vm.$el.querySelector('.did-you-feel-it')
-    const DYFILink = DYFILinkContainer.querySelector('a')
-    const pageLinksContainer = vm.$el.querySelector('#page-links')
-    const pageLinks = pageLinksContainer.querySelectorAll('a')
-    const eventsLink = pageLinks[0]
-    const analyticsLink = pageLinks[1]
+  describe('static elements', () => {
+    it('renders logo', () => {
+      const logoContainer = wrapper.find('#logo')
+      const logoLink = logoContainer.find('a')
+      const logoImage = logoLink.find('img')
 
-    expect(DYFILinkContainer.classList.contains('text-center')).to.equal(true)
+      expect(logoContainer.classes()).to.contain('mr-auto')
 
-    expect(DYFILink.getAttribute('href')).to.equal('https://goo.gl/forms/Hd4E0BcA2ffRNjfY2')
-    expect(DYFILink.getAttribute('target')).to.equal('_blank')
-    expect(DYFILink.textContent.trim()).to.equal('Ощутили землетрясение?')
+      expect(logoLink.attributes().alt).to.equal('eqalert.ru')
+      expect(logoLink.attributes().href).to.equal('#/')
 
-    expect(pageLinksContainer.classList.contains('mr-auto')).to.equal(true)
+      expect(logoImage.attributes().alt).to.equal('EQA!ert')
+      expect(logoImage.attributes().src).to.not.be.empty
+    })
 
-    expect(pageLinks.length).to.equal(2)
+    it('renders links', () => {
+      const DYFILinkContainer = wrapper.find('.did-you-feel-it')
+      const DYFILink = DYFILinkContainer.find('a')
+      const pageLinksContainer = wrapper.find('#page-links')
+      const pageLinks = pageLinksContainer.findAll('a')
+      const eventsLink = pageLinks.at(0)
+      const analyticsLink = pageLinks.at(1)
 
-    expect(eventsLink.getAttribute('href')).to.equal('#/events?hasMt=1')
-    expect(eventsLink.textContent).to.equal('Тензор момента')
+      expect(DYFILinkContainer.classes()).to.contain('text-center')
 
-    expect(analyticsLink.getAttribute('href')).to.equal('#/analytics')
-    expect(analyticsLink.textContent).to.equal('Аналитика')
+      expect(DYFILink.attributes().href).to.equal('https://goo.gl/forms/Hd4E0BcA2ffRNjfY2')
+      expect(DYFILink.attributes().target).to.equal('_blank')
+      expect(DYFILink.text()).to.equal('Ощутили землетрясение?')
+
+      expect(pageLinksContainer.classes()).to.contain('mr-auto')
+
+      expect(pageLinks.length).to.equal(2)
+
+      expect(eventsLink.attributes().href).to.equal('#/events?hasMt=1')
+      expect(eventsLink.text()).to.equal('Тензор момента')
+
+      expect(analyticsLink.attributes().href).to.equal('#/analytics')
+      expect(analyticsLink.text()).to.equal('Аналитика')
+    })
+  })
+
+  describe('user authentication block', () => {
+    describe('when not authenticated', () => {
+      const signInOutContainer = wrapper.find('.sign-in-out')
+      const icon = signInOutContainer.find('i')
+      const link = signInOutContainer.find('a')
+
+      it('renders correct link', () => {
+        expect(link.attributes().href).to.equal('#/sign-in')
+        expect(link.text()).to.equal('Войти')
+
+        expect(icon.classes()).to.contain('fa')
+        expect(icon.classes()).to.contain('fa-long-arrow-right')
+        expect(icon.classes()).to.contain('align-middle')
+      })
+    })
+
+    describe('when authenticated', () => {
+      const $store = {
+        getters: {
+          user: {
+            authenticated: true
+          }
+        }
+      }
+
+      const wrapper = shallowMount(AppHeader, {
+        router,
+        mocks: {
+          $store
+        }
+      })
+
+      const signInOutContainer = wrapper.find('.sign-in-out')
+      const icon = signInOutContainer.find('i')
+      const link = signInOutContainer.find('a')
+
+      it('renders correct link', () => {
+        expect(link.attributes().href).to.equal('javascript:void(0)')
+        expect(link.text()).to.equal('Выйти')
+
+        expect(icon.classes()).to.contain('fa')
+        expect(icon.classes()).to.contain('fa-times')
+        expect(icon.classes()).to.not.contain('align-middle')
+      })
+    })
   })
 })
