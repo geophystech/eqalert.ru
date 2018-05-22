@@ -21,14 +21,28 @@ describe('AppHeader.vue', () => {
     expect(logoImage.getAttribute('src')).to.not.be.empty
   })
 
-  it.only('renders links', () => {
+  it('renders links', () => {
     const DYFILinkContainer = vm.$el.querySelector('.did-you-feel-it')
     const DYFILink = DYFILinkContainer.querySelector('a')
+    const pageLinksContainer = vm.$el.querySelector('#page-links')
+    const pageLinks = pageLinksContainer.querySelectorAll('a')
+    const eventsLink = pageLinks[0]
+    const analyticsLink = pageLinks[1]
 
     expect(DYFILinkContainer.classList.contains('text-center')).to.equal(true)
 
     expect(DYFILink.getAttribute('href')).to.equal('https://goo.gl/forms/Hd4E0BcA2ffRNjfY2')
     expect(DYFILink.getAttribute('target')).to.equal('_blank')
     expect(DYFILink.textContent.trim()).to.equal('Ощутили землетрясение?')
+
+    expect(pageLinksContainer.classList.contains('mr-auto')).to.equal(true)
+
+    expect(pageLinks.length).to.equal(2)
+
+    expect(eventsLink.getAttribute('href')).to.equal('#/events?hasMt=1')
+    expect(eventsLink.textContent).to.equal('Тензор момента')
+
+    expect(analyticsLink.getAttribute('href')).to.equal('#/analytics')
+    expect(analyticsLink.textContent).to.equal('Аналитика')
   })
 })
