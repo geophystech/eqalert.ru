@@ -4,10 +4,10 @@ import store from '@/store'
 import AppHeader from '@/components/AppHeader'
 
 describe('AppHeader.vue', () => {
-  it('renders logo', () => {
-    const Constructor = Vue.extend(AppHeader)
-    const vm = new Constructor({router, store}).$mount()
+  const Constructor = Vue.extend(AppHeader)
+  const vm = new Constructor({ router, store }).$mount()
 
+  it('renders logo', () => {
     const logoContainer = vm.$el.querySelector('#logo')
     const logoLink = logoContainer.querySelector('a')
     const logoImage = logoLink.querySelector('img')
@@ -19,5 +19,16 @@ describe('AppHeader.vue', () => {
 
     expect(logoImage.getAttribute('alt')).to.equal('EQA!ert')
     expect(logoImage.getAttribute('src')).to.not.be.empty
+  })
+
+  it.only('renders links', () => {
+    const DYFILinkContainer = vm.$el.querySelector('.did-you-feel-it')
+    const DYFILink = DYFILinkContainer.querySelector('a')
+
+    expect(DYFILinkContainer.classList.contains('text-center')).to.equal(true)
+
+    expect(DYFILink.getAttribute('href')).to.equal('https://goo.gl/forms/Hd4E0BcA2ffRNjfY2')
+    expect(DYFILink.getAttribute('target')).to.equal('_blank')
+    expect(DYFILink.textContent.trim()).to.equal('Ощутили землетрясение?')
   })
 })
