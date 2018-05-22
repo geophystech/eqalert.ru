@@ -2,9 +2,11 @@
     <header id="header">
       <b-row class="align-items-center">
         <b-col class="align-items-center d-flex justify-content-end">
-          <router-link to="/" alt="eqalert.ru" class="mr-auto">
-            <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
-          </router-link>
+          <span class="mr-auto" id="logo">
+            <router-link to="/" alt="eqalert.ru">
+              <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
+            </router-link>
+          </span>
 
           <router-link to="events">
             <span id="events-count">
@@ -26,13 +28,13 @@
             <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
           </span>
 
-          <span v-if="$store.getters.user.authenticated">
+          <span class="sign-in-out" v-if="$store.getters.user.authenticated">
             <a href="javascript:void(0)" v-on:click="signOut" key="sign-out">
               Выйти
               <i class="fa fa-times"></i>
             </a>
           </span>
-          <span v-else>
+          <span class="sign-in-out" v-else>
             <router-link :to="{ name: 'UserAuthentication' }" key="sign-in">
               Войти
               <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
