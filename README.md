@@ -15,11 +15,11 @@ Built on <a href="https://vuejs.org">Vue.js</a>, <a href="https://webpack.js.org
 </a>
 
 <a href="https://getbootstrap.com/docs/4.0">
-    <img alt="bootstrap-4.0.0" src="https://img.shields.io/badge/bootstrap-4-337ab7.svg?style=flat-square">
+    <img alt="webpack-4" src="https://img.shields.io/badge/webpack-4-337ab7.svg?style=flat-square">
 </a>
 
 <a href="https://getbootstrap.com/docs/4.0">
-    <img alt="webpack-4" src="https://img.shields.io/badge/webpack-4-337ab7.svg?style=flat-square">
+    <img alt="bootstrap-4.0.0" src="https://img.shields.io/badge/bootstrap-4-337ab7.svg?style=flat-square">
 </a>
 
 <br>
