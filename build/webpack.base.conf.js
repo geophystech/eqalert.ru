@@ -11,6 +11,11 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
