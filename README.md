@@ -6,7 +6,7 @@
 <br>
 The real-time information resource about earthquakes, seismic impacts, and hazards.
 <br>
-Built on <a href="https://vuejs.org">Vue.js</a> and <a href="https://getbootstrap.com/docs/4.0">Twitter Bootstrap 4</a>
+Built on <a href="https://vuejs.org">Vue.js</a>, Webpack 4, and <a href="https://getbootstrap.com/docs/4.0">Twitter Bootstrap 4</a>
 <br>
 <br>
 
