@@ -15,7 +15,6 @@ process.traceDeprecation = true
 
 
 module.exports = merge(baseWebpackConfig, {
-  mode: 'development',
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
