@@ -6,12 +6,12 @@
 <br>
 The real-time information resource about earthquakes, seismic impacts, and hazards.
 <br>
-Built on <a href="https://vuejs.org">Vue.js</a>, <a href="https://webpack.js.org">Webpack 4</a>, and <a href="https://getbootstrap.com/docs/4.0">Twitter Bootstrap 4</a>
+Built on <a href="https://vuejs.org">Vue.js 2.5</a>, <a href="https://webpack.js.org">Webpack 4</a>, and <a href="https://getbootstrap.com/docs/4.0">Twitter Bootstrap 4</a>
 <br>
 <br>
 
 <a href="https://vuejs.org">
-    <img alt="vue.js-2.4.x" src="https://img.shields.io/badge/vue.js-2.5-337ab7.svg?style=flat-square">
+    <img alt="vue.js-2.5.x" src="https://img.shields.io/badge/vue.js-2.5-337ab7.svg?style=flat-square">
 </a>
 
 <a href="https://getbootstrap.com/docs/4.0">
