@@ -8,13 +8,9 @@ function resolve (dir) {
 }
 
 module.exports = {
+  mode: 'development',
   entry: {
     app: './src/main.js'
-  },
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    }
   },
   output: {
     path: config.build.assetsRoot,

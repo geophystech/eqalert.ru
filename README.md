@@ -11,7 +11,7 @@ Built on <a href="https://vuejs.org">Vue.js</a>, <a href="https://webpack.js.org
 <br>
 
 <a href="https://vuejs.org">
-    <img alt="vue.js-2.4.x" src="https://img.shields.io/badge/vue.js-2.4-337ab7.svg?style=flat-square">
+    <img alt="vue.js-2.4.x" src="https://img.shields.io/badge/vue.js-2.5-337ab7.svg?style=flat-square">
 </a>
 
 <a href="https://getbootstrap.com/docs/4.0">
