@@ -42,5 +42,11 @@ export default {
     a {
       color: $color-gray-dark;
     }
+
+    #social-media-links {
+      a {
+        font-size: 150%;
+      }
+    }
   }
 </style>
