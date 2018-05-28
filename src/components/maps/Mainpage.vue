@@ -5,9 +5,6 @@
 <script>
   import { createMap } from '@/map_functions.js'
 
-  const moment = require('moment')
-  require('moment/locale/ru')
-
   export default {
     data() {
       return {
@@ -22,9 +19,9 @@
     methods: {
       addEvents: function(events) {
         events.reverse().forEach(event => {
-          const datetime = moment.utc(event.locValues.data.event_datetime)
-          const datetimeDiff = moment.utc().diff(datetime, 'hours')
-          const datetimeHumanreadable = datetime.locale('ru').format('LL в HH:mm:ss UTC')
+          const datetime = this.$moment(event.locValues.data.event_datetime)
+          const datetimeDiff = this.$moment.utc().diff(datetime, 'hours')
+          const datetimeHumanreadable = datetime.format('LL в HH:mm:ss UTC')
           const depth = event.locValues.data.depth
           const latitude = event.locValues.data.lat
           const longitude = event.locValues.data.lon

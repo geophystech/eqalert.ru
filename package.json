@@ -24,7 +24,7 @@
     "vue-chartjs": "^2.8.7",
     "vue-markdown": "^2.2.4",
     "vue-meta": "^1.5.0",
-    "vue-moment": "^2.0.2",
+    "vue-moment": "^4.0.0-0",
     "vue-router": "^3.0.1",
     "vue-simple-spinner": "^1.2.8",
     "vue-toasted": "^1.1.24",

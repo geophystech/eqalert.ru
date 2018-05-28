@@ -13,7 +13,7 @@
               <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
             </span>
             ( <span class="magnitude">{{ event.magnitude }}</span> )
-            {{ moment.utc(event.datetime).locale('ru').format('LL в HH:mm:ss UTC') }}
+            {{ event.datetime | moment('LL в HH:mm:ss UTC') }}
             <span class="processing-method">
               {{ event.processingMethod.short }}
             </span>
@@ -42,9 +42,6 @@
 </template>
 
 <script>
-  const moment = require('moment')
-  require('moment/locale/ru')
-
   import Spinner from 'vue-simple-spinner'
 
   export default {
@@ -88,11 +85,6 @@
             variant: 'processing'
           }
         }
-      }
-    },
-    computed: {
-      moment: function() {
-        return moment
       }
     },
     created() {

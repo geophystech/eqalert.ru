@@ -13,7 +13,7 @@
               {{ event.settlement }}
             </div>
             <div class="datetime">
-              {{ moment.utc(event.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }},
+              {{ event.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }},
               глубина {{ event.locValues.data.depth }} км
             </div>
           </b-col>
@@ -24,9 +24,6 @@
 </template>
 
 <script>
-  const moment = require('moment')
-  require('moment/locale/ru')
-
   import { round } from '@/helpers/math.js'
 
   export default {
@@ -61,11 +58,6 @@
       },
       highlightEvent: function(id) {
         return id === this.event.id
-      }
-    },
-    computed: {
-      moment: function() {
-        return moment
       }
     },
     created() {

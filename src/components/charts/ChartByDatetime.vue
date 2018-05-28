@@ -1,9 +1,6 @@
 <script>
 import { Line } from 'vue-chartjs'
 
-const moment = require('moment')
-require('moment/locale/ru')
-
 export default Line.extend({
   props: ['filtersParams'],
   data() {
@@ -58,8 +55,8 @@ export default Line.extend({
           // Pass data to the Analytics.vue component.
           this.$emit('update', {
             eventsCount: response.data.data.total_count,
-            startDate: moment.utc(response.data.data.range.start).locale('ru').format('L'),
-            endDate: moment.utc(response.data.data.range.end).locale('ru').format('L')
+            startDate: this.$moment(response.data.data.range.start).format('L'),
+            endDate: this.$moment(response.data.data.range.end).format('L')
           })
 
           this.renderChart(this.chartData, this.options)
@@ -68,7 +65,7 @@ export default Line.extend({
     },
     prepareDates: function(dates) {
       return dates.map(date => {
-        let _date = moment.utc(date).locale('ru').format('MMMM YYYY')
+        let _date = this.$moment(date).format('MMMM YYYY')
         _date = _date[0].toUpperCase() + _date.substr(1)
 
         return _date

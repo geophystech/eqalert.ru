@@ -13,7 +13,7 @@
             {{ event.nearestCity.data.ep_dis }} км до {{ event.nearestCity.data.settlement.data.translation.data.title }}
           </div>
           <div class="datetime">
-            {{ moment.utc(event.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}, глубина {{ event.depth }} км
+            {{ event.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }}, глубина {{ event.depth }} км
           </div>
         </b-col>
         <b-col cols="2" class="moment-tensor text-center">
@@ -27,18 +27,10 @@
 </template>
 
 <script>
-  const moment = require('moment')
-  require('moment/locale/ru')
-
   export default {
     data() {
       return {
         events: []
-      }
-    },
-    computed: {
-      moment: function() {
-        return moment
       }
     },
     created() {
