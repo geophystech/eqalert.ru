@@ -26,7 +26,7 @@
           </template>
           <template slot="depth" slot-scope="data">{{ data.item.locValues.data.depth }} км</template>
           <template slot="datetime" slot-scope="data">
-            {{ moment.utc(data.item.locValues.data.event_datetime).locale('ru').format('LL в HH:mm:ss UTC') }}
+            {{ data.item.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }}
           </template>
           <template slot="settlement" slot-scope="data">
             <span v-if="!data.item.nearestCity">Нет данных</span>
@@ -48,9 +48,6 @@
 </template>
 
 <script>
-const moment = require('moment')
-require('moment/locale/ru')
-
 import CountersHeader from '@/components/CountersHeader.vue'
 import Filters from '@/components/Filters.vue'
 import Spinner from 'vue-simple-spinner'
@@ -85,9 +82,6 @@ export default {
     }
   },
   computed: {
-    moment: function() {
-      return moment
-    },
     round: function() {
       return round
     }
@@ -122,8 +116,8 @@ export default {
 
           if (!response.data.data.length) return
 
-          this.startDate = moment.utc(this.events[this.events.length - 1].locValues.data.event_datetime).locale('ru').format('L')
-          this.endDate = moment.utc(this.events[0].locValues.data.event_datetime).locale('ru').format('L')
+          this.startDate = this.$moment().utc(this.events[this.events.length - 1].locValues.data.event_datetime).locale('ru').format('L')
+          this.endDate = this.$moment().utc(this.events[0].locValues.data.event_datetime).locale('ru').format('L')
         })
         .catch(error => {
           console.log(error)

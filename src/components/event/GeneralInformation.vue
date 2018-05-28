@@ -14,9 +14,6 @@
 </template>
 
 <script>
-  const moment = require('moment')
-  require('moment/locale/ru')
-
   export default {
     props: ['event'],
     data() {
@@ -41,11 +38,6 @@
         ]
       }
     },
-    computed: {
-      moment: function() {
-        return moment
-      }
-    },
     created() {
       this.setData(this.event)
     },
@@ -57,7 +49,7 @@
         this.items[1].error = `± ${data.locValues.data.lon_err} км`
         this.items[2].value = `${data.locValues.data.depth} км`
         this.items[2].error = `± ${data.locValues.data.depth_err} км`
-        this.items[3].value = moment.utc(data.locValues.data.event_datetime).locale('ru').format('DD.MM.YYYY в HH:mm:ss UTC')
+        this.items[3].value = this.$moment(data.locValues.data.event_datetime).format('DD.MM.YYYY в HH:mm:ss UTC')
         this.items[3].error = `${data.locValues.data.origin_time_err} сек`
         this.items[4].value = `${data.locValues.data.station_near} км`
         this.items[5].value = `${data.locValues.data.hypo_gap}°`
