@@ -15,13 +15,14 @@ Used components and their licences:
 5. vue-axios: MIT.
 6. vue-chartjs: MIT.
 7. vue-markdown: MIT.
-8. vue-router: MIT.
-9. vue-simple-spinner: MIT.
-10. vuex: MIT.
-11. vuex-persistedstate: MIT.
-12. leaflet: BSD 2-Clause.
-13. Leaflet.fullscreen: ISC.
-14. leaflet-dvf: MIT.
-15. leaflet.zoomhome: CC-BY-SA-3.0.
-16. Leaflet.markercluster: MIT.
-17. Leaflet.GoogleMutant: "THE BEER-WARE LICENSE".
+8. vue-moment: MIT
+9. vue-router: MIT.
+10. vue-simple-spinner: MIT.
+11. vuex: MIT.
+12. vuex-persistedstate: MIT.
+13. leaflet: BSD 2-Clause.
+14. Leaflet.fullscreen: ISC.
+15. leaflet-dvf: MIT.
+16. leaflet.zoomhome: CC-BY-SA-3.0.
+17. Leaflet.markercluster: MIT.
+18. Leaflet.GoogleMutant: "THE BEER-WARE LICENSE".
