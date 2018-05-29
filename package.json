@@ -22,6 +22,7 @@
     "vue-analytics": "^5.10.2",
     "vue-axios": "^2.0.2",
     "vue-chartjs": "^2.8.7",
+    "vue-flatpickr-component": "^7.0.2",
     "vue-markdown": "^2.2.4",
     "vue-meta": "^1.5.0",
     "vue-moment": "^4.0.0-0",

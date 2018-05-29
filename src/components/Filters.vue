@@ -91,6 +91,35 @@
 
     <b-row class="filter" no-gutters>
       <b-col align-self="center">
+        <b-row no-gutters><b-col class="text-center filter-title">Дата и время</b-col></b-row>
+        <b-row no-gutters class="filter-inputs" align-v="center">
+          <b-col cols="5">
+            <b-input-group left="От">
+              <flat-pickr v-model="filters.datetimeMin"
+                          class="form-control"
+                          :config="datetimeConfig"
+                          :disabled="disabled"
+                          placeholder="Дата"
+                          @on-change="onChangeCalled" />
+            </b-input-group>
+          </b-col>
+          <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
+          <b-col cols="5">
+            <b-input-group left="До">
+              <flat-pickr v-model="filters.datetimeMax"
+                          class="form-control"
+                          :config="datetimeConfig"
+                          :disabled="disabled"
+                          placeholder="Дата"
+                          @on-change="filtersUpdated()" />
+            </b-input-group>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+
+    <b-row class="filter" no-gutters>
+      <b-col align-self="center">
         <b-row no-gutters><b-col class="text-center filter-title">RMS</b-col></b-row>
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
@@ -124,12 +153,29 @@
 
 <script>
   import { camelToUnderscore } from '@/helpers/string'
+  import flatPickr from 'vue-flatpickr-component'
+  import 'flatpickr/dist/flatpickr.css'
+  import { Russian } from 'flatpickr/dist/l10n/ru'
 
   export default {
+    components: {
+      flatPickr
+    },
     props: ['disabled'],
     data() {
       return {
+        datetimeConfig: {
+          allowInput: false,
+          dateFormat: 'Y-m-d H:i:S',
+          enableTime: false,
+          locale: Russian,
+          mode: 'single',
+          time_24hr: true,
+          wrap: true
+        },
         filters: {
+          datetimeMax: null,
+          datetimeMin: null,
           depthMax: null,
           depthMin: null,
           hasMt: null,
@@ -153,9 +199,13 @@
       }
     },
     methods: {
+      onChangeCalled: function(event) {
+        this.filtersUpdated()
+      },
       filtersUpdated: function(delay = 300) {
         setTimeout(() => {
           this.updateURL()
+
           let convertedFilters = {}
 
           Object.keys(this.filters).map(key => {
@@ -170,7 +220,7 @@
 
         Object.keys(this.$route.query).forEach(key => {
           if (key in this.filters) {
-            if (key === 'hasMt') {
+            if (key === 'hasMt' || key === 'datetimeMin' || key === 'datetimeMax') {
               this.filters[key] = this.prepareValue(this.$route.query[key])
             } else {
               this.filters[key] = parseFloat(this.$route.query[key])
