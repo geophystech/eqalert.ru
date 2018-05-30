@@ -3053,6 +3053,10 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
+flatpickr@^4.4.6:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.5.0.tgz#f72c7164a1c24e3ad419e3b2209d1a2d3604724a"
+
 flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
@@ -7742,6 +7746,12 @@ vue-chartjs@^2.8.7:
   resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-2.8.7.tgz#bcd1cda1a1ef8ed80581638a02cf88182d437d09"
   dependencies:
     lodash.merge "^4.6.0"
+
+vue-flatpickr-component@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/vue-flatpickr-component/-/vue-flatpickr-component-7.0.2.tgz#5c026d2f27fc60dc925e557822cc315d30fa6113"
+  dependencies:
+    flatpickr "^4.4.6"
 
 vue-functional-data-merge@^1.0.6:
   version "1.0.7"
