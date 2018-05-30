@@ -95,7 +95,7 @@
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
             <b-input-group left="От">
-              <flat-pickr v-model="filters.datetimeMin"
+              <flat-pickr v-model.trim="filters.datetimeMin"
                           class="form-control"
                           :config="datetimeConfig"
                           :disabled="disabled"
@@ -106,7 +106,7 @@
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
             <b-input-group left="До">
-              <flat-pickr v-model="filters.datetimeMax"
+              <flat-pickr v-model.trim="filters.datetimeMax"
                           class="form-control"
                           :config="datetimeConfig"
                           :disabled="disabled"
@@ -167,6 +167,7 @@
         datetimeConfig: {
           allowInput: false,
           dateFormat: 'Y-m-d H:i:S',
+          defaultDate: null,
           enableTime: false,
           locale: Russian,
           mode: 'single',
@@ -232,12 +233,13 @@
       },
       prepareValue: function(value) {
         switch (value) {
-          case '1': return true
+          case 0: return null
           case 1: return true
           case '0': return null
-          case 0: return null
-          case true: return 1
+          case '1': return true
+          case '': return null
           case false: return null
+          case true: return 1
           default: return value
         }
       },
@@ -251,10 +253,11 @@
       updateURL: function() {
         const query = Object.keys(this.filters)
           .filter(key => {
-            if (this.filters[key] !== null) return key
+            if (this.filters[key] !== null && this.filters[key] !== '') return key
           })
           .reduce((object, key) => {
             object[key] = this.prepareValue(this.filters[key])
+
             return object
           }, {})
 
