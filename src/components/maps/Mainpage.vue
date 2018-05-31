@@ -41,11 +41,6 @@
           const marker = new window.L.RegularPolygonMarker(new window.L.LatLng(latitude, longitude), options)
           const message =
             `<table class="table table-hover table-sm table-responsive">
-              <thead>
-                <tr>
-                  <th class="text-center" colspan=2>${event.id}</th>
-                </tr>
-              </thead>
               <tbody>
                 <tr>
                   <th class="align-middle" scope="row">Магнитуда</th>
@@ -62,6 +57,10 @@
                 <tr>
                   <th scope="row">Глубина</th>
                   <td>${depth} км</td>
+                </tr>
+                <tr>
+                  <th scope="row">ID</th>
+                  <td>${event.id}</td>
                 </tr>
               </tbody>
             </table>
