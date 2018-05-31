@@ -125,9 +125,11 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .tabs {
-    .nav-tabs {
+    padding-bottom: 2%;
+
+    /deep/ .nav-tabs {
       justify-content: center;
 
       .nav-item{
@@ -135,10 +137,6 @@
           font-size: 90%;
         }
       }
-    }
-
-    .tab-content {
-      padding-top: 2%;
     }
   }
 </style>
