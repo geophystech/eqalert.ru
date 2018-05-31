@@ -18,7 +18,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../assets/scss/global.scss';
+  @import '~scss/global';
 
   .infobar {
     background-color: $color-white-2;

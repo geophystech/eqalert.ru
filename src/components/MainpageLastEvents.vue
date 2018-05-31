@@ -55,7 +55,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../assets/scss/global.scss';
+  @import '~scss/global';
 
   $border: 1px $color-gray-light solid;
 

@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '../assets/scss/global.scss';
+  @import '~scss/global';
 
   $border-bottom-blue: 3px solid $color-blue;
   $border-bottom-orange: 3px solid $color-orange;

@@ -112,7 +112,7 @@
       padding-top: 0;
 
       .active {
-        color: #444;
+        color: $color-gray-dark;
       }
     }
 

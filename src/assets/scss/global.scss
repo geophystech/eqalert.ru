@@ -19,35 +19,6 @@ $color-red-2: #e52c5a;
 $color-white: #fff;
 $color-white-2: #faf9f9;
 
-// ----------------
-//       Body.
-// ----------------
-
-body {
-	color: $color-gray-dark;
-  font-family: 'Open Sans', sans-serif;
-}
-
-// --------------------
-//    Font Awesome.
-// --------------------
-
-.fa-icon {
-  width: auto;
-  height: 1em; /* or any other relative font sizes */
-
-  /* You would have to include the following two lines to make this work in Safari */
-  max-width: 100%;
-  max-height: 100%;
-}
-
-// -------------
-//    Links.
-// -------------
-a {
-  color: $color-blue;
-}
-
 // -------------
 //    Borders.
 // -------------
