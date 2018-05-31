@@ -75,8 +75,8 @@
   }
 </script>
 
-<style lang="scss">
-  @import '../assets/scss/global.scss';
+<style lang="scss" scoped>
+  @import '~scss/global';
 
   $border: 1px $color-gray-light solid;
 

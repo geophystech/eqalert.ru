@@ -268,7 +268,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../assets/scss/global.scss';
+  @import '~scss/global';
 
   .filters {
     border: 1px solid $color-gray-light-4;

@@ -54,6 +54,25 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  @import '~scss/global';
 
+  $border: 1px $color-gray-light solid;
+
+  .events-analytics-block {
+    border-top: $border;
+    height: auto;
+    margin-top: 3%;
+
+    h4 {
+      a {
+        color: $color-gray-dark;
+      }
+    }
+
+    .header {
+      padding-bottom: 3%;
+      padding-top: 3%;
+    }
+  }
 </style>

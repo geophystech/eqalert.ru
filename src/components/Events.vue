@@ -138,8 +138,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-  @import '../assets/scss/global.scss';
+<style lang="scss" scoped>
+  @import '~scss/global';
 
   .events {
     .all-events {

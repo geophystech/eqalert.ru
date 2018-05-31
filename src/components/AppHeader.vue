@@ -59,7 +59,7 @@
 
 
 <style lang="scss" scoped>
-  @import '../assets/scss/global.scss';
+  @import '~scss/global';
 
   #header {
     padding-top: 15px;
@@ -74,7 +74,7 @@
   }
 
   a {
-    color: $color-black;
+    color: $color-gray-dark;
     font-size: 90%;
   }
 

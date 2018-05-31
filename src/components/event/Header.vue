@@ -99,7 +99,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../assets/scss/global';
 
   .event-header {
@@ -112,7 +112,7 @@
       padding-top: 0;
 
       .active {
-        color: #444;
+        color: $color-gray-dark;
       }
     }
 

@@ -22,6 +22,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
+      'scss': resolve('src/assets/scss'),
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
     }
