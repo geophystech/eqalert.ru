@@ -130,6 +130,7 @@
     padding-bottom: 2%;
 
     /deep/ .nav-tabs {
+      outline: none;
       justify-content: center;
 
       .nav-item{
