@@ -7,41 +7,44 @@
 
     <b-row no-gutters>
       <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" key="mainpage-filters" />
+
       <b-col class="all-events">
         <Spinner line-fg-color="#337ab7" :line-size="1" v-if="spinners.loadMoreEvents && !events.length" />
 
-        <b-table
-          hover
-          :fields="fields"
-          :items="events"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          @row-clicked="openEvent"
-          v-if="events.length" >
-          <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
-          <template slot="magnitude" slot-scope="data">
-            <span :class="{ 'highlight-event': data.item.locValues.data.mag > highlightEventTreshold }">
-              {{ data.item.locValues.data.mag }}
-            </span>
-          </template>
-          <template slot="depth" slot-scope="data">{{ data.item.locValues.data.depth }} км</template>
-          <template slot="datetime" slot-scope="data">
-            {{ data.item.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }}
-          </template>
-          <template slot="settlement" slot-scope="data">
-            <span v-if="!data.item.nearestCity">Нет данных</span>
-            <span v-else>
-              {{ round(data.item.nearestCity.data.ep_dis, 1) }} км до {{ data.item.nearestCity.data.settlement.data.translation.data.title }}
-            </span>
-          </template>
-          <template slot="bottom-row" slot-scope="data">
-            <td :colspan="data.columns">
-              <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="spinners.loadMoreEvents" />
-              <a href="javascript:void(0)" @click.prevent="loadMoreEvents" v-if="apiParams.cursor && !spinners.loadMoreEvents">Показать больше событий</a>
-              <span v-else>Загружены все события</span>
-            </td>
-          </template>
-        </b-table>
+        <b-row no-gutters class="events-head text-center">
+          <b-col>#</b-col>
+          <b-col>Магнитуда</b-col>
+          <b-col>Глубина</b-col>
+          <b-col cols="4">Дата и время</b-col>
+          <b-col cols="4">Ближайший населённый пункт</b-col>
+        </b-row>
+
+        <router-link v-for="(event, index) in events" :key="event.id" :to="{ name: 'Event', params: { id: event.id } }">
+          <b-row no-gutters class="events-row text-center">
+            <b-col>{{ index + 1 }}</b-col>
+            <b-col>
+              <span :class="{ 'highlight-event': event.locValues.data.mag > highlightEventTreshold }">
+                {{ event.locValues.data.mag }}
+              </span>
+            </b-col>
+            <b-col>{{ event.locValues.data.depth }} км</b-col>
+            <b-col cols="4">{{ event.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }}</b-col>
+            <b-col cols="4">
+              <span v-if="!event.nearestCity">Нет данных</span>
+              <span v-else>
+                {{ round(event.nearestCity.data.ep_dis, 1) }} км до {{ event.nearestCity.data.settlement.data.translation.data.title }}
+              </span>
+            </b-col>
+          </b-row>
+        </router-link>
+
+        <b-row class="load-more-events" no-gutters>
+          <b-col class="text-center">
+            <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="spinners.loadMoreEvents" />
+            <a href="javascript:void(0)" @click.prevent="loadMoreEvents" v-if="apiParams.cursor && !spinners.loadMoreEvents">Показать больше событий</a>
+            <span v-if="!apiParams.cursor">Загружены все события</span>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </div>
@@ -64,16 +67,7 @@ export default {
       },
       events: [],
       disabledFilters: false,
-      fields: [
-        { key: 'index', label: '#' },
-        { key: 'magnitude', label: 'Магнитуда', sortable: true },
-        { key: 'depth', label: 'Глубина', sortable: true },
-        { key: 'datetime', label: 'Дата и время', sortable: true },
-        { key: 'settlement', label: 'Ближайший населённый пункт', sortable: true }
-      ],
       highlightEventTreshold: this.$root.$options.settings.events.highlightTreshold,
-      sortBy: 'datetime',
-      sortDesc: true,
       spinners: {
         loadMoreEvents: false
       },
@@ -128,7 +122,7 @@ export default {
     loadMoreEvents: function() {
       this.getEvents()
     },
-    openEvent: function(item) {
+    openEvent: function(item, index, event) {
       this.$router.push({ name: 'Event', params: { id: item.id } })
     }
   },
@@ -145,35 +139,41 @@ export default {
     .all-events {
       font-size: 90%;
 
-      table {
+      a {
+        color: $color-gray-dark;
+        text-decoration: none;
+      }
+
+      .events-head {
         border: 1px solid $color-gray-light-4;
         border-radius: $border-radius;
-        text-align: center;
+        font-weight: bold;
+        padding: 0.75rem;
+      }
 
-        thead {
-          background-color: $color-white-2;
+      .events-row {
+        border: 1px solid $color-gray-light-4;
+        border-radius: $border-radius;
+        border-top: none;
+        padding: 0.75rem;
 
-          tr {
-            th {
-              text-align: center;
-            }
-          }
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.075);
+          cursor: pointer;
         }
+      }
 
-        tbody {
-          tr {
-            &:last-child {
-              a {
-                border-bottom: 1px dotted $color-blue;
-                font-weight: bold;
-                text-decoration: none;
-              }
-            }
+      .load-more-events {
+        border: 1px solid $color-gray-light-4;
+        border-radius: $border-radius;
+        border-top: none;
+        padding: 0.75rem;
 
-            &:hover:not(:last-child) {
-              cursor: pointer;
-            }
-          }
+        a {
+          border-bottom: 1px dotted $color-blue;
+          color: $color-blue;
+          font-weight: bold;
+          text-decoration: none;
         }
       }
     }
