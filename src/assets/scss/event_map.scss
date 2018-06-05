@@ -21,15 +21,16 @@
   .map-text {
     background-color: rgba(255, 255, 255, .5);
     border-radius: 2px;
-    bottom: -5px;
     font-size: 120%;
+    width: 280px;
 
     p {
-      color: #000;
-      font-family: "Open Sans Light";
+      color: #444;
+      font-family: 'Open Sans', sans-serif;
       max-height: 10px;
       padding-left: 27px;
       padding-right: 35px;
+      padding-top: 2px;
     }
   }
 
@@ -69,6 +70,12 @@
         width: auto;
       }
     }
+  }
+
+  .leaflet-control-attribution {
+    margin-right: 10px;
+    text-align: center;
+    width: 280px;
   }
 
   /* ZoomHome plugin */

@@ -200,5 +200,10 @@
 
 <style lang="scss">
   @import '../../assets/scss/event_map';
-</style>
 
+  .map {
+    .map-legend {
+      padding: 0;
+    }
+  }
+</style>
