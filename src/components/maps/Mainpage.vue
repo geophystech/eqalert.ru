@@ -203,7 +203,7 @@
 
   .map {
     .map-legend {
-      padding: 0; // 6px 8px;
+      padding: 0;
     }
   }
 </style>
