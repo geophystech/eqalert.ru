@@ -47,15 +47,20 @@
 
           pgaLegend.addTo(this.map.object)
         }
-        this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
+        this.putEpicenter()
       },
       createMap: function() {
         this.map.object = createMap(this.map.id, this.coordinates)
       },
       fetchData: function() {
         this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.event.id))
-          .then(response => { this.addData(response.data.data) })
-          .catch(error => { console.log(error) })
+          .then(response => {
+            this.addData(response.data.data)
+          })
+          .catch(error => {
+            console.log(error)
+            this.putEpicenter()
+          })
       },
       initialize: function() {
         this.map.id = id(this.event.id, this.tab)
@@ -63,17 +68,19 @@
       },
       pgaLineColor: function(range) {
         switch (range) {
-          case '<=0.15': return '#fff5f0'
-          case '0.15-0.3': return '#fee0d2'
-          case '0.3-2.8': return '#fcbba1'
-          case '2.8-6.2': return '#fc9272'
-          case '6.2-12': return '#fb6a4a'
-          case '12-22': return '#ef3b2c'
-          case '22-40': return '#cb181d'
-          case '40-75': return '#a50f15'
-          case '75-139': return '#67000d'
-          case '>139': return '#400000'
+          case '0.15': return '#fff5f0'
+          case '0.3': return '#fee0d2'
+          case '2.8': return '#fcbba1'
+          case '6.2': return '#fc9272'
+          case '12.0': return '#fb6a4a'
+          case '22.0': return '#ef3b2c'
+          case '40.0': return '#cb181d'
+          case '75.0': return '#a50f15'
+          case '139.0': return '#67000d'
         }
+      },
+      putEpicenter: function() {
+        this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
       },
       removeData: function() {
         // Remove PGA polylines.
