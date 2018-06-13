@@ -112,7 +112,7 @@
           })
         })
 
-        this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
+        this.putEpicenter()
       },
       createMap: function() {
         this.map.object = createMap(this.map.id, this.coordinates)
@@ -120,6 +120,9 @@
       initialize: function() {
         this.map.id = id(this.event.id, this.tab)
         this.coordinates = [this.event.locValues.data.lat, this.event.locValues.data.lon]
+      },
+      putEpicenter: function() {
+        this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
       },
       removeData: function() {
         // Remove building markers.
