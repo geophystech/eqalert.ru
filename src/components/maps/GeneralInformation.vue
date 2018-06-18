@@ -23,7 +23,7 @@
         let legendData = ''
 
         Object.keys(data).forEach((key) => {
-          const lineColor = this.pgaLineColor(data[key].range)
+          const lineColor = this.pgaLineColor(key)
           const pga = window.L.polygon(data[key].data, { color: lineColor, weigh: 2 })
 
           this.map.pga.push(pga)
@@ -66,18 +66,10 @@
         this.map.id = id(this.event.id, this.tab)
         this.coordinates = [this.event.locValues.data.lat, this.event.locValues.data.lon]
       },
-      pgaLineColor: function(range) {
-        switch (range) {
-          case '0.15': return '#fff5f0'
-          case '0.3': return '#fee0d2'
-          case '2.8': return '#fcbba1'
-          case '6.2': return '#fc9272'
-          case '12.0': return '#fb6a4a'
-          case '22.0': return '#ef3b2c'
-          case '40.0': return '#cb181d'
-          case '75.0': return '#a50f15'
-          case '139.0': return '#67000d'
-        }
+      pgaLineColor: function(index) {
+        const colors = ['#fff5f0', '#fee0d2', '#fcbba1', '#fc9272', '#fb6a4a', '#ef3b2c', '#cb181d', '#a50f15', '#67000d']
+
+        return colors[index - 1]
       },
       putEpicenter: function() {
         this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
