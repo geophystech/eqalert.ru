@@ -73,7 +73,7 @@
         let legend = window.L.control({ position: 'bottomright' })
 
         legend.onAdd = function() {
-          let div = window.L.DomUtil.create('div', 'map-legend')
+          let div = window.L.DomUtil.create('div', 'map-legend map-legend-mainpage')
           div.innerHTML += '<span style="background:#FF0000;">< 24 ч</span>'
           div.innerHTML += '<span style="background:#FFA500">1-5 дн</span>'
           div.innerHTML += '<span style="background:#FFFF00">6-14 дн</span>'
@@ -202,7 +202,7 @@
   @import '../../assets/scss/event_map';
 
   .map {
-    .map-legend {
+    .map-legend-mainpage {
       padding: 0 !important;
     }
   }
