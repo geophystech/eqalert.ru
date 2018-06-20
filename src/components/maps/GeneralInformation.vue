@@ -20,7 +20,16 @@
     },
     methods: {
       addData: function(data) {
-        let legendData = ''
+        let legendData = `
+          <table>
+            <thead>
+              <tr>
+                <th>ШСИ</th>
+                <th></th>
+                <th>%g</th>
+              </tr>
+            </thead>
+            <tbody>`
 
         Object.keys(data).forEach((key) => {
           const lineColor = this.pgaLineColor(key)
@@ -30,7 +39,21 @@
           pga.addTo(this.map.object)
           pga.bindPopup(`Пиковое ускорение грунта: ${data[key].range}%g (ускорение свободного падения)`)
 
-          legendData += `<i style="background: ${lineColor}"></i>${data[key].range}<br>`
+          const nextRange = data[parseInt(key) + 1]
+          let intensityLegendValue = this.pgaToIntensity(data[key].range)
+          let pgaLegendValue = data[key].range
+
+          if (!nextRange) {
+            intensityLegendValue += `+`
+            pgaLegendValue += `+`
+          }
+
+          legendData += `
+            <tr>
+              <td>${intensityLegendValue}</td>
+              <td><i style="background: ${lineColor}; margin-left: 8px;"></i></td>
+              <td>${pgaLegendValue}</td>
+            </tr>`
         })
 
         // Show map legend just once.
@@ -39,8 +62,7 @@
 
           pgaLegend.onAdd = (map) => {
             const div = window.L.DomUtil.create('div', 'map-legend')
-            div.innerHTML += '<h6>%g</h6>'
-            div.innerHTML += legendData
+            div.innerHTML += legendData + `</tbody></table>`
 
             return div
           }
@@ -70,6 +92,19 @@
         const colors = ['#fff5f0', '#fee0d2', '#fcbba1', '#fc9272', '#fb6a4a', '#ef3b2c', '#cb181d', '#a50f15', '#67000d']
 
         return colors[index - 1]
+      },
+      pgaToIntensity: function(pga) {
+        switch (pga) {
+          case '0.175': return 2.5
+          case '0.28': return 3
+          case '0.7': return 4
+          case '1.75': return 5
+          case '4.4': return 6
+          case '11.0': return 7
+          case '28.0': return 8
+          case '70.0': return 9
+          case '110.0': return 9.5
+        }
       },
       putEpicenter: function() {
         this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
