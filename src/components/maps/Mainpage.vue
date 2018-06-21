@@ -149,7 +149,7 @@
         })
       },
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.map.coordinates)
+        this.map.object = createMap(this.map.id, this.map.coordinates, 5)
       },
       eventColor: function(timeDifference) {
         if (timeDifference <= 24) {
