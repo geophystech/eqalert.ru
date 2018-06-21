@@ -96,7 +96,7 @@ function currentTileProvider() {
   return tileProviders()[tileProvider]
 }
 
-export function createMap(id, coordinates, store) {
+export function createMap(id, coordinates, zoom = 8, store) {
   const options = {
     fullscreenControl: true,
     fullscreenControlOptions: { position: 'topleft' },
@@ -112,6 +112,7 @@ export function createMap(id, coordinates, store) {
   layersControl().addTo(map)
   zoomHome().addTo(map)
   listenerStoreCurrentTileProvider(map, store)
+  map.setZoom(zoom)
 
   return map
 }
