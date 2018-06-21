@@ -37,23 +37,33 @@
 
           this.map.pga.push(pga)
           pga.addTo(this.map.object)
-          pga.bindPopup(`Пиковое ускорение грунта: ${data[key].range}%g (ускорение свободного падения)`)
 
           const nextRange = data[parseInt(key) + 1]
           let intensityLegendValue = this.pgaToIntensity(data[key].range)
           let pgaLegendValue = data[key].range
+          let pgaPopupRange = data[key].range
 
-          if (!nextRange) {
+          if (nextRange) {
+            pgaPopupRange += ` - ${nextRange.range}`
+          } else {
             intensityLegendValue += `+`
             pgaLegendValue += `+`
+            pgaPopupRange += `+`
           }
 
           legendData += `
             <tr>
-              <td>${intensityLegendValue}</td>
+              <td align="right">${intensityLegendValue}</td>
               <td><i style="background: ${lineColor}; margin-left: 8px;"></i></td>
               <td>${pgaLegendValue}</td>
             </tr>`
+
+          const popupMessage = `
+            Пиковое ускорение грунта: ${pgaPopupRange}%g <br>
+            Интенсивность по ШСИ-2017: ${intensityLegendValue} балла
+          `
+
+          pga.bindPopup(popupMessage)
         })
 
         // Show map legend just once.
