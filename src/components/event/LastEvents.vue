@@ -99,7 +99,7 @@
 
       .magnitude {
         color: $color-orange;
-        font-size: 120%;
+        font-size: 115%;
       }
 
       .datetime {
