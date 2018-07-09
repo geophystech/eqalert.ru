@@ -98,7 +98,7 @@
           .catch(error => { console.log(error) })
       },
       setData(data) {
-        data.reverse().forEach(settlement => {
+        data.forEach(settlement => {
           const convertedValue = convertMsk64(settlement.msk64_value)
           const region = settlement.settlement.data.translation.data.region
           const title = settlement.settlement.data.translation.data.title
