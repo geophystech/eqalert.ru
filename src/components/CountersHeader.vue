@@ -2,7 +2,7 @@
   <b-row class="infobar" align-v="center" no-gutters>
     <b-col>
       <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
-      <router-link to="/">Снять ограничения данных</router-link>
+      <router-link to="/sign-in">Снять ограничения данных</router-link>
     </b-col>
     <b-col cols="8">
       Загружено <span class="count">{{ count }}</span> событий
