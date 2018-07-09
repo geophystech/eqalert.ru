@@ -38,7 +38,7 @@
         this.$http.get(this.$root.$options.settings.api.endpointEvents, {
           params: {
             limit: 10,
-            show_nearest_city: 1
+            include: 'nearestCity'
           }
         })
           .then(response => {

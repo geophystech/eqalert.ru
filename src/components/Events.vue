@@ -63,7 +63,7 @@ export default {
       apiParams: {
         cursor: '',
         limit: 10,
-        show_nearest_city: 1
+        include: 'nearestCity'
       },
       events: [],
       disabledFilters: false,
