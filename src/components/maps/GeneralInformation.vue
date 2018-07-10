@@ -4,6 +4,7 @@
 
 <script>
   import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
+  import { numberDeclension } from '@/helpers/numbers.js'
 
   export default {
     props: ['event', 'tab'],
@@ -60,7 +61,7 @@
 
           const popupMessage = `
             Пиковое ускорение грунта: ${pgaPopupRange}%g <br>
-            Интенсивность по ШСИ-2017: ${intensityLegendValue} балла
+            Интенсивность по ШСИ-2017: ${intensityLegendValue} ${numberDeclension(intensityLegendValue, ['балл', 'балла', 'баллов'])}
           `
 
           pga.bindPopup(popupMessage)
