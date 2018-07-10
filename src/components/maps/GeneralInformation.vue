@@ -42,9 +42,11 @@
           const nextRange = data[parseInt(key) + 1]
           let intensityLegendValue = this.pgaToIntensity(data[key].range)
           let pgaLegendValue = data[key].range
+          let intensityPopupRange = intensityLegendValue
           let pgaPopupRange = data[key].range
 
           if (nextRange) {
+            intensityPopupRange += ` - ${this.pgaToIntensity(nextRange.range)}`
             pgaPopupRange += ` - ${nextRange.range}`
           } else {
             intensityLegendValue += `+`
@@ -61,7 +63,7 @@
 
           const popupMessage = `
             Пиковое ускорение грунта: ${pgaPopupRange}%g <br>
-            Интенсивность по ШСИ-2017: ${intensityLegendValue} ${numberDeclension(intensityLegendValue, ['балл', 'балла', 'баллов'])}
+            Интенсивность по ШСИ-2017: ${intensityPopupRange} ${numberDeclension(intensityLegendValue, ['балл', 'балла', 'баллов'])}
           `
 
           pga.bindPopup(popupMessage)
