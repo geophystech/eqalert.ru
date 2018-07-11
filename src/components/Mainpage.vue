@@ -56,6 +56,7 @@
 
   .mainpage {
     .map {
+      height: 700px;
       margin-top: 2%;
     }
 
