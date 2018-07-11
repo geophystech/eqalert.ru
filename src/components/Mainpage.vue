@@ -3,31 +3,6 @@
     <MainpageMap />
 
     <b-container>
-      <b-row>
-        <b-col class="events-analytics-block">
-          <b-row>
-            <MainpageLastEvents />
-
-            <b-col>
-              <b-row class="d-flex justify-content-center header">
-                <h4>
-                  <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
-                </h4>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <ChartByDatetime :height="300" />
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <ChartByMagnitudeCumulative :height="300" />
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
       <b-row class="partners">
         <b-col>
           <b-row class="d-flex justify-content-center">
@@ -63,15 +38,14 @@
 <script>
   import ChartByDatetime from '@/components/charts/ChartByDatetime'
   import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
-  import MainpageLastEvents from '@/components/MainpageLastEvents'
   import MainpageMap from '@/components/maps/Mainpage'
 
   export default {
     components: {
       ChartByDatetime,
       ChartByMagnitudeCumulative,
-      MainpageLastEvents,
-      MainpageMap }
+      MainpageMap
+    }
   }
 </script>
 
