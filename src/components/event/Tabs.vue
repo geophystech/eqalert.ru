@@ -49,8 +49,9 @@
       }
     },
     metaInfo() {
+      console.log(this.event)
       return {
-        title: `${this.currentTabName()} | ${this.event.id}`
+        title: `${this.event.id} | Землетрясение M${this.event.magnitude} | ${this.currentTabName()}`
       }
     },
     methods: {
