@@ -1168,18 +1168,24 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap-vue@^1.0.0-beta.9:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-1.2.0.tgz#137aa803e7d910a0b63a7cc3816d7d180c3f7575"
+bootstrap-vue@^2.0.0-rc.11:
+  version "2.0.0-rc.11"
+  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-2.0.0-rc.11.tgz#47aaa6d2a8d390477de75e636d8ea652b1d03f59"
   dependencies:
+    bootstrap "^4.1.1"
+    lodash.get "^4.4.2"
     lodash.startcase "^4.4.0"
     opencollective "^1.0.3"
     popper.js "^1.12.9"
-    vue-functional-data-merge "^1.0.6"
+    vue-functional-data-merge "^2.0.5"
 
 bootstrap@4.0.0-beta.2:
   version "4.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
+
+bootstrap@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.1.tgz#3aec85000fa619085da8d2e4983dfd67cf2114cb"
 
 brace-expansion@^1.0.0, brace-expansion@^1.1.7:
   version "1.1.8"
@@ -4623,6 +4629,10 @@ lodash.defaultsdeep@4.3.2:
     lodash.mergewith "^4.0.0"
     lodash.rest "^4.0.0"
 
+lodash.get@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
+
 lodash.isarguments@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
@@ -7753,9 +7763,9 @@ vue-flatpickr-component@^7.0.2:
   dependencies:
     flatpickr "^4.4.6"
 
-vue-functional-data-merge@^1.0.6:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-1.0.7.tgz#0c8876c91bc5968882dff3f7ef91f62619e1fdfe"
+vue-functional-data-merge@^2.0.5:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.6.tgz#f08055adfb92458debcf2ad10c3aa712277f7fc2"
 
 vue-hot-reload-api@^2.2.0:
   version "2.2.4"
