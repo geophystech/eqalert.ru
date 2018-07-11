@@ -3,34 +3,9 @@
     <MainpageMap />
 
     <b-container>
-      <b-row>
-        <b-col class="events-analytics-block">
-          <b-row>
-            <MainpageLastEvents />
-
-            <b-col>
-              <b-row class="d-flex justify-content-center header">
-                <h4>
-                  <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
-                </h4>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <ChartByDatetime :height="300" />
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <ChartByMagnitudeCumulative :height="300" />
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
       <b-row class="partners">
         <b-col>
-          <b-row class="d-flex justify-content-center">
+          <b-row class="d-flex justify-content-center header">
             <h4>Партнёры проекта</h4>
           </b-row>
           <b-row class="d-flex align-items-center">
@@ -63,15 +38,14 @@
 <script>
   import ChartByDatetime from '@/components/charts/ChartByDatetime'
   import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
-  import MainpageLastEvents from '@/components/MainpageLastEvents'
   import MainpageMap from '@/components/maps/Mainpage'
 
   export default {
     components: {
       ChartByDatetime,
       ChartByMagnitudeCumulative,
-      MainpageLastEvents,
-      MainpageMap }
+      MainpageMap
+    }
   }
 </script>
 
@@ -82,6 +56,7 @@
 
   .mainpage {
     .map {
+      height: 700px;
       margin-top: 2%;
     }
 
@@ -108,23 +83,19 @@
       padding-bottom: 3%;
       padding-top: 3%;
 
-      .row:last-child {
-        height: 250px;
+      .header {
+        padding-bottom: 3%;
       }
 
       .col:nth-child(3) {
         img {
-          max-width: 90%;
+          max-width: 60%;
         }
-      }
-
-      h4 {
-        margin-bottom: 3%;
       }
 
       img {
         filter: grayscale(100%);
-        max-width: 50%;
+        max-width: 25%;
 
         &:hover {
           filter: grayscale(0%);
