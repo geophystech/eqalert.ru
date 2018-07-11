@@ -5,7 +5,7 @@
     <b-container>
       <b-row class="partners">
         <b-col>
-          <b-row class="d-flex justify-content-center">
+          <b-row class="d-flex justify-content-center header">
             <h4>Партнёры проекта</h4>
           </b-row>
           <b-row class="d-flex align-items-center">
@@ -82,23 +82,19 @@
       padding-bottom: 3%;
       padding-top: 3%;
 
-      .row:last-child {
-        height: 250px;
+      .header {
+        padding-bottom: 3%;
       }
 
       .col:nth-child(3) {
         img {
-          max-width: 90%;
+          max-width: 60%;
         }
-      }
-
-      h4 {
-        margin-bottom: 3%;
       }
 
       img {
         filter: grayscale(100%);
-        max-width: 50%;
+        max-width: 25%;
 
         &:hover {
           filter: grayscale(0%);
