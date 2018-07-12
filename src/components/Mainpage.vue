@@ -55,9 +55,10 @@
   $border: 1px $color-gray-light solid;
 
   .mainpage {
+    padding-top: 2%;
+
     .map {
       height: 700px;
-      margin-top: 2%;
     }
 
     .events-analytics-block {
@@ -80,6 +81,7 @@
     .partners {
       background-color: $color-gray-light-3;
       border: $border;
+      margin-top: 3%;
       padding-bottom: 3%;
       padding-top: 3%;
 
