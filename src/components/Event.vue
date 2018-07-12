@@ -121,3 +121,10 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .event-tab {
+    margin-top: 5%;
+  }
+</style>
+
