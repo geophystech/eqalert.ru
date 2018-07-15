@@ -65,7 +65,11 @@
     },
     methods: {
       fetchData: function(id) {
-        this.$http.get(this.$root.$options.settings.api.endpointEvent(id))
+        this.$http.get(this.$root.$options.settings.api.endpointEvent(id), {
+          params: {
+            include: 'nearestCity'
+          }
+        })
           .then(response => {
             this.setData(response.data.data)
           })

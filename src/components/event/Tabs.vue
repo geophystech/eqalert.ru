@@ -14,6 +14,8 @@
 </template>
 
 <script>
+  import { round } from '@/helpers/math.js'
+
   export default {
     props: ['event'],
     data() {
@@ -49,9 +51,8 @@
       }
     },
     metaInfo() {
-      console.log(this.event)
       return {
-        title: `${this.event.id} | Землетрясение M${this.event.magnitude} | ${this.currentTabName()}`
+        title: this.getTitle()
       }
     },
     methods: {
@@ -82,6 +83,20 @@
         if (tab) params.tab = tab
 
         return this.$router.resolve({ name: 'Event', params: params }).href
+      },
+      getTitle: function() {
+        const id = this.event.id
+        const magnitude = `Землетрясение M${this.event.magnitude}`
+        let settlement = ``
+
+        if (this.event.nearestCity) {
+          const distance = round(this.event.nearestCity.data.ep_dis, 2)
+          const title = this.event.nearestCity.data.settlement.data.translation.data.title
+
+          settlement = `| ${distance} км до ${title}`
+        }
+
+        return `${id} | ${magnitude} ${settlement}`
       },
       onTabSwitch: function(object) {
         const tab = Object.keys(this.tabs).find(key => this.tabs[key].href === object.href)
