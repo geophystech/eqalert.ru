@@ -35,6 +35,6 @@
   (-webkit-min-device-pixel-ratio:2),
   (min-resolution:192dpi) {
     .leaflet-control-fullscreen a {
-      background-image:url(/static/img/leaflet/fullscreen@2x.png);
+      background-image:url(/static/img/leaflet/fullscreen.png);
     }
   }
