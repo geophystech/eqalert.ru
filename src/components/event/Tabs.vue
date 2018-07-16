@@ -92,11 +92,11 @@
         if (this.event.nearestCity) {
           const distance = round(this.event.nearestCity.data.ep_dis, 2)
           const title = this.event.nearestCity.data.settlement.data.translation.data.title
-
-          settlement = `| ${distance} км до ${title}`
+          const region = this.event.nearestCity.data.settlement.data.translation.data.region
+          settlement = `| ${distance} км до ${title}, ${region}`
         }
 
-        return `${id} | ${magnitude} ${settlement}`
+        return `${magnitude} ${settlement} | ${this.currentTabName()} | ${id}`
       },
       onTabSwitch: function(object) {
         const tab = Object.keys(this.tabs).find(key => this.tabs[key].href === object.href)
