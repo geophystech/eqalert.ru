@@ -10,11 +10,11 @@
         </b-row>
       </b-col>
 
-      <b-col cols="12" md="6" order="1" order-md="2" class="text-center" id="geophystech-website">
+      <b-col cols="12" md="4" order="1" order-md="2" class="text-center" id="geophystech-website">
         <a href="https://geophystech.ru/">ООО "Геофизические технологии"</a>
       </b-col>
 
-      <b-col cols="2" md="2" order="3" order-md="3" align-self="center" class="text-right align-self-md-start" id="social-media-links">
+      <b-col cols="2" md="4" order="3" order-md="3" align-self="center" class="text-right align-self-md-start" id="social-media-links">
         <a href="https://telegram.me/eqalert_ru_bot"><i class="fa fa-telegram" aria-hidden="true" /></a>
       </b-col>
     </b-row>
