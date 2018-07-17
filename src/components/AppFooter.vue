@@ -43,6 +43,12 @@ export default {
       color: $color-gray-dark;
     }
 
+    @media screen and (max-width: 767px) {
+      #geophystech-website {
+        margin-bottom: 5%;
+      }
+    }
+
     #social-media-links {
       a {
         font-size: 150%;
