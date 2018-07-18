@@ -1,13 +1,15 @@
 <template>
     <header id="header">
       <b-row class="align-items-center">
-        <b-col class="align-items-center d-flex justify-content-end">
-          <span class="mr-auto" id="logo">
+        <b-col cols="6" md="2">
+          <span id="logo">
             <router-link to="/" alt="eqalert.ru">
               <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
             </router-link>
           </span>
+        </b-col>
 
+        <b-col cols="6" md="1" class="text-right">
           <router-link to="events">
             <span id="events-count">
               <span class="exclamation-mark">!</span>
@@ -16,18 +18,20 @@
           </router-link>
         </b-col>
 
-        <b-col class="did-you-feel-it text-center">
+        <b-col class="did-you-feel-it text-center" cols="8" md="4">
           <a href="https://goo.gl/forms/Hd4E0BcA2ffRNjfY2" target="_blank">
             Ощутили землетрясение?
           </a>
         </b-col>
 
-        <b-col class="align-items-center d-flex justify-content-end">
-          <span class="mr-auto" id="page-links">
+        <b-col class="d-none d-md-block" md="3">
+          <span class="mr-auto d-none d-sm-block" id="page-links">
             <router-link :to="{ name: 'Events', query: { hasMt: 1 } }" key="events-with-mt">Тензор момента</router-link>
             <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
           </span>
+        </b-col>
 
+        <b-col class="sign-block text-right" cols="4" md="2">
           <span class="sign-in-out" v-if="$store.getters.user.authenticated">
             <a href="javascript:void(0)" v-on:click="signOut" key="sign-out">
               Выйти
@@ -79,6 +83,13 @@
   }
 
   .did-you-feel-it {
+    @media screen and (max-width: 767px) {
+      margin-top: 5%;
+      text-align: left !important;
+    }
+
+    font-size: 90%;
+
     a {
       color: $color-orange;
       font-weight: bold;
@@ -90,5 +101,10 @@
     font-weight: bold;
   }
 
+  .sign-block {
+    @media screen and (max-width: 767px) {
+      margin-top: 5%;
+    }
+  }
 </style>
 
