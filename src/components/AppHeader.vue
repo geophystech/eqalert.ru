@@ -84,11 +84,10 @@
 
   .did-you-feel-it {
     @media screen and (max-width: 767px) {
+      font-size: 90%;
       margin-top: 5%;
       text-align: left !important;
     }
-
-    font-size: 90%;
 
     a {
       color: $color-orange;
