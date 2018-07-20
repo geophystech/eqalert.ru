@@ -89,6 +89,7 @@
           case 'W': return [['M', 'W']]
           case 'G': return [['M', 'b'], ['L', 'g']]
           case 'C': return [['M', 'c']]
+          case 'mww': return [['M', 'mww']]
           default: return [['M', '']]
         }
       },
