@@ -62,6 +62,10 @@
                   <th scope="row">ID</th>
                   <td>${event.id}</td>
                 </tr>
+                <tr>
+                  <th scope="row">Агенство</th>
+                  <td>${this.agency(event.agency)}</td>
+                </tr>
               </tbody>
             </table>
             <div class="text-center read-more"><a href="#/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
@@ -147,6 +151,13 @@
           marker.bindPopup(message)
           this.map.object.addLayer(marker)
         })
+      },
+      agency: function(agency) {
+        switch (agency) {
+          case 'SAK': return 'GEOPHYSTECH LLC'
+          case 'USGS': return 'USGS Earthquake Hazards Program'
+          default: return 'Unknown'
+        }
       },
       createMap: function() {
         this.map.object = createMap(this.map.id, this.map.coordinates, 5)
