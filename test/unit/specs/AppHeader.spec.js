@@ -25,8 +25,6 @@ describe('AppHeader.vue', () => {
       const logoLink = logoContainer.find('a')
       const logoImage = logoLink.find('img')
 
-      expect(logoContainer.classes()).to.contain('mr-auto')
-
       expect(logoLink.attributes().alt).to.equal('eqalert.ru')
       expect(logoLink.attributes().href).to.equal('#/')
 
