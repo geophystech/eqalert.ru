@@ -4,7 +4,7 @@
 
 <script>
   import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
-  import { numberDeclension } from '@/helpers/numbers.js'
+  import { numberDeclension } from '@/helpers/number.js'
 
   export default {
     props: ['event', 'tab'],
