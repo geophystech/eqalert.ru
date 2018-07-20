@@ -63,7 +63,7 @@
                   <td>${event.id}</td>
                 </tr>
                 <tr>
-                  <th scope="row">Агенство</th>
+                  <th scope="row">Агентство</th>
                   <td>${this.agency(event.agency)}</td>
                 </tr>
               </tbody>
