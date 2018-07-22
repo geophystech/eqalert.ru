@@ -24,7 +24,7 @@
             <b-col>{{ index + 1 }}</b-col>
             <b-col>
               <span :class="{ 'highlight-event': event.locValues.data.mag > highlightEventTreshold }">
-                {{ event.locValues.data.mag }}
+                {{ event.locValues.data.mag.toFixed(1) }}
               </span>
             </b-col>
             <b-col>{{ event.locValues.data.depth }} км</b-col>
