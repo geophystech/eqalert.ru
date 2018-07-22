@@ -25,7 +25,7 @@
           const depth = event.locValues.data.depth
           const latitude = event.locValues.data.lat
           const longitude = event.locValues.data.lon
-          const magnitude = event.locValues.data.mag
+          const magnitude = event.locValues.data.mag.toFixed(1)
           const magnitudeType = event.locValues.data.mag_t
           const options = {
             color: 'black',

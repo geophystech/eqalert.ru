@@ -6,7 +6,7 @@
       <b-row no-gutters :class="{ event: true, 'highlight-event': highlightEvent(event.id) }" align-v="center" v-for="event in events" :key="event.id">
         <router-link :to="{ name: 'Event', params: { id: event.id } }" class="d-flex align-items-center" :key="event.id">
           <b-col cols="2" class="magnitude text-center">
-            <strong>{{ event.locValues.data.mag }}</strong>
+            <strong>{{ event.locValues.data.mag.toFixed(1) }}</strong>
           </b-col>
           <b-col class="event-data">
             <div class="settlement">

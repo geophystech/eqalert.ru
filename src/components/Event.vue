@@ -106,7 +106,7 @@
       setData: function(data) {
         this.event = data
         this.event.datetime = data.locValues.data.event_datetime
-        this.event.magnitude = data.locValues.data.mag
+        this.event.magnitude = data.locValues.data.mag.toFixed(1)
         this.event.magnitudeType = this.magnitudeType(data.locValues.data.mag_t)
         this.event.processingMethod = this.processingMethod(data.has_auto, data.has_manual)
       }
