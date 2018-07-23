@@ -9,22 +9,22 @@
             <h4>Партнёры проекта</h4>
           </b-row>
           <b-row class="d-flex align-items-center">
-            <b-col class="text-center">
+            <b-col class="text-center" cols="6" md="3">
               <img src="../assets/img/logos/mchs.png" class="img-responsive" id="logo-mchs" alt="МЧС России" />
               <b-tooltip target="logo-mchs" title="МЧС России"></b-tooltip>
             </b-col>
 
-            <b-col class="text-center">
+            <b-col class="text-center" cols="6" md="3">
               <img src="../assets/img/logos/sakhalin-government.png" class="img-responsive" id="logo-sakhalin-government" alt="Правительство Сахалинской области" />
               <b-tooltip target="logo-sakhalin-government" title="Правительство Сахалинской области"></b-tooltip>
             </b-col>
 
-            <b-col class="text-center">
+            <b-col class="text-center" cols="6" md="3">
               <img src="../assets/img/logos/idg.jpg" class="img-responsive" id="logo-idg" alt="ИДГ РАН" />
               <b-tooltip target="logo-idg" title="ИДГ РАН"></b-tooltip>
             </b-col>
 
-            <b-col class="text-center">
+            <b-col class="text-center" cols="6" md="3">
               <img src="../assets/img/logos/vc.png" class="img-responsive" id="logo-vc" alt="ВЦ ДВО РАН" />
               <b-tooltip target="logo-vc" title="ВЦ ДВО РАН"></b-tooltip>
             </b-col>
@@ -89,18 +89,24 @@
         padding-bottom: 3%;
       }
 
-      .col:nth-child(3) {
-        img {
-          max-width: 60%;
-        }
+    @media screen and (max-width: 767px) {
+      .col-6:nth-child(3),
+      .col-6:nth-child(4) {
+        margin-top: 5%;
       }
 
-      img {
-        filter: grayscale(100%);
-        max-width: 25%;
+      #logo-idg {
+        max-width: 80%;
+      }
+    }
 
-        &:hover {
-          filter: grayscale(0%);
+    @media screen and (min-width: 768px) {
+        img {
+          filter: grayscale(100%);
+
+          &:hover {
+            filter: grayscale(0%);
+          }
         }
       }
     }
