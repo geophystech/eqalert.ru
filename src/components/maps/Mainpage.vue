@@ -3,7 +3,8 @@
 </template>
 
 <script>
-  import { createMap } from '@/map_functions.js'
+  import { createMap } from '@/map_functions'
+  import { agency } from '@/helpers/event'
 
   export default {
     data() {
@@ -64,7 +65,7 @@
                 </tr>
                 <tr>
                   <th scope="row">Агентство</th>
-                  <td>${this.agency(event.agency)}</td>
+                  <td>${agency(event.agency)}</td>
                 </tr>
               </tbody>
             </table>
@@ -151,13 +152,6 @@
           marker.bindPopup(message)
           this.map.object.addLayer(marker)
         })
-      },
-      agency: function(agency) {
-        switch (agency) {
-          case 'SAK': return 'GEOPHYSTECH LLC'
-          case 'USGS': return 'USGS Earthquake Hazards Program'
-          default: return 'Unknown'
-        }
       },
       createMap: function() {
         this.map.object = createMap(this.map.id, this.map.coordinates, 5)
