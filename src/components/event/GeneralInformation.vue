@@ -14,6 +14,8 @@
 </template>
 
 <script>
+  import { agency } from '@/helpers/event'
+
   export default {
     props: ['event'],
     data() {
@@ -27,7 +29,8 @@
           { parameter: 'Азимутальная брешь', value: null, error: null, description: 'Параметр характерезующий плотность сети вокруг эпицентра' },
           { parameter: 'RMS', value: null, error: null, description: 'Суммарная невязка по внутренней сходимости' },
           { parameter: 'Число станций', value: null, error: null, description: 'Количество станций задействованных в обработке для этого землетрясения' },
-          { parameter: 'Метод обработки', value: null, error: null, description: 'Ручная или автоматическая обработка' }
+          { parameter: 'Метод обработки', value: null, error: null, description: 'Ручная или автоматическая обработка' },
+          { parameter: 'Агентство', value: null, error: null, description: 'Источник данных' }
         ],
         fields: [
           { key: 'index', label: '#' },
@@ -56,6 +59,7 @@
         this.items[6].value = data.locValues.data.rms
         this.items[7].value = data.locValues.data.sta_num
         this.items[8].value = data.processingMethod.long
+        this.items[9].value = agency(data.agency)
       }
     },
     watch: {

@@ -17,6 +17,9 @@
             <span class="processing-method">
               {{ event.processingMethod.short }}
             </span>
+            <b-badge v-if="agency.title" class="agency" v-b-popover.hover.auto="agency.description">
+              {{ agency.title }}
+            </b-badge>
           </h5>
         </b-col>
       </b-row>
@@ -43,12 +46,17 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
+  import { agency, agencyDescription } from '@/helpers/event'
 
   export default {
     components: { Spinner },
     props: ['event'],
     data() {
       return {
+        agency: {
+          title: '',
+          description: ''
+        },
         breadcrumbs: [
           {
             text: 'Главная',
@@ -65,6 +73,10 @@
       }
     },
     methods: {
+      setAgency: function(data) {
+        this.agency.title = agency(data, false)
+        this.agency.description = agencyDescription(data)
+      },
       setLabel: function(event) {
         if (event.has_delete) {
           this.label = {
@@ -94,6 +106,7 @@
       event: function(value) {
         this.breadcrumbs[2].text = value.id
         this.setLabel(value.id)
+        this.setAgency(value.agency)
       }
     }
   }
@@ -114,6 +127,11 @@
       .active {
         color: $color-gray-dark;
       }
+    }
+
+    .agency {
+      font-size: 50% !important;
+      vertical-align: top;
     }
 
     .badge {
