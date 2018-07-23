@@ -1,12 +1,17 @@
 <template>
     <nav id="navbar">
-      <b-navbar>
-        <b-nav justified>
-          <b-nav-item :to="{ name: 'Events' }" key="events">Все землетрясения</b-nav-item>
-          <b-nav-item :to="{ name: 'StaticPage', params: { page: 'stations' } }" key="static-page-stations">Сеть станций</b-nav-item>
-          <li><a href="https://geophystech.ru/services/seismic-monitoring-system/" class="nav-link">Мониторинг объектов</a></li>
-          <b-nav-item :to="{ name: 'StaticPage', params: { page: 'about' } }" key="static-page-about">О сервисе</b-nav-item>
-        </b-nav>
+      <b-navbar toggleable="md" type="dark">
+        <b-navbar-toggle target="nav_collapse">
+          <i class="fa fa-navicon" aria-hidden="true" />
+        </b-navbar-toggle>
+        <b-collapse is-nav id="nav_collapse">
+          <b-navbar-nav justified>
+            <b-nav-item :to="{ name: 'Events' }" key="events">Все землетрясения</b-nav-item>
+            <b-nav-item :to="{ name: 'StaticPage', params: { page: 'stations' } }" key="static-page-stations">Сеть станций</b-nav-item>
+            <li><a href="https://geophystech.ru/services/seismic-monitoring-system/" class="nav-item nav-link">Мониторинг объектов</a></li>
+            <b-nav-item :to="{ name: 'StaticPage', params: { page: 'about' } }" key="static-page-about">О сервисе</b-nav-item>
+          </b-navbar-nav>
+        </b-collapse>
       </b-navbar>
     </nav>
 </template>
@@ -37,9 +42,16 @@ export default {
 
   .navbar {
     width: 100%;
-    padding-bottom: 1px;
-    padding-top: 8px;
     margin: 0;
+
+    @media screen and (max-width: 767px) {
+      padding-left: 0;
+    }
+
+    @media screen and (min-width: 768px) {
+      padding-bottom: 1px;
+      padding-top: 8px;
+    }
 
     ul {
       width: 100%;
@@ -62,6 +74,13 @@ export default {
 
   .active {
     border-bottom: $border-bottom-orange !important;
+  }
+
+  .navbar-toggler {
+    border: none;
+
+    // .navbar-toggler-icon {
+    // }
   }
 </style>
 
