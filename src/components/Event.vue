@@ -6,7 +6,11 @@
     <b-row>
       <b-col cols="8">
         <keep-alive>
-          <component :is="components.maps[components.currentTab]" :tab="components.currentTab" :event="event" v-if="event.id" />
+          <component
+            :is="components.maps[components.currentTab]"
+            :tab="components.currentTab"
+            :event="event"
+            v-if="event.id && !$root.onMobile" />
         </keep-alive>
 
         <keep-alive>
