@@ -1,6 +1,6 @@
 <template>
   <div class="mainpage">
-    <MainpageMap v-if="$root.onMobile" />
+    <MainpageMap v-if="!$root.onMobile" />
 
     <b-container>
       <b-row class="partners">

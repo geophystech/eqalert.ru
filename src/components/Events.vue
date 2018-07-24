@@ -6,7 +6,7 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" key="mainpage-filters" />
+      <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" key="mainpage-filters" v-if="!$root.onMobile" />
 
       <b-col class="all-events">
         <Spinner line-fg-color="#337ab7" :line-size="1" v-if="spinners.loadMoreEvents && !events.length" />

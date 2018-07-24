@@ -81,7 +81,7 @@ new Vue({
   components: { App },
   computed: {
     onMobile: function() {
-      return screen.width > 767
+      return screen.width < 768
     }
   }
 })
