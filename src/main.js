@@ -78,5 +78,10 @@ new Vue({
     stations: StationsSettings
   },
   template: '<App/>',
-  components: { App }
+  components: { App },
+  computed: {
+    onMobile: function() {
+      return screen.width > 767
+    }
+  }
 })
