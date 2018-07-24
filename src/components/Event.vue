@@ -1,7 +1,7 @@
 <template>
   <div class="event">
     <component :is="components.header" :event="event" />
-    <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id"/>
+    <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id" />
 
     <b-row>
       <b-col cols="8">
@@ -15,7 +15,7 @@
       </b-col>
       <b-col cols="4">
         <keep-alive>
-          <component :is="components.lastEvents" :event="event"/>
+          <component :is="components.lastEvents" :event="event" v-if="!$root.onMobile" />
         </keep-alive>
       </b-col>
     </b-row>
