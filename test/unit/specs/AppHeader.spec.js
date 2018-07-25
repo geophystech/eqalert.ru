@@ -50,7 +50,7 @@ describe('AppHeader.vue', () => {
 
       expect(pageLinks.length).to.equal(2)
 
-      expect(eventsLink.attributes().href).to.equal('/events?hasMt=1')
+      expect(eventsLink.attributes().href).to.equal('#/events?hasMt=1')
       expect(eventsLink.text()).to.equal('Тензор момента')
 
       expect(analyticsLink.attributes().href).to.equal('#/analytics')
