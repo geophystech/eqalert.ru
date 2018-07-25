@@ -69,7 +69,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center read-more"><a href="#/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
+            <div class="text-center read-more"><a href="/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
 
           marker.bindPopup(message)
           marker.addTo(this.map.object)
