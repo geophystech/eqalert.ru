@@ -8,7 +8,7 @@
           <b-col cols="2" class="magnitude text-center">
             <strong>{{ event.locValues.data.mag.toFixed(1) }}</strong>
           </b-col>
-          <b-col class="event-data">
+          <b-col cols="10" class="event-data">
             <div class="settlement">
               {{ event.settlement }}
             </div>
@@ -57,7 +57,9 @@
           .catch(error => { console.log(error) })
       },
       highlightEvent: function(id) {
-        return id === this.event.id
+        if (this.event) return id === this.event.id
+
+        return false
       }
     },
     created() {
@@ -92,9 +94,14 @@
         border-bottom: $border;
       }
 
-      .event-data {
-        padding-left: 0;
+      .col-2 {
+        padding-left: 1%;
         padding-right: 0;
+      }
+
+      .col-10 {
+        padding-left: 1%;
+        padding-right: 5%;
       }
 
       .magnitude {

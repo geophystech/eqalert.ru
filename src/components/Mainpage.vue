@@ -1,5 +1,6 @@
 <template>
   <div class="mainpage">
+    <LastEvents v-if="$root.onMobile" />
     <MainpageMap v-if="!$root.onMobile" />
 
     <b-container>
@@ -38,12 +39,14 @@
 <script>
   import ChartByDatetime from '@/components/charts/ChartByDatetime'
   import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
+  import LastEvents from '@/components/event/LastEvents'
   import MainpageMap from '@/components/maps/Mainpage'
 
   export default {
     components: {
       ChartByDatetime,
       ChartByMagnitudeCumulative,
+      LastEvents,
       MainpageMap
     }
   }
