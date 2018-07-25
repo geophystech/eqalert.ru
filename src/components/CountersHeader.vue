@@ -1,12 +1,14 @@
 <template>
   <b-row class="infobar" align-v="center" no-gutters>
-    <b-col>
-      <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
-      <router-link to="/sign-in">Снять ограничения данных</router-link>
+    <b-col cols="2" md="4" class="text-center text-md-left">
+      <router-link to="/sign-in">
+        <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
+        <span v-if="!$root.onMobile">Снять ограничения данных</span>
+      </router-link>
     </b-col>
-    <b-col cols="8">
+    <b-col cols="10" md="8" class="text-center text-md-left">
       Загружено <span class="count">{{ count }}</span> событий
-      <span v-if="count">({{ startDate }} — {{ endDate }})</span>
+      <span v-if="count && !$root.onMobile">({{ startDate }} — {{ endDate }})</span>
     </b-col>
   </b-row>
 </template>
