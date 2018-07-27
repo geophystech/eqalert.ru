@@ -12,24 +12,24 @@
         <Spinner line-fg-color="#337ab7" :line-size="1" v-if="spinners.loadMoreEvents && !events.length" />
 
         <b-row no-gutters class="events-head text-center">
-          <b-col>#</b-col>
-          <b-col>Магнитуда</b-col>
-          <b-col>Глубина</b-col>
-          <b-col cols="4">Дата и время</b-col>
-          <b-col cols="4">Ближайший населённый пункт</b-col>
+          <b-col v-if="!$root.onMobile" md="1">#</b-col>
+          <b-col cols="3" md="1">Магнитуда</b-col>
+          <b-col cols="3" md="2">Глубина</b-col>
+          <b-col cols="6" md="4" class="datetime">Дата и время</b-col>
+          <b-col cols="12" md="4" v-if="!$root.onMobile">Ближайший населённый пункт</b-col>
         </b-row>
 
         <router-link v-for="(event, index) in events" :key="event.id" :to="{ name: 'Event', params: { id: event.id } }">
           <b-row no-gutters class="events-row text-center">
-            <b-col>{{ index + 1 }}</b-col>
-            <b-col>
+            <b-col v-if="!$root.onMobile" md="1">{{ index + 1 }}</b-col>
+            <b-col cols="3" md="1">
               <span :class="{ 'highlight-event': event.locValues.data.mag > highlightEventTreshold }">
                 {{ event.locValues.data.mag.toFixed(1) }}
               </span>
             </b-col>
-            <b-col>{{ event.locValues.data.depth }} км</b-col>
-            <b-col cols="4">{{ event.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }}</b-col>
-            <b-col cols="4">
+            <b-col cols="3" md="2">{{ event.locValues.data.depth }} км</b-col>
+            <b-col cols="6" md="4" class="datetime">{{ event.locValues.data.event_datetime | moment(datetimeFormat) }}</b-col>
+            <b-col cols="12" md="4" class="settlement" v-if="!$root.onMobile">
               <span v-if="!event.nearestCity">Нет данных</span>
               <span v-else>
                 {{ round(event.nearestCity.data.ep_dis, 1) }} км до {{ event.nearestCity.data.settlement.data.translation.data.title }}
@@ -78,6 +78,13 @@ export default {
   computed: {
     round: function() {
       return round
+    },
+    datetimeFormat: function() {
+      if (this.$root.onMobile) {
+        return 'L в HH:mm:ss'
+      } else {
+        return 'LL в HH:mm:ss UTC'
+      }
     }
   },
   metaInfo: {
@@ -144,11 +151,29 @@ export default {
         text-decoration: none;
       }
 
+      .datetime {
+        @media screen and (max-width: 767px) {
+          font-size: 90%;
+          margin-top: 1%;
+        }
+      }
+
       .events-head {
         border: 1px solid $color-gray-light-4;
         border-radius: $border-radius;
         font-weight: bold;
         padding: 0.75rem;
+
+        @media screen and (max-width: 767px) {
+          font-size: 70%;
+        }
+
+        .datetime {
+          @media screen and (max-width: 767px) {
+            font-size: 100%;
+            margin-top: 0;
+          }
+        }
       }
 
       .events-row {
@@ -160,6 +185,13 @@ export default {
         &:hover {
           background-color: rgba(0, 0, 0, 0.075);
           cursor: pointer;
+        }
+
+        .datetime {
+          @media screen and (max-width: 767px) {
+            font-size: 90%;
+            margin-top: 1%;
+          }
         }
       }
 
