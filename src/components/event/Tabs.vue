@@ -6,9 +6,22 @@
         :active="isTabActive(tab)"
         :href="tab.href"
         @click="onTabSwitch(tab)"
-        v-if="isTabAvailable(tab)">
+        v-if="!$root.onMobile && isTabAvailable(tab)">
         {{ tab.text }}
       </b-nav-item>
+
+    <b-form-select
+      v-if="$root.onMobile"
+      v-model="activeTab"
+      @change="onTabSwitch">
+        <option
+          v-if="isTabAvailable(tab)"
+          v-for="tab in tabs"
+          :key="tab.href"
+          :value="tab.href">
+            {{ tab.text }}
+        </option>
+    </b-form-select>
     </template>
   </b-tabs>
 </template>
@@ -20,7 +33,7 @@
     props: ['event'],
     data() {
       return {
-        activeTab: this.$router.currentRoute.fullPath,
+        activeTab: '#' + this.$router.currentRoute.fullPath,
         tabs: {
           generalInformation: {
             available: true,
@@ -63,7 +76,7 @@
       },
       currentTabName: function() {
         const currentTab = Object.keys(this.tabs).find(key => {
-          return this.tabs[key].href.substr(1) === this.activeTab
+          return this.tabs[key].href === this.activeTab
         })
 
         if (currentTab) return this.tabs[currentTab].text
@@ -71,7 +84,7 @@
         return 'Информация о событии'
       },
       isTabActive: function(tab) {
-        return this.activeTab === tab.href.substr(1)
+        return this.activeTab === tab.href
       },
       isTabAvailable: function(tab) {
         // Add user access rights here in the future.
@@ -99,7 +112,8 @@
         return `${magnitude} ${settlement} | ${this.currentTabName()} | ${id}`
       },
       onTabSwitch: function(object) {
-        const tab = Object.keys(this.tabs).find(key => this.tabs[key].href === object.href)
+        const href = typeof object === 'string' ? object : object.href
+        const tab = Object.keys(this.tabs).find(key => this.tabs[key].href === href)
 
         this.setActiveTab(tab)
 
@@ -107,7 +121,7 @@
         this.$emit('onTabSwitch', tab)
       },
       setActiveTab: function(tab = this.$router.currentRoute.params.tab) {
-        this.activeTab = this.tabs[this.convertTabName(tab)].href.substr(1)
+        this.activeTab = this.tabs[this.convertTabName(tab)].href
       },
       setAvailability: function() {
         this.tabs.buildings.available = this.event.has_buildings_msk64_analysis
