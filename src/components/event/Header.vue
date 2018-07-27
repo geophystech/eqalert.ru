@@ -1,9 +1,9 @@
 <template>
   <b-row class="event-header" no-gutters>
-    <b-col cols="3">
+    <b-col cols="12" md="3">
       <b-breadcrumb :items="breadcrumbs" />
     </b-col>
-    <b-col cols="8">
+    <b-col cols="12" md="8">
       <b-row>
         <b-col class="text-center">
           <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="!event.magnitude" />
@@ -13,7 +13,7 @@
               <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
             </span>
             ( <span class="magnitude">{{ event.magnitude }}</span> )
-            {{ event.datetime | moment('LL в HH:mm:ss UTC') }}
+            {{ event.datetime | moment(datetimeFormat) }}
             <span class="processing-method">
               {{ event.processingMethod.short }}
             </span>
@@ -34,7 +34,7 @@
         </b-col>
       </b-row>
     </b-col>
-    <b-col cols="1" class="text-right">
+    <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
       <b-button-group>
         <b-dropdown right text="Скачать" size="sm" variant="secondary">
           <b-dropdown-item>Скачать в формате XLS</b-dropdown-item>
@@ -99,6 +99,15 @@
         }
       }
     },
+    computed: {
+      datetimeFormat: function() {
+        if (this.$root.onMobile) {
+          return 'L в HH:mm:ss UTC'
+        } else {
+          return 'LL в HH:mm:ss UTC'
+        }
+      }
+    },
     created() {
       this.setLabel(this.event)
     },
@@ -129,15 +138,22 @@
       }
     }
 
-    .agency {
-      font-size: 50% !important;
-      vertical-align: top;
-    }
+      .agency {
+        @media screen and (min-width: 768px) {
+          font-size: 50% !important;
+          vertical-align: top;
+        }
+      }
+
 
     .badge {
       font-size: 70%;
       padding: 1%;
       text-transform: uppercase;
+
+      @media screen and (max-width: 767px) {
+        padding: 2%;
+      }
     }
 
     .badge-deleted {
