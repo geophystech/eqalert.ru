@@ -24,11 +24,8 @@
           </a>
         </b-col>
 
-        <b-col class="d-none d-md-block" md="3">
-          <span class="mr-auto d-none d-sm-block" id="page-links">
-            <router-link :to="{ name: 'Events', query: { hasMt: 1 } }" key="events-with-mt">Тензор момента</router-link>
-            <router-link :to="{ name: 'Analytics' }" key="analytics">Аналитика</router-link>
-          </span>
+        <b-col class="d-none d-md-block social-media-links text-center" md="3">
+          <a href="https://telegram.me/eqalert_ru_bot"><i class="fa fa-telegram" aria-hidden="true" /></a>
         </b-col>
 
         <b-col class="sign-block text-right" cols="4" md="2">
@@ -68,13 +65,6 @@
   #header {
     padding-top: 15px;
     padding-bottom: 15px;
-
-    #page-links {
-      a:first-child {
-        border-right: 1px solid $color-gray-light;
-        padding-right: 5px;
-      }
-    }
   }
 
   a {
@@ -103,6 +93,12 @@
   .sign-block {
     @media screen and (max-width: 767px) {
       margin-top: 5%;
+    }
+  }
+
+  .social-media-links {
+    a {
+      font-size: 120%;
     }
   }
 </style>

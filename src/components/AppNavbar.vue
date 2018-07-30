@@ -7,9 +7,9 @@
         <b-collapse is-nav id="nav_collapse">
           <b-navbar-nav justified>
             <b-nav-item :to="{ name: 'Events' }" key="events">Все землетрясения</b-nav-item>
-            <b-nav-item :to="{ name: 'StaticPage', params: { page: 'stations' } }" key="static-page-stations">Сеть станций</b-nav-item>
+            <b-nav-item :to="{ name: 'Analytics' }" key="analytics">Аналитика</b-nav-item>
             <li><a href="https://geophystech.ru/services/seismic-monitoring-system/" class="nav-item nav-link">Мониторинг объектов</a></li>
-            <b-nav-item :to="{ name: 'StaticPage', params: { page: 'about' } }" key="static-page-about">О сервисе</b-nav-item>
+            <b-nav-item :to="{ name: 'StaticPage', params: { page: 'about' } }" key="static-page-about">О проекте</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
