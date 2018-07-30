@@ -15,3 +15,22 @@ body {
 a {
   color: #337ab7;
 }
+
+details {
+  margin-bottom: 1.5%;
+  text-align: center;
+}
+
+summary span {
+  border-bottom: 1px dotted #337ab7;
+  color: #337ab7;
+  text-decoration: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary:first-of-type {
+  list-style-type: none;
+}
