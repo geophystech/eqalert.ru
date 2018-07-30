@@ -35,10 +35,9 @@ describe('AppHeader.vue', () => {
     it('renders links', () => {
       const DYFILinkContainer = wrapper.find('.did-you-feel-it')
       const DYFILink = DYFILinkContainer.find('a')
-      const pageLinksContainer = wrapper.find('#page-links')
-      const pageLinks = pageLinksContainer.findAll('a')
-      const eventsLink = pageLinks.at(0)
-      const analyticsLink = pageLinks.at(1)
+      const socialMediaLinksContainer = wrapper.find('.social-media-links')
+      const socialMediaLinks = socialMediaLinksContainer.findAll('a')
+      const telegramLink = socialMediaLinks.at(0)
 
       expect(DYFILinkContainer.classes()).to.contain('text-center')
 
@@ -46,15 +45,10 @@ describe('AppHeader.vue', () => {
       expect(DYFILink.attributes().target).to.equal('_blank')
       expect(DYFILink.text()).to.equal('Ощутили землетрясение?')
 
-      expect(pageLinksContainer.classes()).to.contain('mr-auto')
+      expect(socialMediaLinksContainer.classes()).to.contain('text-center')
 
-      expect(pageLinks.length).to.equal(2)
-
-      expect(eventsLink.attributes().href).to.equal('#/events?hasMt=1')
-      expect(eventsLink.text()).to.equal('Тензор момента')
-
-      expect(analyticsLink.attributes().href).to.equal('#/analytics')
-      expect(analyticsLink.text()).to.equal('Аналитика')
+      expect(socialMediaLinks.length).to.equal(1)
+      expect(telegramLink.attributes().href).to.equal('https://telegram.me/eqalert_ru_bot')
     })
   })
 

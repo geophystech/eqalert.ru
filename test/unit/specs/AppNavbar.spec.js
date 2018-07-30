@@ -12,7 +12,7 @@ describe('AppNavbar.vue', () => {
     const externalLinks = wrapper.findAll('a')
 
     const eventsLink = internalLinks.at(0)
-    const stationsLink = internalLinks.at(1)
+    const analyticsLink = internalLinks.at(1)
     const aboutServiceLink = internalLinks.at(2)
     const seismicMonitoringLink = externalLinks.at(0)
 
@@ -20,8 +20,8 @@ describe('AppNavbar.vue', () => {
     expect(externalLinks.length).to.equal(1)
 
     expect(eventsLink.text()).to.equal('Все землетрясения')
-    expect(stationsLink.text()).to.equal('Сеть станций')
-    expect(aboutServiceLink.text()).to.equal('О сервисе')
+    expect(analyticsLink.text()).to.equal('Аналитика')
+    expect(aboutServiceLink.text()).to.equal('О проекте')
 
     expect(seismicMonitoringLink.text()).to.equal('Мониторинг объектов')
     expect(seismicMonitoringLink.attributes().href).to.equal('https://geophystech.ru/services/seismic-monitoring-system/')
