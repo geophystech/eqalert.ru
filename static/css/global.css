@@ -13,9 +13,10 @@ body {
 }
 
 a {
-  color: #337ab7;
+  color: #337ab7 !important;
 }
 
+/* Details */
 details {
   margin-bottom: 1.5%;
   text-align: center;
@@ -33,4 +34,30 @@ details summary::-webkit-details-marker {
 
 details > summary:first-of-type {
   list-style-type: none;
+}
+
+.tooltip-static-page {
+  color: #337ab7;
+  border-bottom: 1px dotted #337ab7;
+	cursor: help;
+}
+
+.tooltip-static-page::after {
+	background: rgba(0, 0, 0, 0.8);
+	border-radius: 8px 8px 8px 0px;
+	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+	color: #fff;
+	content: attr(data-tooltip);
+	margin-top: -24px;
+	opacity: 0;
+	padding: 3px 7px;
+	position: absolute;
+	visibility: hidden;
+
+	transition: all 0.4s ease-in-out;
+}
+
+.tooltip-static-page:hover::after {
+	opacity: 1;
+	visibility: visible;
 }
