@@ -1,5 +1,5 @@
 <template>
-  <vue-markdown :source="content" />
+  <vue-markdown :source="content" class="static-page-content" />
 </template>
 
 <script>
