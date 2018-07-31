@@ -40,6 +40,10 @@ a {
   border-top: 1px solid #ebeaea;
 }
 
+.static-page-content h6 {
+  margin-bottom: 1.5%;
+}
+
 /* Details */
 details {
   margin-bottom: 1.5%;
