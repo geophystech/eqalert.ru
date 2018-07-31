@@ -13,7 +13,31 @@ body {
 }
 
 a {
+  color: #337ab7;
+}
+
+/* Static page */
+.static-page-content a {
   color: #337ab7 !important;
+}
+
+.static-page-content table {
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 3%;
+  text-align: center;
+  width: 70%;
+}
+
+.static-page-content table th,
+.static-page-content table td {
+  border: 1px solid #ebeaea;
+  padding: 6px 13px;
+  width: 50%;
+}
+
+.static-page-content table tr {
+  border-top: 1px solid #ebeaea;
 }
 
 /* Details */
