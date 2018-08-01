@@ -18,7 +18,7 @@ describe('AppFooter.vue', () => {
     expect(feedbackLink.attributes().href).to.equal('https://goo.gl/forms/i48vp55kTjL2d9Wk1')
     expect(feedbackLink.text()).to.equal('Обратная связь')
 
-    expect(geophystechWebsiteLink.attributes().href).to.equal('https://geophystech.ru/')
+    expect(geophystechWebsiteLink.attributes().href).to.equal('https://geophystech.ru/contacts')
     expect(geophystechWebsiteLink.text()).to.equal('ООО "Геофизические технологии"')
 
     expect(telegramLink.attributes().href).to.equal('https://telegram.me/eqalert_ru_bot')
