@@ -91,7 +91,8 @@ export function convertMsk64(value) {
 
 function currentTileProvider() {
   // Get stored tile provider for the current user.
-  const tileProvider = store.getters.currentTileProvider || Object.keys(tileProviders())[0]
+  // const tileProvider = store.getters.currentTileProvider || Object.keys(tileProviders())[0]
+  const tileProvider = Object.keys(tileProviders())[0]
 
   return tileProviders()[tileProvider]
 }
@@ -171,11 +172,11 @@ function tileProviders() {
   return {
     'OpenStreetMap': new window.L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: `<a href="http://osm.org">OpenStreetMap</a> | ${geophystechLink}`
-    }),
-    'Google Roadmap': new window.L.GridLayer.GoogleMutant({ attribution: geophystechLink }, 'roadmap'),
-    'Yandex Satellite': new window.L.Yandex('satellite', { attribution: geophystechLink }),
-    'Yandex Hybrid': new window.L.Yandex('hybrid', { attribution: geophystechLink }),
-    'Yandex Map': new window.L.Yandex('', { attribution: geophystechLink })
+    })
+    // 'Google Roadmap': new window.L.GridLayer.GoogleMutant({ attribution: geophystechLink }, 'roadmap'),
+    // 'Yandex Satellite': new window.L.Yandex('satellite', { attribution: geophystechLink }),
+    // 'Yandex Hybrid': new window.L.Yandex('hybrid', { attribution: geophystechLink }),
+    // 'Yandex Map': new window.L.Yandex('', { attribution: geophystechLink })
   }
 }
 
