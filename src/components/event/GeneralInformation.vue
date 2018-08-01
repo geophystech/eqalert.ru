@@ -3,6 +3,7 @@
     <b-table
       hover
       outlined
+      responsive
       :fields="fields"
       :items="items">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>

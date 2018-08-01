@@ -4,7 +4,7 @@
     <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id" />
 
     <b-row>
-      <b-col cols="8">
+      <b-col cols="12" md="8">
         <keep-alive>
           <component
             :is="components.maps[components.currentTab]"
