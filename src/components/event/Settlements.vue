@@ -5,6 +5,7 @@
     <b-table
       hover
       outlined
+      responsive
       :fields="fields"
       :items="items"
       v-if="items.length">
