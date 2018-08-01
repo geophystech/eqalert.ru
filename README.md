@@ -31,32 +31,76 @@ Built on <a href="https://vuejs.org">Vue.js 2.5</a>, <a href="https://webpack.js
 
 > Eqalert.ru – the real-time information resource about earthquakes, seismic impacts and hazards
 
-## Build Setup
+## Used technologies
+
+This is a Single Page Application built with [VueJS](https://vuejs.org/) and [webpack](https://webpack.js.org/).     
+Data is received from an API host using [axios](https://github.com/axios/axios) library. 
+
+More about used technologies you can get from the `packages.json` file.
+
+## Preparing application
+
+```bash
+# Clone application from GitHub
+git clone git@github.com:geophystech/eqalert.ru.git
+
+cd eqalert.ru
+
+# Install dependencies
+yarn install 
+```
+
+
+## Development mode
+
+To run application in development mode, just run:
 
 ``` bash
-# install dependencies
-npm install
+yarn dev
+```
 
-# serve with hot reload at localhost:8080
-npm run dev
+The application will be compiled and run. 
+It will be available at http://localhost:8080 
 
-# build for production with minification
-npm run build
+By default the application uses hot-reload mode which means any changes will be picked up and all open pages will be reloaded automatically.
+Exception is static markdown pages located in `static/markdown` directory. 
 
-# build for production and view the bundle analyzer report
-npm run build --report
+If you changem them, you should update your browser pages manually (`F5`).
 
-# run unit tests
+## Run tests
+
+The application has a few tests. Not very good coverage yet, but still. 
+
+To run tests, just run:
+
+```
+# Unit tests
 npm run unit
 
-# run e2e tests
+# E2E tests
 npm run e2e
 
-# run all tests
+# Or run all tests
 npm test
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Build application 
+
+To run application in staging or production areas, it should be compiled first:
+
+```
+NODE_ENV=production yarn build
+```
+
+The compiled application will be stored in the `dist/` directory.     
+You can deploy it to your target (staging, production, etc) using any tools you like. 
+
+Example of deploying the application manually to a staging host:
+
+```bash
+rsync -avzr --delete -e ssh dist/ USERNAME@HOSTNAME:/opt/eqalert-frontend-test
+```
+
 
 ## LICENSE
 
