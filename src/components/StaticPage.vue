@@ -13,8 +13,7 @@ export default {
       content: '',
       page: this.$router.currentRoute.params.page,
       pages: {
-        about: 'О сервисе',
-        stations: 'Сеть станций'
+        about: 'О проекте'
       }
     }
   },
