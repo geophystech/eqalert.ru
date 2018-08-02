@@ -1,4 +1,7 @@
+import axios from 'axios'
 import store from './store'
+import ApiSettings from './settings/api'
+import StationsSettings from './settings/stations.js'
 
 function listenerStoreCurrentTileProvider(map) {
   // Store current tile provider to the storage
@@ -54,6 +57,69 @@ export function addPlateBoundaries(controls) {
   controls.addOverlay(boundaries, 'Plate Boundaries')
 }
 
+export function addStations(map) {
+  const settings = new ApiSettings()
+
+  axios.get(settings.endpointStations)
+    .then(response => {
+      response.data.data.forEach(station => {
+        let marker = new window.L.RegularPolygonMarker(new window.L.LatLng(station.sta_lat, station.sta_lon), {
+          numberOfSides: 3,
+          rotation: 30.0,
+          radius: 7,
+          fillOpacity: 1.0,
+          color: false,
+          fillColor: StationsSettings.colors[station.scnl_network]
+        })
+
+        let message =
+          `<table class="table table-hover table-sm table-responsive">
+            <thead>
+              <tr>
+                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Каналов</th>
+                <td>${station.channel_num}</td>
+              </tr>
+              <tr>
+                <th scope="row">Высота</th>
+                <td>${station.sta_elevation}</td>
+              </tr>
+              <tr>
+                <th scope="row">Тип датчика</th>
+                <td>${station.instrument}</td>
+              </tr>
+              <tr>
+                <th scope="row">Регистратор</th>
+                <td>${station.datalogger}</td>
+              </tr>
+              <tr>
+                <th scope="row">Частота дискр.</th>
+                <td>${station.sample_rate}</td>
+              </tr>
+              <tr>
+                <th scope="row">Телеметрия</th>
+                <td>${station.has_realtime}</td>
+              </tr>
+              <tr>
+                <th scope="row">Оператор</th>
+                <td>${station.operator}</td>
+              </tr>
+            </tbody>
+          </table>`
+
+        marker.bindPopup(message)
+        map.addLayer(marker)
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
 export function buildingColor(damageLevel) {
   switch (damageLevel) {
     case 0: return 'cyan'
@@ -97,7 +163,7 @@ function currentTileProvider() {
   return tileProviders()[tileProvider]
 }
 
-export function createMap(id, coordinates, zoom = 8, store) {
+export function createMap(id, coordinates, zoom = 8, showStations = true, store) {
   const options = {
     fullscreenControl: true,
     fullscreenControlOptions: { position: 'topleft' },
@@ -113,6 +179,7 @@ export function createMap(id, coordinates, zoom = 8, store) {
   layersControl().addTo(map)
   zoomHome().addTo(map)
   listenerStoreCurrentTileProvider(map, store)
+  if (showStations) addStations(map)
   map.setZoom(zoom)
 
   return map
