@@ -45,7 +45,7 @@ describe('AppHeader.vue', () => {
       expect(DYFILink.attributes().target).to.equal('_blank')
       expect(DYFILink.text()).to.equal('Ощутили землетрясение?')
 
-      expect(socialMediaLinksContainer.classes()).to.contain('text-center')
+      expect(socialMediaLinksContainer.classes()).to.contain('text-md-center')
 
       expect(socialMediaLinks.length).to.equal(1)
       expect(telegramLink.attributes().href).to.equal('https://telegram.me/eqalert_ru_bot')
