@@ -1,7 +1,7 @@
 <template>
     <header id="header">
       <b-row class="align-items-center">
-        <b-col cols="6" md="2">
+        <b-col cols="6" md="2" order="1" order-md="1">
           <span id="logo">
             <router-link to="/" alt="eqalert.ru">
               <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
@@ -9,7 +9,7 @@
           </span>
         </b-col>
 
-        <b-col cols="6" md="1" class="text-right">
+        <b-col cols="6" md="1" class="text-right" order-md="2" v-if="!$root.onMobile">
           <router-link to="events">
             <span id="events-count">
               <span class="exclamation-mark">!</span>
@@ -18,17 +18,17 @@
           </router-link>
         </b-col>
 
-        <b-col class="did-you-feel-it text-center" cols="8" md="4">
+        <b-col class="did-you-feel-it text-center" cols="8" md="4" order="3" order-md="3">
           <a href="https://goo.gl/forms/Hd4E0BcA2ffRNjfY2" target="_blank">
             Ощутили землетрясение?
           </a>
         </b-col>
 
-        <b-col class="d-none d-md-block social-media-links text-center" md="3">
+        <b-col class="social-media-links text-right text-md-center" md="3" cols="6" order="2" order-md="4">
           <a href="https://telegram.me/eqalert_ru_bot"><i class="fa fa-telegram" aria-hidden="true" /></a>
         </b-col>
 
-        <b-col class="sign-block text-right" cols="4" md="2">
+        <b-col class="sign-block text-right" cols="4" md="2" order="5" order-md="5">
           <span class="sign-in-out" v-if="$store.getters.user.authenticated">
             <a href="javascript:void(0)" v-on:click="signOut" key="sign-out">
               Выйти
