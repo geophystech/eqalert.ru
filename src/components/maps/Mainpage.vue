@@ -100,7 +100,7 @@
         text.addTo(this.map.object)
       },
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.map.coordinates, 5)
+        this.map.object = createMap(this.map.id, this.map.coordinates, 5, false)
       },
       eventColor: function(timeDifference) {
         if (timeDifference <= 24) {

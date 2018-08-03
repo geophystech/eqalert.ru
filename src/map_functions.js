@@ -57,11 +57,13 @@ export function addPlateBoundaries(controls) {
   controls.addOverlay(boundaries, 'Plate Boundaries')
 }
 
-export function addStations(map) {
+export function addStations(map, controls, show = true) {
   const settings = new ApiSettings()
 
   axios.get(settings.endpointStations)
     .then(response => {
+      let markers = []
+
       response.data.data.forEach(station => {
         let marker = new window.L.RegularPolygonMarker(new window.L.LatLng(station.sta_lat, station.sta_lon), {
           numberOfSides: 3,
@@ -112,8 +114,13 @@ export function addStations(map) {
           </table>`
 
         marker.bindPopup(message)
-        map.addLayer(marker)
+        markers.push(marker)
       })
+
+      const makerksGroup = new window.L.LayerGroup(markers)
+
+      if (show) map.addLayer(makerksGroup)
+      controls.addOverlay(makerksGroup, 'Show seismic stations')
     })
     .catch(error => {
       console.log(error)
@@ -157,7 +164,6 @@ export function convertMsk64(value) {
 
 function currentTileProvider() {
   // Get stored tile provider for the current user.
-  // const tileProvider = store.getters.currentTileProvider || Object.keys(tileProviders())[0]
   const tileProvider = Object.keys(tileProviders())[0]
 
   return tileProviders()[tileProvider]
@@ -173,14 +179,17 @@ export function createMap(id, coordinates, zoom = 8, showStations = true, store)
     zoomControl: false
   }
   const map = window.L.map(id, options)
-
   setView(map, coordinates)
   currentTileProvider(store).addTo(map)
-  layersControl().addTo(map)
+
+  const controls = layersControl()
+
   zoomHome().addTo(map)
   listenerStoreCurrentTileProvider(map, store)
-  if (showStations) addStations(map)
+  addStations(map, controls, showStations)
+
   map.setZoom(zoom)
+  controls.addTo(map)
 
   return map
 }
@@ -240,10 +249,6 @@ function tileProviders() {
     'OpenStreetMap': new window.L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: `<a href="http://osm.org">OpenStreetMap</a> | ${geophystechLink}`
     })
-    // 'Google Roadmap': new window.L.GridLayer.GoogleMutant({ attribution: geophystechLink }, 'roadmap'),
-    // 'Yandex Satellite': new window.L.Yandex('satellite', { attribution: geophystechLink }),
-    // 'Yandex Hybrid': new window.L.Yandex('hybrid', { attribution: geophystechLink }),
-    // 'Yandex Map': new window.L.Yandex('', { attribution: geophystechLink })
   }
 }
 
