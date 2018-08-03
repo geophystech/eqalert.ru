@@ -1,4 +1,7 @@
+import axios from 'axios'
 import store from './store'
+import ApiSettings from './settings/api'
+import StationsSettings from './settings/stations.js'
 
 function listenerStoreCurrentTileProvider(map) {
   // Store current tile provider to the storage
@@ -54,6 +57,76 @@ export function addPlateBoundaries(controls) {
   controls.addOverlay(boundaries, 'Plate Boundaries')
 }
 
+export function addStations(map, controls, show = true) {
+  const settings = new ApiSettings()
+
+  axios.get(settings.endpointStations)
+    .then(response => {
+      let markers = []
+
+      response.data.data.forEach(station => {
+        let marker = new window.L.RegularPolygonMarker(new window.L.LatLng(station.sta_lat, station.sta_lon), {
+          numberOfSides: 3,
+          rotation: 30.0,
+          radius: 7,
+          fillOpacity: 1.0,
+          color: false,
+          fillColor: StationsSettings.colors[station.scnl_network]
+        })
+
+        let message =
+          `<table class="table table-hover table-sm table-responsive">
+            <thead>
+              <tr>
+                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Каналов</th>
+                <td>${station.channel_num}</td>
+              </tr>
+              <tr>
+                <th scope="row">Высота</th>
+                <td>${station.sta_elevation}</td>
+              </tr>
+              <tr>
+                <th scope="row">Тип датчика</th>
+                <td>${station.instrument}</td>
+              </tr>
+              <tr>
+                <th scope="row">Регистратор</th>
+                <td>${station.datalogger}</td>
+              </tr>
+              <tr>
+                <th scope="row">Частота дискр.</th>
+                <td>${station.sample_rate}</td>
+              </tr>
+              <tr>
+                <th scope="row">Телеметрия</th>
+                <td>${station.has_realtime}</td>
+              </tr>
+              <tr>
+                <th scope="row">Оператор</th>
+                <td>${station.operator}</td>
+              </tr>
+            </tbody>
+          </table>`
+
+        marker.bindPopup(message)
+        markers.push(marker)
+      })
+
+      const makerksGroup = new window.L.LayerGroup(markers)
+
+      if (show) map.addLayer(makerksGroup)
+      controls.addOverlay(makerksGroup, 'Show seismic stations')
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
 export function buildingColor(damageLevel) {
   switch (damageLevel) {
     case 0: return 'cyan'
@@ -91,13 +164,12 @@ export function convertMsk64(value) {
 
 function currentTileProvider() {
   // Get stored tile provider for the current user.
-  // const tileProvider = store.getters.currentTileProvider || Object.keys(tileProviders())[0]
   const tileProvider = Object.keys(tileProviders())[0]
 
   return tileProviders()[tileProvider]
 }
 
-export function createMap(id, coordinates, zoom = 8, store) {
+export function createMap(id, coordinates, zoom = 8, showStations = true, store) {
   const options = {
     fullscreenControl: true,
     fullscreenControlOptions: { position: 'topleft' },
@@ -107,13 +179,17 @@ export function createMap(id, coordinates, zoom = 8, store) {
     zoomControl: false
   }
   const map = window.L.map(id, options)
-
   setView(map, coordinates)
   currentTileProvider(store).addTo(map)
-  layersControl().addTo(map)
+
+  const controls = layersControl()
+
   zoomHome().addTo(map)
   listenerStoreCurrentTileProvider(map, store)
+  addStations(map, controls, showStations)
+
   map.setZoom(zoom)
+  controls.addTo(map)
 
   return map
 }
@@ -173,10 +249,6 @@ function tileProviders() {
     'OpenStreetMap': new window.L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: `<a href="http://osm.org">OpenStreetMap</a> | ${geophystechLink}`
     })
-    // 'Google Roadmap': new window.L.GridLayer.GoogleMutant({ attribution: geophystechLink }, 'roadmap'),
-    // 'Yandex Satellite': new window.L.Yandex('satellite', { attribution: geophystechLink }),
-    // 'Yandex Hybrid': new window.L.Yandex('hybrid', { attribution: geophystechLink }),
-    // 'Yandex Map': new window.L.Yandex('', { attribution: geophystechLink })
   }
 }
 

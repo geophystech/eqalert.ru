@@ -125,7 +125,7 @@
         this.putEpicenter()
       },
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.coordinates)
+        this.map.object = createMap(this.map.id, this.coordinates, 8, false)
       },
       initialize: function() {
         this.map.id = id(this.event.id, this.tab)
