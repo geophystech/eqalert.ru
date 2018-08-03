@@ -85,7 +85,7 @@
         this.putEpicenter()
       },
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.coordinates, 8, false)
+        this.map.object = createMap(this.map.id, this.coordinates)
       },
       fetchData: function() {
         this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.event.id))
