@@ -191,6 +191,8 @@ export function createMap(id, coordinates, zoom = 8, showStations = true, store)
   map.setZoom(zoom)
   controls.addTo(map)
 
+  addFullscreenInvalidationFix(map)
+
   return map
 }
 
@@ -240,6 +242,18 @@ export function removeEpicenter(map, epicenter) {
 
 export function setView(map, coordinates, zoom = 5) {
   map.setView(coordinates, zoom)
+}
+
+// There is a bug when layers got disappeared on exiting from fullscreen.
+// See eqalert issue: https://github.com/geophystech/eqalert.ru/issues/249
+// This is a workaround that explicitly redraws map to brig layers back.
+// It should be removed once upstream libraries are fixed.
+function addFullscreenInvalidationFix(map) {
+  map.on('fullscreenchange', () => {
+    if (!map.isFullscreen()) {
+      map.invalidateSize()
+    }
+  })
 }
 
 function tileProviders() {
