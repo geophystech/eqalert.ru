@@ -108,9 +108,9 @@ export default {
           this.spinners.loadMoreEvents = false
 
           if (typeof data === 'object') {
-            this.events = response.data.data
+            this.events = [...new Set(response.data.data)]
           } else {
-            this.events = this.events.concat(response.data.data)
+            this.events = [...new Set(this.events.concat(response.data.data))]
           }
 
           this.apiParams.cursor = response.data.meta.cursor.next
