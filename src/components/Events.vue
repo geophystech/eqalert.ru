@@ -91,13 +91,13 @@ export default {
     title: 'События'
   },
   methods: {
-    getEvents: function(data) {
+    getEvents: function(filtersData) {
       let params = this.apiParams
 
       // Use cursor only on loadMoreEvents()
-      if (typeof data === 'object') {
+      if (typeof filtersData === 'object') {
         params.cursor = null
-        Object.assign(params, data)
+        Object.assign(params, filtersData)
       }
 
       this.spinners.loadMoreEvents = true
@@ -107,10 +107,10 @@ export default {
         .then(response => {
           this.spinners.loadMoreEvents = false
 
-          if (typeof data === 'object') {
-            this.events = [...new Set(response.data.data)]
+          if (typeof filtersData === 'object') {
+            this.events = response.data.data
           } else {
-            this.events = [...new Set(this.events.concat(response.data.data))]
+            this.events = this.events.concat(response.data.data)
           }
 
           this.apiParams.cursor = response.data.meta.cursor.next
@@ -132,9 +132,6 @@ export default {
     openEvent: function(item, index, event) {
       this.$router.push({ name: 'Event', params: { id: item.id } })
     }
-  },
-  created() {
-    this.getEvents()
   }
 }
 </script>
