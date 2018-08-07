@@ -103,7 +103,14 @@ export default {
       this.spinners.loadMoreEvents = true
       this.disabledFilters = true
 
-      this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params })
+      this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params,
+        before(request) {
+          if (this.previousRequest) {
+            this.previousRequest.abort()
+          }
+
+          this.previousRequest = request
+        }})
         .then(response => {
           this.spinners.loadMoreEvents = false
 
