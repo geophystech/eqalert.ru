@@ -210,7 +210,7 @@
           let convertedFilters = {}
 
           Object.keys(this.filters).map(key => {
-            convertedFilters[camelToUnderscore(key)] = this.prepareValue(this.filters[key])
+            convertedFilters[camelToUnderscore(key)] = this.prepareValue(key, this.filters[key])
           })
 
           this.$emit('filtersUpdated', convertedFilters)
@@ -222,7 +222,7 @@
         Object.keys(this.$route.query).forEach(key => {
           if (key in this.filters) {
             if (key === 'hasMt' || key === 'datetimeMin' || key === 'datetimeMax') {
-              this.filters[key] = this.prepareValue(this.$route.query[key])
+              this.filters[key] = this.prepareValue(key, this.$route.query[key])
             } else {
               this.filters[key] = parseFloat(this.$route.query[key])
             }
@@ -231,10 +231,10 @@
 
         this.filtersUpdated(0)
       },
-      prepareValue: function(value) {
+      prepareValue: function(key, value) {
         switch (value) {
           case 0: return null
-          case 1: return true
+          case 1: return key === 'hasMt' ? true : value
           case '0': return null
           case '1': return true
           case '': return null
@@ -256,7 +256,7 @@
             if (this.filters[key] !== null && this.filters[key] !== '') return key
           })
           .reduce((object, key) => {
-            object[key] = this.prepareValue(this.filters[key])
+            object[key] = this.prepareValue(key, this.filters[key])
 
             return object
           }, {})
