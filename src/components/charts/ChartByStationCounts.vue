@@ -49,7 +49,7 @@ export default Line.extend({
               },
               scaleLabel: {
                 display: true,
-                labelString: 'Количество землетрясений (M \u2265 2.5)'
+                labelString: 'Количество землетрясений'
               },
               ticks: {
                 beginAtZero: true
