@@ -19,32 +19,6 @@ export default {
     currentTileProvider: state => {
       return state.currentTileProvider
     },
-    chartDataset: () => {
-      return {
-        datasets: [{
-          label: '',
-          data: [],
-          fill: true,
-          lineTension: 0.1,
-          backgroundColor: 'rgba(51,122,183,0.4)',
-          borderColor: 'rgba(51,122,183,1)',
-          borderCapStyle: 'butt',
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: 'miter',
-          pointBorderColor: 'rgba(51,122,183,1)',
-          pointBackgroundColor: 'rgba(51,122,183,1)',
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(51,122,183,1)',
-          pointHoverBorderColor: 'rgba(51,122,183,1)',
-          pointHoverBorderWidth: 2,
-          pointRadius: 1,
-          pointHitRadius: 10
-        }],
-        labels: []
-      }
-    },
     msk64ConfigVersion: state => { return state.msk64Config.configVersion },
     pgaConfigVersion: state => { return state.pgaConfig.configVersion },
     plateBoundaries: state => { return state.plateBoundaries },
