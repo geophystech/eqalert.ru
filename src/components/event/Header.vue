@@ -114,7 +114,7 @@
     watch: {
       event: function(value) {
         this.breadcrumbs[2].text = value.id
-        this.setLabel(value.id)
+        this.setLabel(value)
         this.setAgency(value.agency)
       }
     }
