@@ -131,7 +131,11 @@
         }
       },
       fetchEvents: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointEvents)
+        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+          params: {
+            limit: 500
+          }
+        })
           .then(response => { this.addEvents(response.data.data) })
           .catch(error => { console.log(error) })
       }
