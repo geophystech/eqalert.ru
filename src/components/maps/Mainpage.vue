@@ -133,6 +133,7 @@
       fetchEvents: function() {
         this.$http.get(this.$root.$options.settings.api.endpointEvents, {
           params: {
+            datetime_min: this.$moment().subtract(3, 'months').format('YYYY-MM-DD HH:mm:ss'),
             limit: 500
           }
         })
