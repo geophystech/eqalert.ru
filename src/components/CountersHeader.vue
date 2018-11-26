@@ -1,8 +1,8 @@
 <template>
   <b-row class="infobar" align-v="center" no-gutters>
-    <b-col cols="2" md="4" class="text-center text-md-left">
+    <b-col cols="2" md="4" v-if="!$store.getters.user.authenticated" class="text-center text-md-left">
       <router-link to="/sign-in">
-        <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
+        <i class="fa fa-lg fa-lock align-middle" aria-hidden="true"></i>
         <span v-if="!$root.onMobile">Снять ограничения данных</span>
       </router-link>
     </b-col>
