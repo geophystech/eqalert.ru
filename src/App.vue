@@ -25,7 +25,9 @@ export default {
       { charset: 'utf-8' },
       { content: 'width=device-width, initial-scale=1', name: 'viewport' },
       { description: 'Eqalert.ru – информационная служба реального времени о землетрясениях, сейсмических воздействиях и опасности' },
-      { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, магнитуда, механизм очага, тензор момента, архив' }
+      { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, ' +
+          'сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, ' +
+          'магнитуда, механизм очага, тензор момента, архив' }
     ],
     title: 'Главная',
     titleTemplate: '%s | EQA!ert'
@@ -47,13 +49,15 @@ export default {
     },
     fetchSystemInfo: function() {
       this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
-      .then(response => {
-        this.$store.dispatch('setTotalEventsCount', response.data.data.counters.reports)
-        this.$store.dispatch('setMsk64ConfigVersion', response.data.data.msk64Config.data.config_version)
-        this.$store.dispatch('setPgaConfigVersion', response.data.data.pgaConfig.data.config_version)
-        this.$store.dispatch('setSrssDBVersion', response.data.data.srssCoreConfig.data.db_version)
-      })
-      .catch(error => { console.log(error) })
+        .then(response => {
+          this.$store.dispatch('setTotalEventsCount', response.data.data.counters.reports)
+          this.$store.dispatch('setMsk64ConfigVersion', response.data.data.msk64Config.data.config_version)
+          this.$store.dispatch('setPgaConfigVersion', response.data.data.pgaConfig.data.config_version)
+          this.$store.dispatch('setSrssDBVersion', response.data.data.srssCoreConfig.data.db_version)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted() {
