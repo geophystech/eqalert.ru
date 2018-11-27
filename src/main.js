@@ -23,6 +23,22 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'moment/locale/ru'
 
+// Leaflet
+
+import 'leaflet/dist/leaflet'
+import 'leaflet/dist/leaflet.css'
+
+import 'leaflet-dvf/dist/leaflet-dvf'
+import 'leaflet-dvf/dist/css/dvf.css'
+
+import 'leaflet-zoomhome/dist/leaflet.zoomhome'
+
+import 'leaflet.markercluster/dist/leaflet.markercluster'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+
+import 'leaflet.gridlayer.googlemutant/Leaflet.GoogleMutant'
+
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
