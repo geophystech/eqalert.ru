@@ -28,6 +28,9 @@ import 'moment/locale/ru'
 import 'leaflet/dist/leaflet'
 import 'leaflet/dist/leaflet.css'
 
+import 'leaflet-fullscreen/dist/Leaflet.fullscreen'
+import 'leaflet-fullscreen/dist/leaflet.fullscreen.css'
+
 import 'leaflet-dvf/dist/leaflet-dvf'
 import 'leaflet-dvf/dist/css/dvf.css'
 
