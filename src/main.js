@@ -42,6 +42,8 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 import 'leaflet.gridlayer.googlemutant/Leaflet.GoogleMutant'
 
+import 'font-awesome/css/font-awesome.min.css'
+
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
