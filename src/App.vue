@@ -56,7 +56,7 @@ export default {
           this.$store.dispatch('setSrssDBVersion', response.data.data.srssCoreConfig.data.db_version)
         })
         .catch(error => {
-          console.log(error)
+          if (error) console.log(error)
         })
     }
   },
