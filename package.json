@@ -17,6 +17,7 @@
     "axios": "^0.16.2",
     "bootstrap": "^4.1.3",
     "chart.js": "^2.7.3",
+    "font-awesome": "^4.7.0",
     "idle-vue": "^2.0.5",
     "leaflet": "^1.3.4",
     "leaflet-dvf": "^0.3.1",

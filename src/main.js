@@ -23,6 +23,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'moment/locale/ru'
 
+import 'font-awesome/css/font-awesome.min.css'
+
 // Leaflet
 
 import 'leaflet/dist/leaflet'
