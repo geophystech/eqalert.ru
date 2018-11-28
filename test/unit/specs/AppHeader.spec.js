@@ -1,7 +1,15 @@
-import router from '@/router'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 
 import AppHeader from '@/components/AppHeader'
+import VueRouter from 'vue-router'
+
+const RouterLink = {
+  name: 'router-link',
+  render: function(h) {
+    return h('a', this.$slots.default)
+  },
+  props: ['to']
+}
 
 describe('AppHeader.vue', () => {
   const $store = {
@@ -11,9 +19,16 @@ describe('AppHeader.vue', () => {
       }
     }
   }
+  const localVue = createLocalVue()
+  localVue.use(VueRouter)
 
+  const router = new VueRouter()
   const wrapper = shallowMount(AppHeader, {
+    localVue,
     router,
+    stubs: {
+      RouterLink
+    },
     mocks: {
       $store
     }
@@ -22,11 +37,10 @@ describe('AppHeader.vue', () => {
   describe('static elements', () => {
     it('renders logo', () => {
       const logoContainer = wrapper.find('#logo')
-      const logoLink = logoContainer.find('a')
+      const logoLink = logoContainer.find(RouterLink)
       const logoImage = logoLink.find('img')
 
-      expect(logoLink.attributes().alt).to.equal('eqalert.ru')
-      expect(logoLink.attributes().href).to.equal('#/')
+      expect(logoLink.props().to).to.equal('/')
 
       expect(logoImage.attributes().alt).to.equal('EQA!ert')
       expect(logoImage.attributes().src).to.not.be.empty
@@ -81,10 +95,10 @@ describe('AppHeader.vue', () => {
       describe('when not authenticated', () => {
         const signInOutContainer = wrapper.find('.sign-in-out')
         const icon = signInOutContainer.find('i')
-        const link = signInOutContainer.find('a')
+        const link = signInOutContainer.find(RouterLink)
 
         it('renders correct link', () => {
-          expect(link.attributes().href).to.equal('#/sign-in')
+          expect(link.props().to.name).to.equal('UserAuthentication')
           expect(link.text()).to.equal('Войти')
 
           expect(icon.classes()).to.contain('fa')

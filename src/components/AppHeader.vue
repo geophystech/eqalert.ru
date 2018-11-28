@@ -3,7 +3,7 @@
       <b-row class="align-items-center">
         <b-col cols="6" md="2" order="1" order-md="1">
           <span id="logo">
-            <router-link to="/" alt="eqalert.ru">
+            <router-link to="/">
               <img src="../assets/img/logos/eqalert-beta.png" alt="EQA!ert">
             </router-link>
           </span>
