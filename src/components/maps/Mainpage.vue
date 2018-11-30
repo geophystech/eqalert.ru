@@ -76,13 +76,59 @@
         })
 
         let legend = window.L.control({ position: 'bottomright' })
+        let stateLabel = window.L.DomUtil.create('p')
+        let defaultState = 'События за последние 3 месяца'
 
-        legend.onAdd = function() {
-          let div = window.L.DomUtil.create('div', 'map-legend map-legend-mainpage')
-          div.innerHTML += '<span style="background:#FF0000;">< 24 ч</span>'
-          div.innerHTML += '<span style="background:#FFA500">1-5 дн</span>'
-          div.innerHTML += '<span style="background:#FFFF00">6-14 дн</span>'
-          div.innerHTML += '<span style="background:#808080">> 14 дн</span>'
+        stateLabel.innerText = defaultState
+
+        legend.onAdd = function()
+        {
+          /** @type HTMLElement */
+          let div = window.L.DomUtil.create('div', 'btn-group map-legend map-legend-mainpage')
+
+          let appendBtn = function(label, title, color, callBack) {
+
+            /** @type HTMLElement */
+            let btn = window.L.DomUtil.create('button', 'btn btn-sm btn-default')
+
+            btn.addEventListener('click', function(e) {
+
+              if (!e.target.classList.contains('active')) {
+                callBack.apply(this, arguments)
+                stateLabel.innerText = title
+              }
+
+              [].forEach.call(div.querySelectorAll('button'), function(elem) {
+                elem.classList[elem === e.target ? 'add' : 'remove']('active')
+              })
+
+            }, false)
+
+            btn.setAttribute('type', 'button')
+            btn.setAttribute('title', title)
+            btn.style.backgroundColor = color
+            btn.innerText = label
+
+            div.appendChild(btn)
+
+            return btn
+          }
+
+          appendBtn('< 24 ч', 'События за последние сутки', '#FF0000', (e) => {
+            console.log(e.target.innerText)
+          })
+
+          appendBtn('1-7 дн', 'События за последнюю неделю', '#FFA500', (e) => {
+            console.log(e.target.innerText)
+          })
+
+          appendBtn('7-14 дн', 'События за последние две недели', '#FFFF00', (e) => {
+            console.log(e.target.innerText)
+          })
+
+          appendBtn('> 14 дн', defaultState, '#808080', (e) => {
+            console.log(e.target.innerText)
+          }).classList.add('active')
 
           return div
         }
@@ -93,8 +139,7 @@
 
         text.onAdd = function() {
           let div = window.L.DomUtil.create('div', 'map-text')
-          div.innerHTML += '<p>События за последние 3 месяца</p>'
-
+          div.appendChild(stateLabel)
           return div
         }
         text.addTo(this.map.object)

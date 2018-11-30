@@ -24,12 +24,13 @@
     width: 280px;
 
     p {
-      color: #444;
       font-family: 'Open Sans', sans-serif;
-      max-height: 10px;
-      padding-left: 27px;
-      padding-right: 35px;
-      padding-top: 2px;
+      text-align: center;
+      line-height: 25px;
+      height: 25px;
+      color: #444;
+      padding: 0;
+      margin: 0;
     }
   }
 
@@ -50,11 +51,30 @@
       width: 15px;
     }
 
-    span {
-      display: inline-block;
-      padding: 5px;
-      text-align: center;
-      width: 70px;
+    &.btn-group {
+      .btn {
+        line-height: normal;
+        text-align: center;
+        font-size: 12px;
+        padding: 5px 0;
+        width: 71px;
+        opacity: 0.8;
+
+        &:focus {
+          box-shadow: none;
+          outline: none;
+        }
+
+        &:hover {
+          z-index: auto;
+        }
+
+        &:hover, &.active {
+          box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.12);
+          z-index: auto;
+          opacity: 1;
+        }
+      }
     }
 
     .buildings-legend {
