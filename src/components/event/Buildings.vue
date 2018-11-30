@@ -58,7 +58,6 @@
         })
 
         const msk64ConfigVersion = this.$store.getters.msk64ConfigVersion
-        const pgaConfigVersion = this.$store.getters.pgaConfigVersion
 
         this.items[0].value = damageLevels['1']
         this.items[1].value = damageLevels['2']
@@ -66,7 +65,7 @@
         this.items[3].value = damagedResidents
         this.items[4].value = this.$store.getters.srssDBVersion
         this.items[5].value = data.length
-        this.items[6].value = `${msk64ConfigVersion} / ${pgaConfigVersion}`
+        this.items[6].value = `${msk64ConfigVersion}`
       }
     },
     watch: {
