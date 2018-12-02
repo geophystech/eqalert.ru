@@ -165,7 +165,9 @@
 
             appendBtn(eventsRangeName, (e) => {
 
-              let minDate = $moment().subtract(minDateSubtract[0], minDateSubtract[1])
+              let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
+
+              console.log(minDate.format('YYYY-MM-DD HH:mm:ss'))
 
               $http.get(apiSettings.endpointEvents, {
                 params: {
