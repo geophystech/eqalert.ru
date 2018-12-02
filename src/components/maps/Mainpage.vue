@@ -13,7 +13,6 @@
           coordinates: [50.351, 142.395],
           id: 'map-mainpage',
           object: null,
-          events: [],
           defaultEventsRange: 'lastWeekEvents',
           eventsRanges: {
             lastDayEvents: {
