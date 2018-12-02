@@ -10,7 +10,7 @@
     data() {
       return {
         map: {
-          coordinates: [50.351, 142.395],
+          coordinates: [58.651, 142.395],
           id: 'map-mainpage',
           object: null,
           defaultEventsRange: 'lastWeekEvents',
@@ -50,7 +50,7 @@
 
     methods: {
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.map.coordinates, 5, false)
+        this.map.object = createMap(this.map.id, this.map.coordinates, 4, false)
         let apiSettings = this.$root.$options.settings.api
         let selfComponent = this
         let $moment = this.$moment
