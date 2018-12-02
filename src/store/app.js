@@ -20,7 +20,6 @@ export default {
       return state.currentTileProvider
     },
     msk64ConfigVersion: state => { return state.msk64Config.configVersion },
-    pgaConfigVersion: state => { return state.pgaConfig.configVersion },
     plateBoundaries: state => { return state.plateBoundaries },
     srssDBVersion: state => { return state.srssCoreConfig.dbVersion },
     totalEventsCount: state => { return state.counters.totalEvents }
@@ -61,9 +60,6 @@ export default {
     },
     setMsk64ConfigVersion({ commit }, value) {
       commit('setMsk64Config', { key: 'configVersion', value: value })
-    },
-    setPgaConfigVersion({ commit }, value) {
-      commit('setPgaConfig', { key: 'configVersion', value: value })
     },
     setSrssDBVersion({ commit }, value) {
       commit('setSrssDBVersion', { key: 'dbVersion', value: value })

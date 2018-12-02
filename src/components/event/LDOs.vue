@@ -72,7 +72,6 @@ export default {
       })
 
       const msk64ConfigVersion = this.$store.getters.msk64ConfigVersion
-      const pgaConfigVersion = this.$store.getters.pgaConfigVersion
 
       this.items[0].value = damagedParts['1']
       this.items[1].value = damagedParts['2']
@@ -80,7 +79,7 @@ export default {
       this.items[3].value = damagedParts['1'] + damagedParts['2']
       this.items[4].value = this.$store.getters.srssDBVersion
       this.items[5].value = data.length
-      this.items[6].value = `${msk64ConfigVersion} / ${pgaConfigVersion}`
+      this.items[6].value = `${msk64ConfigVersion}`
       this.spinner = false
     }
   }

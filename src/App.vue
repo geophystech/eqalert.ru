@@ -41,17 +41,18 @@ export default {
   },
   methods: {
     fetchPlateBoundaries: function() {
-      this.$http.get('/static/json/plate_boundaries.geojson')
+      this.$http.get('/static/json/plate_boundaries.geo.json')
         .then(response => { this.$store.dispatch('setPlateBoundaries', response.data) })
         .catch(error => { console.log(error) })
     },
     fetchSystemInfo: function() {
       this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
       .then(response => {
-        this.$store.dispatch('setTotalEventsCount', response.data.data.counters.reports)
-        this.$store.dispatch('setMsk64ConfigVersion', response.data.data.msk64Config.data.config_version)
-        this.$store.dispatch('setPgaConfigVersion', response.data.data.pgaConfig.data.config_version)
-        this.$store.dispatch('setSrssDBVersion', response.data.data.srssCoreConfig.data.db_version)
+        ((data) => {
+          this.$store.dispatch('setMsk64ConfigVersion', data.msk64Config.data.config_version)
+          this.$store.dispatch('setSrssDBVersion', data.srssCoreConfig.data.db_version)
+          this.$store.dispatch('setTotalEventsCount', data.counters.reports)
+        })(response.data.data)
       })
       .catch(error => { console.log(error) })
     }
