@@ -142,6 +142,7 @@
             let radio = btn.querySelector('input[type=radio]')
 
             if (checked) {
+              stateLabel.innerText = eventsRange.title
               callBack.apply(this, arguments)
             }
 
@@ -189,8 +190,6 @@
             checkedBtn.checked = true
             checkedBtn.dispatchEvent(new Event('change'))
           }
-
-          stateLabel.innerText = checkedBtn.getAttribute('data-title')
 
           return btnGroup
         }
