@@ -51,14 +51,15 @@
       width: 15px;
     }
 
-    &.btn-group {
+    &.btn-group
+    {
       .btn {
         line-height: normal;
         text-align: center;
+        margin-bottom: 0;
         font-size: 12px;
-        padding: 5px 0;
         width: 71px;
-        opacity: 0.8;
+        padding: 0;
 
         &:focus {
           box-shadow: none;
@@ -69,10 +70,15 @@
           z-index: auto;
         }
 
-        &:hover, &.active {
-          box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.12);
-          z-index: auto;
-          opacity: 1;
+        > span {
+          padding: 5px 0;
+          display: block;
+          color: #444;
+        }
+
+        > input[type=radio]:checked + span,
+        &:hover > span {
+          box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.15);
         }
       }
     }

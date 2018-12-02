@@ -13,35 +13,85 @@
           coordinates: [50.351, 142.395],
           id: 'map-mainpage',
           object: null,
-          events: []
+          events: [],
+          defaultEventsRange: 'lastWeekEvents',
+          eventsRanges: {
+            lastDayEvents: {
+              title: 'События за последние сутки',
+              minDateSubtract: [1, 'days'],
+              label: '< 24 ч',
+              color: '#FF0000',
+              limit: 500
+            },
+            lastWeekEvents: {
+              title: 'События за последнюю неделю',
+              minDateSubtract: [1, 'weeks'],
+              label: '1-7 дн',
+              color: '#FFA500',
+              limit: 500
+            },
+            last2WeekEvents: {
+              title: 'События за последние две недели',
+              minDateSubtract: [2, 'weeks'],
+              label: '7-14 дн',
+              color: '#FFFF00',
+              limit: 500
+            },
+            past3MonthsEvents: {
+              title: 'События за последние 3 месяца',
+              minDateSubtract: [3, 'months'],
+              label: '> 14 дн',
+              color: '#808080',
+              limit: 500
+            }
+          }
         }
       }
     },
-    methods: {
-      addEvents: function(events) {
-        events.reverse().forEach(event => {
-          const datetime = this.$moment(event.locValues.data.event_datetime)
-          const datetimeDiff = this.$moment.utc().diff(datetime, 'hours')
-          const datetimeHumanreadable = datetime.format('LL в HH:mm:ss UTC')
-          const depth = event.locValues.data.depth
-          const latitude = event.locValues.data.lat
-          const longitude = event.locValues.data.lon
-          const magnitude = event.locValues.data.mag.toFixed(1)
-          const magnitudeType = event.locValues.data.mag_t
-          const options = {
-            color: 'black',
-            colorOpacity: 1.0,
-            fillColor: this.eventColor(datetimeDiff),
-            fillOpacity: 0.8,
-            gradient: false,
-            numberOfSides: 360,
-            radius: this.eventRadius(magnitude),
-            weight: 1
-          }
 
-          const marker = new window.L.RegularPolygonMarker(new window.L.LatLng(latitude, longitude), options)
-          const message =
-            `<table class="table table-hover table-sm table-responsive">
+    methods: {
+      createMap: function()
+      {
+        this.map.object = createMap(this.map.id, this.map.coordinates, 5, false)
+        let apiSettings = this.$root.$options.settings.api
+        let selfComponent = this
+        let $moment = this.$moment
+        let $http = this.$http
+        let _map = this.map
+
+        let legend = window.L.control({ position: 'bottomright' })
+        let stateLabel = window.L.DomUtil.create('p')
+        let markers = []
+
+        let addEvents = function(events)
+        {
+          markers.forEach(marker => _map.object.removeLayer(marker))
+          markers = []
+
+          events.reverse().forEach(event => {
+
+            const datetime = $moment(event.locValues.data.event_datetime)
+            const datetimeDiff = $moment.utc().diff(datetime, 'hours')
+            const datetimeHumanreadable = datetime.format('LL в HH:mm:ss UTC')
+            const depth = event.locValues.data.depth
+            const latitude = event.locValues.data.lat
+            const longitude = event.locValues.data.lon
+            const magnitude = event.locValues.data.mag.toFixed(1)
+            const magnitudeType = event.locValues.data.mag_t
+            const options = {
+              fillColor: selfComponent.eventColor(datetimeDiff),
+              radius: selfComponent.eventRadius(magnitude),
+              numberOfSides: 360,
+              colorOpacity: 1.0,
+              fillOpacity: 0.8,
+              gradient: false,
+              color: 'black',
+              weight: 1
+            }
+
+            const marker = new window.L.RegularPolygonMarker(new window.L.LatLng(latitude, longitude), options)
+            const message =
+              `<table class="table table-hover table-sm table-responsive">
               <tbody>
                 <tr>
                   <th class="align-middle" scope="row">Магнитуда</th>
@@ -71,66 +121,79 @@
             </table>
             <div class="text-center read-more"><a href="#/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
 
-          marker.bindPopup(message)
-          marker.addTo(this.map.object)
-        })
-
-        let legend = window.L.control({ position: 'bottomright' })
-        let stateLabel = window.L.DomUtil.create('p')
-        let defaultState = 'События за последние 3 месяца'
-
-        stateLabel.innerText = defaultState
+            marker.bindPopup(message)
+            marker.addTo(_map.object)
+            markers.push(marker)
+          })
+        }
 
         legend.onAdd = function()
         {
           /** @type HTMLElement */
-          let div = window.L.DomUtil.create('div', 'btn-group map-legend map-legend-mainpage')
+          let btnGroup = window.L.DomUtil.create('div', 'btn-group btn-group-toggle map-legend map-legend-mainpage')
 
-          let appendBtn = function(label, title, color, callBack) {
-
+          let appendBtn = function(eventsRangeName, callBack)
+          {
             /** @type HTMLElement */
-            let btn = window.L.DomUtil.create('button', 'btn btn-sm btn-default')
+            let btn = window.L.DomUtil.create('label', 'btn btn-sm btn-default')
+            let eventsRange = _map.eventsRanges[eventsRangeName]
+            let checked = (eventsRangeName === _map.defaultEventsRange)
 
-            btn.addEventListener('click', function(e) {
+            btn.innerHTML =
+              `<input type="radio" name="__map_report__" ${checked ? 'checked' : ''} />
+               <span>${eventsRange.label}</span>`
 
-              if (!e.target.classList.contains('active')) {
-                callBack.apply(this, arguments)
-                stateLabel.innerText = title
-              }
+            /** @type HTMLInputElement */
+            let radio = btn.querySelector('input[type=radio]')
 
-              [].forEach.call(div.querySelectorAll('button'), function(elem) {
-                elem.classList[elem === e.target ? 'add' : 'remove']('active')
-              })
+            if (checked) {
+              callBack.apply(this, arguments)
+            }
 
+            radio.addEventListener('change', function(e) {
+              stateLabel.innerText = eventsRange.title
+              callBack.apply(this, arguments)
             }, false)
 
-            btn.setAttribute('type', 'button')
-            btn.setAttribute('title', title)
-            btn.style.backgroundColor = color
-            btn.innerText = label
+            radio.setAttribute('data-title', eventsRange.title)
+            btn.style.backgroundColor = eventsRange.color
+            btn.setAttribute('title', eventsRange.title)
 
-            div.appendChild(btn)
-
-            return btn
+            btnGroup.appendChild(btn)
           }
 
-          appendBtn('< 24 ч', 'События за последние сутки', '#FF0000', (e) => {
-            console.log(e.target.innerText)
+          Object.keys(_map.eventsRanges).forEach(eventsRangeName => {
+
+            let eventsRange = _map.eventsRanges[eventsRangeName]
+            let minDateSubtract = eventsRange.minDateSubtract
+
+            appendBtn(eventsRangeName, (e) => {
+
+              let minDate = $moment().subtract(minDateSubtract[0], minDateSubtract[1])
+
+              $http.get(apiSettings.endpointEvents, {
+                params: {
+                  datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
+                  limit: eventsRange.limit || 500
+                }
+              })
+                .then(response => { addEvents(response.data.data) })
+                .catch(error => { console.log(error) })
+            })
+
           })
 
-          appendBtn('1-7 дн', 'События за последнюю неделю', '#FFA500', (e) => {
-            console.log(e.target.innerText)
-          })
+          let checkedBtn = btnGroup.querySelector('input[type=radio]:checked')
 
-          appendBtn('7-14 дн', 'События за последние две недели', '#FFFF00', (e) => {
-            console.log(e.target.innerText)
-          })
+          if (!checkedBtn) {
+            checkedBtn = btnGroup.querySelector('input[type=radio]:first-child')
+            checkedBtn.checked = true
+            checkedBtn.dispatchEvent(new Event('change'))
+          }
 
-          appendBtn('> 14 дн', defaultState, '#808080', (e) => {
-            console.log(e.target.innerText)
-          }).classList.add('active')
+          stateLabel.innerText = checkedBtn.getAttribute('data-title')
 
-          return div
+          return btnGroup
         }
 
         legend.addTo(this.map.object)
@@ -142,23 +205,25 @@
           div.appendChild(stateLabel)
           return div
         }
+
         text.addTo(this.map.object)
       },
-      createMap: function() {
-        this.map.object = createMap(this.map.id, this.map.coordinates, 5, false)
-      },
-      eventColor: function(timeDifference) {
+
+      eventColor: function(timeDifference)
+      {
         if (timeDifference <= 24) {
-          return '#ff0000'
-        } else if (timeDifference > 24 && timeDifference <= 120) {
-          return '#ffa500'
-        } else if (timeDifference > 120 && timeDifference <= 336) {
-          return '#ffff00'
+          return this.map.eventsRanges.lastDayEvents.color
+        } else if (timeDifference > 24 && timeDifference <= 168) {
+          return this.map.eventsRanges.lastWeekEvents.color
+        } else if (timeDifference > 168 && timeDifference <= 336) {
+          return this.map.eventsRanges.last2WeekEvents.color
         } else {
-          return '#808080'
+          return this.map.eventsRanges.past3MonthsEvents.color
         }
       },
-      eventRadius: function(magnitude) {
+
+      eventRadius: function(magnitude)
+      {
         if (magnitude < 3.0) {
           return 4
         } else if (magnitude >= 3.0 && magnitude < 4.0) {
@@ -174,21 +239,11 @@
         } else if (magnitude > 8) {
           return 26
         }
-      },
-      fetchEvents: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-          params: {
-            datetime_min: this.$moment().subtract(3, 'months').format('YYYY-MM-DD HH:mm:ss'),
-            limit: 500
-          }
-        })
-          .then(response => { this.addEvents(response.data.data) })
-          .catch(error => { console.log(error) })
       }
     },
+
     mounted() {
       this.createMap()
-      this.fetchEvents()
     }
   }
 </script>
