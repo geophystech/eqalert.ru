@@ -150,7 +150,7 @@
               callBack.apply(this, arguments)
             }, false)
 
-            radio.setAttribute('data-title', eventsRange.title)
+            radio.setAttribute('data-range', eventsRangeName)
             btn.style.backgroundColor = eventsRange.color
             btn.setAttribute('title', eventsRange.title)
 
