@@ -184,7 +184,12 @@ export function createMap(id, coordinates, zoom = 8, showStations = true, store)
 
   const controls = layersControl()
 
-  zoomHome().addTo(map)
+  let _zoomHome = zoomHome()
+
+  _zoomHome.setHomeCoordinates(coordinates)
+  _zoomHome.setHomeZoom(zoom)
+  _zoomHome.addTo(map)
+
   listenerStoreCurrentTileProvider(map, store)
   addStations(map, controls, showStations)
 
