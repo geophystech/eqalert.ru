@@ -1,10 +1,10 @@
 <template>
-  <div class="map" :id="map.id" />
+  <div class="map" :id="map.id"/>
 </template>
 
 <script>
-  import { createMap } from '@/map_functions'
-  import { agency } from '@/helpers/event'
+  import {createMap} from '@/map_functions'
+  import {agency} from '@/helpers/event'
 
   export default {
     data() {
@@ -50,8 +50,7 @@
     },
 
     methods: {
-      createMap: function()
-      {
+      createMap: function() {
         this.map.object = createMap(this.map.id, this.map.coordinates, 5, false)
         let apiSettings = this.$root.$options.settings.api
         let selfComponent = this
@@ -59,12 +58,11 @@
         let $http = this.$http
         let _map = this.map
 
-        let legend = window.L.control({ position: 'bottomright' })
+        let legend = window.L.control({position: 'bottomright'})
         let stateLabel = window.L.DomUtil.create('p')
         let markers = []
 
-        let addEvents = function(events)
-        {
+        let addEvents = function(events) {
           markers.forEach(marker => _map.object.removeLayer(marker))
           markers = []
 
@@ -127,13 +125,11 @@
           })
         }
 
-        legend.onAdd = function()
-        {
+        legend.onAdd = function() {
           /** @type HTMLElement */
           let btnGroup = window.L.DomUtil.create('div', 'btn-group btn-group-toggle map-legend map-legend-mainpage')
 
-          let appendBtn = function(eventsRangeName, callBack)
-          {
+          let appendBtn = function(eventsRangeName, callBack) {
             /** @type HTMLElement */
             let btn = window.L.DomUtil.create('label', 'btn btn-sm btn-default')
             let eventsRange = _map.eventsRanges[eventsRangeName]
@@ -177,8 +173,12 @@
                   limit: eventsRange.limit || 500
                 }
               })
-                .then(response => { addEvents(response.data.data) })
-                .catch(error => { console.log(error) })
+                .then(response => {
+                  addEvents(response.data.data)
+                })
+                .catch(error => {
+                  console.log(error)
+                })
             })
 
           })
@@ -198,7 +198,7 @@
 
         legend.addTo(this.map.object)
 
-        let text = window.L.control({ position: 'bottomright' })
+        let text = window.L.control({position: 'bottomright'})
 
         text.onAdd = function() {
           let div = window.L.DomUtil.create('div', 'map-text')
@@ -209,8 +209,7 @@
         text.addTo(this.map.object)
       },
 
-      eventColor: function(timeDifference)
-      {
+      eventColor: function(timeDifference) {
         if (timeDifference <= 24) {
           return this.map.eventsRanges.lastDayEvents.color
         } else if (timeDifference > 24 && timeDifference <= 168) {
@@ -222,8 +221,7 @@
         }
       },
 
-      eventRadius: function(magnitude)
-      {
+      eventRadius: function(magnitude) {
         if (magnitude < 3.0) {
           return 4
         } else if (magnitude >= 3.0 && magnitude < 4.0) {
