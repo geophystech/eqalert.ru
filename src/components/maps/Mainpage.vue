@@ -133,6 +133,10 @@
             let btn = window.L.DomUtil.create('label', 'btn btn-sm btn-default')
             let eventsRange = _map.eventsRanges[eventsRangeName]
             let checked = (eventsRangeName === _map.defaultEventsRange)
+            let changeHandler = function() {
+              stateLabel.innerText = eventsRange.title
+              callBack()
+            }
 
             btn.innerHTML =
               `<input type="radio" name="__map_report__" ${checked ? 'checked' : ''} />
@@ -141,15 +145,8 @@
             /** @type HTMLInputElement */
             let radio = btn.querySelector('input[type=radio]')
 
-            if (checked) {
-              stateLabel.innerText = eventsRange.title
-              callBack.apply(this, arguments)
-            }
-
-            radio.addEventListener('change', function(e) {
-              stateLabel.innerText = eventsRange.title
-              callBack.apply(this, arguments)
-            }, false)
+            radio.addEventListener('change', changeHandler, false)
+            if (checked) changeHandler()
 
             radio.setAttribute('data-range', eventsRangeName)
             btn.style.backgroundColor = eventsRange.color
@@ -163,11 +160,9 @@
             let eventsRange = _map.eventsRanges[eventsRangeName]
             let minDateSubtract = eventsRange.minDateSubtract
 
-            appendBtn(eventsRangeName, (e) => {
+            appendBtn(eventsRangeName, () => {
 
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
-
-              console.log(minDate.format('YYYY-MM-DD HH:mm:ss'))
 
               $http.get(apiSettings.endpointEvents, {
                 params: {

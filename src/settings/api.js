@@ -26,7 +26,7 @@ class Config {
   }
 
   endpointEventBuildings(id) {
-    return `${this.baseURL}/${this.version}/msk64/damagedBuildings/${id}`
+    return `${this.baseURL}/${this.version}/pga/damagedBuildings/${id}`
   }
 
   endpointEvent(id) {
