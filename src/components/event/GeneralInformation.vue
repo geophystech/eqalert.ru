@@ -8,7 +8,7 @@
       :items="items">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
       <template slot="description" slot-scope="data">
-        <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.auto="data.value" />
+        <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>
   </div>
