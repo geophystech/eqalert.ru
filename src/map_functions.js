@@ -252,34 +252,34 @@ export function setView(map, coordinates, zoom = 5) {
 
 export function createMapMarkerPopupBuilding(building)
 {
-  let data = building.building.data
+  let buildingData = Object.assign({}, building.building.data)
+
+  buildingData.address = `${buildingData.street}, д. ${buildingData.street_number}`
+  buildingData.max_msk64 = `${buildingData.max_msk64} (MSK64)`
+  buildingData.damage_level = building.damage_level
+  buildingData.PGA = building.pga_value || 0.0
+
   let rows = [
-    ['Тип строения', data.building_type],
-    ['Тип фундамента', data.building_base_type],
-    ['Материал', data.fabric_type],
-    ['Год постройки', data.built_year],
-    ['Кол-во этажей', data.flats],
-    ['Адрес', `${data.street}, д. ${data.street_number}`],
-    ['Кол-во проживающих', data.residents],
-    ['Максимальная бальность', `${data.max_msk64} (MSK64)`],
-    ['Прогноз повреждений', building.damage_level],
-    ['PGA', building.pga_value || 0.0],
-    // --
-    ['soil_type', data.soil_type],
-    ['height', data.height],
-    ['notes', data.notes],
-    ['max_pga', data.max_pga],
-    ['deterioration', data.deterioration],
-    ['avg_day_people', data.avg_day_people],
-    ['avg_night_people', data.avg_night_people],
-    ['apartments_num', data.apartments_num],
-    ['vs30', data.vs30],
-    ['data_source_reference', data.data_source_reference]
-    // --
+    ['building_type', 'Тип строения'],
+    ['building_base_type', 'Тип фундамента'],
+    ['fabric_type', 'Материал'],
+    ['built_year', 'Год постройки'],
+    ['flats', 'Кол-во этажей'],
+    ['address', 'Адрес'],
+    ['residents', 'Кол-во проживающих'],
+    ['max_msk64', 'Максимальная бальность'],
+    ['damage_level', 'Прогноз повреждений'],
+    ['PGA', 'PGA'],
+    ['notes', 'Доп. сведения'],
+    ['data_source_reference', 'Источник данных']
   ]
-    .filter(([, val] = []) => val.toString() !== '')
-    .map(([prop, val] = []) => {
-      return `<tr><th scope="row" class="align-middle">${prop}</th><td>${val}</td></tr>`
+    .filter(([prop] = []) => buildingData[prop].toString() !== '')
+    .map(([prop, title] = []) => {
+      return (
+        `<tr class="row-building-${prop}">
+          <th scope="row" class="align-middle">${title}</th><td>${buildingData[prop]}</td>
+        </tr>`
+      )
     })
 
   return (
