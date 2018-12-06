@@ -1,5 +1,7 @@
-class Config {
-  constructor() {
+class Config
+{
+  constructor()
+  {
     this.authorizationType = 'Bearer'
     this.baseURL = process.env.API_BASE_URL
     this.oauthBaseURL = process.env.API_OAUTH_BASE_URL

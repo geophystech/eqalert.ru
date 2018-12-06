@@ -28,5 +28,7 @@ module.exports = {
     'brace-style': 0,
     'padded-blocks': 0,
     'skip-blank-lines': 0,
+    'no-unexpected-multiline': 0,
+    'func-call-spacing': 0
   }
 }

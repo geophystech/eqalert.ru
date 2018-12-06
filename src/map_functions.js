@@ -10,14 +10,15 @@ function listenerStoreCurrentTileProvider(map) {
   })
 }
 
-export function addEpicenter(map, coordinates) {
+export function addEpicenter(map, coordinates)
+{
   const options = {
-    color: '',
     fillColor: '#ff0a0a',
-    fillOpacity: 1.0,
     numberOfPoints: 5,
+    fillOpacity: 1.0,
     radius: 12,
-    weight: 2
+    weight: 2,
+    color: ''
   }
   const latLng = new window.L.LatLng(coordinates[0], coordinates[1])
   const epicenter = new window.L.StarMarker(latLng, options)
@@ -127,12 +128,16 @@ export function addStations(map, controls, show = true) {
     })
 }
 
-export function buildingColor(damageLevel) {
+export function buildingColor(damageLevel)
+{
+  if (damageLevel >= 3) {
+    return '#ff0000'
+  }
+
   switch (damageLevel) {
     case 0: return 'cyan'
     case 1: return '#008000'
     case 2: return '#ffa500'
-    case 3: return '#ff0000'
   }
 }
 
@@ -169,7 +174,8 @@ function currentTileProvider() {
   return tileProviders()[tileProvider]
 }
 
-export function createMap(id, coordinates, zoom = 8, showStations = true, store) {
+export function createMap(id, coordinates, {zoom = 8, showStations = true, store} = {})
+{
   const options = {
     fullscreenControl: true,
     fullscreenControlOptions: { position: 'topleft' },
@@ -181,15 +187,18 @@ export function createMap(id, coordinates, zoom = 8, showStations = true, store)
   const map = window.L.map(id, options)
   setView(map, coordinates)
   currentTileProvider(store).addTo(map)
+  listenerStoreCurrentTileProvider(map, store)
 
-  const controls = layersControl()
+  const controls = new window.L.Control.Layers(tileProviders())
   let _zoomHome = zoomHome()
 
   _zoomHome.setHomeCoordinates(coordinates)
   _zoomHome.setHomeZoom(zoom)
   _zoomHome.addTo(map)
 
-  listenerStoreCurrentTileProvider(map, store)
+  // Plate Boundaries
+  addPlateBoundaries(controls)
+  // Show seismic stations
   addStations(map, controls, showStations)
 
   map.setZoom(zoom)
@@ -202,13 +211,6 @@ export function createMap(id, coordinates, zoom = 8, showStations = true, store)
 
 export function id(id, tab) {
   return `map-${id}-${tab}`
-}
-
-function layersControl() {
-  const controls = new window.L.Control.Layers(tileProviders())
-  addPlateBoundaries(controls)
-
-  return controls
 }
 
 export function msk64Color(value) {

@@ -1,4 +1,8 @@
-.map {
+
+$legend-marker-size: 10px;
+
+.map
+{
   height: 450px;
 
   .magnitude-color {
@@ -17,7 +21,8 @@
   }
 
   // Подпись.
-  .map-text {
+  .map-text
+  {
     background-color: rgba(255, 255, 255, .5);
     border-radius: 2px;
     font-size: 120%;
@@ -34,14 +39,15 @@
     }
   }
 
-  .map-legend {
+  .map-legend
+  {
+    box-shadow: 0 0 15px rgba(0, 0, 0, .2);
     background: rgba(255, 255, 255, .8);
     border-radius: 5px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, .2);
-    color: #555;
     line-height: 15px;
     padding: 6px 8px;
     text-align: left;
+    color: #555;
 
     i {
       float: left;
@@ -83,15 +89,27 @@
       }
     }
 
-    .buildings-legend {
-      width: 50px;
+    .buildings-legend
+    {
+      position: relative;
+      width: 65px;
+      top: -1px;
 
-      span:first-child {
-        width: 10px;
+      span:first-child
+      {
+        height: $legend-marker-size;
+        width: $legend-marker-size;
+        vertical-align: middle;
+        display: inline-block;
       }
 
-      span:last-child {
-        margin-left: 10px;
+      span:last-child
+      {
+        line-height: $legend-marker-size;
+        height: $legend-marker-size;
+        vertical-align: middle;
+        display: inline-block;
+        margin-left: 8px;
         width: auto;
       }
     }

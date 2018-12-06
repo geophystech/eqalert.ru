@@ -20,78 +20,54 @@
     },
     methods: {
       addData: function(data) {
-        let markers = new window.L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
+        let markers = new window.L.MarkerClusterGroup({
+          disableClusteringAtZoom: 15
+        })
 
         data.forEach(building => {
           if (building.damage_level < 1) return
 
-          const buildingType = building.building.data.building_type
-          const buildingBaseType = building.building.data.building_base_type
-          const builtYear = building.building.data.built_year
-          const damageLevel = building.damage_level
-          const fabricType = building.building.data.fabric_type
-          const flats = building.building.data.flats
-          const latitude = building.building.data.lat
-          const longitude = building.building.data.lon
-          const maxMSK64 = building.building.data.max_msk64
+          const buildingData = building.building.data
           const options = {
+            fillColor: buildingColor(building.damage_level),
             dropShadow: true,
-            fillColor: buildingColor(damageLevel),
             gradient: true,
             innerRadius: 0,
             radius: 7
           }
-          const PGAValue = building.pga_value || 0.0
-          const residents = building.building.data.residents
-          const street = building.building.data.street
-          const streetNumber = building.building.data.street_number
-
-          const coordinates = new window.L.LatLng(latitude, longitude)
+          const coordinates = new window.L.LatLng(buildingData.lat, buildingData.lon)
           const marker = new window.L.MapMarker(coordinates, options)
+          let rows = [
+            ['Тип строения', buildingData.building_type],
+            ['Тип фундамента', buildingData.building_base_type],
+            ['Материал', buildingData.fabric_type],
+            ['Год постройки', buildingData.built_year],
+            ['Кол-во этажей', buildingData.flats],
+            ['Адрес', `${buildingData.street}, д. ${buildingData.street_number}`],
+            ['Кол-во проживающих', buildingData.residents],
+            ['Максимальная бальность', `${buildingData.max_msk64} (MSK64)`],
+            ['Прогноз повреждений', building.damage_level],
+            ['PGA', building.pga_value || 0.0],
+            // --
+            ['soil_type', buildingData.soil_type],
+            ['height', buildingData.height],
+            ['notes', buildingData.notes],
+            ['max_pga', buildingData.max_pga],
+            ['deterioration', buildingData.deterioration],
+            ['avg_day_people', buildingData.avg_day_people],
+            ['avg_night_people', buildingData.avg_night_people],
+            ['apartments_num', buildingData.apartments_num],
+            ['vs30', buildingData.vs30],
+            ['data_source_reference', buildingData.data_source_reference]
+            // --
+          ].filter(cols => cols[1].toString() !== '').map(cols => {
+            return `<tr><th scope="row" class="align-middle">${cols[0]}</th><td>${cols[1]}</td></tr>`
+          })
 
           const message =
             `<table class="table table-hover table-sm table-responsive">
               <tbody>
-                <tr>
-                  <th class="align-middle" scope="row">Тип строения</th>
-                  <td>${buildingType}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Тип фундамента</th>
-                  <td>${buildingBaseType}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Материал</th>
-                  <td>${fabricType}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Год постройки</th>
-                  <td>${builtYear}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Кол-во этажей</th>
-                  <td>${flats}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Адрес</th>
-                  <td>${street}, д. ${streetNumber}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Кол-во проживающих</th>
-                  <td>${residents}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Максимальная бальность</th>
-                  <td>${maxMSK64} (MSK64)</td>
-                </tr>
-                <tr>
-                  <th scope="row">Прогноз повреждений</th>
-                  <td>d-${damageLevel}</td>
-                </tr>
-                <tr>
-                  <th scope="row">PGA</th>
-                  <td>${PGAValue}</td>
-                </tr>
+                ${rows.join('')}
                 <tr>
                   <th scope="row">По данным</th>
                   <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
@@ -114,7 +90,7 @@
             div.innerHTML =
               `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
               <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
-              <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3</span></div>
+              <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3 - d-5</span></div>
               `
             return div
           }
