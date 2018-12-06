@@ -3,7 +3,10 @@
 </template>
 
 <script>
-  import { addEpicenter, buildingColor, createMap, id, removeEpicenter, setView, createMapMarkerPopupBuilding } from '@/map_functions.js'
+  import {
+    addEpicenter, buildingColor, createMap, id, removeEpicenter,
+    setView, createMapMarkerPopupBuilding
+  } from '@/map_functions.js'
 
   export default {
     props: ['event', 'tab'],
