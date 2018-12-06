@@ -250,6 +250,49 @@ export function setView(map, coordinates, zoom = 5) {
   map.setView(coordinates, zoom)
 }
 
+export function createMapMarkerPopupBuilding(building)
+{
+  let data = building.building.data
+  let rows = [
+    ['Тип строения', data.building_type],
+    ['Тип фундамента', data.building_base_type],
+    ['Материал', data.fabric_type],
+    ['Год постройки', data.built_year],
+    ['Кол-во этажей', data.flats],
+    ['Адрес', `${data.street}, д. ${data.street_number}`],
+    ['Кол-во проживающих', data.residents],
+    ['Максимальная бальность', `${data.max_msk64} (MSK64)`],
+    ['Прогноз повреждений', building.damage_level],
+    ['PGA', building.pga_value || 0.0],
+    // --
+    ['soil_type', data.soil_type],
+    ['height', data.height],
+    ['notes', data.notes],
+    ['max_pga', data.max_pga],
+    ['deterioration', data.deterioration],
+    ['avg_day_people', data.avg_day_people],
+    ['avg_night_people', data.avg_night_people],
+    ['apartments_num', data.apartments_num],
+    ['vs30', data.vs30],
+    ['data_source_reference', data.data_source_reference]
+    // --
+  ].filter(cols => cols[1].toString() !== '').map(cols => {
+    return `<tr><th scope="row" class="align-middle">${cols[0]}</th><td>${cols[1]}</td></tr>`
+  })
+
+  return (
+    `<table class="table table-hover table-sm table-responsive">
+      <tbody>
+        ${rows.join('')}
+        <tr>
+          <th scope="row">По данным</th>
+          <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
+        </tr>
+      </tbody>
+    </table>`
+  )
+}
+
 // There is a bug when layers got disappeared on exiting from fullscreen.
 // See eqalert issue: https://github.com/geophystech/eqalert.ru/issues/249
 // This is a workaround that explicitly redraws map to brig layers back.

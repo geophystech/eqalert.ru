@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { addEpicenter, buildingColor, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
+  import { addEpicenter, buildingColor, createMap, id, removeEpicenter, setView, createMapMarkerPopupBuilding } from '@/map_functions.js'
 
   export default {
     props: ['event', 'tab'],
@@ -27,7 +27,6 @@
         data.forEach(building => {
           if (building.damage_level < 1) return
 
-          const buildingData = building.building.data
           const options = {
             fillColor: buildingColor(building.damage_level),
             dropShadow: true,
@@ -35,47 +34,11 @@
             innerRadius: 0,
             radius: 7
           }
-          const coordinates = new window.L.LatLng(buildingData.lat, buildingData.lon)
+          const {lat: latitude, lon: longitude} = building.building.data
+          const coordinates = new window.L.LatLng(latitude, longitude)
           const marker = new window.L.MapMarker(coordinates, options)
-          let rows = [
-            ['Тип строения', buildingData.building_type],
-            ['Тип фундамента', buildingData.building_base_type],
-            ['Материал', buildingData.fabric_type],
-            ['Год постройки', buildingData.built_year],
-            ['Кол-во этажей', buildingData.flats],
-            ['Адрес', `${buildingData.street}, д. ${buildingData.street_number}`],
-            ['Кол-во проживающих', buildingData.residents],
-            ['Максимальная бальность', `${buildingData.max_msk64} (MSK64)`],
-            ['Прогноз повреждений', building.damage_level],
-            ['PGA', building.pga_value || 0.0],
-            // --
-            ['soil_type', buildingData.soil_type],
-            ['height', buildingData.height],
-            ['notes', buildingData.notes],
-            ['max_pga', buildingData.max_pga],
-            ['deterioration', buildingData.deterioration],
-            ['avg_day_people', buildingData.avg_day_people],
-            ['avg_night_people', buildingData.avg_night_people],
-            ['apartments_num', buildingData.apartments_num],
-            ['vs30', buildingData.vs30],
-            ['data_source_reference', buildingData.data_source_reference]
-            // --
-          ].filter(cols => cols[1].toString() !== '').map(cols => {
-            return `<tr><th scope="row" class="align-middle">${cols[0]}</th><td>${cols[1]}</td></tr>`
-          })
 
-          const message =
-            `<table class="table table-hover table-sm table-responsive">
-              <tbody>
-                ${rows.join('')}
-                <tr>
-                  <th scope="row">По данным</th>
-                  <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
-                </tr>
-              </tbody>
-            </table>`
-
-          marker.bindPopup(message)
+          marker.bindPopup(createMapMarkerPopupBuilding(building))
           markers.addLayer(marker)
         })
 
@@ -89,9 +52,8 @@
             let div = window.L.DomUtil.create('div', 'map-legend')
             div.innerHTML =
               `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
-              <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
-              <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3 - d-5</span></div>
-              `
+               <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3 - d-5</span></div>`
             return div
           }
 
