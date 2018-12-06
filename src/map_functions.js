@@ -277,9 +277,9 @@ export function createMapMarkerPopupBuilding(building)
     ['data_source_reference', data.data_source_reference]
     // --
   ]
-    .filter(([, value] = []) => value.toString() !== '')
-    .map(([title, value] = []) => {
-      return `<tr><th scope="row" class="align-middle">${title}</th><td>${value}</td></tr>`
+    .filter(([, val] = []) => val.toString() !== '')
+    .map(([prop, val] = []) => {
+      return `<tr><th scope="row" class="align-middle">${prop}</th><td>${val}</td></tr>`
     })
 
   return (
