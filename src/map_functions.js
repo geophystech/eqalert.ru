@@ -256,7 +256,7 @@ export function createMapMarkerPopupBuilding(building)
 
   buildingData.address = `${buildingData.street}, д. ${buildingData.street_number}`
   buildingData.max_msk64 = `${buildingData.max_msk64} (MSK64)`
-  buildingData.damage_level = building.damage_level
+  buildingData.damage_level = `d-${building.damage_level}`
   buildingData.PGA = building.pga_value || 0.0
 
   let rows = [

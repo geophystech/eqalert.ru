@@ -29,6 +29,8 @@ module.exports = {
     'padded-blocks': 0,
     'skip-blank-lines': 0,
     'no-unexpected-multiline': 0,
-    'func-call-spacing': 0
+    'no-trailing-spaces': 0,
+    'func-call-spacing': 0,
+    'spaced-comment': 0
   }
 }

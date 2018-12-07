@@ -24,22 +24,65 @@
     methods: {
       addData: function(data) {
         let markers = new window.L.MarkerClusterGroup({
-          disableClusteringAtZoom: 15
+          disableClusteringAtZoom: 15,
+          iconCreateFunction: function(cluster)
+          {
+            let damageLevels = {}
+
+            cluster.getAllChildMarkers().forEach(marker => {
+              let damageLevel = marker.options.damageLevel
+              if (!damageLevel) return
+              if (!(damageLevel in damageLevels)) {
+                damageLevels[damageLevel] = 0
+              }
+              damageLevels[damageLevel]++
+            })
+
+            damageLevels = Object.entries(damageLevels).sort((a, b) => b[1] - a[1] || 1)
+            let damageLevel = damageLevels[0][0]
+
+            if (damageLevel > 3) {
+              damageLevel = 3
+            }
+
+            return new window.L.DivIcon({
+              className: `marker-cluster marker-cluster-damage-level-${damageLevel}`,
+              html: `<div><span>${cluster.getChildCount()}</span></div>`,
+              iconSize: new window.L.Point(40, 40)
+            })
+          }
         })
 
         data.forEach(building => {
           if (building.damage_level < 1) return
 
-          const options = {
-            fillColor: buildingColor(building.damage_level),
-            dropShadow: true,
-            gradient: true,
-            innerRadius: 0,
-            radius: 7
-          }
           const {lat: latitude, lon: longitude} = building.building.data
           const coordinates = new window.L.LatLng(latitude, longitude)
-          const marker = new window.L.MapMarker(coordinates, options)
+          const markerColor = buildingColor(building.damage_level)
+          let marker
+
+          if (building.building.data.is_primary)
+          {
+            marker = new window.L.Marker(coordinates, {
+              icon: window.L.divIcon({
+                html: `<div title="${building.building.data.building_type}"
+                            style="background-color: ${markerColor}"></div>`,
+                className: 'marker-icon primary-building',
+                iconSize: new window.L.Point(17, 17)
+              })
+            })
+          }
+          else
+          {
+            marker = new window.L.MapMarker(coordinates, {
+              damageLevel: building.damage_level,
+              fillColor: markerColor,
+              dropShadow: true,
+              gradient: true,
+              innerRadius: 0,
+              radius: 7
+            })
+          }
 
           marker.bindPopup(createMapMarkerPopupBuilding(building))
           markers.addLayer(marker)
@@ -107,5 +150,31 @@
 
 <style lang="scss">
   @import '../../assets/scss/event_map';
+
+  $level-colors: (
+    1: #008000,
+    2: #ffa500,
+    3: #ff0000
+  );
+
+  @each $level, $color in $level-colors {
+    .marker-cluster-damage-level-#{$level} {
+      background-color: rgba(lighten($color, 20%), 0.6);
+      > div { background-color: rgba($color, 0.6) }
+    }
+  }
+
+  .marker-icon.primary-building > div {
+    box-shadow: 2px 0 3px 1px rgba(0, 0, 0, .65);
+    transform: rotate(45deg);
+    border: 1px solid #666;
+    position: relative;
+    border-radius: 3px;
+    display: block;
+    height: 100%;
+    width: 100%;
+    top: -12px;
+  }
+
 </style>
 
