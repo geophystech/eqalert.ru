@@ -47,16 +47,16 @@
                     <td>${ldo.name}</td>
                   </tr>
                   <tr>
-                    <th scope="row">Количество анализируемых участков</th>
-                    <td>${ldo.part_num}</td>
-                  </tr>
-                  <tr>
                     <th scope="row">Год постройки</th>
                     <td>${part.built_year}</td>
                   </tr>
                   <tr>
                     <th scope="row">Глубина залегания</th>
                     <td>${part.height}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Проектная бальность</th>
+                    <td>${part.max_msk64} (MSK64)</td>
                   </tr>
                   <tr>
                     <th scope="row">Материал конструкций</th>

@@ -31,6 +31,7 @@ module.exports = {
     'no-unexpected-multiline': 0,
     'no-trailing-spaces': 0,
     'func-call-spacing': 0,
+    'keyword-spacing': 0,
     'spaced-comment': 0
   }
 }

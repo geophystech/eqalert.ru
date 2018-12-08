@@ -174,8 +174,12 @@ function currentTileProvider() {
   return tileProviders()[tileProvider]
 }
 
-export function createMap(id, coordinates, {zoom = 8, showStations = true, store} = {})
-{
+export function createMap(id, coordinates, {
+  addToggleShowObjects = false,
+  showStations = true,
+  zoom = 8,
+  store
+} = {}) {
   const options = {
     fullscreenControl: true,
     fullscreenControlOptions: { position: 'topleft' },
@@ -200,6 +204,11 @@ export function createMap(id, coordinates, {zoom = 8, showStations = true, store
   addPlateBoundaries(controls)
   // Show seismic stations
   addStations(map, controls, showStations)
+
+  if(addToggleShowObjects)
+  {
+
+  }
 
   map.setZoom(zoom)
   controls.addTo(map)
@@ -267,7 +276,7 @@ export function createMapMarkerPopupBuilding(building)
     ['flats', 'Кол-во этажей'],
     ['address', 'Адрес'],
     ['residents', 'Кол-во проживающих'],
-    ['max_msk64', 'Максимальная бальность'],
+    ['max_msk64', 'Проектная бальность'],
     ['damage_level', 'Прогноз повреждений'],
     ['PGA', 'PGA'],
     ['notes', 'Доп. сведения'],

@@ -50,7 +50,11 @@
 
     methods: {
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.map.coordinates, {zoom: 4, showStations: false})
+        this.map.object = createMap(this.map.id, this.map.coordinates, {
+          addToggleShowObjects: true,
+          showStations: false,
+          zoom: 4
+        })
         let apiSettings = this.$root.$options.settings.api
         let selfComponent = this
         let $moment = this.$moment
