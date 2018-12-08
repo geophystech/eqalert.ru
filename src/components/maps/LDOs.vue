@@ -55,7 +55,7 @@
                     <td>${part.height}</td>
                   </tr>
                   <tr>
-                    <th scope="row">Проектная бальность</th>
+                    <th scope="row">Проектная сейсмостойкость</th>
                     <td>${part.max_msk64} (MSK64)</td>
                   </tr>
                   <tr>

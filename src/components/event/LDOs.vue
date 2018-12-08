@@ -90,10 +90,10 @@ export default {
         this.items[i].value = damagedParts[k]
       })
 
-      this.items[5].value = 0
+      this.items[5].value = 0;
 
-      Object.values(damagedParts).forEach(v => {
-        this.items[5].value += v
+      ([2, 3, 4, 5]).forEach(level => {
+        this.items[5].value += damagedParts[level]
       })
 
       this.items[6].value = this.$store.getters.srssDBVersion

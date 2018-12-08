@@ -276,7 +276,7 @@ export function createMapMarkerPopupBuilding(building)
     ['flats', 'Кол-во этажей'],
     ['address', 'Адрес'],
     ['residents', 'Кол-во проживающих'],
-    ['max_msk64', 'Проектная бальность'],
+    ['max_msk64', 'Проектная сейсмостойкость'],
     ['damage_level', 'Прогноз повреждений'],
     ['PGA', 'PGA'],
     ['notes', 'Доп. сведения'],
