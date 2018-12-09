@@ -76,7 +76,7 @@
               color: ColorTrasform.darken(markerColor, 10),
               numberOfPoints: 8,
               fillOpacity: 0.7,
-              innerRadius: 5,
+              //innerRadius: 5,
               radius: 17,
               weight: 1
             }))
