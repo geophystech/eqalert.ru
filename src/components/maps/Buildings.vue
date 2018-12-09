@@ -3,7 +3,10 @@
 </template>
 
 <script>
-  import { addEpicenter, buildingColor, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
+  import {
+    addEpicenter, buildingColor, createMap, id, removeEpicenter,
+    setView, createMapMarkerPopupBuilding
+  } from '@/map_functions.js'
 
   export default {
     props: ['event', 'tab'],
@@ -20,86 +23,72 @@
     },
     methods: {
       addData: function(data) {
-        let markers = new window.L.MarkerClusterGroup({ disableClusteringAtZoom: 15 })
+        let markers = new window.L.MarkerClusterGroup({
+          disableClusteringAtZoom: 15,
+          iconCreateFunction: function(cluster)
+          {
+            let damageLevels = {}
+
+            cluster.getAllChildMarkers().forEach(marker => {
+              let damageLevel = marker.options.damageLevel
+              if (!damageLevel) return
+              if (!(damageLevel in damageLevels)) {
+                damageLevels[damageLevel] = 0
+              }
+              damageLevels[damageLevel]++
+            })
+
+            damageLevels = Object.entries(damageLevels).sort((a, b) => b[1] - a[1] || 1)
+            let damageLevel = damageLevels[0][0]
+
+            if (damageLevel > 3) {
+              damageLevel = 3
+            }
+
+            return new window.L.DivIcon({
+              className: `marker-cluster marker-cluster-damage-level-${damageLevel}`,
+              html: `<div><span>${cluster.getChildCount()}</span></div>`,
+              iconSize: new window.L.Point(40, 40)
+            })
+          }
+        })
 
         data.forEach(building => {
           if (building.damage_level < 1) return
 
-          const buildingType = building.building.data.building_type
-          const buildingBaseType = building.building.data.building_base_type
-          const builtYear = building.building.data.built_year
-          const damageLevel = building.damage_level
-          const fabricType = building.building.data.fabric_type
-          const flats = building.building.data.flats
-          const latitude = building.building.data.lat
-          const longitude = building.building.data.lon
-          const maxMSK64 = building.building.data.max_msk64
-          const options = {
-            dropShadow: true,
-            fillColor: buildingColor(damageLevel),
-            gradient: true,
-            innerRadius: 0,
-            radius: 7
-          }
-          const PGAValue = building.pga_value || 0.0
-          const residents = building.building.data.residents
-          const street = building.building.data.street
-          const streetNumber = building.building.data.street_number
-
+          const {lat: latitude, lon: longitude} = building.building.data
           const coordinates = new window.L.LatLng(latitude, longitude)
-          const marker = new window.L.MapMarker(coordinates, options)
+          const markerColor = buildingColor(building.damage_level)
+          let marker
 
-          const message =
-            `<table class="table table-hover table-sm table-responsive">
-              <tbody>
-                <tr>
-                  <th class="align-middle" scope="row">Тип строения</th>
-                  <td>${buildingType}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Тип фундамента</th>
-                  <td>${buildingBaseType}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Материал</th>
-                  <td>${fabricType}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Год постройки</th>
-                  <td>${builtYear}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Кол-во этажей</th>
-                  <td>${flats}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Адрес</th>
-                  <td>${street}, д. ${streetNumber}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Кол-во проживающих</th>
-                  <td>${residents}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Максимальная бальность</th>
-                  <td>${maxMSK64} (MSK64)</td>
-                </tr>
-                <tr>
-                  <th scope="row">Прогноз повреждений</th>
-                  <td>d-${damageLevel}</td>
-                </tr>
-                <tr>
-                  <th scope="row">PGA</th>
-                  <td>${PGAValue}</td>
-                </tr>
-                <tr>
-                  <th scope="row">По данным</th>
-                  <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
-                </tr>
-              </tbody>
-            </table>`
+          if (building.building.data.is_primary)
+          {
+            marker = new window.L.Marker(coordinates, {
+              icon: window.L.divIcon({
+                html: `<div title="${building.building.data.building_type}"
+                            style="background-color: ${markerColor}"></div>`,
+                className: 'marker-icon primary-building',
+                iconSize: new window.L.Point(17, 17)
+              })
+            })
+          }
+          else
+          {
+            marker = new window.L.MapMarker(coordinates, {
+              damageLevel: building.damage_level,
+              fillColor: markerColor,
+              dropShadow: true,
+              gradient: true,
+              innerRadius: 0,
+              radius: 7
+            })
+          }
 
-          marker.bindPopup(message)
+          let popup = createMapMarkerPopupBuilding(building.building.data, {
+            damageLevel: building.damage_level,
+            pgaValue: building.pga_value
+          })
+          marker.bindPopup(popup)
           markers.addLayer(marker)
         })
 
@@ -113,9 +102,8 @@
             let div = window.L.DomUtil.create('div', 'map-legend')
             div.innerHTML =
               `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
-              <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
-              <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3</span></div>
-              `
+               <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d≥3</span></div>`
             return div
           }
 
@@ -166,5 +154,31 @@
 
 <style lang="scss">
   @import '../../assets/scss/event_map';
+
+  $level-colors: (
+    1: #008000,
+    2: #ffa500,
+    3: #ff0000
+  );
+
+  @each $level, $color in $level-colors {
+    .marker-cluster-damage-level-#{$level} {
+      background-color: rgba(lighten($color, 20%), 0.6);
+      > div { background-color: rgba($color, 0.6) }
+    }
+  }
+
+  .marker-icon.primary-building > div {
+    box-shadow: 2px 0 3px 1px rgba(0, 0, 0, .65);
+    transform: rotate(45deg);
+    border: 1px solid #666;
+    position: relative;
+    border-radius: 3px;
+    display: block;
+    height: 100%;
+    width: 100%;
+    top: -12px;
+  }
+
 </style>
 

@@ -10,14 +10,15 @@ function listenerStoreCurrentTileProvider(map) {
   })
 }
 
-export function addEpicenter(map, coordinates) {
+export function addEpicenter(map, coordinates)
+{
   const options = {
-    color: '',
     fillColor: '#ff0a0a',
-    fillOpacity: 1.0,
     numberOfPoints: 5,
+    fillOpacity: 1.0,
     radius: 12,
-    weight: 2
+    weight: 2,
+    color: ''
   }
   const latLng = new window.L.LatLng(coordinates[0], coordinates[1])
   const epicenter = new window.L.StarMarker(latLng, options)
@@ -40,7 +41,9 @@ export function addPlateBoundaries(controls) {
         <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
         P.Bird, 2003</a>`
 
-      layer.on('mouseover', function(event) { return this.bindPopup(message).openPopup(event.latlng) })
+      layer.on('mouseover', function(event) {
+        return this.bindPopup(message).openPopup(event.latlng)
+      })
 
       layer.on('mouseout', function(event) {
         const popups = document.getElementsByClassName('leaflet-popup')
@@ -65,13 +68,15 @@ export function addStations(map, controls, show = true) {
       let markers = []
 
       response.data.data.forEach(station => {
-        let marker = new window.L.RegularPolygonMarker(new window.L.LatLng(station.sta_lat, station.sta_lon), {
+
+        let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
+        let marker = new window.L.RegularPolygonMarker(coordinates, {
+          fillColor: StationsSettings.colors[station.scnl_network],
+          fillOpacity: 1.0,
           numberOfSides: 3,
           rotation: 30.0,
-          radius: 7,
-          fillOpacity: 1.0,
           color: false,
-          fillColor: StationsSettings.colors[station.scnl_network]
+          radius: 7
         })
 
         let message =
@@ -115,6 +120,7 @@ export function addStations(map, controls, show = true) {
 
         marker.bindPopup(message)
         markers.push(marker)
+
       })
 
       const makerksGroup = new window.L.LayerGroup(markers)
@@ -127,12 +133,16 @@ export function addStations(map, controls, show = true) {
     })
 }
 
-export function buildingColor(damageLevel) {
+export function buildingColor(damageLevel)
+{
+  if (damageLevel >= 3) {
+    return '#ff0000'
+  }
+
   switch (damageLevel) {
     case 0: return 'cyan'
     case 1: return '#008000'
     case 2: return '#ffa500'
-    case 3: return '#ff0000'
   }
 }
 
@@ -169,7 +179,12 @@ function currentTileProvider() {
   return tileProviders()[tileProvider]
 }
 
-export function createMap(id, coordinates, zoom = 8, showStations = true, store) {
+export function createMap(id, coordinates, {
+  addToggleShowObjects = false,
+  showStations = true,
+  zoom = 8,
+  store
+} = {}) {
   const options = {
     fullscreenControl: true,
     fullscreenControlOptions: { position: 'topleft' },
@@ -181,16 +196,68 @@ export function createMap(id, coordinates, zoom = 8, showStations = true, store)
   const map = window.L.map(id, options)
   setView(map, coordinates)
   currentTileProvider(store).addTo(map)
+  listenerStoreCurrentTileProvider(map, store)
 
-  const controls = layersControl()
+  const controls = new window.L.Control.Layers(tileProviders())
   let _zoomHome = zoomHome()
 
   _zoomHome.setHomeCoordinates(coordinates)
   _zoomHome.setHomeZoom(zoom)
   _zoomHome.addTo(map)
 
-  listenerStoreCurrentTileProvider(map, store)
+  // Plate Boundaries
+  addPlateBoundaries(controls)
+  // Show seismic stations
   addStations(map, controls, showStations)
+
+  if(addToggleShowObjects)
+  {
+    (function() {
+
+      let markerClusterGroup = new window.L.MarkerClusterGroup({
+        disableClusteringAtZoom: 15
+      })
+
+      map.spin(true)
+
+      let getBuildings = function(url)
+      {
+        axios.get(url).then(response => {
+
+          response.data.data.forEach(building => {
+
+            let coordinates = new window.L.LatLng(building.lat, building.lon)
+            let marker = new window.L.MapMarker(coordinates, {
+              dropShadow: true,
+              gradient: true,
+              innerRadius: 0,
+              radius: 7
+            })
+
+            marker.bindPopup(createMapMarkerPopupBuilding(building))
+            markerClusterGroup.addLayer(marker)
+
+          })
+
+          let pagination = response.data.meta.pagination
+
+          if (pagination.current_page < pagination.total_pages) {
+            return getBuildings(pagination.links.next)
+          }
+
+          controls.addOverlay(markerClusterGroup, 'Show objects')
+          map.spin(false)
+
+        }).catch(error => {
+          console.log(error)
+          map.spin(false)
+        })
+      }
+
+      getBuildings((new ApiSettings()).endpointBuildings)
+
+    })()
+  }
 
   map.setZoom(zoom)
   controls.addTo(map)
@@ -202,13 +269,6 @@ export function createMap(id, coordinates, zoom = 8, showStations = true, store)
 
 export function id(id, tab) {
   return `map-${id}-${tab}`
-}
-
-function layersControl() {
-  const controls = new window.L.Control.Layers(tileProviders())
-  addPlateBoundaries(controls)
-
-  return controls
 }
 
 export function msk64Color(value) {
@@ -246,6 +306,51 @@ export function removeEpicenter(map, epicenter) {
 
 export function setView(map, coordinates, zoom = 5) {
   map.setView(coordinates, zoom)
+}
+
+export function createMapMarkerPopupBuilding(building, {damageLevel = null, pgaValue = null} = {})
+{
+  building = Object.assign({}, building)
+
+  building.address = `${building.street}, д. ${building.street_number}`
+  building.max_msk64 = `${building.max_msk64} (MSK64)`
+  building.damage_level = damageLevel ? `d-${damageLevel}` : ''
+  building.PGA = pgaValue ? (pgaValue || 0.0) : ''
+
+  let rows = [
+    ['building_type', 'Тип строения'],
+    ['building_base_type', 'Тип фундамента'],
+    ['fabric_type', 'Материал'],
+    ['built_year', 'Год постройки'],
+    ['flats', 'Кол-во этажей'],
+    ['address', 'Адрес'],
+    ['residents', 'Кол-во проживающих'],
+    ['max_msk64', 'Проектная сейсмостойкость'],
+    ['damage_level', 'Прогноз повреждений'],
+    ['PGA', 'PGA'],
+    ['notes', 'Доп. сведения'],
+    ['data_source_reference', 'Источник данных']
+  ]
+    .filter(([prop] = []) => building[prop].toString() !== '')
+    .map(([prop, title] = []) => {
+      return (
+        `<tr class="row-building-${prop}">
+          <th scope="row" class="align-middle">${title}</th><td>${building[prop]}</td>
+        </tr>`
+      )
+    })
+
+  return (
+    `<table class="table table-hover table-sm table-responsive">
+      <tbody>
+        ${rows.join('')}
+        <tr>
+          <th scope="row">По данным</th>
+          <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
+        </tr>
+      </tbody>
+    </table>`
+  )
 }
 
 // There is a bug when layers got disappeared on exiting from fullscreen.

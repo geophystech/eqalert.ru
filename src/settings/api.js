@@ -1,5 +1,7 @@
-class Config {
-  constructor() {
+class Config
+{
+  constructor()
+  {
     this.authorizationType = 'Bearer'
     this.baseURL = process.env.API_BASE_URL
     this.oauthBaseURL = process.env.API_OAUTH_BASE_URL
@@ -12,6 +14,7 @@ class Config {
     this.endpointEvents = `${this.baseURL}/${this.version}/reports`
     this.endpointPurposesList = `${this.baseURL}/${this.version}/user/purposesList`
     this.endpointStations = `${this.baseURL}/${this.version}/stations`
+    this.endpointBuildings = `${this.baseURL}/${this.version}/buildings`
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
     this.endpointUserAuthentication = `${this.oauthBaseURL}/token`
     this.endpointUserRefreshToken = `${this.oauthBaseURL}/refreshToken`
@@ -26,7 +29,7 @@ class Config {
   }
 
   endpointEventBuildings(id) {
-    return `${this.baseURL}/${this.version}/msk64/damagedBuildings/${id}`
+    return `${this.baseURL}/${this.version}/pga/damagedBuildings/${id}`
   }
 
   endpointEvent(id) {

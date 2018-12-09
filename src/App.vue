@@ -3,9 +3,7 @@
     <b-container>
       <app-header></app-header>
       <app-navbar></app-navbar>
-
       <router-view></router-view>
-
       <app-footer></app-footer>
     </b-container>
   </div>
@@ -25,7 +23,9 @@ export default {
       { charset: 'utf-8' },
       { content: 'width=device-width, initial-scale=1', name: 'viewport' },
       { description: 'Eqalert.ru – информационная служба реального времени о землетрясениях, сейсмических воздействиях и опасности' },
-      { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, магнитуда, механизм очага, тензор момента, архив' }
+      { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, ' +
+          'сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, ' +
+          'магнитуда, механизм очага, тензор момента, архив' }
     ],
     title: 'Главная',
     titleTemplate: '%s | EQA!ert'
@@ -48,7 +48,7 @@ export default {
     fetchSystemInfo: function() {
       this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
       .then(response => {
-        ((data) => {
+        (data => {
           this.$store.dispatch('setMsk64ConfigVersion', data.msk64Config.data.config_version)
           this.$store.dispatch('setSrssDBVersion', data.srssCoreConfig.data.db_version)
           this.$store.dispatch('setTotalEventsCount', data.counters.reports)
