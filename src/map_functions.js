@@ -218,7 +218,7 @@ export function createMap(id, coordinates, {
         disableClusteringAtZoom: 15
       })
 
-      map.spin(true)
+      // map.spin(true)
 
       let getBuildings = function(url)
       {
@@ -246,11 +246,11 @@ export function createMap(id, coordinates, {
           }
 
           controls.addOverlay(markerClusterGroup, 'Show objects')
-          map.spin(false)
+          // map.spin(false)
 
         }).catch(error => {
           console.log(error)
-          map.spin(false)
+          // map.spin(false)
         })
       }
 
