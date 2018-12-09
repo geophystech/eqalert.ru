@@ -8,6 +8,8 @@
     setView, createMapMarkerPopupBuilding
   } from '@/map_functions.js'
 
+  import { ColorTrasform } from '@/helpers.js'
+
   export default {
     props: ['event', 'tab'],
     data() {
@@ -59,29 +61,40 @@
           const {lat: latitude, lon: longitude} = building.building.data
           const coordinates = new window.L.LatLng(latitude, longitude)
           const markerColor = buildingColor(building.damage_level)
+          let markerOpts = {
+            damageLevel: building.damage_level,
+            fillColor: markerColor,
+            dropShadow: true,
+            gradient: true,
+            innerRadius: 0
+          }
           let marker
 
           if (building.building.data.is_primary)
           {
-            marker = new window.L.Marker(coordinates, {
-              icon: window.L.divIcon({
-                html: `<div title="${building.building.data.building_type}"
-                            style="background-color: ${markerColor}"></div>`,
-                className: 'marker-icon primary-building',
-                iconSize: new window.L.Point(17, 17)
-              })
-            })
+            marker = new window.L.RegularPolygonMarker(coordinates, Object.assign(markerOpts, {
+              color: ColorTrasform.darken(markerColor, 10),
+              numberOfSides: 4,
+              fillOpacity: 0.7,
+              //innerRadius: 5,
+              radius: 15,
+              weight: 1
+            }))
+
+            /*marker = new window.L.StarMarker(coordinates, Object.assign(markerOpts, {
+              color: ColorTrasform.darken(markerColor, 10),
+              numberOfPoints: 8,
+              fillOpacity: 0.7,
+              //innerRadius: 5,
+              radius: 17,
+              weight: 1
+            }))*/
           }
           else
           {
-            marker = new window.L.MapMarker(coordinates, {
-              damageLevel: building.damage_level,
-              fillColor: markerColor,
-              dropShadow: true,
-              gradient: true,
-              innerRadius: 0,
+            marker = new window.L.MapMarker(coordinates, Object.assign(markerOpts, {
               radius: 7
-            })
+            }))
           }
 
           let popup = createMapMarkerPopupBuilding(building.building.data, {
@@ -166,18 +179,6 @@
       background-color: rgba(lighten($color, 20%), 0.6);
       > div { background-color: rgba($color, 0.6) }
     }
-  }
-
-  .marker-icon.primary-building > div {
-    box-shadow: 2px 0 3px 1px rgba(0, 0, 0, .65);
-    transform: rotate(45deg);
-    border: 1px solid #666;
-    position: relative;
-    border-radius: 3px;
-    display: block;
-    height: 100%;
-    width: 100%;
-    top: -12px;
   }
 
 </style>
