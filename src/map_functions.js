@@ -222,7 +222,7 @@ export function createMap(id, coordinates, {
 
       let getBuildings = function(url)
       {
-        axios.get(url).then(response => {
+        axios.get(url, {params: { limit: 1000 }}).then(response => {
 
           response.data.data.forEach(building => {
 
@@ -342,13 +342,7 @@ export function createMapMarkerPopupBuilding(building, {damageLevel = null, pgaV
 
   return (
     `<table class="table table-hover table-sm table-responsive">
-      <tbody>
-        ${rows.join('')}
-        <tr>
-          <th scope="row">По данным</th>
-          <td><a href="http://www.fkr65.ru">www.fkr65.ru</a></td>
-        </tr>
-      </tbody>
+      <tbody>${rows.join('')}</tbody>
     </table>`
   )
 }
