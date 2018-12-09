@@ -51,7 +51,7 @@
     methods: {
       createMap: function() {
         this.map.object = createMap(this.map.id, this.map.coordinates, {
-          addToggleShowObjects: true,
+          addToggleShowObjects: this.$store.getters.user.authenticated,
           showStations: false,
           zoom: 4
         })

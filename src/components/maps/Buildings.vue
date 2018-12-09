@@ -84,7 +84,11 @@
             })
           }
 
-          marker.bindPopup(createMapMarkerPopupBuilding(building))
+          let popup = createMapMarkerPopupBuilding(building.building.data, {
+            damageLevel: building.damage_level,
+            pgaValue: building.pga_value
+          })
+          marker.bindPopup(popup)
           markers.addLayer(marker)
         })
 

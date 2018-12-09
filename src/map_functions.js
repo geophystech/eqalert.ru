@@ -212,7 +212,51 @@ export function createMap(id, coordinates, {
 
   if(addToggleShowObjects)
   {
+    (function() {
 
+      let markerClusterGroup = new window.L.MarkerClusterGroup({
+        disableClusteringAtZoom: 15
+      })
+
+      map.spin(true)
+
+      let getBuildings = function(url)
+      {
+        axios.get(url).then(response => {
+
+          response.data.data.forEach(building => {
+
+            let coordinates = new window.L.LatLng(building.lat, building.lon)
+            let marker = new window.L.MapMarker(coordinates, {
+              dropShadow: true,
+              gradient: true,
+              innerRadius: 0,
+              radius: 7
+            })
+
+            marker.bindPopup(createMapMarkerPopupBuilding(building))
+            markerClusterGroup.addLayer(marker)
+
+          })
+
+          let pagination = response.data.meta.pagination
+
+          if (pagination.current_page < pagination.total_pages) {
+            return getBuildings(pagination.links.next)
+          }
+
+          controls.addOverlay(markerClusterGroup, 'Show objects')
+          map.spin(false)
+
+        }).catch(error => {
+          console.log(error)
+          map.spin(false)
+        })
+      }
+
+      getBuildings((new ApiSettings()).endpointBuildings)
+
+    })()
   }
 
   map.setZoom(zoom)
@@ -264,14 +308,14 @@ export function setView(map, coordinates, zoom = 5) {
   map.setView(coordinates, zoom)
 }
 
-export function createMapMarkerPopupBuilding(building)
+export function createMapMarkerPopupBuilding(building, {damageLevel = null, pgaValue = null} = {})
 {
-  let buildingData = Object.assign({}, building.building.data)
+  building = Object.assign({}, building)
 
-  buildingData.address = `${buildingData.street}, д. ${buildingData.street_number}`
-  buildingData.max_msk64 = `${buildingData.max_msk64} (MSK64)`
-  buildingData.damage_level = `d-${building.damage_level}`
-  buildingData.PGA = building.pga_value || 0.0
+  building.address = `${building.street}, д. ${building.street_number}`
+  building.max_msk64 = `${building.max_msk64} (MSK64)`
+  building.damage_level = damageLevel ? `d-${damageLevel}` : ''
+  building.PGA = pgaValue ? (pgaValue || 0.0) : ''
 
   let rows = [
     ['building_type', 'Тип строения'],
@@ -287,11 +331,11 @@ export function createMapMarkerPopupBuilding(building)
     ['notes', 'Доп. сведения'],
     ['data_source_reference', 'Источник данных']
   ]
-    .filter(([prop] = []) => buildingData[prop].toString() !== '')
+    .filter(([prop] = []) => building[prop].toString() !== '')
     .map(([prop, title] = []) => {
       return (
         `<tr class="row-building-${prop}">
-          <th scope="row" class="align-middle">${title}</th><td>${buildingData[prop]}</td>
+          <th scope="row" class="align-middle">${title}</th><td>${building[prop]}</td>
         </tr>`
       )
     })
