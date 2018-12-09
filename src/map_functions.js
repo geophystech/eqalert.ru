@@ -41,7 +41,9 @@ export function addPlateBoundaries(controls) {
         <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
         P.Bird, 2003</a>`
 
-      layer.on('mouseover', function(event) { return this.bindPopup(message).openPopup(event.latlng) })
+      layer.on('mouseover', function(event) {
+        return this.bindPopup(message).openPopup(event.latlng)
+      })
 
       layer.on('mouseout', function(event) {
         const popups = document.getElementsByClassName('leaflet-popup')
@@ -66,13 +68,15 @@ export function addStations(map, controls, show = true) {
       let markers = []
 
       response.data.data.forEach(station => {
-        let marker = new window.L.RegularPolygonMarker(new window.L.LatLng(station.sta_lat, station.sta_lon), {
+
+        let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
+        let marker = new window.L.RegularPolygonMarker(coordinates, {
+          fillColor: StationsSettings.colors[station.scnl_network],
+          fillOpacity: 1.0,
           numberOfSides: 3,
           rotation: 30.0,
-          radius: 7,
-          fillOpacity: 1.0,
           color: false,
-          fillColor: StationsSettings.colors[station.scnl_network]
+          radius: 7
         })
 
         let message =
@@ -116,6 +120,7 @@ export function addStations(map, controls, show = true) {
 
         marker.bindPopup(message)
         markers.push(marker)
+
       })
 
       const makerksGroup = new window.L.LayerGroup(markers)

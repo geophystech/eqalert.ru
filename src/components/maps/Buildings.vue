@@ -99,7 +99,7 @@
             div.innerHTML =
               `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
                <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3 - d-5</span></div>`
+               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d≥3</span></div>`
             return div
           }
 
