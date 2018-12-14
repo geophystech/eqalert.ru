@@ -98,7 +98,7 @@
       </b-col>
     </b-row>
 
-    <b-row class="filter" no-gutters>
+    <b-row class="filter datetime-filter" no-gutters>
       <b-col align-self="center">
 
         <b-row>
@@ -107,7 +107,7 @@
 
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
-            <b-input-group prepend="От">
+            <b-input-group prepend="С">
               <flat-pickr v-model.trim="filters.datetimeMin"
                           class="form-control datetime-picker"
                           :config="datetimeConfig"
@@ -120,7 +120,7 @@
 
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
-            <b-input-group prepend="До">
+            <b-input-group prepend="По">
               <flat-pickr v-model.trim="filters.datetimeMax"
                           class="form-control datetime-picker"
                           :config="datetimeConfig"
@@ -296,8 +296,19 @@
       border-bottom: 1px solid $color-gray-light-4;
       padding-bottom: 6%;
 
-      .row.filter-inputs + .row.filter-inputs {
-        margin-top: 10px;
+      &.datetime-filter
+      {
+        .row.filter-inputs + .row.filter-inputs {
+          margin-top: 10px;
+        }
+
+        .input-group {
+          .input-group-prepend {
+            .input-group-text {
+              width: 50px;
+            }
+          }
+        }
       }
 
       .form-control.datetime-picker {
