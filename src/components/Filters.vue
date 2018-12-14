@@ -5,14 +5,16 @@
         <b-row no-gutters><b-col class="text-center filter-title">Магнитуда</b-col></b-row>
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
-            <b-input-group left="От">
-              <b-form-input v-model.number.trim="filters.magMin" placeholder="2.5" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.magMin" placeholder="2.5"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
-            <b-input-group left="До">
-              <b-form-input v-model.number.trim="filters.magMax" placeholder="10.0" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.magMax" placeholder="10.0"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -24,14 +26,16 @@
         <b-row no-gutters><b-col class="text-center filter-title">Широта</b-col></b-row>
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
-            <b-input-group left="От">
-              <b-form-input v-model.number.trim="filters.latMin" placeholder="51.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.latMin" placeholder="51.1"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
-            <b-input-group left="До">
-              <b-form-input v-model.number.trim="filters.latMax" placeholder="70.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.latMax" placeholder="70.1"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -43,14 +47,16 @@
         <b-row no-gutters><b-col class="text-center filter-title">Долгота</b-col></b-row>
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
-            <b-input-group left="От">
-              <b-form-input v-model.number.trim="filters.lonMin" placeholder="145.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.lonMin" placeholder="145.1"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
-            <b-input-group left="До">
-              <b-form-input v-model.number.trim="filters.lonMax" placeholder="190.1" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.lonMax" placeholder="190.1"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -62,8 +68,9 @@
         <b-row no-gutters><b-col class="text-center filter-title">Количество станций</b-col></b-row>
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
-            <b-input-group left="Минимум">
-              <b-form-input v-model.number.trim="filters.staNumMin" placeholder="1" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group prepend="Минимум">
+              <b-form-input v-model.number.trim="filters.staNumMin" placeholder="1"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -75,14 +82,16 @@
         <b-row no-gutters><b-col class="text-center filter-title">Глубина</b-col></b-row>
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col cols="5">
-            <b-input-group left="От">
-              <b-form-input v-model.number.trim="filters.depthMin" placeholder="0" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.depthMin" placeholder="0"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
           <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
           <b-col cols="5">
-            <b-input-group left="До">
-              <b-form-input v-model.number.trim="filters.depthMax" placeholder="10" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group>
+              <b-form-input v-model.number.trim="filters.depthMax" placeholder="10"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -91,23 +100,29 @@
 
     <b-row class="filter" no-gutters>
       <b-col align-self="center">
-        <b-row no-gutters><b-col class="text-center filter-title">Дата и время</b-col></b-row>
+
+        <b-row>
+          <b-col class="text-center filter-title">Дата и время</b-col>
+        </b-row>
+
         <b-row no-gutters class="filter-inputs" align-v="center">
-          <b-col cols="5">
-            <b-input-group left="От">
+          <b-col>
+            <b-input-group prepend="От">
               <flat-pickr v-model.trim="filters.datetimeMin"
-                          class="form-control"
+                          class="form-control datetime-picker"
                           :config="datetimeConfig"
                           :disabled="disabled"
                           placeholder="Дата"
                           @on-change="onChangeCalled" />
             </b-input-group>
           </b-col>
-          <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
-          <b-col cols="5">
-            <b-input-group left="До">
+        </b-row>
+
+        <b-row no-gutters class="filter-inputs" align-v="center">
+          <b-col>
+            <b-input-group prepend="До">
               <flat-pickr v-model.trim="filters.datetimeMax"
-                          class="form-control"
+                          class="form-control datetime-picker"
                           :config="datetimeConfig"
                           :disabled="disabled"
                           placeholder="Дата"
@@ -123,8 +138,9 @@
         <b-row no-gutters><b-col class="text-center filter-title">RMS</b-col></b-row>
         <b-row no-gutters class="filter-inputs" align-v="center">
           <b-col>
-            <b-input-group left="Максимум">
-              <b-form-input v-model.number.trim="filters.rmsMax" placeholder="0.9" :disabled="disabled" @keyup.native="filtersUpdated()" />
+            <b-input-group prepend="Максимум">
+              <b-form-input v-model.number.trim="filters.rmsMax" placeholder="0.9"
+                            :disabled="disabled" @keyup.native="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -168,7 +184,7 @@
           allowInput: false,
           dateFormat: 'Y-m-d H:i:S',
           defaultDate: null,
-          enableTime: false,
+          enableTime: true,
           locale: Russian,
           mode: 'single',
           time_24hr: true,
@@ -275,9 +291,18 @@
     border-radius: $border-radius;
     margin-right: 3%;
 
-    .filter {
+    .filter
+    {
       border-bottom: 1px solid $color-gray-light-4;
       padding-bottom: 6%;
+
+      .row.filter-inputs + .row.filter-inputs {
+        margin-top: 10px;
+      }
+
+      .form-control.datetime-picker {
+        background-color: white;
+      }
 
       &:nth-last-child(2) {
         padding-top: 6%;
@@ -307,7 +332,7 @@
 
         // Left input.
         .col-5:first-child,
-        .col:first-child, {
+        .col:first-child {
           padding-left: 3%
         }
 
@@ -318,7 +343,7 @@
 
         // Right input.
         .col-5:last-child,
-        .col:last-child, {
+        .col:last-child {
           padding-right: 3%
         }
 
