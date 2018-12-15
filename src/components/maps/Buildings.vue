@@ -8,7 +8,7 @@
     setView, createMapMarkerPopupBuilding
   } from '@/map_functions.js'
 
-  import { ColorTrasform } from '@/helpers.js'
+  import { colorDarken } from '@/helpers/color'
 
   export default {
     props: ['event', 'tab'],
@@ -73,22 +73,12 @@
           if (building.building.data.is_primary)
           {
             marker = new window.L.RegularPolygonMarker(coordinates, Object.assign(markerOpts, {
-              color: ColorTrasform.darken(markerColor, 10),
+              color: colorDarken(markerColor, 10),
               numberOfSides: 4,
               fillOpacity: 0.7,
-              //innerRadius: 5,
               radius: 15,
               weight: 1
             }))
-
-            /*marker = new window.L.StarMarker(coordinates, Object.assign(markerOpts, {
-              color: ColorTrasform.darken(markerColor, 10),
-              numberOfPoints: 8,
-              fillOpacity: 0.7,
-              //innerRadius: 5,
-              radius: 17,
-              weight: 1
-            }))*/
           }
           else
           {
