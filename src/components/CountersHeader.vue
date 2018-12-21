@@ -1,21 +1,28 @@
 <template>
   <b-row class="infobar" align-v="center" no-gutters>
-    <b-col cols="2" md="4" v-if="!$store.getters.user.authenticated" class="text-center text-md-left">
-      <router-link to="/sign-in">
+    <b-col cols="2" md="2" class="text-center text-md-left">
+      <router-link to="/sign-in" v-if="!$store.getters.user.authenticated">
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
         <span v-if="!$root.onMobile">Снять ограничения данных</span>
       </router-link>
     </b-col>
-    <b-col cols="10" md="8" class="text-center text-md-left">
+    <b-col cols="8" md="8" class="text-center">
       Загружено <span class="count">{{ count }}</span> событий
       <span v-if="count && !$root.onMobile">({{ startDate }} — {{ endDate }})</span>
+    </b-col>
+    <b-col cols="2" md="2">
+      <div class="pull-right">
+        <ModalMap />
+      </div>
     </b-col>
   </b-row>
 </template>
 
 <script>
+  import ModalMap from '@/components/maps/ModalMap'
   export default {
-    props: ['count', 'startDate', 'endDate']
+    props: ['count', 'startDate', 'endDate'],
+    components: { ModalMap }
   }
 </script>
 
@@ -31,7 +38,7 @@
     margin-top: 3%;
     min-height: 50px;
     padding-left: 2%;
-    padding-right: 2%;
+    padding-right: 8px;
 
     .fa {
       color: $color-orange;

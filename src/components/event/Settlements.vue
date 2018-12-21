@@ -124,7 +124,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/scss/event';
+  @import '~scss/event';
 
   $border-radius: 4px;
   $color-gray-light-4: #ebeaea;

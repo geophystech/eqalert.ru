@@ -150,6 +150,6 @@
 </script>
 
 <style lang="scss">
-  @import '../../assets/scss/event_map';
+  @import '~scss/event_map';
 </style>
 

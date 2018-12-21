@@ -4,46 +4,16 @@
 
 <script>
   import {createMap} from '@/map_functions'
-  import {agency} from '@/helpers/event'
+  import {agency, eventColor, eventRadius, EVENTS_RANGES} from '@/helpers/event'
 
   export default {
     data() {
       return {
         map: {
+          defaultEventsRange: 'lastWeekEvents',
           coordinates: [58.651, 142.395],
           id: 'map-mainpage',
-          object: null,
-          defaultEventsRange: 'lastWeekEvents',
-          eventsRanges: {
-            lastDayEvents: {
-              title: 'События за последние сутки',
-              minDateSubtract: [1, 'days'],
-              label: '< 24 ч',
-              color: '#FF0000',
-              limit: 500
-            },
-            lastWeekEvents: {
-              title: 'События за последнюю неделю',
-              minDateSubtract: [1, 'weeks'],
-              label: '1-7 дн',
-              color: '#FFA500',
-              limit: 500
-            },
-            last2WeekEvents: {
-              title: 'События за последние две недели',
-              minDateSubtract: [2, 'weeks'],
-              label: '7-14 дн',
-              color: '#FFFF00',
-              limit: 500
-            },
-            past3MonthsEvents: {
-              title: 'События за последние 3 месяца',
-              minDateSubtract: [3, 'months'],
-              label: '> 14 дн',
-              color: '#808080',
-              limit: 500
-            }
-          }
+          object: null
         }
       }
     },
@@ -56,7 +26,6 @@
           zoom: 4
         })
         let apiSettings = this.$root.$options.settings.api
-        let selfComponent = this
         let $moment = this.$moment
         let $http = this.$http
         let _map = this.map
@@ -80,8 +49,8 @@
             const magnitude = event.locValues.data.mag.toFixed(1)
             const magnitudeType = event.locValues.data.mag_t
             const options = {
-              fillColor: selfComponent.eventColor(datetimeDiff),
-              radius: selfComponent.eventRadius(magnitude),
+              fillColor: eventColor(datetimeDiff),
+              radius: eventRadius(magnitude),
               numberOfSides: 360,
               colorOpacity: 1.0,
               fillOpacity: 0.8,
@@ -135,7 +104,7 @@
           let appendBtn = function(eventsRangeName, callBack) {
             /** @type HTMLElement */
             let btn = window.L.DomUtil.create('label', 'btn btn-sm btn-default')
-            let eventsRange = _map.eventsRanges[eventsRangeName]
+            let eventsRange = EVENTS_RANGES[eventsRangeName]
             let checked = (eventsRangeName === _map.defaultEventsRange)
             let changeHandler = function() {
               stateLabel.innerText = eventsRange.title
@@ -159,9 +128,9 @@
             btnGroup.appendChild(btn)
           }
 
-          Object.keys(_map.eventsRanges).forEach(eventsRangeName => {
+          Object.keys(EVENTS_RANGES).forEach(eventsRangeName => {
 
-            let eventsRange = _map.eventsRanges[eventsRangeName]
+            let eventsRange = EVENTS_RANGES[eventsRangeName]
             let minDateSubtract = eventsRange.minDateSubtract
 
             appendBtn(eventsRangeName, () => {
@@ -206,36 +175,6 @@
         }
 
         text.addTo(this.map.object)
-      },
-
-      eventColor: function(timeDifference) {
-        if (timeDifference <= 24) {
-          return this.map.eventsRanges.lastDayEvents.color
-        } else if (timeDifference > 24 && timeDifference <= 168) {
-          return this.map.eventsRanges.lastWeekEvents.color
-        } else if (timeDifference > 168 && timeDifference <= 336) {
-          return this.map.eventsRanges.last2WeekEvents.color
-        } else {
-          return this.map.eventsRanges.past3MonthsEvents.color
-        }
-      },
-
-      eventRadius: function(magnitude) {
-        if (magnitude < 3.0) {
-          return 4
-        } else if (magnitude >= 3.0 && magnitude < 4.0) {
-          return 6
-        } else if (magnitude >= 4.0 && magnitude < 5.0) {
-          return 8
-        } else if (magnitude >= 5.0 && magnitude < 6.0) {
-          return 12
-        } else if (magnitude >= 6.0 && magnitude < 7.0) {
-          return 16
-        } else if (magnitude >= 7.0 && magnitude < 8.0) {
-          return 21
-        } else if (magnitude > 8) {
-          return 26
-        }
       }
     },
 
@@ -246,7 +185,7 @@
 </script>
 
 <style lang="scss">
-  @import '../../assets/scss/event_map';
+  @import '~scss/event_map';
 
   .map {
     .map-legend-mainpage {
