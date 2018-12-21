@@ -12,7 +12,7 @@
     </b-col>
     <b-col cols="2" md="2">
       <div class="pull-right">
-        <ModalMap />
+        <ModalMap v-if="showModalMap" :filtersData="filtersData" />
       </div>
     </b-col>
   </b-row>
@@ -21,7 +21,13 @@
 <script>
   import ModalMap from '@/components/maps/ModalMap'
   export default {
-    props: ['count', 'startDate', 'endDate'],
+    props: {
+      showModalMap: false,
+      filtersData: {},
+      count: 0,
+      startDate: '',
+      endDate: ''
+    },
     components: { ModalMap }
   }
 </script>

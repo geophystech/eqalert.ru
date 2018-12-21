@@ -1,6 +1,8 @@
 <template>
   <div class="events">
     <CountersHeader
+      :filtersData="filtersData"
+      :showModalMap="true"
       :count="events.length"
       :startDate="startDate"
       :endDate="endDate" />
@@ -58,12 +60,15 @@ import { round } from '@/helpers/math.js'
 
 export default {
   components: { CountersHeader, Filters, Spinner },
+  props: {
+  },
   data() {
     return {
+      filtersData: {},
       apiParams: {
+        include: 'nearestCity',
         cursor: '',
-        limit: 10,
-        include: 'nearestCity'
+        limit: 10
       },
       events: [],
       disabledFilters: false,
@@ -92,6 +97,7 @@ export default {
   },
   methods: {
     getEvents: function(filtersData) {
+      this.filtersData = Object.assign({}, filtersData)
       let params = this.apiParams
 
       // Use cursor only on loadMoreEvents()

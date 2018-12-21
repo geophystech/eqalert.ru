@@ -32,6 +32,7 @@ module.exports = {
     'no-trailing-spaces': 0,
     'func-call-spacing': 0,
     'keyword-spacing': 0,
-    'spaced-comment': 0
+    'spaced-comment': 0,
+    'no-extra-bind': 0
   }
 }

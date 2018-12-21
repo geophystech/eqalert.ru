@@ -126,7 +126,7 @@
                           :config="maxDatetimeConfig"
                           :disabled="disabled"
                           placeholder="Дата"
-                          @on-change="filtersUpdated()" />
+                          @on-change="filtersUpdated" />
             </b-input-group>
           </b-col>
         </b-row>
