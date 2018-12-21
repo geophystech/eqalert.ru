@@ -110,7 +110,7 @@
             <b-input-group prepend="С">
               <flat-pickr v-model.trim="filters.datetimeMin"
                           class="form-control datetime-picker"
-                          :config="datetimeConfig"
+                          :config="minDatetimeConfig"
                           :disabled="disabled"
                           placeholder="Дата"
                           @on-change="onChangeCalled" />
@@ -123,7 +123,7 @@
             <b-input-group prepend="По">
               <flat-pickr v-model.trim="filters.datetimeMax"
                           class="form-control datetime-picker"
-                          :config="datetimeConfig"
+                          :config="maxDatetimeConfig"
                           :disabled="disabled"
                           placeholder="Дата"
                           @on-change="filtersUpdated()" />
@@ -180,6 +180,8 @@
     props: ['disabled'],
     data() {
       return {
+        minDatetimeConfig: {},
+        maxDatetimeConfig: {},
         datetimeConfig: {
           allowInput: false,
           dateFormat: 'Y-m-d H:i:S',
@@ -207,8 +209,17 @@
         }
       }
     },
-    beforeMount() {
+    beforeMount()
+    {
+      this.minDatetimeConfig = Object.assign({}, this.datetimeConfig)
+      this.maxDatetimeConfig = Object.assign({}, this.datetimeConfig)
+      this.minDatetimeConfig.defaultDate = this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00')
+
       this.parseURL()
+
+      if (!this.filters.datetimeMin) {
+        this.filters.datetimeMin = this.minDatetimeConfig.defaultDate
+      }
     },
     watch: {
       $route: function(data) {
