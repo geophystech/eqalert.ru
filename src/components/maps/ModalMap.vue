@@ -134,15 +134,14 @@
       getAllEvents: function(callBack)
       {
         let events = []
+        let params = Object.assign(Object.assign({}, this.filtersData), {
+          include: 'nearestCity',
+          limit: 1000,
+          cursor: ''
+        })
 
         let _getEvents = function()
         {
-          let params = Object.assign(Object.assign({}, this.filtersData), {
-            include: 'nearestCity',
-            limit: 1000,
-            cursor: ''
-          })
-
           this.$http.get(this.$root.$options.settings.api.endpointEvents, {
             params: params,
             before: (request) => {
