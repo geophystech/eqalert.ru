@@ -47,6 +47,11 @@
 
         this.getAllEvents((events) => {
 
+          let startDate = this.$moment(events[events.length - 1].locValues.data.event_datetime).format('L')
+          let endDate = this.$moment(events[0].locValues.data.event_datetime).format('L')
+
+          this.title = `Загружено ${events.length} событий (${startDate} — ${endDate})`
+
           events.forEach(event => {
 
             const datetime = this.$moment(event.locValues.data.event_datetime)
@@ -115,11 +120,6 @@
 
           map.spin(false)
 
-          let startDate = this.$moment(events[events.length - 1].locValues.data.event_datetime).format('L')
-          let endDate = this.$moment(events[0].locValues.data.event_datetime).format('L')
-
-          this.title = `Загружено ${events.length} событий (${startDate} — ${endDate})`
-
         })
       },
       onClose: function(e)
@@ -129,20 +129,20 @@
         }
 
         this.map.object.remove()
+        this.title = ''
       },
 
       getAllEvents: function(callBack)
       {
         let events = []
+        let params = Object.assign(Object.assign({}, this.filtersData), {
+          include: 'nearestCity',
+          limit: 1000,
+          cursor: ''
+        })
 
         let _getEvents = function()
         {
-          let params = Object.assign(Object.assign({}, this.filtersData), {
-            include: 'nearestCity',
-            limit: 1000,
-            cursor: ''
-          })
-
           this.$http.get(this.$root.$options.settings.api.endpointEvents, {
             params: params,
             before: (request) => {
