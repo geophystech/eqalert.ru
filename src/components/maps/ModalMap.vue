@@ -129,6 +129,7 @@
         }
 
         this.map.object.remove()
+        this.title = ''
       },
 
       getAllEvents: function(callBack)
