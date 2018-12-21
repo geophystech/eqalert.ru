@@ -47,6 +47,11 @@
 
         this.getAllEvents((events) => {
 
+          let startDate = this.$moment(events[events.length - 1].locValues.data.event_datetime).format('L')
+          let endDate = this.$moment(events[0].locValues.data.event_datetime).format('L')
+
+          this.title = `Загружено ${events.length} событий (${startDate} — ${endDate})`
+
           events.forEach(event => {
 
             const datetime = this.$moment(event.locValues.data.event_datetime)
@@ -114,11 +119,6 @@
           map.setView(bound.center, bound.zoom)
 
           map.spin(false)
-
-          let startDate = this.$moment(events[events.length - 1].locValues.data.event_datetime).format('L')
-          let endDate = this.$moment(events[0].locValues.data.event_datetime).format('L')
-
-          this.title = `Загружено ${events.length} событий (${startDate} — ${endDate})`
 
         })
       },
