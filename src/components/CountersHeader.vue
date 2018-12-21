@@ -1,16 +1,16 @@
 <template>
   <b-row class="infobar" align-v="center" no-gutters>
-    <b-col cols="3" md="3" class="text-center text-md-left">
+    <b-col class="text-center text-md-left">
       <router-link to="/sign-in" v-if="!$store.getters.user.authenticated">
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
         <span v-if="!$root.onMobile">Снять ограничения данных</span>
       </router-link>
     </b-col>
-    <b-col cols="7" md="7" class="text-center">
+    <b-col class="text-center">
       Загружено <span class="count">{{ count }}</span> событий
       <span v-if="count && !$root.onMobile">({{ startDate }} — {{ endDate }})</span>
     </b-col>
-    <b-col cols="2" md="2">
+    <b-col>
       <div class="pull-right">
         <ModalMap v-if="showModalMap" :filtersData="filtersData" />
       </div>
