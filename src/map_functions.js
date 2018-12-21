@@ -199,11 +199,11 @@ export function createMap(id, coordinates, {
   listenerStoreCurrentTileProvider(map, store)
 
   const controls = new window.L.Control.Layers(tileProviders())
-  let _zoomHome = zoomHome()
+  map._zoomHome = zoomHome()
 
-  _zoomHome.setHomeCoordinates(coordinates)
-  _zoomHome.setHomeZoom(zoom)
-  _zoomHome.addTo(map)
+  map._zoomHome.setHomeCoordinates(coordinates)
+  map._zoomHome.setHomeZoom(zoom)
+  map._zoomHome.addTo(map)
 
   // Plate Boundaries
   addPlateBoundaries(controls)
@@ -218,7 +218,7 @@ export function createMap(id, coordinates, {
         disableClusteringAtZoom: 15
       })
 
-      // map.spin(true)
+      map.spin(true)
 
       let getBuildings = function(url)
       {
@@ -246,11 +246,11 @@ export function createMap(id, coordinates, {
           }
 
           controls.addOverlay(markerClusterGroup, 'Show objects')
-          // map.spin(false)
+          map.spin(false)
 
         }).catch(error => {
           console.log(error)
-          // map.spin(false)
+          map.spin(false)
         })
       }
 
@@ -263,6 +263,7 @@ export function createMap(id, coordinates, {
   controls.addTo(map)
 
   addFullscreenInvalidationFix(map)
+  window.L.control.scale().addTo(map)
 
   return map
 }

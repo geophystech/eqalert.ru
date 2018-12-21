@@ -107,5 +107,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/scss/event';
+  @import '~scss/event';
 </style>

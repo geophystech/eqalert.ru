@@ -122,7 +122,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/scss/global';
+  @import '~scss/global';
 
   .event-header {
     margin-bottom: 3%;
