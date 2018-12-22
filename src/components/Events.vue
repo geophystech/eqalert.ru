@@ -97,13 +97,13 @@ export default {
   },
   methods: {
     getEvents: function(filtersData) {
-      this.filtersData = Object.assign({}, filtersData)
       let params = this.apiParams
 
       // Use cursor only on loadMoreEvents()
       if (typeof filtersData === 'object') {
         params.cursor = null
         Object.assign(params, filtersData)
+        this.filtersData = Object.assign({}, filtersData)
       }
 
       this.spinners.loadMoreEvents = true

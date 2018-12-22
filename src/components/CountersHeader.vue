@@ -24,9 +24,9 @@
     props: {
       showModalMap: false,
       filtersData: {},
-      count: 0,
       startDate: '',
-      endDate: ''
+      endDate: '',
+      count: 0
     },
     components: { ModalMap }
   }
