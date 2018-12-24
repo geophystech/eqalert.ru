@@ -42,6 +42,8 @@
     watch: {
       filtersData: function(filtersData)
       {
+        this.xlsUrl = ''
+
         this.$http.get(this.$root.$options.settings.api.endpointEvents, {
           params: Object.assign(Object.assign({}, filtersData), {export_to: 'xlsx'})
         })
