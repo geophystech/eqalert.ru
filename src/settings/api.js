@@ -18,6 +18,7 @@ class Config
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
     this.endpointUserAuthentication = `${this.oauthBaseURL}/token`
     this.endpointUserRefreshToken = `${this.oauthBaseURL}/refreshToken`
+    this.endpointUserRefreshScopes = `${this.baseURL}/${this.version}/oauth/scopes`
     this.endpointUserRegistration = `${this.baseURL}/${this.version}/user/register`
     this.endpointUserResetPassword = `${this.baseURL}/${this.version}/user/resetPassword`
     this.endpointUserResetPasswordCheck = `${this.baseURL}/${this.version}/user/resetPasswordCheck`

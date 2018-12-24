@@ -21,6 +21,7 @@ import { axiosAddRefreshTokenInterceptor, axiosSetAuthorizationHeaders } from '.
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'vue-toasted/dist/vue-toasted.min.css'
 import 'moment/locale/ru'
 
 // Leaflet

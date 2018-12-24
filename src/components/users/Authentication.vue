@@ -66,6 +66,7 @@
 </template>
 
 <script>
+  import ApiSettings from '@/settings/api'
   export default {
     data() {
       return {
@@ -126,14 +127,34 @@
 
         this.$http.post(this.$root.$options.settings.api.endpointUserAuthentication, payload)
           .then(response => {
-            this.$store.dispatch('authenticateUser', {
-              accessToken: response.data.access_token,
-              refreshToken: response.data.refresh_token,
-              rememberMe: this.form.fields.rememberMe.value
-            })
 
-            this.$toasted.success(`Добро пожаловать!`, { icon: 'check' })
-            this.$router.push(this.redirectTo)
+            const apiSettings = new ApiSettings()
+
+            this.$http.get(this.$root.$options.settings.api.endpointUserRefreshScopes, {
+              headers: { Authorization: `${apiSettings.authorizationType} ${response.data.access_token}` }
+            })
+              .then(scopesResponse => {
+
+                let permissions = {}
+
+                scopesResponse.data.data.forEach(permission => {
+                  permissions[permission.id] = permission.description
+                })
+
+                this.$store.dispatch('authenticateUser', {
+                  accessToken: response.data.access_token,
+                  refreshToken: response.data.refresh_token,
+                  rememberMe: this.form.fields.rememberMe.value,
+                  permissions: permissions
+                })
+
+                this.$toasted.success(`Добро пожаловать!`, { icon: 'check' })
+                this.$router.push(this.redirectTo)
+
+              })
+              .catch(error => {
+                console.log(error)
+              })
           })
           .catch(error => {
             if (error.response) {

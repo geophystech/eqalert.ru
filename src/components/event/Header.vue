@@ -36,8 +36,9 @@
     </b-col>
     <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
       <b-button-group>
-        <b-dropdown right text="Скачать" size="sm" variant="secondary">
-          <b-dropdown-item>Скачать в формате XLS</b-dropdown-item>
+        <b-dropdown v-if="('xls_access' in $store.getters.user.permissions && '' !== xlsUrl)"
+                    text="Скачать" size="sm" variant="secondary" right>
+          <b-dropdown-item v-bind:href="xlsUrl" target="_blank">Скачать в формате XLS</b-dropdown-item>
         </b-dropdown>
       </b-button-group>
     </b-col>
@@ -53,6 +54,7 @@
     props: ['event'],
     data() {
       return {
+        xlsUrl: '',
         agency: {
           title: '',
           description: ''
@@ -112,11 +114,22 @@
       this.setLabel(this.event)
     },
     watch: {
-      event: function(value) {
+
+      event: function(value)
+      {
         this.breadcrumbs[2].text = value.id
         this.setLabel(value)
         this.setAgency(value.agency)
+
+        this.$http.get(this.$root.$options.settings.api.endpointEvent(value.id), { params: { export_to: 'xlsx' } })
+          .then(response => {
+            this.xlsUrl = response.data.data.url
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
+
     }
   }
 </script>
