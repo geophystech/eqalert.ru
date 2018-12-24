@@ -36,7 +36,7 @@
     </b-col>
     <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
       <b-button-group>
-        <b-dropdown v-if="('xls_access' in $store.getters.user.permissions && !!xlsUrl)"
+        <b-dropdown v-if="('xls_access' in $store.getters.user.permissions && '' !== xlsUrl)"
                     text="Скачать" size="sm" variant="secondary" right>
           <b-dropdown-item v-bind:href="xlsUrl" target="_blank">Скачать в формате XLS</b-dropdown-item>
         </b-dropdown>

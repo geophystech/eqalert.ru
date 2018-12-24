@@ -13,6 +13,10 @@
     <b-col>
       <div class="pull-right">
         <ModalMap v-if="showModalMap" :filtersData="filtersData" />
+        <b-dropdown v-if="('xls_access' in $store.getters.user.permissions && '' !== xlsUrl)"
+                    text="Скачать" size="sm" variant="secondary" right>
+          <b-dropdown-item v-bind:href="xlsUrl" target="_blank">Скачать в формате XLS</b-dropdown-item>
+        </b-dropdown>
       </div>
     </b-col>
   </b-row>
@@ -28,7 +32,27 @@
       endDate: '',
       count: 0
     },
-    components: { ModalMap }
+    data() {
+      return {
+        xlsUrl: ''
+      }
+    },
+    components: { ModalMap },
+
+    watch: {
+      filtersData: function(filtersData)
+      {
+        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+          params: Object.assign(Object.assign({}, filtersData), {export_to: 'xlsx'})
+        })
+          .then(response => {
+            this.xlsUrl = response.data.data.url
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    }
   }
 </script>
 
