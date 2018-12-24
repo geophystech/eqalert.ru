@@ -33,16 +33,34 @@ export function axiosAddRefreshTokenInterceptor() {
         return axios.post(apiSettings.endpointUserRefreshToken, {
           'refresh_token': store.getters.user.refreshToken
         }).then(response => {
-          store.dispatch('authenticateUser', {
-            accessToken: response.data.access_token,
-            refreshToken: response.data.refresh_token,
-            rememberMe: store.getters.user.rememberMe
-          })
 
           const apiSettings = new ApiSettings()
 
-          errorResponse.config.headers['Authorization'] = `${apiSettings.authorizationType} ${response.data.access_token}`
-          axiosAddRefreshTokenInterceptor()
+          this.$http.get(this.$root.$options.settings.api.endpointUserRefreshScopes, {
+            headers: { Authorization: `${apiSettings.authorizationType} ${response.data.access_token}` }
+          })
+            .then(scopesResponse => {
+
+              let permissions = {}
+
+              scopesResponse.data.data.forEach(permission => {
+                permissions[permission.id] = permission.description
+              })
+
+              store.dispatch('authenticateUser', {
+                accessToken: response.data.access_token,
+                refreshToken: response.data.refresh_token,
+                rememberMe: store.getters.user.rememberMe,
+                permissions: permissions
+              })
+
+              errorResponse.config.headers['Authorization'] = `${apiSettings.authorizationType} ${response.data.access_token}`
+              axiosAddRefreshTokenInterceptor()
+
+            })
+            .catch(error => {
+              console.log(error)
+            })
 
           return axios(errorResponse.config)
         }).catch(error => {

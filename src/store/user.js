@@ -3,7 +3,8 @@ export default {
     authenticated: false,
     accessToken: null,
     refreshToken: null,
-    rememberMe: false
+    rememberMe: false,
+    permissions: {}
   },
   getters: {
     user: state => {
@@ -11,7 +12,8 @@ export default {
         authenticated: state.authenticated,
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
-        rememberMe: state.rememberMe
+        rememberMe: state.rememberMe,
+        permissions: state.permissions
       }
     }
   },
@@ -21,12 +23,14 @@ export default {
       state.accessToken = values.accessToken
       state.refreshToken = values.refreshToken
       state.rememberMe = values.rememberMe
+      state.permissions = values.permissions
     },
     unauthenticateUser(state) {
       state.authenticated = false
       state.accessToken = null
       state.refreshToken = null
       state.rememberMe = null
+      state.permissions = {}
     }
   },
   actions: {
@@ -34,7 +38,8 @@ export default {
       commit('authenticateUser', {
         accessToken: values.accessToken,
         refreshToken: values.refreshToken,
-        rememberMe: values.rememberMe
+        rememberMe: values.rememberMe,
+        permissions: values.permissions
       })
     },
     unauthenticateUser({ commit, state }) {
