@@ -45,7 +45,10 @@
         this.xlsUrl = ''
 
         this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-          params: Object.assign(Object.assign({}, filtersData), {export_to: 'xlsx'})
+          params: Object.assign(Object.assign({}, filtersData), {
+            export_to: 'xlsx',
+            limit: 5000
+          })
         })
           .then(response => {
             this.xlsUrl = response.data.data.url
