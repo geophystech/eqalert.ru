@@ -42,16 +42,18 @@
 
   export default {
     components: {
-      buildings: Buildings,
       generalInformation: GeneralInformation,
-      ldos: LDOs,
       momentTensor: MomentTensor,
-      settlements: Settlements
+      settlements: Settlements,
+      buildings: Buildings,
+      ldos: LDOs
     },
     data() {
       return {
         components: {
-          currentTab: this.$router.currentRoute.params.tab || 'generalInformation',
+          currentTab: this.$router.currentRoute.params.tab || (
+            this.$root.onMobile ? 'settlements' : 'generalInformation'
+          ),
           header: EventHeader,
           lastEvents: LastEvents,
           maps: {
@@ -123,7 +125,7 @@
       // Do nothing on switching tabs.
       if (to.params.id !== this.$router.currentRoute.params.id) {
         this.fetchData(to.params.id)
-        this.components.currentTab = 'generalInformation'
+        this.components.currentTab = this.$root.onMobile ? 'settlements' : 'generalInformation'
       }
 
       next()
