@@ -1,18 +1,18 @@
 <template>
   <b-row class="infobar" align-v="center" no-gutters>
-    <b-col class="text-center text-md-left">
+    <b-col md="4" class="text-center text-md-left" v-if="!$root.onMobile">
       <router-link to="/sign-in" v-if="!$store.getters.user.authenticated">
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
-        <span v-if="!$root.onMobile">Снять ограничения данных</span>
+        <span>Снять ограничения данных</span>
       </router-link>
     </b-col>
-    <b-col class="text-center">
+    <b-col cols="7" md="4" class="text-center">
       Загружено <span class="count">{{ count }}</span> событий
       <span v-if="count && !$root.onMobile">({{ startDate }} — {{ endDate }})</span>
     </b-col>
-    <b-col>
+    <b-col cols="5" md="4">
       <div class="pull-right">
-        <ModalMap v-if="showModalMap" :filtersData="filtersData" />
+        <ModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
         <b-dropdown v-if="('xls_access' in $store.getters.user.permissions && '' !== xlsUrl)"
                     text="Скачать" size="sm" variant="secondary" right>
           <b-dropdown-item v-bind:href="xlsUrl" target="_blank">Скачать в формате XLS</b-dropdown-item>
