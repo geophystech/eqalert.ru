@@ -3,7 +3,7 @@
     <b-container>
       <app-header></app-header>
       <app-navbar></app-navbar>
-      <b-row v-if="$root.onMobile">
+      <b-row v-if="$root.onMobile" class="android-app-alert">
         <b-col cols="12">
           <b-alert variant="danger" style="margin-top: 10px" show dismissible>
             <a href="https://play.google.com/store/apps/details?id=ru.geophystech.eqalert"
@@ -71,3 +71,24 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+  .android-app-alert
+  {
+    .alert
+    {
+      background-color: tomato;
+      border-color: darken(tomato, 10%);
+
+      &, .alert-link {
+        color: white;
+      }
+
+      .alert-link {
+        text-decoration: underline;
+      }
+    }
+  }
+
+</style>
