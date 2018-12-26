@@ -46,6 +46,7 @@
 
         this.$http.get(this.$root.$options.settings.api.endpointEvents, {
           params: Object.assign(Object.assign({}, filtersData), {
+            include: 'nearestCity',
             export_to: 'xlsx',
             limit: 5000
           })

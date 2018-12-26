@@ -121,7 +121,12 @@
         this.setLabel(value)
         this.setAgency(value.agency)
 
-        this.$http.get(this.$root.$options.settings.api.endpointEvent(value.id), { params: { export_to: 'xlsx' } })
+        this.$http.get(this.$root.$options.settings.api.endpointEvent(value.id), {
+          params: {
+            include: 'nearestCity',
+            export_to: 'xlsx'
+          }
+        })
           .then(response => {
             this.xlsUrl = response.data.data.url
           })
