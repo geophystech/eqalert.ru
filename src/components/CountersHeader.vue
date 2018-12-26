@@ -44,7 +44,7 @@
       {
         this.xlsUrl = ''
 
-        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+        !this.$store.getters.user.authenticated || this.$http.get(this.$root.$options.settings.api.endpointEvents, {
           params: Object.assign(Object.assign({}, filtersData), {
             include: 'nearestCity',
             export_to: 'xlsx',

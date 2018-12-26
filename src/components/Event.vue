@@ -50,6 +50,8 @@
     },
     data() {
       return {
+        mobileMapHidden: true,
+        defaultViewport: '',
         components: {
           currentTab: this.$router.currentRoute.params.tab || (
             this.$root.onMobile ? 'settlements' : 'generalInformation'
@@ -57,10 +59,10 @@
           header: EventHeader,
           lastEvents: LastEvents,
           maps: {
-            buildings: MapBuildings,
             generalInformation: MapGeneralInformation,
-            ldos: MapLDOs,
-            settlements: MapSettlements
+            settlements: MapSettlements,
+            buildings: MapBuildings,
+            ldos: MapLDOs
           },
           tabs: Tabs
         },
@@ -70,8 +72,10 @@
       }
     },
     methods: {
-      fetchData: function(id) {
-        this.$http.get(this.$root.$options.settings.api.endpointEvent(id), {
+
+      fetchData: function(id)
+      {
+        !this.$store.getters.user.authenticated || this.$http.get(this.$root.$options.settings.api.endpointEvent(id), {
           params: {
             include: 'nearestCity'
           }
@@ -83,7 +87,9 @@
             console.log(error)
           })
       },
-      magnitudeType: function(type) {
+
+      magnitudeType: function(type)
+      {
         // Nested arrays are used because there may be multiple magnitude types.
         // But in most cases there will be only one type.
         switch (type) {
@@ -99,9 +105,11 @@
           default: return [['M', '']]
         }
       },
+
       onTabSwitch: function(tab) {
         this.components.currentTab = tab
       },
+
       processingMethod: function(auto, manual) {
         if (auto && !manual) return { long: 'автоматический', short: 'A' }
         if (auto && manual) return { long: 'смешанный', short: 'AM' }
@@ -109,6 +117,7 @@
 
         return { long: 'неизвестно', short: 'U' }
       },
+
       setData: function(data) {
         this.event = data
         this.event.datetime = data.locValues.data.event_datetime
@@ -116,10 +125,13 @@
         this.event.magnitudeType = this.magnitudeType(data.locValues.data.mag_t)
         this.event.processingMethod = this.processingMethod(data.has_auto, data.has_manual)
       }
+
     },
+
     created() {
       this.fetchData(this.$router.currentRoute.params.id)
     },
+
     beforeRouteUpdate(to, from, next) {
       // Fetch data only when event id is changed.
       // Do nothing on switching tabs.
@@ -136,6 +148,20 @@
 <style lang="scss" scoped>
   .event-tab {
     margin-top: 5%;
+  }
+  .mobile-map-dialog
+  {
+    position: fixed;
+    top: 0; left: 0;
+
+    &, > .mobile-map {
+      height: 100%;
+      width: 100vw;
+    }
+
+    .mobile-map {
+      position: relative;
+    }
   }
 </style>
 
