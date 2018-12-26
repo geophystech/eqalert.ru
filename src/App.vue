@@ -3,6 +3,14 @@
     <b-container>
       <app-header></app-header>
       <app-navbar></app-navbar>
+      <b-row v-if="$root.onMobile" class="android-app-alert">
+        <b-col cols="12">
+          <b-alert variant="danger" style="margin-top: 10px" show dismissible>
+            <a href="https://play.google.com/store/apps/details?id=ru.geophystech.eqalert"
+               class="alert-link">Мы сделали приложение для Android</a>
+          </b-alert>
+        </b-col>
+      </b-row>
       <router-view></router-view>
       <app-footer></app-footer>
     </b-container>
@@ -63,3 +71,24 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+  .android-app-alert
+  {
+    .alert
+    {
+      border-color: darken(tomato, 10%);
+      background-color: tomato;
+
+      &, .alert-link {
+        color: white;
+      }
+
+      .alert-link {
+        text-decoration: underline;
+      }
+    }
+  }
+
+</style>

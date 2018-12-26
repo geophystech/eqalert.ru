@@ -87,7 +87,12 @@
       createMap: function() {
         this.map.object = createMap(this.map.id, this.coordinates)
       },
-      fetchData: function() {
+      fetchData: function()
+      {
+        if (!this.event.has_pga_data) {
+          return this.putEpicenter()
+        }
+
         this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.event.id))
           .then(response => {
             this.addData(response.data.data)

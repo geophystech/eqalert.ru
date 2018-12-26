@@ -23,7 +23,8 @@ export default new Vuex.Store({
         case 'setCurrentTileProvider':
         case 'setPlateBoundaries':
         case 'authenticateUser':
-        case 'unauthenticateUser': return true
+        case 'unauthenticateUser':
+          return true
         default: return false
       }
     },

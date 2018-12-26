@@ -179,7 +179,7 @@ function currentTileProvider() {
   return tileProviders()[tileProvider]
 }
 
-export function createMap(id, coordinates, {
+export function createMap(mapID, coordinates, {
   addToggleShowObjects = false,
   showStations = true,
   zoom = 8,
@@ -193,7 +193,7 @@ export function createMap(id, coordinates, {
     zoomAnimation: true,
     zoomControl: false
   }
-  const map = window.L.map(id, options)
+  const map = window.L.map(mapID, options)
   setView(map, coordinates)
   currentTileProvider(store).addTo(map)
   listenerStoreCurrentTileProvider(map, store)

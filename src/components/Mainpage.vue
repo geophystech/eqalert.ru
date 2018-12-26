@@ -16,7 +16,8 @@
             </b-col>
 
             <b-col class="text-center" cols="6" md="3">
-              <img src="../assets/img/logos/sakhalin-government.png" class="img-responsive" id="logo-sakhalin-government" alt="Правительство Сахалинской области" />
+              <img src="../assets/img/logos/sakhalin-government.png" class="img-responsive"
+                   id="logo-sakhalin-government" alt="Правительство Сахалинской области" />
               <b-tooltip target="logo-sakhalin-government" title="Правительство Сахалинской области"></b-tooltip>
             </b-col>
 

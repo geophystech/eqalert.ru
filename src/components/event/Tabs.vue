@@ -1,13 +1,14 @@
 <template>
   <b-tabs>
     <template slot="tabs">
-      <b-nav-item v-for="tab in tabs"
+      <b-nav-item
+        v-if="!$root.onMobile && isTabAvailable(tab)"
+        v-for="tab in tabs"
+        :href="tab.href"
         :key="tab.href"
         :active="isTabActive(tab)"
-        :href="tab.href"
-        @click="onTabSwitch(tab)"
-        v-if="!$root.onMobile && isTabAvailable(tab)">
-        {{ tab.text }}
+        @click="onTabSwitch(tab)">
+        {{ tab.label }}
       </b-nav-item>
 
     <b-form-select
@@ -17,9 +18,9 @@
         <option
           v-if="isTabAvailable(tab)"
           v-for="tab in tabs"
-          :key="tab.href"
-          :value="tab.href">
-            {{ tab.text }}
+          :value="tab.href"
+          :key="tab.href">
+            {{ tab.label }}
         </option>
     </b-form-select>
     </template>
@@ -36,29 +37,29 @@
         activeTab: '#' + this.$router.currentRoute.fullPath,
         tabs: {
           generalInformation: {
+            label: 'Общая информация',
             available: true,
-            href: '#',
-            text: 'Общая информация'
+            href: '#'
           },
           settlements: {
+            label: 'Ближайшие населенные пункты',
             available: false,
-            href: '#',
-            text: 'Ближайшие населенные пункты'
+            href: '#'
           },
           buildings: {
+            label: 'Здания и сооружения',
             available: false,
-            href: '#',
-            text: 'Здания и сооружения'
+            href: '#'
           },
           momentTensor: {
+            label: 'Тензор момента',
             available: false,
-            href: '#',
-            text: 'Тензор момента'
+            href: '#'
           },
           ldos: {
+            label: 'Магистральные объекты',
             available: false,
-            href: '#',
-            text: 'Магистральные объекты'
+            href: '#'
           }
         }
       }
@@ -69,8 +70,13 @@
       }
     },
     methods: {
-      convertTabName: function(tab) {
-        if (!tab) return 'generalInformation'
+      convertTabName: function(tab)
+      {
+        if (!tab) {
+          return (!this.$root.onMobile || !this.tabs.settlements.available)
+            ? 'generalInformation' : 'settlements'
+        }
+
         if (tab === 'moment-tensor') return 'momentTensor'
         return tab
       },
@@ -79,7 +85,7 @@
           return this.tabs[key].href === this.activeTab
         })
 
-        if (currentTab) return this.tabs[currentTab].text
+        if (currentTab) return this.tabs[currentTab].label
 
         return 'Информация о событии'
       },
@@ -124,10 +130,10 @@
         this.activeTab = this.tabs[this.convertTabName(tab)].href
       },
       setAvailability: function() {
-        this.tabs.buildings.available = this.event.has_buildings_msk64_analysis
-        this.tabs.ldos.available = this.event.has_long_distance_objects_analysis
-        this.tabs.momentTensor.available = this.event.has_mt
         this.tabs.settlements.available = this.event.has_cities_msk64_analysis
+        this.tabs.buildings.available = this.event.has_buildings_msk64_analysis
+        this.tabs.momentTensor.available = this.event.has_mt
+        this.tabs.ldos.available = this.event.has_long_distance_objects_analysis
       },
       setData: function() {
         this.setAvailability()
