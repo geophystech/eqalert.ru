@@ -78,8 +78,8 @@ export default {
   {
     .alert
     {
-      background-color: tomato;
       border-color: darken(tomato, 10%);
+      background-color: tomato;
 
       &, .alert-link {
         color: white;
