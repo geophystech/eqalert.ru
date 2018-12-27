@@ -15,7 +15,7 @@
       </b-col>
 
       <b-col cols="2" md="4" order="3" order-md="3" align-self="center" class="text-right align-self-md-start" id="social-media-links">
-        <a href="https://telegram.me/eqalert_ru_bot"><i class="fa fa-telegram" aria-hidden="true" /></a>
+        <a href="tg://resolve?domain=eqalert_ru_bot"><i class="fa fa-telegram" aria-hidden="true" /></a>
       </b-col>
     </b-row>
   </footer>
