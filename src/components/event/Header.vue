@@ -84,20 +84,8 @@
           }
         }
       },
-      export2xls: function(callBack)
-      {
-        this.$http.get(this.$root.$options.settings.api.endpointEvent(this.event.id), {
-          params: {
-            include: 'nearestCity',
-            export_to: 'xlsx'
-          }
-        })
-          .then(response => {
-            callBack(response.data.data.url)
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      export2xls: function(request) {
+        request(this.$root.$options.settings.api.endpointEvent(this.event.id))
       }
     },
     computed: {
