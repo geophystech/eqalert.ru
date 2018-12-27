@@ -36,7 +36,7 @@
     </b-col>
     <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
       <b-button-group>
-        <ExportDropDown @export2xls="export2xls" />
+        <ExportDropDown v-if="event.id" @export2xls="export2xls" />
       </b-button-group>
     </b-col>
   </b-row>
@@ -49,7 +49,9 @@
 
   export default {
     components: { Spinner, ExportDropDown },
-    props: ['event'],
+    props: {
+      event: {}
+    },
     data() {
       return {
         agency: { title: '', description: '' },
