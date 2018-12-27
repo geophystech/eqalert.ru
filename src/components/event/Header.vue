@@ -36,10 +36,7 @@
     </b-col>
     <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
       <b-button-group>
-        <b-dropdown v-if="('xls_access' in $store.getters.user.permissions && '' !== xlsUrl)"
-                    text="Скачать" size="sm" variant="secondary" right>
-          <b-dropdown-item v-bind:href="xlsUrl" target="_blank">Скачать в формате XLS</b-dropdown-item>
-        </b-dropdown>
+        <ExportDropDown v-if="event.id" @export2xls="export2xls" />
       </b-button-group>
     </b-col>
   </b-row>
@@ -47,15 +44,17 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
+  import ExportDropDown from '@/components/ExportDropDown'
   import { agency, agencyDescription } from '@/helpers/event'
 
   export default {
-    components: { Spinner },
-    props: ['event'],
+    components: { Spinner, ExportDropDown },
+    props: {
+      event: {}
+    },
     data() {
       return {
         agency: { title: '', description: '' },
-        xlsUrl: '',
         label: {}
       }
     },
@@ -84,6 +83,21 @@
             variant: 'processing'
           }
         }
+      },
+      export2xls: function(callBack)
+      {
+        this.$http.get(this.$root.$options.settings.api.endpointEvent(this.event.id), {
+          params: {
+            include: 'nearestCity',
+            export_to: 'xlsx'
+          }
+        })
+          .then(response => {
+            callBack(response.data.data.url)
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     },
     computed: {
@@ -129,19 +143,6 @@
         this.breadcrumbs[ this.breadcrumbs.length - 1 ].text = value.id
         this.setLabel(value)
         this.setAgency(value.agency)
-
-        !this.$store.getters.user.authenticated || this.$http.get(this.$root.$options.settings.api.endpointEvent(value.id), {
-          params: {
-            include: 'nearestCity',
-            export_to: 'xlsx'
-          }
-        })
-          .then(response => {
-            this.xlsUrl = response.data.data.url
-          })
-          .catch(error => {
-            console.log(error)
-          })
       }
 
     }
