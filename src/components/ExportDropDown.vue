@@ -34,9 +34,9 @@
             })
           })
             .then(response => {
+              window.location.href = response.data.data.url
               this.$refs.dropdown.visible = false
               this.xlsSpinnerShow = false
-              window.location.href = response.data.data.url
             })
             .catch(error => {
               console.log(error)
