@@ -25,10 +25,22 @@
       {
         this.xlsSpinnerShow = true
 
-        this.$emit('export2xls', (xlsUrl) => {
-          this.$refs.dropdown.visible = false
-          this.xlsSpinnerShow = false
-          window.open(xlsUrl)
+        this.$emit('export2xls', (url, params) => {
+
+          this.$http.get(url, {
+            params: Object.assign(Object.assign({}, params), {
+              include: 'nearestCity',
+              export_to: 'xlsx'
+            })
+          })
+            .then(response => {
+              window.location.href = response.data.data.url
+              this.$refs.dropdown.visible = false
+              this.xlsSpinnerShow = false
+            })
+            .catch(error => {
+              console.log(error)
+            })
         })
       },
       onHide: function(e) {
