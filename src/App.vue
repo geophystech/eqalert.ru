@@ -3,7 +3,7 @@
     <b-container>
       <app-header></app-header>
       <app-navbar></app-navbar>
-      <b-row v-if="$root.onMobile" class="android-app-alert">
+      <b-row v-if="isAndroid" class="android-app-alert">
         <b-col cols="12">
           <b-alert variant="danger" style="margin-top: 10px" show dismissible>
             <a href="https://play.google.com/store/apps/details?id=ru.geophystech.eqalert"
@@ -68,6 +68,11 @@ export default {
   mounted() {
     setInterval(() => { this.fetchSystemInfo() }, 30000)
     this.fetchPlateBoundaries()
+  },
+  computed: {
+    isAndroid: function() {
+      return this.$root.onMobile && /Android/i.test(navigator.userAgent)
+    }
   }
 }
 </script>
