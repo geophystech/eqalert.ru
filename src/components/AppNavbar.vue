@@ -5,7 +5,7 @@
           <i class="fa fa-navicon" aria-hidden="true" />
         </b-navbar-toggle>
         <b-collapse is-nav id="nav_collapse">
-          <b-navbar-nav justified>
+          <b-navbar-nav @click.capture="clicked" justified>
             <b-nav-item v-if="!$root.onMobile" :to="{ name: 'Events' }" key="events">Все землетрясения</b-nav-item>
             <b-nav-item v-if="!$root.onMobile" :to="{ name: 'Analytics' }" key="analytics">Аналитика</b-nav-item>
             <li><a href="https://geophystech.ru/services/seismic-monitoring-system/" class="nav-item nav-link">Мониторинг объектов</a></li>
@@ -18,7 +18,14 @@
 
 <script>
 export default {
-  name: 'app-navbar'
+  name: 'app-navbar',
+  methods: {
+    clicked: function(e) {
+      if (e.target.classList.contains('nav-link') && e.target.classList.contains('active')) {
+        e.preventDefault()
+      }
+    }
+  }
 }
 </script>
 
