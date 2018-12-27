@@ -13,10 +13,7 @@
     <b-col cols="5" md="4">
       <div class="pull-right">
         <ModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
-        <b-dropdown v-if="('xls_access' in $store.getters.user.permissions && '' !== xlsUrl)"
-                    text="Скачать" size="sm" variant="secondary" right>
-          <b-dropdown-item v-bind:href="xlsUrl" target="_blank">Скачать в формате XLS</b-dropdown-item>
-        </b-dropdown>
+        <ExportDropDown @export2xls="export2xls" />
       </div>
     </b-col>
   </b-row>
@@ -24,6 +21,7 @@
 
 <script>
   import ModalMap from '@/components/maps/ModalMap'
+  import ExportDropDown from '@/components/ExportDropDown'
   export default {
     props: {
       showModalMap: false,
@@ -33,26 +31,22 @@
       count: 0
     },
     data() {
-      return {
-        xlsUrl: ''
-      }
+      return {}
     },
-    components: { ModalMap },
+    components: { ModalMap, ExportDropDown },
 
-    watch: {
-      filtersData: function(filtersData)
+    methods: {
+      export2xls: function(callBack)
       {
-        this.xlsUrl = ''
-
-        !this.$store.getters.user.authenticated || this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-          params: Object.assign(Object.assign({}, filtersData), {
+        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+          params: Object.assign(Object.assign({}, this.filtersData), {
             include: 'nearestCity',
             export_to: 'xlsx',
             limit: 5000
           })
         })
           .then(response => {
-            this.xlsUrl = response.data.data.url
+            callBack(response.data.data.url)
           })
           .catch(error => {
             console.log(error)
