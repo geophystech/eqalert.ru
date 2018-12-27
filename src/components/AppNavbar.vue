@@ -21,7 +21,10 @@ export default {
   name: 'app-navbar',
   methods: {
     clicked: function(e) {
-      if (e.target.classList.contains('nav-link') && e.target.classList.contains('active')) {
+      if (e.target.classList.contains('nav-link')
+        && e.target.classList.contains('active')
+        && !this.$router.currentRoute.params.id
+      ) {
         e.preventDefault()
       }
     }
