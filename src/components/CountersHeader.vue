@@ -36,21 +36,11 @@
     components: { ModalMap, ExportDropDown },
 
     methods: {
-      export2xls: function(callBack)
-      {
-        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-          params: Object.assign(Object.assign({}, this.filtersData), {
-            include: 'nearestCity',
-            export_to: 'xlsx',
-            limit: 5000
-          })
-        })
-          .then(response => {
-            callBack(response.data.data.url)
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      export2xls: function(request) {
+        let params = Object.assign({}, this.filtersData)
+        request(this.$root.$options.settings.api.endpointEvents, Object.assign(params, {
+          limit: 5000
+        }))
       }
     }
   }
