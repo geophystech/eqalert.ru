@@ -56,8 +56,8 @@
           currentTab: this.$router.currentRoute.params.tab || (
             this.$root.onMobile ? 'settlements' : 'generalInformation'
           ),
-          header: EventHeader,
           lastEvents: LastEvents,
+          header: EventHeader,
           maps: {
             generalInformation: MapGeneralInformation,
             settlements: MapSettlements,
@@ -75,7 +75,7 @@
 
       fetchData: function(id)
       {
-        !this.$store.getters.user.authenticated || this.$http.get(this.$root.$options.settings.api.endpointEvent(id), {
+        this.$http.get(this.$root.$options.settings.api.endpointEvent(id), {
           params: {
             include: 'nearestCity'
           }

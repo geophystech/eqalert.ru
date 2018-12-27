@@ -54,23 +54,8 @@
     props: ['event'],
     data() {
       return {
+        agency: { title: '', description: '' },
         xlsUrl: '',
-        agency: {
-          title: '',
-          description: ''
-        },
-        breadcrumbs: [
-          {
-            text: 'Главная',
-            href: this.$router.resolve({ name: 'Mainpage' }).href
-          }, {
-            text: 'События',
-            href: this.$router.resolve({ name: 'Events' }).href
-          }, {
-            text: 'event',
-            active: true
-          }
-        ],
         label: {}
       }
     },
@@ -102,12 +87,36 @@
       }
     },
     computed: {
-      datetimeFormat: function() {
+      datetimeFormat: function()
+      {
         if (this.$root.onMobile) {
           return 'L в HH:mm:ss UTC'
         } else {
           return 'LL в HH:mm:ss UTC'
         }
+      },
+      breadcrumbs: function()
+      {
+        let breadcrumbs = []
+
+        breadcrumbs.push({
+          text: 'Главная',
+          href: this.$router.resolve({ name: 'Mainpage' }).href
+        })
+
+        if (!this.$root.onMobile) {
+          breadcrumbs.push({
+            text: 'События',
+            href: this.$router.resolve({ name: 'Events' }).href
+          })
+        }
+
+        breadcrumbs.push({
+          text: 'event',
+          active: true
+        })
+
+        return breadcrumbs
       }
     },
     created() {
@@ -117,11 +126,11 @@
 
       event: function(value)
       {
-        this.breadcrumbs[2].text = value.id
+        this.breadcrumbs[ this.breadcrumbs.length - 1 ].text = value.id
         this.setLabel(value)
         this.setAgency(value.agency)
 
-        this.$http.get(this.$root.$options.settings.api.endpointEvent(value.id), {
+        !this.$store.getters.user.authenticated || this.$http.get(this.$root.$options.settings.api.endpointEvent(value.id), {
           params: {
             include: 'nearestCity',
             export_to: 'xlsx'
