@@ -13,7 +13,7 @@
     <b-col cols="5" md="4">
       <div class="pull-right">
         <ModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
-        <ExportDropDown @export2xls="export2xls" />
+        <ExportDropDown v-if="count > 0" @export2xls="export2xls" />
       </div>
     </b-col>
   </b-row>
