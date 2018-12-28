@@ -1,6 +1,7 @@
 <template>
   <div class="analytics">
     <CountersHeader
+      :filtersData="filtersParams"
       :count="eventsCount"
       :startDate="startDate"
       :endDate="endDate" />
@@ -49,10 +50,10 @@
     data() {
       return {
         disabledFilters: false,
-        endDate: '',
-        eventsCount: 0,
         filtersParams: {},
-        startDate: ''
+        eventsCount: 0,
+        startDate: '',
+        endDate: ''
       }
     },
     metaInfo: {
