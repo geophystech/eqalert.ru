@@ -62,7 +62,7 @@ describe('AppHeader.vue', () => {
       expect(socialMediaLinksContainer.classes()).to.contain('text-md-center')
 
       expect(socialMediaLinks.length).to.equal(1)
-      expect(telegramLink.attributes().href).to.equal('https://telegram.me/eqalert_ru_bot')
+      expect(telegramLink.attributes().href).to.equal('tg://resolve?domain=eqalert_ru_bot')
     })
   })
 
