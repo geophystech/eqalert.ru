@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab">
-    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="spinner" />
+    <Spinner v-if="spinner" />
 
     <b-table hover outlined responsive :fields="fields" :items="items" v-if="!spinner">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Spinner from 'vue-simple-spinner'
+import Spinner from '@/components/Spinner'
 
 export default {
   components: { Spinner },
