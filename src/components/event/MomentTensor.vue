@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab">
-    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="!image" />
+    <Spinner v-if="!image" />
 
     <b-row v-if="image">
       <b-col class="text-center">
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import Spinner from 'vue-simple-spinner'
+  import Spinner from '@/components/Spinner'
 
   export default {
     components: { Spinner },

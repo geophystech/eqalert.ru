@@ -6,7 +6,7 @@
     <b-col cols="12" md="8">
       <b-row>
         <b-col class="text-center">
-          <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="!event.magnitude" />
+          <Spinner v-if="!event.magnitude" />
 
           <h5 v-if="event.magnitude">
             <span class="magnitude-type" v-for="item in event.magnitudeType" :key="item[0]">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import Spinner from 'vue-simple-spinner'
+  import Spinner from '@/components/Spinner'
   import ExportDropDown from '@/components/ExportDropDown'
   import { agency, agencyDescription } from '@/helpers/event'
 
