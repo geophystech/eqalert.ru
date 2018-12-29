@@ -15,7 +15,7 @@
     props: {},
     data() {
       return {
-        xlsSpinnerShow: true
+        xlsSpinnerShow: false
       }
     },
     components: { Spinner },
