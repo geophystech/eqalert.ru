@@ -11,7 +11,8 @@
       <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" key="mainpage-filters" v-if="!$root.onMobile" />
 
       <b-col class="all-events">
-        <Spinner line-fg-color="#337ab7" :line-size="1" v-if="spinners.loadMoreEvents && !events.length" />
+
+        <Spinner :size="32" v-if="spinners.loadMoreEvents && !events.length" />
 
         <b-row no-gutters class="events-head text-center">
           <b-col v-if="!$root.onMobile" md="1">#</b-col>
@@ -42,7 +43,7 @@
 
         <b-row class="load-more-events" no-gutters>
           <b-col class="text-center">
-            <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="spinners.loadMoreEvents" />
+            <Spinner v-if="spinners.loadMoreEvents" />
             <a href="javascript:void(0)" @click.prevent="loadMoreEvents" v-if="apiParams.cursor && !spinners.loadMoreEvents">Показать больше событий</a>
             <span v-if="!apiParams.cursor">Загружены все события</span>
           </b-col>
@@ -55,7 +56,7 @@
 <script>
 import CountersHeader from '@/components/CountersHeader.vue'
 import Filters from '@/components/Filters.vue'
-import Spinner from 'vue-simple-spinner'
+import Spinner from '@/components/Spinner'
 import { round } from '@/helpers/math.js'
 
 export default {

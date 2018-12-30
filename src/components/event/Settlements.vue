@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab">
-    <Spinner line-fg-color="#337ab7" :line-size="1" size="26" v-if="!items.length" />
+    <Spinner v-if="!items.length" />
 
     <b-table
       hover
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import Spinner from 'vue-simple-spinner'
+  import Spinner from '@/components/Spinner'
   import { convertMsk64 } from '@/map_functions.js'
   import { round } from '@/helpers/math.js'
 

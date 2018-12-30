@@ -3,14 +3,13 @@
               text="Скачать" size="sm" variant="secondary" @hide="onHide"
               ref="dropdown" right>
     <b-dropdown-item @click="xlsItemClick">
-      Скачать в формате XLS <Spinner line-fg-color="#337ab7" :line-size="1" size="21"
-                                     v-if="xlsSpinnerShow" class="dropdown-item-spiner" />
+      Скачать в формате XLS <Spinner size="21" v-if="xlsSpinnerShow" class="dropdown-item-spiner" />
     </b-dropdown-item>
   </b-dropdown>
 </template>
 
 <script>
-  import Spinner from 'vue-simple-spinner'
+  import Spinner from '@/components/Spinner'
   export default {
     name: 'ExportDropDown',
     props: {},
