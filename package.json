@@ -23,6 +23,7 @@
     "leaflet-dvf": "^0.3.1",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-spin": "^1.1.0",
+    "leaflet-yandex-tile": "github:armd-pro/leaflet.yandex-map-tile",
     "leaflet-zoomhome": "github:armd-pro/leaflet.zoomhome",
     "leaflet.gridlayer.googlemutant": "^0.7.1",
     "leaflet.markercluster": "^1.4.1",
