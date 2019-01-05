@@ -339,7 +339,7 @@ export function createMapMarkerPopupBuilding(building, {damageLevel = null, pgaV
     ['built_year', 'Год постройки'],
     ['flats', 'Кол-во этажей'],
     ['address', 'Адрес'],
-    ['residents', 'Кол-во проживающих'],
+    ['residents', 'Кол-во человек на объекте'],
     ['max_msk64', 'Проектная сейсмостойкость'],
     ['damage_level', 'Прогноз повреждений'],
     ['PGA', 'PGA'],
