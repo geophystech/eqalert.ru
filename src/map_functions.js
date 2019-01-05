@@ -190,6 +190,14 @@ export function createMap(mapID, coordinates, {
   setView(map, coordinates)
   listenerStoreCurrentTileProvider(map, store)
 
+  window.addEventListener('keydown', e => {
+    if (e.keyCode === 17) map.scrollWheelZoom.enable()
+  }, false)
+
+  window.addEventListener('keyup', e => {
+    if (e.keyCode === 17) map.scrollWheelZoom.disable()
+  }, false)
+
   let osm = new window.L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: `<a href="http://osm.org">OpenStreetMap</a> | <a href="https://geophystech.ru">GEOPHYSTECH LLC</a>`
   })
