@@ -6,7 +6,7 @@
     <b-col cols="12" md="8">
       <b-row>
         <b-col class="text-center">
-          <Spinner v-if="!event.magnitude" />
+          <Spinner v-if="!event.magnitude && !!event.id" />
 
           <h5 v-if="event.magnitude">
             <span class="magnitude-type" v-for="item in event.magnitudeType" :key="item[0]">
