@@ -24,8 +24,10 @@
       }
     },
     methods: {
-      addData: function(data) {
-        let markers = new window.L.MarkerClusterGroup({
+
+      addData: function(buildings)
+      {
+        let markerCluster = new window.L.MarkerClusterGroup({
           disableClusteringAtZoom: 15,
           iconCreateFunction: function(cluster)
           {
@@ -43,8 +45,8 @@
             damageLevels = Object.entries(damageLevels).sort((a, b) => b[1] - a[1] || 1)
             let damageLevel = damageLevels[0][0]
 
-            if (damageLevel > 3) {
-              damageLevel = 3
+            if (damageLevel > 5) {
+              damageLevel = 5
             }
 
             return new window.L.DivIcon({
@@ -55,7 +57,8 @@
           }
         })
 
-        data.forEach(building => {
+        buildings.forEach(building => {
+
           if (building.damage_level < 1) return
 
           const {lat: latitude, lon: longitude} = building.building.data
@@ -91,14 +94,17 @@
             damageLevel: building.damage_level,
             pgaValue: building.pga_value
           })
+
           marker.bindPopup(popup)
-          markers.addLayer(marker)
+          markerCluster.addLayer(marker)
+
         })
 
-        this.map.markers = markers
-        this.map.object.addLayer(markers)
+        this.map.markers = markerCluster
+        this.map.object.addLayer(markerCluster)
 
-        if (!this.$el.querySelector('.map-legend')) {
+        if (!this.$el.querySelector('.map-legend'))
+        {
           const legend = window.L.control({ position: 'bottomright' })
 
           legend.onAdd = map => {
@@ -106,7 +112,9 @@
             div.innerHTML =
               `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
                <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d≥3</span></div>`
+               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3</span></div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(4)}"></span><span>d-4</span></div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(5)}"></span><span>d≥5</span></div>`
             return div
           }
 
@@ -138,7 +146,7 @@
     created() {
       this.initialize()
 
-      this.$root.$on('onMapBuildingsDataFetched', data => { this.addData(data) })
+      this.$root.$on('onMapBuildingsDataFetched', buildings => { this.addData(buildings) })
     },
     beforeDestroy() {
       this.$root.$off('onMapBuildingsDataFetched')
@@ -159,9 +167,11 @@
   @import '~scss/event_map';
 
   $level-colors: (
-    1: #008000,
-    2: #ffa500,
-    3: #ff0000
+    1: green,
+    2: yellow,
+    3: orange,
+    4: red,
+    5: #C50126
   );
 
   @each $level, $color in $level-colors {

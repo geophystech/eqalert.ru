@@ -29,15 +29,18 @@ export function addEpicenter(map, coordinates)
   return epicenter
 }
 
-export function addPlateBoundaries(controls) {
+export function addPlateBoundaries(controls)
+{
   const boundaries = new window.L.GeoJSON(store.getters.plateBoundaries, {
+
     style: {
       color: '#8A0707',
       weight: 2
     },
-    onEachFeature: function(feature, layer) {
-      const message =
-        `Обновленная модель границ тектонических плит.
+
+    onEachFeature: function(feature, layer)
+    {
+      const message = `Обновленная модель границ тектонических плит.
         <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
         P.Bird, 2003</a>`
 
@@ -55,12 +58,14 @@ export function addPlateBoundaries(controls) {
         })
       })
     }
+
   })
 
   controls.addOverlay(boundaries, 'Plate Boundaries')
 }
 
-export function addStations(map, controls, show = true) {
+export function addStations(map, controls, show = true)
+{
   const settings = new ApiSettings()
 
   axios.get(settings.endpointStations)
@@ -125,7 +130,10 @@ export function addStations(map, controls, show = true) {
 
       const makerksGroup = new window.L.LayerGroup(markers)
 
-      if (show) map.addLayer(makerksGroup)
+      if (show) {
+        map.addLayer(makerksGroup)
+      }
+
       controls.addOverlay(makerksGroup, 'Show seismic stations')
     })
     .catch(error => {
@@ -135,14 +143,16 @@ export function addStations(map, controls, show = true) {
 
 export function buildingColor(damageLevel)
 {
-  if (damageLevel >= 3) {
-    return '#ff0000'
+  if (damageLevel >= 5) {
+    return '#c50126'
   }
 
   switch (damageLevel) {
     case 0: return 'cyan'
-    case 1: return '#008000'
-    case 2: return '#ffa500'
+    case 1: return 'green'
+    case 2: return 'yellow'
+    case 3: return 'orange'
+    case 4: return 'red'
   }
 }
 
@@ -214,6 +224,7 @@ export function createMap(mapID, coordinates, {
   })
 
   map._zoomHome = zoomHome()
+  map._controls = controls
 
   map._zoomHome.setHomeCoordinates(coordinates)
   map._zoomHome.setHomeZoom(zoom)
