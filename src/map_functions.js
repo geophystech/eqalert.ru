@@ -172,13 +172,6 @@ export function convertMsk64(value) {
   if (value >= 11.75 && value < Infinity) return 'XII'
 }
 
-function currentTileProvider() {
-  // Get stored tile provider for the current user.
-  const tileProvider = Object.keys(tileProviders())[0]
-
-  return tileProviders()[tileProvider]
-}
-
 export function createMap(mapID, coordinates, {
   addToggleShowObjects = false,
   showStations = true,
@@ -195,10 +188,31 @@ export function createMap(mapID, coordinates, {
   }
   const map = window.L.map(mapID, options)
   setView(map, coordinates)
-  currentTileProvider(store).addTo(map)
   listenerStoreCurrentTileProvider(map, store)
 
-  const controls = new window.L.Control.Layers(tileProviders())
+  window.addEventListener('keydown', e => {
+    if (e.keyCode === 17) map.scrollWheelZoom.enable()
+  }, false)
+
+  window.addEventListener('keyup', e => {
+    if (e.keyCode === 17) map.scrollWheelZoom.disable()
+  }, false)
+
+  let osm = new window.L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: `<a href="http://osm.org">OpenStreetMap</a> | <a href="https://geophystech.ru">GEOPHYSTECH LLC</a>`
+  })
+
+  let yndx = new window.L.Yandex(null, {
+    ymapsOpts: { suppressMapOpenBlock: true }
+  })
+
+  map.addLayer(osm)
+
+  const controls = new window.L.Control.Layers({
+    'Open Street Map': osm,
+    'Yandex Map': yndx
+  })
+
   map._zoomHome = zoomHome()
 
   map._zoomHome.setHomeCoordinates(coordinates)
@@ -325,7 +339,7 @@ export function createMapMarkerPopupBuilding(building, {damageLevel = null, pgaV
     ['built_year', 'Год постройки'],
     ['flats', 'Кол-во этажей'],
     ['address', 'Адрес'],
-    ['residents', 'Кол-во проживающих'],
+    ['residents', 'Кол-во человек на объекте'],
     ['max_msk64', 'Проектная сейсмостойкость'],
     ['damage_level', 'Прогноз повреждений'],
     ['PGA', 'PGA'],
@@ -358,16 +372,6 @@ function addFullscreenInvalidationFix(map) {
       map.invalidateSize()
     }
   })
-}
-
-function tileProviders() {
-  const geophystechLink = '<a href="https://geophystech.ru">GEOPHYSTECH LLC</a>'
-
-  return {
-    'OpenStreetMap': new window.L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: `<a href="http://osm.org">OpenStreetMap</a> | ${geophystechLink}`
-    })
-  }
 }
 
 function zoomHome() {
