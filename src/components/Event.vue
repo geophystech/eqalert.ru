@@ -5,6 +5,19 @@
 
     <b-row>
       <b-col cols="12" md="8">
+
+        <div v-if="errorResponse">
+          <p class="text-error" v-if="errorResponse.status === 403">
+            Доступ к информации по данному событию ограничен, пожалуйста, пройдите процедуру авторизации.
+            <a href="https://goo.gl/forms/i48vp55kTjL2d9Wk1" target="_blank">Служба поддежки.</a>
+          </p>
+          <p class="text-error" v-if="errorResponse.status === 404">
+            Данного события не существует.
+            Пожалуйста, посмотрите, <router-link :to="{name: 'Mainpage'}">последние землетрясения</router-link>
+            или выполните <router-link :to="{name: 'Events'}">поиск в архиве.</router-link>
+          </p>
+        </div>
+
         <keep-alive>
           <component
             :is="components.maps[components.currentTab]"
@@ -51,6 +64,7 @@
     data() {
       return {
         mobileMapHidden: true,
+        errorResponse: null,
         defaultViewport: '',
         components: {
           currentTab: this.$router.currentRoute.params.tab || (
@@ -75,6 +89,8 @@
 
       fetchData: function(id)
       {
+        this.errorResponse = null
+
         this.$http.get(this.$root.$options.settings.api.endpointEvent(id), {
           params: {
             include: 'nearestCity'
@@ -84,7 +100,7 @@
             this.setData(response.data.data)
           })
           .catch(error => {
-            console.log(error)
+            this.errorResponse = error.response
           })
       },
 
