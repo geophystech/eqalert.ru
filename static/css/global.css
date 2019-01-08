@@ -107,6 +107,6 @@ details > summary:first-of-type {
   color: red;
 }
 
-.leaflet-container.leaflet-touch-zoom {
+[data-gesture-handling-scroll-content]::after {
   text-align: center;
 }
