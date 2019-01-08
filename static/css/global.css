@@ -106,3 +106,7 @@ details > summary:first-of-type {
 .text-error {
   color: red;
 }
+
+.leaflet-container.leaflet-touch-zoom {
+  text-align: center;
+}
