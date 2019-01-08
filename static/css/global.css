@@ -89,3 +89,24 @@ details > summary:first-of-type {
 	opacity: 1;
 	visibility: visible;
 }
+
+.text-error a {
+  text-decoration: underline;
+}
+
+.text-error a:hover {
+  text-decoration: none;
+}
+
+.text-error a,
+.text-error a:hover {
+  color: darkred;
+}
+
+.text-error {
+  color: red;
+}
+
+.leaflet-container.leaflet-touch-zoom {
+  text-align: center;
+}

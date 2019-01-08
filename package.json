@@ -22,6 +22,7 @@
     "leaflet": "^1.4.0",
     "leaflet-dvf": "^0.3.1",
     "leaflet-fullscreen": "^1.0.2",
+    "leaflet-gesture-handling": "^1.1.8",
     "leaflet-spin": "^1.1.0",
     "leaflet-yandex-tile": "github:armd-pro/leaflet.yandex-map-tile",
     "leaflet-zoomhome": "github:armd-pro/leaflet.zoomhome",
