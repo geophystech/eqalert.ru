@@ -49,6 +49,7 @@ import 'leaflet-yandex-tile/dist/leaflet.yandex-tile'
 
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.min'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css'
+
 import 'font-awesome/css/font-awesome.min.css'
 
 Vue.config.productionTip = false
