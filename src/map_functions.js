@@ -141,19 +141,17 @@ export function addStations(map, controls, show = true)
     })
 }
 
-export function buildingColor(damageLevel)
-{
-  if (damageLevel >= 5) {
-    return '#C50126' // Dark crimson
-  }
+export const BUILDING_COLORS = [
+  '#00FFFF',
+  '#008000',
+  '#FFFF00',
+  '#FFA500',
+  '#FF0000',
+  '#C50126'
+]
 
-  switch (damageLevel) {
-    case 0: return '#00FFFF' // cyan
-    case 1: return '#008000' // green
-    case 2: return '#FFFF00' // yellow
-    case 3: return '#FFA500' // orange
-    case 4: return '#FF0000' // red
-  }
+export function buildingColor(damageLevel) {
+  return BUILDING_COLORS[damageLevel > 5 ? 5 : damageLevel]
 }
 
 export function convertMsk64(value) {

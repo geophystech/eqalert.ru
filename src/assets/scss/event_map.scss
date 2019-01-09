@@ -109,14 +109,22 @@ $legend-marker-size: 10px;
       width: 50px;
       top: -1px;
 
-      > span:first-child {
+      span:first-child
+      {
         height: $legend-marker-size;
         width: $legend-marker-size;
+        vertical-align: middle;
         display: inline-block;
-        position: relative;
-        margin-right: 8px;
-        content: '';
-        top: 1px;
+      }
+
+      span:last-child
+      {
+        line-height: $legend-marker-size;
+        height: $legend-marker-size;
+        vertical-align: middle;
+        display: inline-block;
+        margin-left: 8px;
+        width: auto;
       }
     }
   }

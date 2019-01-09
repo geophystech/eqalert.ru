@@ -5,7 +5,7 @@
 <script>
   import {
     addEpicenter, buildingColor, createMap, id, removeEpicenter,
-    setView, createMapMarkerPopupBuilding
+    setView, createMapMarkerPopupBuilding, BUILDING_COLORS
   } from '@/map_functions.js'
 
   import { colorDarken, colorLighten, colorHexToRGB } from '@/helpers/color'
@@ -115,13 +115,19 @@
           const legend = window.L.control({ position: 'bottomright' })
 
           legend.onAdd = map => {
+
             let div = window.L.DomUtil.create('div', 'map-legend buildings-legends')
-            div.innerHTML =
-              `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span>d-1</div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span>d-2</div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span>d-3</div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(4)}"></span>d-4</div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(5)}"></span>d≥5</div>`
+            let dLevelCount = BUILDING_COLORS.length - 1
+            let buildingsLegends = ''
+
+            for(let dLevel = 1; dLevel <= dLevelCount; dLevel++) {
+              buildingsLegends += `<div class="buildings-legend">
+                <span style="background: ${buildingColor(dLevel)}"></span>
+                <span>d${(dLevel === dLevelCount ? '≥' : '-')}${dLevel}</span>
+              </div>`
+            }
+
+            div.innerHTML = buildingsLegends
             return div
           }
 
