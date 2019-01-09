@@ -144,15 +144,15 @@ export function addStations(map, controls, show = true)
 export function buildingColor(damageLevel)
 {
   if (damageLevel >= 5) {
-    return '#c50126'
+    return '#C50126' // Dark crimson
   }
 
   switch (damageLevel) {
-    case 0: return 'cyan'
-    case 1: return 'green'
-    case 2: return 'yellow'
-    case 3: return 'orange'
-    case 4: return 'red'
+    case 0: return '#00FFFF' // cyan
+    case 1: return '#008000' // green
+    case 2: return '#FFFF00' // yellow
+    case 3: return '#FFA500' // orange
+    case 4: return '#FF0000' // red
   }
 }
 

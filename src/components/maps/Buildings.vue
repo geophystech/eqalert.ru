@@ -8,7 +8,7 @@
     setView, createMapMarkerPopupBuilding
   } from '@/map_functions.js'
 
-  import { colorDarken } from '@/helpers/color'
+  import { colorDarken, colorLighten, colorHexToRGB } from '@/helpers/color'
 
   export default {
     props: ['event', 'tab'],
@@ -43,15 +43,22 @@
             })
 
             damageLevels = Object.entries(damageLevels).sort((a, b) => b[1] - a[1] || 1)
-            let damageLevel = damageLevels[0][0]
+            let damageLevel = parseInt(damageLevels[0][0], 10)
 
             if (damageLevel > 5) {
               damageLevel = 5
             }
 
+            let _color = buildingColor(damageLevel)
+
             return new window.L.DivIcon({
               className: `marker-cluster marker-cluster-damage-level-${damageLevel}`,
-              html: `<div><span>${cluster.getChildCount()}</span></div>`,
+              html:
+                `<div style="background: ${colorHexToRGB(colorLighten(_color, 20), 0.4)}">
+                  <div style="background: ${colorHexToRGB(_color, 0.6)}">
+                      <span>${cluster.getChildCount()}</span>
+                  </div>
+                </div>`,
               iconSize: new window.L.Point(40, 40)
             })
           }
@@ -108,13 +115,13 @@
           const legend = window.L.control({ position: 'bottomright' })
 
           legend.onAdd = map => {
-            let div = window.L.DomUtil.create('div', 'map-legend')
+            let div = window.L.DomUtil.create('div', 'map-legend buildings-legends')
             div.innerHTML =
-              `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span><span>d-1</span></div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span><span>d-2</span></div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span><span>d-3</span></div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(4)}"></span><span>d-4</span></div>
-               <div class="buildings-legend"><span style="background: ${buildingColor(5)}"></span><span>d≥5</span></div>`
+              `<div class="buildings-legend"><span style="background: ${buildingColor(1)}"></span>d-1</div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(2)}"></span>d-2</div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(3)}"></span>d-3</div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(4)}"></span>d-4</div>
+               <div class="buildings-legend"><span style="background: ${buildingColor(5)}"></span>d≥5</div>`
             return div
           }
 
@@ -165,21 +172,5 @@
 
 <style lang="scss">
   @import '~scss/event_map';
-
-  $level-colors: (
-    1: green,
-    2: yellow,
-    3: orange,
-    4: red,
-    5: #C50126
-  );
-
-  @each $level, $color in $level-colors {
-    .marker-cluster-damage-level-#{$level} {
-      background-color: rgba(lighten($color, 20%), 0.6);
-      > div { background-color: rgba($color, 0.6) }
-    }
-  }
-
 </style>
 

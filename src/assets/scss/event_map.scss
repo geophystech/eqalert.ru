@@ -39,6 +39,20 @@ $legend-marker-size: 10px;
     }
   }
 
+  .marker-cluster
+  {
+    > div {
+      border-radius: 50%;
+      padding: 5px;
+      height: 100%;
+      width: 100%;
+
+      > div {
+        margin: 0;
+      }
+    }
+  }
+
   .map-legend
   {
     box-shadow: 0 0 15px rgba(0, 0, 0, .2);
@@ -95,22 +109,14 @@ $legend-marker-size: 10px;
       width: 50px;
       top: -1px;
 
-      span:first-child
-      {
+      > span:first-child {
         height: $legend-marker-size;
         width: $legend-marker-size;
-        vertical-align: middle;
         display: inline-block;
-      }
-
-      span:last-child
-      {
-        line-height: $legend-marker-size;
-        height: $legend-marker-size;
-        vertical-align: middle;
-        display: inline-block;
-        margin-left: 8px;
-        width: auto;
+        position: relative;
+        margin-right: 8px;
+        content: '';
+        top: 1px;
       }
     }
   }
