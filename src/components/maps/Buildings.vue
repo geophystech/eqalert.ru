@@ -44,17 +44,12 @@
 
             damageLevels = Object.entries(damageLevels).sort((a, b) => b[1] - a[1] || 1)
             let damageLevel = parseInt(damageLevels[0][0], 10)
-
-            if (damageLevel > 5) {
-              damageLevel = 5
-            }
-
             let _color = buildingColor(damageLevel)
 
             return new window.L.DivIcon({
-              className: `marker-cluster marker-cluster-damage-level-${damageLevel}`,
+              className: `marker-cluster marker-cluster-damage-level`,
               html:
-                `<div style="background: ${colorHexToRGB(colorLighten(_color, 20), 0.4)}">
+                `<div style="background: ${colorHexToRGB(colorLighten(_color, 25), 0.6)}">
                   <div style="background: ${colorHexToRGB(_color, 0.6)}">
                       <span>${cluster.getChildCount()}</span>
                   </div>
@@ -120,11 +115,13 @@
             let dLevelCount = BUILDING_COLORS.length - 1
             let buildingsLegends = ''
 
-            for(let dLevel = 1; dLevel <= dLevelCount; dLevel++) {
-              buildingsLegends += `<div class="buildings-legend">
-                <span style="background: ${buildingColor(dLevel)}"></span>
-                <span>d${(dLevel === dLevelCount ? '≥' : '-')}${dLevel}</span>
-              </div>`
+            for(let dLevel = 1; dLevel <= dLevelCount; dLevel++)
+            {
+              buildingsLegends +=
+                `<div class="buildings-legend">
+                  <span style="background: ${buildingColor(dLevel)}"></span>
+                  <span>d${(dLevel === dLevelCount ? '≥' : '-')}${dLevel}</span>
+                </div>`
             }
 
             div.innerHTML = buildingsLegends
