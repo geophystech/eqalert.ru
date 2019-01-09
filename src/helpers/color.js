@@ -47,8 +47,8 @@ export function colorHexToRGB(hex, alpha)
   let b = parseInt(hex.slice(4, 6), 16)
 
   if (alpha) {
-    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')'
-  } else {
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')'
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
   }
+
+  return `rgb(${r}, ${g}, ${b})`
 }
