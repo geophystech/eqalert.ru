@@ -5,7 +5,7 @@
 <script>
   import {
     addEpicenter, buildingColor, createMap, id, removeEpicenter,
-    setView, createMapMarkerPopupBuilding, BUILDING_COLORS
+    setView, createMapMarkerPopupBuilding
   } from '@/map_functions.js'
 
   import { colorDarken, colorLighten, colorHexToRGB } from '@/helpers/color'
@@ -27,7 +27,6 @@
 
       addData: function(buildings)
       {
-        const dLevelLast = BUILDING_COLORS.length - 1
         let damageLevelMarkers = {}
         let damageLevels = []
 
@@ -100,7 +99,7 @@
               buildingsLegends +=
                 `<div class="buildings-legend">
                   <span style="background: ${buildingColor(dLevel)}"></span>
-                  <span>d${(dLevel === dLevelLast ? '≥' : '-')}${dLevel}</span>
+                  <span>d-${dLevel}</span>
                 </div>`
             })
 
@@ -165,7 +164,7 @@
           damageLevels.forEach(dLevel => {
 
             const makerksGroup = new window.L.LayerGroup([])
-            controls.addOverlay(makerksGroup, `Прогноз повреждений d${(dLevel === dLevelLast ? '≥' : '-')}${dLevel}`)
+            controls.addOverlay(makerksGroup, `Прогноз повреждений d-${dLevel}`)
             _map.addLayer(makerksGroup)
             addedOverlays[dLevel] = true
             updateMarkerCluster()
