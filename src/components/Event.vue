@@ -7,15 +7,20 @@
       <b-col cols="12" md="8">
 
         <div v-if="errorResponse">
-          <p class="text-error" v-if="errorResponse.status === 403">
-            Доступ к информации по данному событию ограничен, пожалуйста, пройдите процедуру авторизации.
-            <a href="https://goo.gl/forms/i48vp55kTjL2d9Wk1" target="_blank">Служба поддежки.</a>
-          </p>
-          <p class="text-error" v-if="errorResponse.status === 404">
+          <div v-if="errorResponse.status === 403" class="text-error">
+            <p>
+              Доступ к информации по данному событию ограничен, пожалуйста, пройдите
+              <router-link :to="{name: 'UserAuthentication'}">процедуру авторизации</router-link>.
+            </p>
+            <p class="text-center">
+              <a href="https://goo.gl/forms/i48vp55kTjL2d9Wk1" target="_blank">Служба поддержки</a>
+            </p>
+          </div>
+          <div v-if="errorResponse.status === 404" class="text-error">
             Данного события не существует.
             Пожалуйста, посмотрите, <router-link :to="{name: 'Mainpage'}">последние землетрясения</router-link>
-            или выполните <router-link :to="{name: 'Events'}">поиск в архиве.</router-link>
-          </p>
+            или выполните <router-link :to="{name: 'Events'}">поиск в архиве</router-link>.
+          </div>
         </div>
 
         <keep-alive>
