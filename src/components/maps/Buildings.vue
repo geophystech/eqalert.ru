@@ -86,25 +86,34 @@
 
         damageLevels.sort((a, b) => a - b)
 
-        if (!this.$el.querySelector('.map-legend'))
+        let buildingsLegendsElem = this.$el.querySelector('.buildings-legends')
+        let addLegends = function(legendsElem)
+        {
+          let buildingsLegends = ''
+
+          damageLevels.forEach(dLevel => {
+            buildingsLegends +=
+              `<div class="buildings-legend">
+                  <span style="background: ${buildingColor(dLevel)}"></span>
+                  <span>d-${dLevel}</span>
+                </div>`
+          })
+
+          legendsElem.innerHTML = buildingsLegends
+        }
+
+        if (buildingsLegendsElem)
+        {
+          addLegends(buildingsLegendsElem)
+        }
+        else
         {
           const legend = window.L.control({ position: 'bottomright' })
 
           legend.onAdd = map => {
-
-            let div = window.L.DomUtil.create('div', 'map-legend buildings-legends')
-            let buildingsLegends = ''
-
-            damageLevels.forEach(dLevel => {
-              buildingsLegends +=
-                `<div class="buildings-legend">
-                  <span style="background: ${buildingColor(dLevel)}"></span>
-                  <span>d-${dLevel}</span>
-                </div>`
-            })
-
-            div.innerHTML = buildingsLegends
-            return div
+            let legendsElem = window.L.DomUtil.create('div', 'map-legend buildings-legends')
+            addLegends(legendsElem)
+            return legendsElem
           }
 
           legend.addTo(this.map.object)
