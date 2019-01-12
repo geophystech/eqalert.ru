@@ -120,20 +120,17 @@
               disableClusteringAtZoom: 15,
               iconCreateFunction: function(cluster)
               {
-                let _damageLevels = {}
+                let _damageLevels = []
 
                 cluster.getAllChildMarkers().forEach(marker => {
                   let damageLevel = marker.options.damageLevel
-                  if (!damageLevel) return
-                  if (!(damageLevel in _damageLevels)) {
-                    _damageLevels[damageLevel] = 0
+                  if (damageLevel && _damageLevels.indexOf(damageLevel) === -1) {
+                    _damageLevels.push(damageLevel)
                   }
-                  _damageLevels[damageLevel]++
                 })
 
-                _damageLevels = Object.entries(_damageLevels).sort((a, b) => b[1] - a[1] || 1)
-                let damageLevel = parseInt(_damageLevels[0][0], 10)
-                let _color = buildingColor(damageLevel)
+                _damageLevels = _damageLevels.sort((a, b) => b - a)
+                let _color = buildingColor(_damageLevels[0])
 
                 return new window.L.DivIcon({
                   className: `marker-cluster marker-cluster-damage-level`,
@@ -164,8 +161,10 @@
           damageLevels.forEach(dLevel => {
 
             const makerksGroup = new window.L.LayerGroup([])
+
             controls.addOverlay(makerksGroup, `Прогноз повреждений d-${dLevel}`)
             _map.addLayer(makerksGroup)
+
             addedOverlays[dLevel] = true
             updateMarkerCluster()
 
