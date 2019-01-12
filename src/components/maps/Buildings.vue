@@ -107,81 +107,81 @@
             return div
           }
 
-          const _map = this.map.object
-          const controls = _map._controls
-          let addedOverlays = {}
-          let updateMarkerCluster = function()
-          {
-            if (this.map.markers) {
-              _map.removeLayer(this.map.markers)
-            }
+          legend.addTo(this.map.object)
+        }
 
-            let markerCluster = new window.L.MarkerClusterGroup({
-              disableClusteringAtZoom: 15,
-              iconCreateFunction: function(cluster)
-              {
-                let _damageLevels = []
+        const _map = this.map.object
+        const controls = _map._controls
+        let addedOverlays = {}
+        let updateMarkerCluster = function()
+        {
+          if (this.map.markers) {
+            _map.removeLayer(this.map.markers)
+          }
 
-                cluster.getAllChildMarkers().forEach(marker => {
-                  let damageLevel = marker.options.damageLevel
-                  if (damageLevel && _damageLevels.indexOf(damageLevel) === -1) {
-                    _damageLevels.push(damageLevel)
-                  }
-                })
+          let markerCluster = new window.L.MarkerClusterGroup({
+            disableClusteringAtZoom: 15,
+            iconCreateFunction: function(cluster)
+            {
+              let _damageLevels = []
 
-                _damageLevels = _damageLevels.sort((a, b) => b - a)
-                let _color = buildingColor(_damageLevels[0])
+              cluster.getAllChildMarkers().forEach(marker => {
+                let damageLevel = marker.options.damageLevel
+                if (damageLevel && _damageLevels.indexOf(damageLevel) === -1) {
+                  _damageLevels.push(damageLevel)
+                }
+              })
 
-                return new window.L.DivIcon({
-                  className: `marker-cluster marker-cluster-damage-level`,
-                  html:
-                    `<div style="background: ${colorHexToRGB(colorLighten(_color, 25), 0.6)}">
+              _damageLevels = _damageLevels.sort((a, b) => b - a)
+              let _color = buildingColor(_damageLevels[0])
+
+              return new window.L.DivIcon({
+                className: `marker-cluster marker-cluster-damage-level`,
+                html:
+                  `<div style="background: ${colorHexToRGB(colorLighten(_color, 25), 0.6)}">
                   <div style="background: ${colorHexToRGB(_color, 0.6)}">
                       <span>${cluster.getChildCount()}</span>
                   </div>
                 </div>`,
-                  iconSize: new window.L.Point(40, 40)
-                })
-              }
-            })
-
-            damageLevels.forEach(dLevel => {
-              if(addedOverlays[dLevel]) {
-                damageLevelMarkers[dLevel].forEach(marker => {
-                  markerCluster.addLayer(marker)
-                })
-              }
-            })
-
-            this.map.markers = markerCluster
-            _map.addLayer(markerCluster)
-
-          }.bind(this)
-
-          damageLevels.forEach(dLevel => {
-
-            const makerksGroup = new window.L.LayerGroup([])
-
-            controls.addOverlay(makerksGroup, `Прогноз повреждений d-${dLevel}`)
-            _map.addLayer(makerksGroup)
-
-            addedOverlays[dLevel] = true
-            updateMarkerCluster()
-
-            makerksGroup.on('add', () => {
-              addedOverlays[dLevel] = true
-              updateMarkerCluster()
-            })
-
-            makerksGroup.on('remove', () => {
-              addedOverlays[dLevel] = false
-              updateMarkerCluster()
-            })
-
+                iconSize: new window.L.Point(40, 40)
+              })
+            }
           })
 
-          legend.addTo(this.map.object)
-        }
+          damageLevels.forEach(dLevel => {
+            if(addedOverlays[dLevel]) {
+              damageLevelMarkers[dLevel].forEach(marker => {
+                markerCluster.addLayer(marker)
+              })
+            }
+          })
+
+          this.map.markers = markerCluster
+          _map.addLayer(markerCluster)
+
+        }.bind(this)
+
+        damageLevels.forEach(dLevel => {
+
+          const makerksGroup = new window.L.LayerGroup([])
+
+          controls.addOverlay(makerksGroup, `Прогноз повреждений d-${dLevel}`)
+          _map.addLayer(makerksGroup)
+
+          addedOverlays[dLevel] = true
+          updateMarkerCluster()
+
+          makerksGroup.on('add', () => {
+            addedOverlays[dLevel] = true
+            updateMarkerCluster()
+          })
+
+          makerksGroup.on('remove', () => {
+            addedOverlays[dLevel] = false
+            updateMarkerCluster()
+          })
+
+        })
 
         this.putEpicenter()
       },
