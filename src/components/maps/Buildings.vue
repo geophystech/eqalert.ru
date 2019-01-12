@@ -27,48 +27,26 @@
 
       addData: function(buildings)
       {
-        let markerCluster = new window.L.MarkerClusterGroup({
-          disableClusteringAtZoom: 15,
-          iconCreateFunction: function(cluster)
-          {
-            let damageLevels = {}
-
-            cluster.getAllChildMarkers().forEach(marker => {
-              let damageLevel = marker.options.damageLevel
-              if (!damageLevel) return
-              if (!(damageLevel in damageLevels)) {
-                damageLevels[damageLevel] = 0
-              }
-              damageLevels[damageLevel]++
-            })
-
-            damageLevels = Object.entries(damageLevels).sort((a, b) => b[1] - a[1] || 1)
-            let damageLevel = parseInt(damageLevels[0][0], 10)
-            let _color = buildingColor(damageLevel)
-
-            return new window.L.DivIcon({
-              className: `marker-cluster marker-cluster-damage-level`,
-              html:
-                `<div style="background: ${colorHexToRGB(colorLighten(_color, 25), 0.6)}">
-                  <div style="background: ${colorHexToRGB(_color, 0.6)}">
-                      <span>${cluster.getChildCount()}</span>
-                  </div>
-                </div>`,
-              iconSize: new window.L.Point(40, 40)
-            })
-          }
-        })
+        const dLevelLast = BUILDING_COLORS.length - 1
+        let damageLevelMarkers = {}
+        let damageLevels = []
 
         buildings.forEach(building => {
 
-          if (building.damage_level < 1) return
+          let dLevel = building.damage_level
+
+          if (dLevel < 1) return
+
+          if (damageLevels.indexOf(dLevel) === -1) {
+            damageLevels.push(dLevel)
+          }
 
           const {lat: latitude, lon: longitude} = building.building.data
           const coordinates = new window.L.LatLng(latitude, longitude)
-          const markerColor = buildingColor(building.damage_level)
+          const markerColor = buildingColor(dLevel)
           let markerOpts = {
-            damageLevel: building.damage_level,
             fillColor: markerColor,
+            damageLevel: dLevel,
             dropShadow: true,
             gradient: true,
             innerRadius: 0
@@ -93,17 +71,21 @@
           }
 
           let popup = createMapMarkerPopupBuilding(building.building.data, {
-            damageLevel: building.damage_level,
-            pgaValue: building.pga_value
+            pgaValue: building.pga_value,
+            damageLevel: dLevel
           })
 
           marker.bindPopup(popup)
-          markerCluster.addLayer(marker)
+
+          if (!(dLevel in damageLevelMarkers)) {
+            damageLevelMarkers[dLevel] = []
+          }
+
+          damageLevelMarkers[dLevel].push(marker)
 
         })
 
-        this.map.markers = markerCluster
-        this.map.object.addLayer(markerCluster)
+        damageLevels.sort((a, b) => a - b)
 
         if (!this.$el.querySelector('.map-legend'))
         {
@@ -112,21 +94,93 @@
           legend.onAdd = map => {
 
             let div = window.L.DomUtil.create('div', 'map-legend buildings-legends')
-            let dLevelCount = BUILDING_COLORS.length - 1
             let buildingsLegends = ''
 
-            for(let dLevel = 1; dLevel <= dLevelCount; dLevel++)
-            {
+            damageLevels.forEach(dLevel => {
               buildingsLegends +=
                 `<div class="buildings-legend">
                   <span style="background: ${buildingColor(dLevel)}"></span>
-                  <span>d${(dLevel === dLevelCount ? '≥' : '-')}${dLevel}</span>
+                  <span>d${(dLevel === dLevelLast ? '≥' : '-')}${dLevel}</span>
                 </div>`
-            }
+            })
 
             div.innerHTML = buildingsLegends
             return div
           }
+
+          const _map = this.map.object
+          const controls = _map._controls
+          let addedOverlays = {}
+          let updateMarkerCluster = function()
+          {
+            if (this.map.markers) {
+              _map.removeLayer(this.map.markers)
+            }
+
+            let markerCluster = new window.L.MarkerClusterGroup({
+              disableClusteringAtZoom: 15,
+              iconCreateFunction: function(cluster)
+              {
+                let _damageLevels = {}
+
+                cluster.getAllChildMarkers().forEach(marker => {
+                  let damageLevel = marker.options.damageLevel
+                  if (!damageLevel) return
+                  if (!(damageLevel in _damageLevels)) {
+                    _damageLevels[damageLevel] = 0
+                  }
+                  _damageLevels[damageLevel]++
+                })
+
+                _damageLevels = Object.entries(_damageLevels).sort((a, b) => b[1] - a[1] || 1)
+                let damageLevel = parseInt(_damageLevels[0][0], 10)
+                let _color = buildingColor(damageLevel)
+
+                return new window.L.DivIcon({
+                  className: `marker-cluster marker-cluster-damage-level`,
+                  html:
+                    `<div style="background: ${colorHexToRGB(colorLighten(_color, 25), 0.6)}">
+                  <div style="background: ${colorHexToRGB(_color, 0.6)}">
+                      <span>${cluster.getChildCount()}</span>
+                  </div>
+                </div>`,
+                  iconSize: new window.L.Point(40, 40)
+                })
+              }
+            })
+
+            damageLevels.forEach(dLevel => {
+              if(addedOverlays[dLevel]) {
+                damageLevelMarkers[dLevel].forEach(marker => {
+                  markerCluster.addLayer(marker)
+                })
+              }
+            })
+
+            this.map.markers = markerCluster
+            _map.addLayer(markerCluster)
+
+          }.bind(this)
+
+          damageLevels.forEach(dLevel => {
+
+            const makerksGroup = new window.L.LayerGroup([])
+            controls.addOverlay(makerksGroup, `Прогноз повреждений d${(dLevel === dLevelLast ? '≥' : '-')}${dLevel}`)
+            _map.addLayer(makerksGroup)
+            addedOverlays[dLevel] = true
+            updateMarkerCluster()
+
+            makerksGroup.on('add', () => {
+              addedOverlays[dLevel] = true
+              updateMarkerCluster()
+            })
+
+            makerksGroup.on('remove', () => {
+              addedOverlays[dLevel] = false
+              updateMarkerCluster()
+            })
+
+          })
 
           legend.addTo(this.map.object)
         }
