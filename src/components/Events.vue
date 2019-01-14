@@ -1,6 +1,9 @@
 <template>
   <div class="events">
     <CountersHeader
+      :trainingEventsBtnDisabled="spinners.loadMoreEvents"
+      @toggleTrainingEvents="toggleTrainingEvents"
+      :trainingEventsBtnShow="true"
       :filtersData="filtersData"
       :showModalMap="true"
       :count="events.length"
@@ -8,11 +11,17 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" key="mainpage-filters" v-if="!$root.onMobile" />
+
+      <Filters
+        :disabled="disabledFilters"
+        @filtersUpdated="getEvents"
+        key="mainpage-filters"
+        v-if="!$root.onMobile"
+        ref="filters"/>
 
       <b-col class="all-events">
 
-        <Spinner :size="32" v-if="spinners.loadMoreEvents && !events.length" />
+        <Spinner :size="32" v-if="spinners.loadMoreEvents" />
 
         <b-row no-gutters class="events-head text-center">
           <b-col v-if="!$root.onMobile" md="1">#</b-col>
@@ -147,6 +156,10 @@ export default {
     },
     openEvent: function(item, index, event) {
       this.$router.push({ name: 'Event', params: { id: item.id } })
+    },
+    toggleTrainingEvents: function(checked) {
+      this.$refs.filters.filters.has_training = checked ? 1 : null
+      this.$refs.filters.filtersUpdated()
     }
   }
 }

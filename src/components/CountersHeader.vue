@@ -1,22 +1,36 @@
 <template>
+
   <b-row class="infobar" align-v="center" no-gutters>
-    <b-col md="4" class="text-center text-md-left" v-if="!$root.onMobile">
+
+    <b-col class="text-center text-md-left" v-if="!$root.onMobile">
       <router-link to="/sign-in" v-if="!$store.getters.user.authenticated">
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
         <span>Снять ограничения данных</span>
       </router-link>
     </b-col>
-    <b-col cols="7" md="4" class="text-center">
+
+    <b-col cols="4" class="text-center">
       Загружено <span class="count">{{ count }}</span> событий
       <span v-if="count && !$root.onMobile">({{ startDate }} — {{ endDate }})</span>
     </b-col>
-    <b-col cols="5" md="4">
+
+    <b-col :cols="$store.getters.user.authenticated && trainingEventsBtnShow ? 5 : 4">
       <div class="pull-right">
+
+        <b-btn
+          v-if="trainingEventsBtnShow && hasUserAccessTraningEvents()"
+          :variant="showTrainingEvents ? 'event-training' : 'info'"
+          :disabled="trainingEventsBtnDisabled"
+          :pressed.sync="showTrainingEvents"
+          size="sm">Показать учебные</b-btn>
+
         <ModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
         <ExportDropDown v-if="count > 0" @export2xls="export2xls" />
       </div>
     </b-col>
+
   </b-row>
+
 </template>
 
 <script>
@@ -24,6 +38,8 @@
   import ExportDropDown from '@/components/ExportDropDown'
   export default {
     props: {
+      trainingEventsBtnDisabled: false,
+      trainingEventsBtnShow: false,
       showModalMap: false,
       filtersData: {},
       startDate: '',
@@ -31,7 +47,9 @@
       count: 0
     },
     data() {
-      return {}
+      return {
+        showTrainingEvents: false
+      }
     },
     components: { ModalMap, ExportDropDown },
 
@@ -41,6 +59,18 @@
         request(this.$root.$options.settings.api.endpointEvents, Object.assign(params, {
           limit: 5000
         }))
+      },
+      hasUserAccessTraningEvents: function() {
+        let permissions = this.$store.getters.user.permissions
+        return 'reports:view_training' in permissions || 'reports' in permissions
+      }
+    },
+    watch: {
+      showTrainingEvents: function(value) {
+        this.$emit('toggleTrainingEvents', value)
+      },
+      filtersData: function(data) {
+        this.showTrainingEvents = !!parseInt(data.has_training || 0)
       }
     }
   }
@@ -70,4 +100,5 @@
       font-weight: bold;
     }
   }
+
 </style>

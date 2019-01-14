@@ -193,6 +193,7 @@
           wrap: true
         },
         filters: {
+          has_training: null,
           datetimeMax: null,
           datetimeMin: null,
           depthMax: null,
