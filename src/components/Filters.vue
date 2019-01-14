@@ -126,7 +126,7 @@
                           :config="maxDatetimeConfig"
                           :disabled="disabled"
                           placeholder="Дата"
-                          @on-change="filtersUpdated" />
+                          @on-change="filtersUpdated()" />
             </b-input-group>
           </b-col>
         </b-row>
@@ -193,6 +193,7 @@
           wrap: true
         },
         filters: {
+          has_training: null,
           datetimeMax: null,
           datetimeMin: null,
           depthMax: null,
@@ -230,16 +231,14 @@
       onChangeCalled: function(event) {
         this.filtersUpdated()
       },
-      filtersUpdated: function(delay = 300) {
+      filtersUpdated: function(delay = 300)
+      {
         setTimeout(() => {
           this.updateURL()
-
           let convertedFilters = {}
-
           Object.keys(this.filters).map(key => {
             convertedFilters[camelToUnderscore(key)] = this.prepareValue(key, this.filters[key])
           })
-
           this.$emit('filtersUpdated', convertedFilters)
         }, delay)
       },

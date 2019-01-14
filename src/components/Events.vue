@@ -1,6 +1,9 @@
 <template>
   <div class="events">
     <CountersHeader
+      :trainingEventsBtnDisabled="spinners.loadMoreEvents"
+      @toggleTrainingEvents="toggleTrainingEvents"
+      :trainingEventsBtnShow="true"
       :filtersData="filtersData"
       :showModalMap="true"
       :count="events.length"
@@ -8,11 +11,17 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <Filters :disabled="disabledFilters" @filtersUpdated="getEvents" key="mainpage-filters" v-if="!$root.onMobile" />
+
+      <Filters
+        :disabled="disabledFilters"
+        @filtersUpdated="getEvents"
+        key="mainpage-filters"
+        v-if="!$root.onMobile"
+        ref="filters"/>
 
       <b-col class="all-events">
 
-        <Spinner :size="32" v-if="spinners.loadMoreEvents && !events.length" />
+        <Spinner :size="32" v-if="spinners.loadMoreEvents" />
 
         <b-row no-gutters class="events-head text-center">
           <b-col v-if="!$root.onMobile" md="1">#</b-col>
@@ -97,56 +106,59 @@ export default {
     title: 'События'
   },
   methods: {
-    getEvents: function(filtersData) {
-      let params = this.apiParams
+    getEvents: function(filtersData)
+    {
+      let _getEvents = () => {
 
-      // Use cursor only on loadMoreEvents()
-      if (typeof filtersData === 'object') {
-        params.cursor = null
-        Object.assign(params, filtersData)
-        this.filtersData = Object.assign({}, filtersData)
+        let params = this.apiParams
+
+        // Use cursor only on loadMoreEvents()
+        if (typeof filtersData === 'object') {
+          params.cursor = null
+          Object.assign(params, filtersData)
+          this.filtersData = Object.assign({}, filtersData)
+        }
+
+        this.spinners.loadMoreEvents = true
+        this.disabledFilters = true
+
+        this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params })
+          .then(response => {
+            this.spinners.loadMoreEvents = false
+
+            if (typeof filtersData === 'object') {
+              this.events = response.data.data
+            } else {
+              this.events = this.events.concat(response.data.data)
+            }
+
+            this.apiParams.cursor = response.data.meta.cursor.next
+
+            if (!response.data.data.length) return
+
+            this.startDate = this.$moment(this.events[this.events.length - 1].locValues.data.event_datetime).format('L')
+            this.endDate = this.$moment(this.events[0].locValues.data.event_datetime).format('L')
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+        this.disabledFilters = false
+
       }
 
-      this.spinners.loadMoreEvents = true
-      this.disabledFilters = true
-
-      this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-        params: params,
-        before: (request) => {
-          if (this.previousRequest) {
-            this.previousRequest.abort()
-          }
-
-          this.previousRequest = request
-        }
-      })
-        .then(response => {
-          this.spinners.loadMoreEvents = false
-
-          if (typeof filtersData === 'object') {
-            this.events = response.data.data
-          } else {
-            this.events = this.events.concat(response.data.data)
-          }
-
-          this.apiParams.cursor = response.data.meta.cursor.next
-
-          if (!response.data.data.length) return
-
-          this.startDate = this.$moment(this.events[this.events.length - 1].locValues.data.event_datetime).format('L')
-          this.endDate = this.$moment(this.events[0].locValues.data.event_datetime).format('L')
-        })
-        .catch(error => {
-          console.log(error)
-        })
-
-      this.disabledFilters = false
+      if (this._getEventsTimeout) clearTimeout(this._getEventsTimeout)
+      this._getEventsTimeout = setTimeout(_getEvents, 50)
     },
     loadMoreEvents: function() {
       this.getEvents()
     },
     openEvent: function(item, index, event) {
       this.$router.push({ name: 'Event', params: { id: item.id } })
+    },
+    toggleTrainingEvents: function(checked) {
+      this.$refs.filters.filters.has_training = checked ? 1 : null
+      this.$refs.filters.filtersUpdated()
     }
   }
 }

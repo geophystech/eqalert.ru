@@ -186,9 +186,13 @@
 </script>
 
 <style lang="scss" scoped>
+
+  @import '~scss/global';
+
   .event-tab {
     margin-top: 5%;
   }
+
   .mobile-map-dialog
   {
     position: fixed;
@@ -204,18 +208,5 @@
     }
   }
 
-  $alert-event-training-color: #FF5657;
-
-  .alert-event-training
-  {
-    border-color: darken($alert-event-training-color, 15);
-    background-color: $alert-event-training-color;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    text-align: center;
-    font-weight: bold;
-    word-spacing: 3px;
-    color: white;
-  }
 </style>
 
