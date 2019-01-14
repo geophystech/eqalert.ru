@@ -6,7 +6,7 @@
           © 2016 &mdash; {{ currentYear }} Eqalert.ru
         </b-row>
         <b-row no-gutters id="feedback">
-          <a href="https://goo.gl/forms/i48vp55kTjL2d9Wk1">Обратная связь</a>
+          <a :href="$root.$options.settings.app.feedbackUrl">Обратная связь</a>
         </b-row>
       </b-col>
 
