@@ -1,8 +1,11 @@
 <template>
+
   <b-row class="event-header" no-gutters>
-    <b-col cols="12" md="3">
+
+    <b-col cols="11" md="3">
       <b-breadcrumb :items="breadcrumbs" />
     </b-col>
+
     <b-col cols="12" md="8">
       <b-row>
         <b-col class="text-center">
@@ -29,17 +32,21 @@
           <b-badge
             :variant="label.variant"
             v-b-popover.hover.auto="label.description">
-              {{ label.text }}
+            {{ label.text }}
           </b-badge>
         </b-col>
       </b-row>
+
     </b-col>
+
     <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
       <b-button-group>
         <ExportDropDown v-if="event.id" @export2xls="export2xls" />
       </b-button-group>
     </b-col>
+
   </b-row>
+
 </template>
 
 <script>

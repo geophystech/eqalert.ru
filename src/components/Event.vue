@@ -1,9 +1,12 @@
 <template>
   <div class="event">
+
     <component :is="components.header" :event="event" />
+    <b-alert show v-if="!!event.has_training" variant="event-training">Режим учебных событий</b-alert>
     <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id" />
 
     <b-row>
+
       <b-col cols="12" md="8">
 
         <div v-if="errorResponse" class="text-error">
@@ -45,14 +48,19 @@
         <keep-alive>
           <component :is="components.currentTab" :event="event" v-if="event.id" />
         </keep-alive>
+
       </b-col>
+
       <b-col cols="4">
         <keep-alive>
           <component :is="components.lastEvents" :event="event" v-if="!$root.onMobile" />
         </keep-alive>
       </b-col>
+
     </b-row>
+
   </div>
+
 </template>
 
 <script>
@@ -194,6 +202,20 @@
     .mobile-map {
       position: relative;
     }
+  }
+
+  $alert-event-training-color: #FF5657;
+
+  .alert-event-training
+  {
+    border-color: darken($alert-event-training-color, 15);
+    background-color: $alert-event-training-color;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+    font-weight: bold;
+    word-spacing: 3px;
+    color: white;
   }
 </style>
 
