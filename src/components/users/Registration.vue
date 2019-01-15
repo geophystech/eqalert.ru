@@ -244,7 +244,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/global';
+  @import '~scss/_variables';
 
   .breadcrumbs {
     .breadcrumb {

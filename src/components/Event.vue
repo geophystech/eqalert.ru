@@ -187,7 +187,7 @@
 
 <style lang="scss" scoped>
 
-  @import '~scss/global';
+  @import '~scss/_variables';
 
   .event-tab {
     margin-top: 5%;

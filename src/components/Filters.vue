@@ -294,7 +294,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/global';
+  @import '~scss/_variables';
 
   .filters {
     border: 1px solid $color-gray-light-4;

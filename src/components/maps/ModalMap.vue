@@ -177,7 +177,7 @@
 
 <style lang="scss" scoped>
 
-  @import '~scss/global';
+  @import '~scss/_variables';
   @import '~scss/mixins/_calc';
 
   .modal-map

@@ -31,20 +31,3 @@ $border-radius: 4px;
 $alert-event-training-color: white;
 $alert-event-training-bg: #FF5657;
 
-
-.btn-event-training {
-  background-color: $alert-event-training-bg;
-  color: $alert-event-training-color;
-}
-
-.alert-event-training
-{
-  border-color: darken($alert-event-training-bg, 15);
-  background-color: $alert-event-training-bg;
-  color: $alert-event-training-color;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-align: center;
-  font-weight: bold;
-  word-spacing: 3px;
-}

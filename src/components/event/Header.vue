@@ -145,7 +145,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/global';
+  @import '~scss/_variables';
 
   .event-header {
     margin-bottom: 3%;

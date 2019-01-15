@@ -1,0 +1,149 @@
+
+@import "variables";
+
+body {
+	color: #444;
+  font-family: 'Open Sans', sans-serif !important;;
+}
+
+.fa-icon {
+  width: auto;
+  height: 1em; /* or any other relative font sizes */
+
+  /* You would have to include the following two lines to make this work in Safari */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+a {
+  color: $color-blue;
+}
+
+.static-page-content
+{
+  /* Static page */
+  a {
+    color: $color-blue !important;
+  }
+
+  table
+  {
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 3%;
+    text-align: center;
+    width: 70%;
+
+    th,
+    td {
+      border: 1px solid #ebeaea;
+      padding: 6px 13px;
+      width: 50%;
+    }
+
+    tr {
+      border-top: 1px solid #ebeaea;
+    }
+  }
+
+  h6 {
+    margin-bottom: 1.5%;
+  }
+}
+
+summary span {
+  border-bottom: 1px dotted #337ab7;
+  color: #337ab7;
+  text-decoration: none;
+}
+
+/* Details */
+details {
+  margin-bottom: 1.5%;
+  text-align: center;
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  > summary:first-of-type {
+    list-style-type: none;
+  }
+}
+
+.tooltip-static-page
+{
+  color: #337ab7;
+  border-bottom: 1px dotted #337ab7;
+	cursor: help;
+
+  &::after {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px 8px 8px 0;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    content: attr(data-tooltip);
+    margin-top: -24px;
+    opacity: 0;
+    padding: 3px 7px;
+    position: absolute;
+    visibility: hidden;
+
+    transition: all 0.4s ease-in-out;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.text-error
+{
+  color: red;
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &, &:hover {
+      color: darkred;
+    }
+  }
+}
+
+[data-gesture-handling-scroll-content]::after {
+  text-align: center;
+}
+
+.btn-event-training {
+  background-color: $alert-event-training-bg;
+  color: $alert-event-training-color;
+}
+
+.alert-event-training
+{
+  border-color: darken($alert-event-training-bg, 10);
+  background-color: $alert-event-training-bg;
+  color: $alert-event-training-color;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  font-weight: bold;
+  word-spacing: 3px;
+}
+
+
+.form-control
+{
+  &, &:focus {
+    color: black;
+  }
+
+  &::placeholder {
+    color: #BBB;
+  }
+}
