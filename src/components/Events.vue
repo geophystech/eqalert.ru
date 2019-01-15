@@ -106,50 +106,49 @@ export default {
     title: 'События'
   },
   methods: {
-    getEvents: function(filtersData) {
-      let params = this.apiParams
+    getEvents: function(filtersData)
+    {
+      let _getEvents = () => {
 
-      // Use cursor only on loadMoreEvents()
-      if (typeof filtersData === 'object') {
-        params.cursor = null
-        Object.assign(params, filtersData)
-        this.filtersData = Object.assign({}, filtersData)
+        let params = this.apiParams
+
+        // Use cursor only on loadMoreEvents()
+        if (typeof filtersData === 'object') {
+          params.cursor = null
+          Object.assign(params, filtersData)
+          this.filtersData = Object.assign({}, filtersData)
+        }
+
+        this.spinners.loadMoreEvents = true
+        this.disabledFilters = true
+
+        this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params })
+          .then(response => {
+            this.spinners.loadMoreEvents = false
+
+            if (typeof filtersData === 'object') {
+              this.events = response.data.data
+            } else {
+              this.events = this.events.concat(response.data.data)
+            }
+
+            this.apiParams.cursor = response.data.meta.cursor.next
+
+            if (!response.data.data.length) return
+
+            this.startDate = this.$moment(this.events[this.events.length - 1].locValues.data.event_datetime).format('L')
+            this.endDate = this.$moment(this.events[0].locValues.data.event_datetime).format('L')
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+        this.disabledFilters = false
+
       }
 
-      this.spinners.loadMoreEvents = true
-      this.disabledFilters = true
-
-      this.$http.get(this.$root.$options.settings.api.endpointEvents, {
-        params: params,
-        before: (request) => {
-          if (this.previousRequest) {
-            this.previousRequest.abort()
-          }
-
-          this.previousRequest = request
-        }
-      })
-        .then(response => {
-          this.spinners.loadMoreEvents = false
-
-          if (typeof filtersData === 'object') {
-            this.events = response.data.data
-          } else {
-            this.events = this.events.concat(response.data.data)
-          }
-
-          this.apiParams.cursor = response.data.meta.cursor.next
-
-          if (!response.data.data.length) return
-
-          this.startDate = this.$moment(this.events[this.events.length - 1].locValues.data.event_datetime).format('L')
-          this.endDate = this.$moment(this.events[0].locValues.data.event_datetime).format('L')
-        })
-        .catch(error => {
-          console.log(error)
-        })
-
-      this.disabledFilters = false
+      if (this._getEventsTimeout) clearTimeout(this._getEventsTimeout)
+      this._getEventsTimeout = setTimeout(_getEvents, 50)
     },
     loadMoreEvents: function() {
       this.getEvents()
