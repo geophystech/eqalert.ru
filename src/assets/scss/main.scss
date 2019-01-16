@@ -1,5 +1,26 @@
 
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
 @import "variables";
+@import "mixins";
+
+@import "~bootstrap/scss/utilities/text";
+
+
+
+@include keyframes(fadeOut) {
+  0% { opacity: 1 }
+  100% { opacity: 0; display: none }
+}
+
+
+@mixin fadeOut()
+{
+  @include animation(fadeOut 250ms linear);
+  animation-fill-mode: both;
+}
+
 
 body {
   font-family: 'Open Sans', sans-serif !important;
@@ -15,6 +36,22 @@ body {
 
 a {
   color: $color-blue;
+}
+
+.fade:not(.hidden) {
+  transition: none;
+  opacity: 1;
+}
+
+.hidden
+{
+  &:not(.fade) {
+    display: none !important;
+  }
+
+  &.fade {
+    @include fadeOut();
+  }
 }
 
 .static-page-content

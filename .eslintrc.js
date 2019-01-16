@@ -34,6 +34,7 @@ module.exports = {
     'func-call-spacing': 0,
     'keyword-spacing': 0,
     'spaced-comment': 0,
-    'no-extra-bind': 0
+    'no-extra-bind': 0,
+    "no-new": 0
   }
 }

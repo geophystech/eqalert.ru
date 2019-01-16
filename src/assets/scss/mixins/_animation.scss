@@ -1,0 +1,6 @@
+@mixin animation($props...)
+{
+  @each $prefix in -webkit-, -moz-, -ms-, -o-, '' {
+    #{$prefix}animation: $props;
+  }
+}

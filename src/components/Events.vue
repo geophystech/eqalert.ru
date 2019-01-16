@@ -124,7 +124,9 @@ export default {
 
         this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params })
           .then(response => {
+
             this.spinners.loadMoreEvents = false
+            this.disabledFilters = false
 
             if (typeof filtersData === 'object') {
               this.events = response.data.data
@@ -140,10 +142,10 @@ export default {
             this.endDate = this.$moment(this.events[0].locValues.data.event_datetime).format('L')
           })
           .catch(error => {
-            console.log(error)
+            this.$refs.filters.setErrors(error.response.data.errors.data)
+            this.spinners.loadMoreEvents = false
+            this.disabledFilters = false
           })
-
-        this.disabledFilters = false
 
       }
 
