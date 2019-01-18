@@ -1,5 +1,5 @@
 <template>
-  <form class="filters col-3" @submit="formSend">
+  <form class="filters col-3" @submit="formSend" @reset="resetFields(true)">
     <div class="filter-rows">
       <b-row class="filter-row" no-gutters>
         <b-col align-self="center">
@@ -7,20 +7,22 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.magMin" placeholder="2.5" :state="propState('magMin')"
-                              @input.native="onFiltersChange($event, 'magMin')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.mag_min" placeholder="2.5" :state="modelState('mag_min')"
+                              @input.native="onFiltersChange($event, 'mag_min')" autocomplete="off"
+                              :disabled="disabled" />
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.magMax" placeholder="10.0" :state="propState('magMax')"
-                              @input.native="onFiltersChange($event, 'magMax')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.mag_max" placeholder="10.0" :state="modelState('mag_max')"
+                              @input.native="onFiltersChange($event, 'mag_max')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
           </b-row>
-          <div class="text-error" v-show="errors.magMin" v-html="errors.magMin"></div>
-          <div class="text-error" v-show="errors.magMax" v-html="errors.magMax"></div>
+          <div class="text-error" v-show="errors.mag_min" v-html="errors.mag_min"></div>
+          <div class="text-error" v-show="errors.mag_max" v-html="errors.mag_max"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -29,20 +31,22 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.latMin" placeholder="51.1" :state="propState('latMin')"
-                              @input.native="onFiltersChange($event, 'latMin')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.lat_min" placeholder="51.1" :state="modelState('lat_min')"
+                              @input.native="onFiltersChange($event, 'lat_min')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.latMax" placeholder="70.1" :state="propState('latMax')"
-                              @input.native="onFiltersChange($event, 'latMax')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.lat_max" placeholder="70.1" :state="modelState('lat_max')"
+                              @input.native="onFiltersChange($event, 'lat_max')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
           </b-row>
-          <div class="text-error" v-show="errors.latMin" v-html="errors.latMin"></div>
-          <div class="text-error" v-show="errors.latMax" v-html="errors.latMax"></div>
+          <div class="text-error" v-show="errors.lat_min" v-html="errors.lat_min"></div>
+          <div class="text-error" v-show="errors.lat_max" v-html="errors.lat_max"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -51,20 +55,22 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.lonMin" placeholder="145.1" :state="propState('lonMin')"
-                              @input.native="onFiltersChange($event, 'lonMin')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.lon_min" placeholder="145.1" :state="modelState('lon_min')"
+                              @input.native="onFiltersChange($event, 'lon_min')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.lonMax" placeholder="190.1" :state="propState('lonMax')"
-                              @input.native="onFiltersChange($event, 'lonMax')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.lon_max" placeholder="190.1" :state="modelState('lon_max')"
+                              @input.native="onFiltersChange($event, 'lon_max')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
           </b-row>
-          <div class="text-error" v-show="errors.lonMin" v-html="errors.lonMin"></div>
-          <div class="text-error" v-show="errors.lonMax" v-html="errors.lonMax"></div>
+          <div class="text-error" v-show="errors.lon_min" v-html="errors.lon_min"></div>
+          <div class="text-error" v-show="errors.lon_max" v-html="errors.lon_max"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -73,12 +79,13 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="Минимум">
-                <b-form-input v-model.number.trim="filters.staNumMin" placeholder="1" :state="propState('staNumMin')"
-                              @input.native="onFiltersChange($event, 'staNumMin')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.sta_num_min" placeholder="1" :state="modelState('sta_num_min')"
+                              @input.native="onFiltersChange($event, 'sta_num_min')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
           </b-row>
-          <div class="text-error" v-show="errors.staNumMin" v-html="errors.staNumMin"></div>
+          <div class="text-error" v-show="errors.sta_num_min" v-html="errors.sta_num_min"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -87,20 +94,22 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.depthMin" placeholder="0" :state="propState('depthMin')"
-                              @input.native="onFiltersChange($event, 'depthMin')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.depth_min" placeholder="0" :state="modelState('depth_min')"
+                              @input.native="onFiltersChange($event, 'depth_min')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.depthMax" placeholder="10" :state="propState('depthMax')"
-                              @input.native="onFiltersChange($event, 'depthMax')" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.depth_max" placeholder="10" :state="modelState('depth_max')"
+                              @input.native="onFiltersChange($event, 'depth_max')" autocomplete="off"
+                              :disabled="disabled"/>
               </b-input-group>
             </b-col>
           </b-row>
-          <div class="text-error" v-show="errors.depthMin" v-html="errors.depthMin"></div>
-          <div class="text-error" v-show="errors.depthMax" v-html="errors.depthMax"></div>
+          <div class="text-error" v-show="errors.depth_min" v-html="errors.depth_min"></div>
+          <div class="text-error" v-show="errors.depth_max" v-html="errors.depth_max"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row datetime-filter" no-gutters>
@@ -113,12 +122,13 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="С">
-                <flat-pickr v-model.trim="filters.datetimeMin"
+                <flat-pickr v-model.trim="filters.datetime_min"
                             class="form-control datetime-picker"
                             :config="minDatetimeConfig"
                             placeholder="Дата"
-                            @input.native="onFiltersChange($event, 'datetimeMin')"
-                            :state="propState('datetimeMin')" />
+                            @input.native="onFiltersChange($event, 'datetime_min')"
+                            :state="modelState('datetime_min')"
+                            :disabled="disabled"/>
               </b-input-group>
             </b-col>
           </b-row>
@@ -126,17 +136,18 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="По">
-                <flat-pickr v-model.trim="filters.datetimeMax"
+                <flat-pickr v-model.trim="filters.datetime_max"
                             class="form-control datetime-picker"
                             :config="maxDatetimeConfig"
                             placeholder="Дата"
-                            @input.native="onFiltersChange($event, 'datetimeMax')"
-                            :state="propState('datetimeMax')" />
+                            @input.native="onFiltersChange($event, 'datetime_max')"
+                            :state="modelState('datetime_max')"
+                            :disabled="disabled"/>
               </b-input-group>
             </b-col>
           </b-row>
-          <div class="text-error" v-show="errors.datetimeMin" v-html="errors.datetimeMin"></div>
-          <div class="text-error" v-show="errors.datetimeMax" v-html="errors.datetimeMax"></div>
+          <div class="text-error" v-show="errors.datetime_min" v-html="errors.datetime_min"></div>
+          <div class="text-error" v-show="errors.datetime_max" v-html="errors.datetime_max"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -145,11 +156,11 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="Максимум">
-                <b-form-input v-model.number.trim="filters.rmsMax" placeholder="0.9" :state="propState('rmsMax')" />
+                <b-form-input v-model.number.trim="filters.rms_max" placeholder="0.9" :state="modelState('rms_max')" />
               </b-input-group>
             </b-col>
           </b-row>
-          <div class="text-error" v-show="errors.rmsMax" v-html="errors.rmsMax"></div>
+          <div class="text-error" v-show="errors.rms_max" v-html="errors.rms_max"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -158,14 +169,14 @@
             <b-col>
               <b-form-checkbox
                 @change.native="onFiltersChange($event)"
-                v-model="filters.hasMt">Только с тензором момента</b-form-checkbox>
+                v-model="filters.has_mt" :disabled="disabled">Только с тензором момента</b-form-checkbox>
             </b-col>
           </b-row>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
         <b-col class="text-center">
-          <b-button size="sm" :disabled="disabled" @click="resetFields(true)">Сбросить фильтры</b-button>
+          <b-button type="reset" size="sm" :disabled="disabled">Сбросить фильтры</b-button>
         </b-col>
       </b-row>
     </div>
@@ -175,7 +186,6 @@
 </template>
 
 <script>
-  import { camelToUnderscore, camelCase } from '@/helpers/string'
   import flatPickr from 'vue-flatpickr-component'
   import 'flatpickr/dist/flatpickr.css'
   import { Russian } from 'flatpickr/dist/l10n/ru'
@@ -191,6 +201,7 @@
       return {
         filtersChanged: false,
         sendBtnFade: false,
+        reseted: false,
         minDatetimeConfig: {},
         maxDatetimeConfig: {},
         datetimeConfig: {
@@ -204,37 +215,22 @@
           wrap: true
         },
         filters: {
-          hasTraining: null,
-          datetimeMax: null,
-          datetimeMin: null,
-          depthMax: null,
-          depthMin: null,
-          hasMt: null,
-          magMax: null,
-          magMin: null,
-          latMax: null,
-          latMin: null,
-          lonMax: null,
-          lonMin: null,
-          rmsMax: null,
-          staNumMin: null
+          has_training: null,
+          datetime_max: null,
+          datetime_min: null,
+          depth_max: null,
+          depth_min: null,
+          has_mt: null,
+          mag_max: null,
+          mag_min: null,
+          lat_max: null,
+          lat_min: null,
+          lon_max: null,
+          lon_min: null,
+          rms_max: null,
+          sta_num_min: null
         },
-        errorMessages: {
-          hasTraining: null,
-          datetimeMax: null,
-          datetimeMin: null,
-          depthMax: null,
-          depthMin: null,
-          hasMt: null,
-          magMax: null,
-          magMin: null,
-          latMax: null,
-          latMin: null,
-          lonMax: null,
-          lonMin: null,
-          rmsMax: null,
-          staNumMin: null
-        }
+        errorMessages: {}
       }
     },
     beforeMount()
@@ -245,8 +241,9 @@
 
       this.parseURL()
 
-      if (!this.filters.datetimeMin) {
-        this.filters.datetimeMin = this.minDatetimeConfig.defaultDate
+      if (!this.filters.datetime_min) {
+        this.filters.datetime_min = this.minDatetimeConfig.defaultDate
+        this.updateURL()
       }
     },
     mounted()
@@ -275,12 +272,16 @@
       }
     },
     methods: {
-      propState: function(prop)
+
+      modelState: function(prop)
       {
         return this.errors[prop] ? false : null
       },
+
       onFiltersChange: function(e, prop = null)
       {
+        if (this.reseted) return
+
         setTimeout(() => {
 
           if (prop) {
@@ -332,7 +333,10 @@
             return object
           }, {})
 
-        this.$router.replace({ name: this.$route.name, query: query })
+        this.$router.replace({
+          name: this.$route.name,
+          query: query
+        })
       },
 
       setErrors: function(errors)
@@ -341,10 +345,9 @@
 
         Object.keys(errors).forEach(prop => {
 
-          let errorList = errors[camelToUnderscore(prop)]
-          prop = camelCase(prop)
+          let errorList = errors[prop]
 
-          if (prop in this.errorMessages) {
+          if (prop in this.filters) {
             this.errorMessages[prop] = `<p>${errorList.join('</p><p>')}</p>`
           } else {
             otherErrors.push(`${prop}: ${errorList.join(', ')}`)
@@ -366,7 +369,7 @@
           let convertedFilters = {}
 
           Object.keys(this.filters).map(key => {
-            convertedFilters[camelToUnderscore(key)] = this.prepareValue(key, this.filters[key])
+            convertedFilters[key] = this.prepareValue(key, this.filters[key])
           })
 
           this.$emit('filtersUpdated', convertedFilters)
@@ -380,7 +383,7 @@
 
         Object.keys(this.$route.query).forEach(key => {
           if (key in this.filters) {
-            if (key === 'hasMt' || key === 'datetimeMin' || key === 'datetimeMax') {
+            if (key === 'has_mt' || key === 'datetime_min' || key === 'datetime_max') {
               this.filters[key] = this.prepareValue(key, this.$route.query[key])
             } else {
               this.filters[key] = parseFloat(this.$route.query[key] || 0)
@@ -395,31 +398,41 @@
       {
         switch (value)
         {
-          case 0:
-            return null
-          case 1:
-            return key === 'hasMt' ? true : value
+          case false:
           case '0':
-            return null
-          case '1':
-            return true
+          case 0:
           case '':
             return null
-          case false:
-            return null
+
+          case 1:
+            return key === 'has_mt' ? true : value
+
+          case '1':
+            return true
+
           case true:
             return 1
+
           default:
             return value
         }
       },
 
-      resetFields: function(reloadEvents = false) {
+      resetFields: function(reloadEvents = false)
+      {
+        this.reseted = true
+
+        setTimeout(() => {
+          this.reseted = false
+        }, 100)
+
         Object.keys(this.filters).map(key => {
           this.filters[key] = null
         })
 
-        if (reloadEvents) this.filtersUpdated()
+        if (reloadEvents) {
+          this.updateURL()
+        }
       }
     }
   }
