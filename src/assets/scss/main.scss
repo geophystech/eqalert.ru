@@ -38,18 +38,13 @@ a {
   color: $color-blue;
 }
 
-.fade:not(.hidden) {
-  transition: none;
-  opacity: 1;
-}
-
 .hidden
 {
-  &:not(.fade) {
+  &:not(.fade2) {
     display: none !important;
   }
 
-  &.fade {
+  &.fade2 {
     @include fadeOut();
   }
 }

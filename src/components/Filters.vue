@@ -185,7 +185,7 @@
       </b-row>
     </div>
     <b-btn type="submit" variant="success" data-btn="send"
-           :class="['send-btn', {fade: sendBtnFade}, {hidden: !filtersChanged}]">Применить</b-btn>
+           :class="['send-btn', {fade2: sendBtnFade}, {hidden: !filtersChanged}]">Применить</b-btn>
   </form>
 </template>
 
