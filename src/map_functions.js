@@ -181,20 +181,26 @@ export function convertMsk64(value) {
 }
 
 export function createMap(mapID, coordinates, {
+
   addToggleShowObjects = false,
+  gestureHandling = true,
   showStations = true,
   zoom = 8,
   store
+
 } = {}) {
+
   const options = {
-    fullscreenControl: true,
     fullscreenControlOptions: { position: 'topleft' },
-    gestureHandling: true,
+    gestureHandling: gestureHandling,
+    fullscreenControl: true,
     worldCopyJump: true,
     zoomAnimation: true,
     zoomControl: false
   }
+
   const map = window.L.map(mapID, options)
+
   setView(map, coordinates)
   listenerStoreCurrentTileProvider(map, store)
 
