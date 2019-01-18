@@ -122,13 +122,15 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="С">
-                <flat-pickr v-model.trim="filters.datetime_min"
-                            class="form-control datetime-picker"
-                            :config="minDatetimeConfig"
-                            placeholder="Дата"
-                            @input.native="onFiltersChange($event, 'datetime_min')"
-                            :state="modelState('datetime_min')"
-                            :disabled="disabled"/>
+                <flat-pickr
+                  v-model.trim="filters.datetime_min"
+                  class="form-control datetime-picker"
+                  :config="minDatetimeConfig"
+                  placeholder="Дата"
+                  @input.native="onFiltersChange($event, 'datetime_min')"
+                  :state="modelState('datetime_min')"
+                  :disabled="disabled"
+                />
               </b-input-group>
             </b-col>
           </b-row>
@@ -136,13 +138,15 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="По">
-                <flat-pickr v-model.trim="filters.datetime_max"
-                            class="form-control datetime-picker"
-                            :config="maxDatetimeConfig"
-                            placeholder="Дата"
-                            @input.native="onFiltersChange($event, 'datetime_max')"
-                            :state="modelState('datetime_max')"
-                            :disabled="disabled"/>
+                <flat-pickr
+                  v-model.trim="filters.datetime_max"
+                  class="form-control datetime-picker"
+                  :config="maxDatetimeConfig"
+                  placeholder="Дата"
+                  @input.native="onFiltersChange($event, 'datetime_max')"
+                  :state="modelState('datetime_max')"
+                  :disabled="disabled"
+                />
               </b-input-group>
             </b-col>
           </b-row>
@@ -212,6 +216,8 @@
           locale: Russian,
           mode: 'single',
           time_24hr: true,
+          maxDate: null,
+          minDate: null,
           wrap: true
         },
         filters: {
@@ -241,8 +247,17 @@
 
       this.parseURL()
 
+      this.minDatetimeConfig.maxDate = this.$moment.utc().format('YYYY-MM-DD 00:00:00')
+      this.maxDatetimeConfig.maxDate = this.$moment.utc().format('YYYY-MM-DD 00:00:00')
+
+      if (!this.$store.getters.user.authenticated) {
+        this.minDatetimeConfig.minDate = this.minDatetimeConfig.defaultDate
+        this.maxDatetimeConfig.minDate = this.minDatetimeConfig.defaultDate
+      }
+
       if (!this.filters.datetime_min) {
         this.filters.datetime_min = this.minDatetimeConfig.defaultDate
+        this.maxDatetimeConfig.minDate = this.filters.datetime_min
         this.updateURL()
       }
     },
