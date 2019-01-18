@@ -38,11 +38,14 @@
       onOpen: function(e)
       {
         let map = this.map.object = createMap(this.map.id, this.map.coordinates, {
+          gestureHandling: false,
           showStations: false,
           zoom: 4
         })
 
         let coordinates = []
+
+        map.scrollWheelZoom.enable()
         map.spin(true)
 
         this.getAllEvents((events) => {
