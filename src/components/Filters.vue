@@ -1,5 +1,5 @@
 <template>
-  <b-col cols="3" class="filters">
+  <form class="filters col-3" @submit="formSend">
     <div class="filter-rows">
       <b-row class="filter-row" no-gutters>
         <b-col align-self="center">
@@ -7,20 +7,20 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.magMin" placeholder="2.5"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.magMin" placeholder="2.5" :state="propState('magMin')"
+                              @input.native="onFiltersChange($event, 'magMin')" autocomplete="off" />
               </b-input-group>
-              <div class="text-error" v-show="errors.mag_min">{{ errors.magMin }}</div>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.magMax" placeholder="10.0"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.magMax" placeholder="10.0" :state="propState('magMax')"
+                              @input.native="onFiltersChange($event, 'magMax')" autocomplete="off" />
               </b-input-group>
-              <div class="text-error" v-show="errors.mag_max">{{ errors.magMax }}</div>
             </b-col>
           </b-row>
+          <div class="text-error" v-show="errors.magMin" v-html="errors.magMin"></div>
+          <div class="text-error" v-show="errors.magMax" v-html="errors.magMax"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -29,18 +29,20 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.latMin" placeholder="51.1"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.latMin" placeholder="51.1" :state="propState('latMin')"
+                              @input.native="onFiltersChange($event, 'latMin')" autocomplete="off" />
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.latMax" placeholder="70.1"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.latMax" placeholder="70.1" :state="propState('latMax')"
+                              @input.native="onFiltersChange($event, 'latMax')" autocomplete="off" />
               </b-input-group>
             </b-col>
           </b-row>
+          <div class="text-error" v-show="errors.latMin" v-html="errors.latMin"></div>
+          <div class="text-error" v-show="errors.latMax" v-html="errors.latMax"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -49,18 +51,20 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.lonMin" placeholder="145.1"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.lonMin" placeholder="145.1" :state="propState('lonMin')"
+                              @input.native="onFiltersChange($event, 'lonMin')" autocomplete="off" />
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.lonMax" placeholder="190.1"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.lonMax" placeholder="190.1" :state="propState('lonMax')"
+                              @input.native="onFiltersChange($event, 'lonMax')" autocomplete="off" />
               </b-input-group>
             </b-col>
           </b-row>
+          <div class="text-error" v-show="errors.lonMin" v-html="errors.lonMin"></div>
+          <div class="text-error" v-show="errors.lonMax" v-html="errors.lonMax"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -69,11 +73,12 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="Минимум">
-                <b-form-input v-model.number.trim="filters.staNumMin" placeholder="1"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.staNumMin" placeholder="1" :state="propState('staNumMin')"
+                              @input.native="onFiltersChange($event, 'staNumMin')" autocomplete="off" />
               </b-input-group>
             </b-col>
           </b-row>
+          <div class="text-error" v-show="errors.staNumMin" v-html="errors.staNumMin"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -82,18 +87,20 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.depthMin" placeholder="0"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.depthMin" placeholder="0" :state="propState('depthMin')"
+                              @input.native="onFiltersChange($event, 'depthMin')" autocomplete="off" />
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.depthMax" placeholder="10"
-                              @input.native="onFiltersChange" autocomplete="off" />
+                <b-form-input v-model.number.trim="filters.depthMax" placeholder="10" :state="propState('depthMax')"
+                              @input.native="onFiltersChange($event, 'depthMax')" autocomplete="off" />
               </b-input-group>
             </b-col>
           </b-row>
+          <div class="text-error" v-show="errors.depthMin" v-html="errors.depthMin"></div>
+          <div class="text-error" v-show="errors.depthMax" v-html="errors.depthMax"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row datetime-filter" no-gutters>
@@ -110,7 +117,8 @@
                             class="form-control datetime-picker"
                             :config="minDatetimeConfig"
                             placeholder="Дата"
-                            @input.native="onFiltersChange" />
+                            @input.native="onFiltersChange($event, 'datetimeMin')"
+                            :state="propState('datetimeMin')" />
               </b-input-group>
             </b-col>
           </b-row>
@@ -122,10 +130,13 @@
                             class="form-control datetime-picker"
                             :config="maxDatetimeConfig"
                             placeholder="Дата"
-                            @input.native="onFiltersChange"/>
+                            @input.native="onFiltersChange($event, 'datetimeMax')"
+                            :state="propState('datetimeMax')" />
               </b-input-group>
             </b-col>
           </b-row>
+          <div class="text-error" v-show="errors.datetimeMin" v-html="errors.datetimeMin"></div>
+          <div class="text-error" v-show="errors.datetimeMax" v-html="errors.datetimeMax"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
@@ -134,17 +145,20 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="Максимум">
-                <b-form-input v-model.number.trim="filters.rmsMax" placeholder="0.9" />
+                <b-form-input v-model.number.trim="filters.rmsMax" placeholder="0.9" :state="propState('rmsMax')" />
               </b-input-group>
             </b-col>
           </b-row>
+          <div class="text-error" v-show="errors.rmsMax" v-html="errors.rmsMax"></div>
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
         <b-col>
           <b-row no-gutters class="filter-inputs">
             <b-col>
-              <b-form-checkbox v-model="filters.hasMt" @change="onFiltersChange">Только с тензором момента</b-form-checkbox>
+              <b-form-checkbox
+                @change.native="onFiltersChange($event)"
+                v-model="filters.hasMt">Только с тензором момента</b-form-checkbox>
             </b-col>
           </b-row>
         </b-col>
@@ -155,13 +169,13 @@
         </b-col>
       </b-row>
     </div>
-    <b-btn type="button" variant="success" data-btn="send"
-           :class="['send-btn', 'fade', {hidden: !filtersChanged}]">Применть</b-btn>
-  </b-col>
+    <b-btn type="submit" variant="success" data-btn="send"
+           :class="['send-btn', {fade: sendBtnFade}, {hidden: !filtersChanged}]">Применть</b-btn>
+  </form>
 </template>
 
 <script>
-  import { camelToUnderscore } from '@/helpers/string'
+  import { camelToUnderscore, camelCase } from '@/helpers/string'
   import flatPickr from 'vue-flatpickr-component'
   import 'flatpickr/dist/flatpickr.css'
   import { Russian } from 'flatpickr/dist/l10n/ru'
@@ -176,6 +190,7 @@
     data() {
       return {
         filtersChanged: false,
+        sendBtnFade: false,
         minDatetimeConfig: {},
         maxDatetimeConfig: {},
         datetimeConfig: {
@@ -189,7 +204,7 @@
           wrap: true
         },
         filters: {
-          has_training: null,
+          hasTraining: null,
           datetimeMax: null,
           datetimeMin: null,
           depthMax: null,
@@ -204,30 +219,21 @@
           rmsMax: null,
           staNumMin: null
         },
-        errors: {
-          has_training: null,
-          datetime_max: null,
-          datetime_min: null,
-          depth_max: null,
-          depth_min: null,
-          has_mt: null,
-          mag_max: null,
-          mag_min: null,
-          lat_max: null,
-          lat_min: null,
-          lon_max: null,
-          lon_min: null,
-          rms_max: null,
-          sta_num_min: null
-        },
-        prepareRegexps: {
-          magMin: [val => /^-?\d(\.\d{1,3})?$/.test(val)],
-          magMax: [val => /^-?\d(\.\d{1,3})?$/.test(val)],
-          latMin: [val => /^-?\d{1,2}(\.\d{1,9})?$/.test(val)],
-          latMax: [val => /^-?\d{1,2}(\.\d{1,9})?$/.test(val)],
-          lonMin: [val => /^-?\d{1,2}(\.\d{1,9})?$/.test(val)],
-          lonMax: [val => /^-?\d{1,2}(\.\d{1,9})?$/.test(val)],
-          rmsMax: [val => /^-?\d{1,2}(\.\d)?$/.test(val)]
+        errorMessages: {
+          hasTraining: null,
+          datetimeMax: null,
+          datetimeMin: null,
+          depthMax: null,
+          depthMin: null,
+          hasMt: null,
+          magMax: null,
+          magMin: null,
+          latMax: null,
+          latMin: null,
+          lonMax: null,
+          lonMin: null,
+          rmsMax: null,
+          staNumMin: null
         }
       }
     },
@@ -246,30 +252,107 @@
     mounted()
     {
       this._sendBtn = this.$el.querySelector('[data-btn="send"]')
+
+      this._sendBtn.addEventListener('mouseover', () => {
+        if (this._btnHiddenTimer) clearTimeout(this._btnHiddenTimer)
+      }, false)
+
+      this._sendBtn.addEventListener('mouseout', () => {
+        this._btnHiddenTimer = setTimeout(() => {
+          this.filtersChanged = false
+        }, 2000)
+      }, false)
+
     },
     watch: {
       $route: function(data) {
         this.parseURL()
       }
     },
+    computed: {
+      errors: function() {
+        return this.errorMessages
+      }
+    },
     methods: {
-      onFiltersChange: function(e)
+      propState: function(prop)
       {
-        if (this._btnHiddenTimer) {
-          clearTimeout(this._btnHiddenTimer)
-        }
-
-        let btnOffsetTop = e.target.getBoundingClientRect().top - this.$el.getBoundingClientRect().top
-        this._sendBtn.style.top = `${btnOffsetTop.toFixed(2)}px`
-        this.filtersChanged = true
-
-        this._btnHiddenTimer = setTimeout(() => {
-          this.filtersChanged = false
-        }, 2000)
+        return this.errors[prop] ? false : null
       },
-      onChangeCalled: function(event) {
-        this.filtersUpdated()
+      onFiltersChange: function(e, prop = null)
+      {
+        setTimeout(() => {
+
+          if (prop) {
+            this.errors[prop] = null
+          }
+
+          if (this._btnHiddenTimer) {
+            clearTimeout(this._btnHiddenTimer)
+          }
+
+          let btnOffsetTop = e.target.getBoundingClientRect().top - this.$el.getBoundingClientRect().top
+
+          if (['checkbox', 'radio'].indexOf(e.target.type) !== -1) {
+            btnOffsetTop -= 5
+          }
+
+          this._sendBtn.style.top = `${btnOffsetTop.toFixed(2)}px`
+          this.filtersChanged = true
+          this.sendBtnFade = true
+
+          this._btnHiddenTimer = setTimeout(() => {
+            this.filtersChanged = false
+          }, 2000)
+
+        }, 10)
       },
+
+      formSend: function(e)
+      {
+        e.preventDefault()
+        this.send()
+      },
+
+      send: function()
+      {
+        this.filtersChanged = false
+        this.sendBtnFade = false
+        this.updateURL()
+      },
+
+      updateURL: function()
+      {
+        const query = Object.keys(this.filters)
+          .filter(key => {
+            if (this.filters[key] !== null && this.filters[key] !== '') return key
+          })
+          .reduce((object, key) => {
+            object[key] = this.prepareValue(key, this.filters[key])
+            return object
+          }, {})
+
+        this.$router.replace({ name: this.$route.name, query: query })
+      },
+
+      setErrors: function(errors)
+      {
+        let otherErrors = []
+
+        Object.keys(errors).forEach(prop => {
+
+          let errorList = errors[camelToUnderscore(prop)]
+          prop = camelCase(prop)
+
+          if (prop in this.errorMessages) {
+            this.errorMessages[prop] = `<p>${errorList.join('</p><p>')}</p>`
+          } else {
+            otherErrors.push(`${prop}: ${errorList.join(', ')}`)
+          }
+
+        })
+      },
+
       filtersUpdated: function(delay = 500)
       {
         this.filtersChanged = false
@@ -280,7 +363,6 @@
 
         this._filtersUpdateTimeout = setTimeout(() => {
 
-          this.updateURL()
           let convertedFilters = {}
 
           Object.keys(this.filters).map(key => {
@@ -291,7 +373,9 @@
 
         }, delay)
       },
-      parseURL: function() {
+
+      parseURL: function()
+      {
         this.resetFields()
 
         Object.keys(this.$route.query).forEach(key => {
@@ -306,6 +390,7 @@
 
         this.filtersUpdated(0)
       },
+
       prepareValue: function(key, value)
       {
         switch (value)
@@ -325,50 +410,16 @@
           case true:
             return 1
           default:
-            /*if (key in this.prepareRegexps
-              && this.prepareRegexps[key].map(validator => validator(value)).filter(res => res === false).length
-            ) {
-              return null
-            }*/
             return value
         }
       },
+
       resetFields: function(reloadEvents = false) {
         Object.keys(this.filters).map(key => {
           this.filters[key] = null
         })
 
         if (reloadEvents) this.filtersUpdated()
-      },
-      updateURL: function() {
-        const query = Object.keys(this.filters)
-          .filter(key => {
-            if (this.filters[key] !== null && this.filters[key] !== '') return key
-          })
-          .reduce((object, key) => {
-            object[key] = this.prepareValue(key, this.filters[key])
-
-            return object
-          }, {})
-
-        this.$router.replace({ name: this.$route.name, query: query })
-      },
-
-      setErrors: function(errors)
-      {
-        let otherErrors = []
-
-        Object.keys(errors).forEach(prop => {
-
-          let errorList = errors[prop]
-
-          if (prop in this.errors) {
-            this.errors[prop] = errorList.join(', ')
-          } else {
-            otherErrors.push(`${prop}: ${errorList.join(', ')}`)
-          }
-
-        })
       }
     }
   }
@@ -405,8 +456,29 @@
           }
         }
 
-        .form-control.datetime-picker {
-          background-color: white;
+        .text-error
+        {
+          padding: 10px 10px 0;
+          line-height: 20px;
+          font-size: 14px;
+
+          /deep/ > p {
+            margin: 0;
+            + p {
+              margin-top: 7px;
+            }
+          }
+        }
+
+        .form-control
+        {
+          &.datetime-picker {
+            background-color: white;
+          }
+
+          &.is-invalid {
+            background-image: none;
+          }
         }
 
         &:nth-last-child(2) {
@@ -426,7 +498,8 @@
           font-weight: bold;
         }
 
-        .filter-inputs {
+        .filter-inputs
+        {
           .input-group {
             height: 80%;
 
@@ -469,7 +542,8 @@
           font-size: 80%;
         }
 
-        .custom-checkbox {
+        .custom-checkbox
+        {
           width: 100%;
 
           .custom-control-indicator {

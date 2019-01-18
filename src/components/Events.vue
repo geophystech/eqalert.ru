@@ -160,7 +160,7 @@ export default {
     },
     toggleTrainingEvents: function(checked) {
       this.$refs.filters.filters.has_training = checked ? 1 : null
-      this.$refs.filters.filtersUpdated()
+      this.$refs.filters.send()
     }
   }
 }
