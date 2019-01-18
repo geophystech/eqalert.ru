@@ -505,6 +505,7 @@
           }
 
           &.is-invalid {
+            padding-right: 0.75rem;
             background-image: none;
           }
         }

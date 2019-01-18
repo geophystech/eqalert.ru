@@ -15,8 +15,7 @@
 }
 
 
-@mixin fadeOut()
-{
+@mixin fadeOut() {
   @include animation(fadeOut 250ms linear);
   animation-fill-mode: both;
 }
