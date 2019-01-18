@@ -2,7 +2,7 @@
 {
   #{$prop}: $default;
 
-  @each $pre in -webkit-, -moz-, -o-, '' {
-    #{$prop}: #{$pre}calc(#{$val});
+  @each $prefix in -webkit-, -moz-, -o-, '' {
+    #{$prop}: #{$prefix}calc(#{$val});
   }
 }

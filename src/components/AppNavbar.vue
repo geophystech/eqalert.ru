@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/global';
+  @import '~scss/_variables';
 
   $border-bottom-blue: 3px solid $color-blue;
   $border-bottom-orange: 3px solid $color-orange;

@@ -1,26 +1,40 @@
 <template>
   <div class="event">
+
     <component :is="components.header" :event="event" />
+    <b-alert show v-if="!!event.has_training" variant="event-training">Режим учебных событий</b-alert>
     <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id" />
 
     <b-row>
+
       <b-col cols="12" md="8">
 
-        <div v-if="errorResponse">
-          <div v-if="errorResponse.status === 403" class="text-error">
+        <div v-if="errorResponse" class="text-error">
+
+          <div v-if="errorResponse.status === 403">
             <p>
               Доступ к информации по данному событию ограничен, пожалуйста, пройдите
               <router-link :to="{name: 'UserAuthentication'}">процедуру авторизации</router-link>.
             </p>
             <p class="text-center">
-              <a href="https://goo.gl/forms/i48vp55kTjL2d9Wk1" target="_blank">Служба поддержки</a>
+              <a :href="$root.$options.settings.app.feedbackUrl" target="_blank">Служба поддержки</a>
             </p>
           </div>
-          <div v-if="errorResponse.status === 404" class="text-error">
+
+          <div v-else-if="errorResponse.status === 404">
             Данного события не существует.
             Пожалуйста, посмотрите, <router-link :to="{name: 'Mainpage'}">последние землетрясения</router-link>
             или выполните <router-link :to="{name: 'Events'}">поиск в архиве</router-link>.
           </div>
+
+          <div v-else>
+            <h4>Ошибка {{ errorResponse.status }}</h4>
+            <p>{{ errorResponse.statusText }}</p>
+            <p class="text-center">
+              <a :href="$root.$options.settings.app.feedbackUrl" target="_blank">Служба поддержки</a>
+            </p>
+          </div>
+
         </div>
 
         <keep-alive>
@@ -34,14 +48,19 @@
         <keep-alive>
           <component :is="components.currentTab" :event="event" v-if="event.id" />
         </keep-alive>
+
       </b-col>
+
       <b-col cols="4">
         <keep-alive>
           <component :is="components.lastEvents" :event="event" v-if="!$root.onMobile" />
         </keep-alive>
       </b-col>
+
     </b-row>
+
   </div>
+
 </template>
 
 <script>
@@ -167,9 +186,13 @@
 </script>
 
 <style lang="scss" scoped>
+
+  @import '~scss/_variables';
+
   .event-tab {
     margin-top: 5%;
   }
+
   .mobile-map-dialog
   {
     position: fixed;
@@ -184,5 +207,6 @@
       position: relative;
     }
   }
+
 </style>
 

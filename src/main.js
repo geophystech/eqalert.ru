@@ -5,6 +5,7 @@ import App from './App'
 import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import EventsSettings from './settings/events.js'
+import AppSettings from './settings/app'
 import IdleVue from 'idle-vue'
 import moment from 'moment'
 import router from './router'
@@ -104,6 +105,7 @@ new Vue({
   settings: {
     api: new ApiSettings(),
     events: EventsSettings,
+    app: AppSettings,
     stations: StationsSettings
   },
   template: '<App/>',

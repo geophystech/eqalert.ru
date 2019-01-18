@@ -13,7 +13,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../assets/scss/global';
+  @import '~scss/_variables';
 
   .row {
     color: $color-white;

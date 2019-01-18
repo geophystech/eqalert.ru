@@ -79,6 +79,8 @@ export default {
 
 <style lang="scss">
 
+  @import '~scss/main';
+
   .android-app-alert
   {
     .alert
