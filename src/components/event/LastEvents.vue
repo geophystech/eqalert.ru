@@ -37,8 +37,9 @@
       fetchEvents: function() {
         this.$http.get(this.$root.$options.settings.api.endpointEvents, {
           params: {
-            limit: 10,
-            include: 'nearestCity'
+            datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
+            include: 'nearestCity',
+            limit: 10
           }
         })
           .then(response => {

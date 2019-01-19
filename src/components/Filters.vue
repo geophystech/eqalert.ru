@@ -339,6 +339,8 @@
 
       updateURL: function()
       {
+        this.errorMessages = {}
+
         const query = Object.keys(this.filters)
           .filter(key => {
             if (this.filters[key] !== null && this.filters[key] !== '') return key
