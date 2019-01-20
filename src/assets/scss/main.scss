@@ -184,3 +184,15 @@ details {
     color: #BBB;
   }
 }
+
+
+.popover
+{
+  &.bs-popover-bottom, &.bs-popover-auto[x-placement^="bottom"] {
+    box-shadow: 0 3px 10px 1px rgba(0,0,0,0.25);
+  }
+
+  &.bs-popover-left, &.bs-popover-auto[x-placement^="left"] {
+    box-shadow: -2px 1px 7px 1px rgba(0, 0, 0, 0.2);
+  }
+}
