@@ -16,9 +16,7 @@
               <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
             </span>
             ( <span class="magnitude">{{ event.magnitude }}</span> )
-            <span v-b-popover.hover.bottom="localDateTime(event.datetime)">
-              {{ event.datetime | moment(datetimeFormatUTC) }}
-            </span>
+            {{ event.datetime | moment(datetimeFormatUTC) }}
             <span class="processing-method">
               {{ event.processingMethod.short }}
             </span>
