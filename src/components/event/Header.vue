@@ -33,7 +33,7 @@
       <b-row class="event-local-dt-row">
         <b-col class="text-center">
           <span class="event-datetime"
-                v-b-popover.hover.auto="'Время возниконовение землетрясения в вашем часовом поясе'">
+                v-b-popover.hover.auto="'Время землетрясения в вашем часовом поясе'">
               {{ localDateTime(event.datetime) }}
             </span>
         </b-col>
