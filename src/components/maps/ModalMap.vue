@@ -16,8 +16,7 @@
 </template>
 
 <script>
-  import {createMap} from '@/map_functions'
-  import {agency, eventColor, eventRadius} from '@/helpers/event'
+  import {createMap, createMapEventMarker} from '@/map_functions'
 
   export default {
     name: 'ModalMap',
@@ -43,6 +42,7 @@
           zoom: 4
         })
 
+        let $moment = this.$moment
         let coordinates = []
 
         map.scrollWheelZoom.enable()
@@ -50,69 +50,14 @@
 
         this.getAllEvents((events) => {
 
-          let startDate = this.$moment(events[events.length - 1].locValues.data.event_datetime).format('L')
-          let endDate = this.$moment(events[0].locValues.data.event_datetime).format('L')
+          let startDate = $moment(events[events.length - 1].event_datetime).format('L')
+          let endDate = $moment(events[0].event_datetime).format('L')
 
           this.title = `Загружено ${events.length} событий (${startDate} — ${endDate})`
 
           events.forEach(event => {
-
-            const datetime = this.$moment(event.locValues.data.event_datetime)
-            const datetimeHumanreadable = datetime.format('LL в HH:mm:ss UTC')
-            const datetimeDiff = this.$moment.utc().diff(datetime, 'hours')
-            const magnitude = event.locValues.data.mag.toFixed(1)
-            const magnitudeType = event.locValues.data.mag_t
-            const longitude = event.locValues.data.lon
-            const latitude = event.locValues.data.lat
-            const depth = event.locValues.data.depth
-            const options = {
-              fillColor: eventColor(datetimeDiff),
-              radius: eventRadius(magnitude),
-              numberOfSides: 360,
-              colorOpacity: 1.0,
-              fillOpacity: 0.8,
-              gradient: false,
-              color: 'black',
-              weight: 1
-            }
-
-            coordinates.push([latitude, longitude])
-
-            const marker = new window.L.RegularPolygonMarker(new window.L.LatLng(latitude, longitude), options)
-            const message =
-              `<table class="table table-hover table-sm table-responsive">
-              <tbody>
-                <tr>
-                  <th class="align-middle" scope="row">Магнитуда</th>
-                  <td><span class="magnitude-color">${magnitude}</span> ( M<sub>${magnitudeType}</sub> )</td>
-                </tr>
-                <tr>
-                  <th scope="row">Время</th>
-                  <td>${datetimeHumanreadable}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Координаты</th>
-                  <td>${latitude}N, ${longitude}E</td>
-                </tr>
-                <tr>
-                  <th scope="row">Глубина</th>
-                  <td>${depth} км</td>
-                </tr>
-                <tr>
-                  <th scope="row">ID</th>
-                  <td>${event.id}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Агентство</th>
-                  <td>${agency(event.agency)}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="text-center read-more"><a href="#/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
-
-            marker.bindPopup(message)
-            marker.addTo(map)
-
+            createMapEventMarker(event, $moment).addTo(map)
+            coordinates.push([event.lat, event.lon])
           })
 
           let bound = map._getBoundsCenterZoom(window.L.latLngBounds(coordinates))
@@ -144,9 +89,9 @@
           cursor: ''
         })
 
-        let _getEvents = function()
+        let _getEvents = function(url)
         {
-          this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+          this.$http.get(url, {
             params: params,
             before: (request) => {
               if (this.previousRequest) {
@@ -158,8 +103,10 @@
           })
             .then(response => {
               events = events.concat(response.data.data)
-              params.cursor = response.data.meta.cursor.next
-              params.cursor ? _getEvents() : callBack(events)
+              let pagination = response.data.meta.pagination
+              let nextPageUrl = pagination.links.next
+              this.title = `Загружено ${events.length} из ${pagination.total} событий`
+              nextPageUrl ? _getEvents(nextPageUrl) : callBack(events)
             })
             .catch(error => {
               this.map.object.spin(false)
@@ -168,7 +115,7 @@
 
         }.bind(this)
 
-        _getEvents()
+        _getEvents(this.$root.$options.settings.api.endpointEventsLight)
       }
     }
   }

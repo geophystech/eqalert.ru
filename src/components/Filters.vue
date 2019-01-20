@@ -257,7 +257,6 @@
 
       if (!this.filters.datetime_min) {
         this.filters.datetime_min = this.minDatetimeConfig.defaultDate
-        this.maxDatetimeConfig.minDate = this.filters.datetime_min
         this.updateURL()
       }
     },

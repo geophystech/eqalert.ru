@@ -1,26 +1,35 @@
 <template>
-  <div class="last-events">
-    <b-card header="Последние события"
-            header-class="text-center">
 
-      <b-row no-gutters :class="{ event: true, 'highlight-event': highlightEvent(event.id) }" align-v="center" v-for="event in events" :key="event.id">
-        <router-link :to="{ name: 'Event', params: { id: event.id } }" class="d-flex align-items-center" :key="event.id">
+  <div class="last-events">
+
+    <b-card header="Последние события" header-class="text-center">
+
+      <b-row v-for="event in events" :key="event.id" no-gutters align-v="center"
+             :class="{ event: true, 'highlight-event': highlightEvent(event.id) }">
+
+        <router-link :to="{ name: 'Event', params: { id: event.id } }"
+                     class="d-flex align-items-center" :key="event.id">
+
           <b-col cols="2" class="magnitude text-center">
             <strong>{{ event.locValues.data.mag.toFixed(1) }}</strong>
           </b-col>
+
           <b-col cols="10" class="event-data">
-            <div class="settlement">
-              {{ event.settlement }}
-            </div>
+            <div class="settlement">{{ event.settlement }}</div>
             <div class="datetime">
               {{ event.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }},
               глубина {{ event.locValues.data.depth }} км
             </div>
           </b-col>
+
         </router-link>
+
       </b-row>
+
     </b-card>
+
   </div>
+
 </template>
 
 <script>
