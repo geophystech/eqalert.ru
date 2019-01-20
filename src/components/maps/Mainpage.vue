@@ -80,7 +80,6 @@
             btn.setAttribute('title', eventsRange.title)
 
             btnGroup.appendChild(btn)
-
           }
 
           Object.keys(EVENTS_RANGES).forEach(eventsRangeName => {
@@ -95,7 +94,7 @@
               $http.get(apiSettings.endpointEventsLight, {
                 params: {
                   datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
-                  limit: eventsRange.limit || 500
+                  limit: eventsRange.limit || 1000
                 }
               })
                 .then(response => {

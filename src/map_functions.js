@@ -373,9 +373,8 @@ import {agency, eventColor, eventRadius} from '@/helpers/event'
 
 export function createMapEventMarker(event, $moment)
 {
-  const datetime = $moment(event.event_datetime)
-  const datetimeHumanreadable = datetime.format('LL в HH:mm:ss UTC')
-  const datetimeDiff = $moment.utc().diff(datetime, 'hours')
+  const utcDatetime = $moment(event.event_datetime + ' +00:00', 'YYYY-MM-DD HH:mm:ss Z').utc()
+  const datetimeDiff = $moment.utc().diff(utcDatetime, 'hours')
   const magnitude = event.mag.toFixed(1)
   const magnitudeType = event.mag_t
   const longitude = event.lon
@@ -402,8 +401,12 @@ export function createMapEventMarker(event, $moment)
                   <td><span class="magnitude-color">${magnitude}</span> ( M<sub>${magnitudeType}</sub> )</td>
                 </tr>
                 <tr>
-                  <th scope="row">Время</th>
-                  <td>${datetimeHumanreadable}</td>
+                  <th scope="row">Время UTC</th>
+                  <td>${utcDatetime.format('LL в HH:mm:ss')}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Локальное время</th>
+                  <td>${utcDatetime.local().format('LL в HH:mm:ss (UTCZ)')}</td>
                 </tr>
                 <tr>
                   <th scope="row">Координаты</th>
