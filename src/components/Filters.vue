@@ -257,7 +257,6 @@
 
       if (!this.filters.datetime_min) {
         this.filters.datetime_min = this.minDatetimeConfig.defaultDate
-        this.maxDatetimeConfig.minDate = this.filters.datetime_min
         this.updateURL()
       }
     },
@@ -339,6 +338,8 @@
 
       updateURL: function()
       {
+        this.errorMessages = {}
+
         const query = Object.keys(this.filters)
           .filter(key => {
             if (this.filters[key] !== null && this.filters[key] !== '') return key

@@ -369,6 +369,69 @@ export function createMapMarkerPopupBuilding(building, {damageLevel = null, pgaV
   )
 }
 
+import {agency, eventColor, eventRadius} from '@/helpers/event'
+
+export function createMapEventMarker(event, $moment)
+{
+  const utcDatetime = $moment(event.event_datetime + ' +00:00', 'YYYY-MM-DD HH:mm:ss Z').utc()
+  const datetimeDiff = $moment.utc().diff(utcDatetime, 'hours')
+  const magnitude = event.mag.toFixed(1)
+  const magnitudeType = event.mag_t
+  const longitude = event.lon
+  const latitude = event.lat
+  const depth = event.depth
+  const options = {
+    fillColor: eventColor(datetimeDiff),
+    radius: eventRadius(magnitude),
+    numberOfSides: 360,
+    colorOpacity: 1.0,
+    fillOpacity: 0.8,
+    gradient: false,
+    color: 'black',
+    weight: 1
+  }
+
+  const coordinates = new window.L.LatLng(latitude, longitude)
+  const marker = new window.L.RegularPolygonMarker(coordinates, options)
+  const message =
+    `<table class="table table-hover table-sm table-responsive">
+              <tbody>
+                <tr>
+                  <th class="align-middle" scope="row">Магнитуда</th>
+                  <td><span class="magnitude-color">${magnitude}</span> ( M<sub>${magnitudeType}</sub> )</td>
+                </tr>
+                <tr>
+                  <th scope="row">Время UTC</th>
+                  <td>${utcDatetime.format('LL в HH:mm:ss')}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Локальное время</th>
+                  <td>${utcDatetime.local().format('LL в HH:mm:ss (UTCZ)')}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Координаты</th>
+                  <td>${latitude}N, ${longitude}E</td>
+                </tr>
+                <tr>
+                  <th scope="row">Глубина</th>
+                  <td>${depth} км</td>
+                </tr>
+                <tr>
+                  <th scope="row">ID</th>
+                  <td>${event.id}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Агентство</th>
+                  <td>${agency(event.agency)}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center read-more"><a href="#/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
+
+  marker.bindPopup(message)
+  return marker
+}
+
 // There is a bug when layers got disappeared on exiting from fullscreen.
 // See eqalert issue: https://github.com/geophystech/eqalert.ru/issues/249
 // This is a workaround that explicitly redraws map to brig layers back.

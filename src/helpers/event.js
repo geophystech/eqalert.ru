@@ -17,7 +17,7 @@ export function agencyDescription(agency) {
 export const EVENTS_RANGES = {
   lastDayEvents: {
     title: 'События за последние сутки',
-    minDateSubtract: [1, 'days'],
+    minDateSubtract: [24 * 60 + 59, 'minutes'],
     label: '< 24 ч',
     color: '#FF0000',
     limit: 500

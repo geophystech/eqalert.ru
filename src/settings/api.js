@@ -12,6 +12,7 @@ class Config
     this.endpointAnalyticsRMSAllocation = `${this.baseURL}/${this.version}/analytics/RMSAllocation`
     this.endpointAnalyticsStationCounts = `${this.baseURL}/${this.version}/analytics/stationCounts`
     this.endpointEvents = `${this.baseURL}/${this.version}/reports`
+    this.endpointEventsLight = `${this.baseURL}/${this.version}/reports/lightweightList`
     this.endpointPurposesList = `${this.baseURL}/${this.version}/user/purposesList`
     this.endpointStations = `${this.baseURL}/${this.version}/stations`
     this.endpointBuildings = `${this.baseURL}/${this.version}/buildings`

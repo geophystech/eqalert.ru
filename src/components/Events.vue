@@ -1,6 +1,6 @@
 <template>
   <div class="events">
-    <CountersHeader
+    <CountersHeader v-if="!error"
       :trainingEventsBtnDisabled="spinners.loadMoreEvents"
       @toggleTrainingEvents="toggleTrainingEvents"
       :trainingEventsBtnShow="true"
@@ -10,7 +10,7 @@
       :startDate="startDate"
       :endDate="endDate" />
 
-    <b-row no-gutters>
+    <b-row style="margin-top: 33px" no-gutters>
 
       <Filters
         :disabled="disabledFilters"
@@ -19,7 +19,11 @@
         v-if="!$root.onMobile"
         ref="filters"/>
 
-      <b-col class="all-events">
+      <b-col v-if="error">
+        <b-alert show variant="danger">{{ error }}</b-alert>
+      </b-col>
+
+      <b-col v-if="!error" class="all-events">
 
         <Spinner :size="32" v-if="spinners.loadMoreEvents" />
 
@@ -31,29 +35,42 @@
           <b-col cols="12" md="4" v-if="!$root.onMobile">Ближайший населённый пункт</b-col>
         </b-row>
 
-        <router-link v-for="(event, index) in events" :key="event.id" :to="{ name: 'Event', params: { id: event.id } }">
+        <router-link v-for="(event, index) in events" :key="event.id"
+                     :to="{ name: 'Event', params: { id: event.id } }">
+
           <b-row no-gutters class="events-row text-center">
+
             <b-col v-if="!$root.onMobile" md="1">{{ index + 1 }}</b-col>
+
             <b-col cols="3" md="1">
               <span :class="{ 'highlight-event': event.locValues.data.mag > highlightEventTreshold }">
                 {{ event.locValues.data.mag.toFixed(1) }}
               </span>
             </b-col>
+
             <b-col cols="3" md="2">{{ event.locValues.data.depth }} км</b-col>
-            <b-col cols="6" md="4" class="datetime">{{ event.locValues.data.event_datetime | moment(datetimeFormat) }}</b-col>
+
+            <b-col cols="6" md="4" class="datetime">
+              {{ event.locValues.data.event_datetime | moment(datetimeFormat) }}
+            </b-col>
+
             <b-col cols="12" md="4" class="settlement" v-if="!$root.onMobile">
               <span v-if="!event.nearestCity">Нет данных</span>
               <span v-else>
-                {{ round(event.nearestCity.data.ep_dis, 1) }} км до {{ event.nearestCity.data.settlement.data.translation.data.title }}
+                {{ round(event.nearestCity.data.ep_dis, 1) }} км
+                до {{ event.nearestCity.data.settlement.data.translation.data.title }}
               </span>
             </b-col>
+
           </b-row>
+
         </router-link>
 
         <b-row class="load-more-events" no-gutters>
           <b-col class="text-center">
             <Spinner v-if="spinners.loadMoreEvents" />
-            <a href="javascript:void(0)" @click.prevent="loadMoreEvents" v-if="apiParams.cursor && !spinners.loadMoreEvents">Показать больше событий</a>
+            <a href="#" v-if="apiParams.cursor && !spinners.loadMoreEvents"
+               @click.prevent="loadMoreEvents">Показать больше событий</a>
             <span v-if="!apiParams.cursor">Загружены все события</span>
           </b-col>
         </b-row>
@@ -74,6 +91,7 @@ export default {
   },
   data() {
     return {
+      error: '',
       filtersData: {},
       apiParams: {
         include: 'nearestCity',
@@ -94,7 +112,7 @@ export default {
     round: function() {
       return round
     },
-    datetimeFormat: function() {
+    datetimeFormatUTC: function() {
       if (this.$root.onMobile) {
         return 'L в HH:mm:ss'
       } else {
@@ -105,9 +123,16 @@ export default {
   metaInfo: {
     title: 'События'
   },
+  watch: {
+    error: function(msg) {
+      if (msg) window.scrollTo(0, 0)
+    }
+  },
   methods: {
     getEvents: function(filtersData)
     {
+      this.error = ''
+
       let _getEvents = () => {
 
         let params = this.apiParams
@@ -142,9 +167,34 @@ export default {
             this.endDate = this.$moment(this.events[0].locValues.data.event_datetime).format('L')
           })
           .catch(error => {
-            this.$refs.filters.setErrors(error.response.data.errors.data)
+
+            let resp = error.response
+            let data = resp.data
+
+            switch(resp.status)
+            {
+              case(422):
+                this.$refs.filters.setErrors(data.errors.data)
+                break
+
+              case(400):
+                this.error = data.error.message
+                break
+
+              default:
+
+                try {
+                  this.error = data.error.message
+                } catch(e) {
+                  this.error = error
+                }
+
+                break
+            }
+
             this.spinners.loadMoreEvents = false
             this.disabledFilters = false
+            this.events = []
           })
 
       }
