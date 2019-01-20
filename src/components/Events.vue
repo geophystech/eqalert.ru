@@ -112,7 +112,7 @@ export default {
     round: function() {
       return round
     },
-    datetimeFormat: function() {
+    datetimeFormatUTC: function() {
       if (this.$root.onMobile) {
         return 'L в HH:mm:ss'
       } else {

@@ -16,7 +16,9 @@
               <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
             </span>
             ( <span class="magnitude">{{ event.magnitude }}</span> )
-            {{ event.datetime | moment(datetimeFormat) }}
+            <span class="event-datetime" v-b-popover.hover.bottom="localDateTime(event.datetime)">
+              {{ event.datetime | moment(datetimeFormatUTC) }}
+            </span>
             <span class="processing-method">
               {{ event.processingMethod.short }}
             </span>
@@ -24,6 +26,7 @@
               {{ agency.title }}
             </b-badge>
           </h5>
+
         </b-col>
       </b-row>
 
@@ -70,6 +73,10 @@
         this.agency.title = agency(data, false)
         this.agency.description = agencyDescription(data)
       },
+      localDateTime: function(dt) {
+        return 'Время возниконовение землетрясения в вашем часовом поясе:\n' +
+          this.$moment.utc(dt).local().format(this.datetimeFormatLocal)
+      },
       setLabel: function(event) {
         if (event.has_delete) {
           this.label = {
@@ -96,13 +103,11 @@
       }
     },
     computed: {
-      datetimeFormat: function()
-      {
-        if (this.$root.onMobile) {
-          return 'L в HH:mm:ss UTC'
-        } else {
-          return 'LL в HH:mm:ss UTC'
-        }
+      datetimeFormatUTC: function() {
+        return this.$root.onMobile ? 'L в HH:mm:ss UTC' : 'LL в HH:mm:ss UTC'
+      },
+      datetimeFormatLocal: function() {
+        return this.$root.onMobile ? 'L в HH:mm:ss (UTCZ)' : 'LL в HH:mm:ss (UTCZ)'
       },
       breadcrumbs: function()
       {
@@ -144,6 +149,12 @@
   }
 </script>
 
+<style lang="scss">
+  .popover {
+    max-width: 450px;
+  }
+</style>
+
 <style lang="scss" scoped>
   @import '~scss/_variables';
 
@@ -177,6 +188,10 @@
       @media screen and (max-width: 767px) {
         padding: 2%;
       }
+
+      &.agency {
+        cursor: pointer;
+      }
     }
 
     .badge-deleted {
@@ -192,6 +207,7 @@
     .badge-processing {
       background-color: $color-orange;
       color: $color-white;
+      cursor: pointer;
     }
 
     .magnitude {
@@ -200,6 +216,15 @@
 
     .processing-method {
       color: $color-blue;
+    }
+
+    .event-datetime {
+      border-bottom: 1px dashed;
+      cursor: pointer;
+      color: #9E9E9E;
+      &:hover {
+        border-bottom-color: transparent;
+      }
     }
   }
 </style>
