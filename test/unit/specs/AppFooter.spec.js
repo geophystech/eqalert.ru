@@ -2,6 +2,7 @@ import { shallowMount } from '@vue/test-utils'
 import AppFooter from '@/components/AppFooter'
 
 describe('AppFooter.vue', () => {
+
   const wrapper = shallowMount(AppFooter)
 
   it('renders copyright', () => {
@@ -24,4 +25,5 @@ describe('AppFooter.vue', () => {
     expect(telegramLink.attributes().href).to.equal('tg://resolve?domain=eqalert_ru_bot')
     expect(telegramLink.find('i').classes()).to.contain('fa-telegram')
   })
+
 })

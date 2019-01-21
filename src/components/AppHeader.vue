@@ -10,7 +10,7 @@
         </b-col>
 
         <b-col cols="6" md="1" class="text-right" order-md="2" v-if="!$root.onMobile">
-          <router-link to="events">
+          <router-link :to="{ name: 'Events' }">
             <span id="events-count">
               <span class="exclamation-mark">!</span>
               <span>{{ $store.getters.totalEventsCount }}</span>
@@ -31,14 +31,12 @@
         <b-col class="sign-block text-right" cols="4" md="2" order="5" order-md="5">
           <span class="sign-in-out" v-if="$store.getters.user.authenticated">
             <a href="javascript:void(0)" v-on:click="signOut" key="sign-out">
-              Выйти
-              <i class="fa fa-times"></i>
+              Выйти <i class="fa fa-times" />
             </a>
           </span>
           <span class="sign-in-out" v-else>
             <router-link :to="{ name: 'UserAuthentication' }" key="sign-in">
-              Войти
-              <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
+              Войти <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
             </router-link>
           </span>
         </b-col>
