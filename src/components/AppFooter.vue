@@ -6,7 +6,7 @@
           © 2016 &mdash; {{ currentYear }} Eqalert.ru
         </b-row>
         <b-row no-gutters id="feedback">
-          <a :href="$root.$options.settings.app.feedbackUrl">Обратная связь</a>
+          <a :href="feedbackUrl">Обратная связь</a>
         </b-row>
       </b-col>
 
@@ -22,14 +22,20 @@
 </template>
 
 <script>
-export default {
-  name: 'app-footer',
-  computed: {
-    currentYear: function() {
-      return (new Date()).getFullYear()
+  import AppSettings from '@/settings/app'
+  export default {
+    name: 'app-footer',
+    data() {
+      return {
+        feedbackUrl: AppSettings.feedbackUrl
+      }
+    },
+    computed: {
+      currentYear: function() {
+        return (new Date()).getFullYear()
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

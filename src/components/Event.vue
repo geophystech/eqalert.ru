@@ -17,7 +17,7 @@
               <router-link :to="{name: 'UserAuthentication'}">процедуру авторизации</router-link>.
             </p>
             <p class="text-center">
-              <a :href="$root.$options.settings.app.feedbackUrl" target="_blank">Служба поддержки</a>
+              <a :href="feedbackUrl" target="_blank">Служба поддержки</a>
             </p>
           </div>
 
@@ -31,7 +31,7 @@
             <h4>Ошибка {{ errorResponse.status }}</h4>
             <p>{{ errorResponse.statusText }}</p>
             <p class="text-center">
-              <a :href="$root.$options.settings.app.feedbackUrl" target="_blank">Служба поддержки</a>
+              <a :href="feedbackUrl" target="_blank">Служба поддержки</a>
             </p>
           </div>
 
@@ -76,6 +76,7 @@
   import MomentTensor from '@/components/event/MomentTensor'
   import Settlements from '@/components/event/Settlements'
   import Tabs from '@/components/event/Tabs'
+  import AppSettings from '@/settings/app'
 
   export default {
     components: {
@@ -87,6 +88,7 @@
     },
     data() {
       return {
+        feedbackUrl: AppSettings.feedbackUrl,
         mobileMapHidden: true,
         errorResponse: null,
         defaultViewport: '',
