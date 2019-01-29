@@ -12,6 +12,7 @@ const RouterLink = {
 }
 
 describe('AppHeader.vue', () => {
+
   const $store = {
     getters: {
       user: {
@@ -19,6 +20,7 @@ describe('AppHeader.vue', () => {
       }
     }
   }
+
   const localVue = createLocalVue()
   localVue.use(VueRouter)
 
@@ -67,7 +69,9 @@ describe('AppHeader.vue', () => {
   })
 
   describe('dynamic elements', () => {
+
     describe('events count', () => {
+
       const $store = {
         getters: {
           totalEventsCount: 100500,
@@ -92,7 +96,9 @@ describe('AppHeader.vue', () => {
     })
 
     describe('user authentication block', () => {
+
       describe('when not authenticated', () => {
+
         const signInOutContainer = wrapper.find('.sign-in-out')
         const icon = signInOutContainer.find('i')
         const link = signInOutContainer.find(RouterLink)
