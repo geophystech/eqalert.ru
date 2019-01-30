@@ -37,6 +37,7 @@ describe('AppHeader.vue', () => {
   })
 
   describe('static elements', () => {
+
     it('renders logo', () => {
       const logoContainer = wrapper.find('#logo')
       const logoLink = logoContainer.find(RouterLink)
@@ -49,6 +50,7 @@ describe('AppHeader.vue', () => {
     })
 
     it('renders links', () => {
+
       const DYFILinkContainer = wrapper.find('.did-you-feel-it')
       const DYFILink = DYFILinkContainer.find('a')
       const socialMediaLinksContainer = wrapper.find('.social-media-links')
@@ -65,7 +67,9 @@ describe('AppHeader.vue', () => {
 
       expect(socialMediaLinks.length).to.equal(1)
       expect(telegramLink.attributes().href).to.equal('tg://resolve?domain=eqalert_ru_bot')
+
     })
+
   })
 
   describe('dynamic elements', () => {
