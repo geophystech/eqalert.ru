@@ -1,7 +1,7 @@
-import store from '../store'
+import store from '@/store'
 import axios from 'axios'
 
-import ApiSettings from '../settings/api.js'
+import apiSettings from '@/settings/api.js'
 
 export function axiosRemoveAuthorizationHeaders() {
   delete axios.defaults.headers.common['Authorization']
@@ -11,7 +11,6 @@ export function axiosSetAuthorizationHeaders() {
   const apiToken = store.getters.user.accessToken
 
   if (apiToken) {
-    const apiSettings = new ApiSettings()
     const apiType = apiSettings.authorizationType
 
     axios.defaults.headers.common['Authorization'] = `${apiType} ${apiToken}`
@@ -24,7 +23,6 @@ export function axiosAddRefreshTokenInterceptor() {
       return response
     },
     error => {
-      const apiSettings = new ApiSettings()
       let errorResponse = error.response
 
       if (errorResponse.status === 401 && apiSettings.endpointUserAuthentication !== error.response.config.url) {
@@ -33,8 +31,6 @@ export function axiosAddRefreshTokenInterceptor() {
         return axios.post(apiSettings.endpointUserRefreshToken, {
           'refresh_token': store.getters.user.refreshToken
         }).then(response => {
-
-          const apiSettings = new ApiSettings()
 
           this.$http.get(this.$root.$options.settings.api.endpointUserRefreshScopes, {
             headers: { Authorization: `${apiSettings.authorizationType} ${response.data.access_token}` }

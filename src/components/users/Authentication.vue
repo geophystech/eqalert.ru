@@ -66,7 +66,7 @@
 </template>
 
 <script>
-  import ApiSettings from '@/settings/api'
+  import apiSettings from '@/settings/api'
   export default {
     data() {
       return {
@@ -127,8 +127,6 @@
 
         this.$http.post(this.$root.$options.settings.api.endpointUserAuthentication, payload)
           .then(response => {
-
-            const apiSettings = new ApiSettings()
 
             this.$http.get(this.$root.$options.settings.api.endpointUserRefreshScopes, {
               headers: { Authorization: `${apiSettings.authorizationType} ${response.data.access_token}` }

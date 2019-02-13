@@ -33,7 +33,8 @@
 </template>
 
 <script>
-  import { round } from '@/helpers/math.js'
+  import apiSettings from '@/settings/app'
+  import { round } from '@/helpers/math'
 
   export default {
     props: ['event'],
@@ -44,7 +45,7 @@
     },
     methods: {
       fetchEvents: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointEvents, {
+        this.$http.get(apiSettings.endpointEvents, {
           params: {
             datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
             include: 'nearestCity',
@@ -64,7 +65,9 @@
               this.events.push(event)
             })
           })
-          .catch(error => { console.log(error) })
+          .catch(error => {
+            console.log(error.response)
+          })
       },
       highlightEvent: function(id) {
         if (this.event) return id === this.event.id
@@ -79,12 +82,9 @@
 </script>
 
 <style lang="scss" scoped>
-  $color-blue: #337ab7;
-  $color-gray-dark: #444;
-  $color-gray-light: #dfdfdf;
-  $color-gray-light-2: #999;
-  $color-orange: #ff7300;
-  $color-white-2: #faf9f9;
+
+  @import '~scss/_variables';
+
   $border: 1px $color-gray-light solid;
 
   .last-events {

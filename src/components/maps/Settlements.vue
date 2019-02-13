@@ -4,6 +4,7 @@
 
 <script>
   import { addEpicenter, createMap, id, convertMsk64, msk64Color, removeEpicenter, setView } from '@/map_functions.js'
+  import apiSettings from '@/settings/app'
 
   export default {
     props: ['event', 'tab'],
@@ -54,7 +55,7 @@
         this.map.object = createMap(this.map.id, this.coordinates)
       },
       fetchData: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(this.event.id))
+        this.$http.get(apiSettings.endpointEventMsk64(this.event.id))
           .then(response => { this.addData(response.data.data) })
           .catch(error => { console.log(error) })
       },

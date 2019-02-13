@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import AppFooter from '@/components/AppFooter'
+import AppSettings from '@/settings/app'
 
 describe('AppFooter.vue', () => {
 
@@ -16,7 +17,7 @@ describe('AppFooter.vue', () => {
     const geophystechWebsiteLink = wrapper.find('#geophystech-website').find('a')
     const telegramLink = wrapper.find('#social-media-links').findAll('a').at(0)
 
-    expect(feedbackLink.attributes().href).to.equal('https://goo.gl/forms/i48vp55kTjL2d9Wk1')
+    expect(feedbackLink.attributes().href).to.equal(AppSettings.feedbackUrl)
     expect(feedbackLink.text()).to.equal('Обратная связь')
 
     expect(geophystechWebsiteLink.attributes().href).to.equal('https://geophystech.ru/contacts')

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import store from './store'
-import ApiSettings from './settings/api'
-import StationsSettings from './settings/stations.js'
+import store from '@/store'
+import apiSettings from '@/settings/api'
+import stationsSettings from '@/settings/stations.js'
 
 function listenerStoreCurrentTileProvider(map) {
   // Store current tile provider to the storage
@@ -66,9 +66,7 @@ export function addPlateBoundaries(controls)
 
 export function addStations(map, controls, show = true)
 {
-  const settings = new ApiSettings()
-
-  axios.get(settings.endpointStations)
+  axios.get(apiSettings.endpointStations)
     .then(response => {
       let markers = []
 
@@ -76,7 +74,7 @@ export function addStations(map, controls, show = true)
 
         let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
         let marker = new window.L.RegularPolygonMarker(coordinates, {
-          fillColor: StationsSettings.colors[station.scnl_network],
+          fillColor: stationsSettings.colors[station.scnl_network],
           fillOpacity: 1.0,
           numberOfSides: 3,
           rotation: 30.0,
@@ -275,7 +273,7 @@ export function createMap(mapID, coordinates, {
         })
       }
 
-      getBuildings((new ApiSettings()).endpointBuildings)
+      getBuildings(apiSettings.endpointBuildings)
 
     })()
   }
