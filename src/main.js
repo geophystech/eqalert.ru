@@ -58,18 +58,18 @@ Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 
 Vue.use(IdleVue, {
-  idleTime: 600000,
   startAtIdle: true,
+  idleTime: 600000,
   store
 })
 
 Vue.use(Toasted, {
   router,
   className: 'toast-message',
-  duration: 5000,
   iconPack: 'fontawesome',
   position: 'top-center',
-  theme: 'primary'
+  theme: 'primary',
+  duration: 5000
 })
 
 Vue.use(VueAnalytics, {

@@ -1,35 +1,45 @@
 
 import moment from 'moment'
 
-function authDration(store) {
-  return Math.ceil(moment.duration(moment().diff(moment(store.getters.user.authDate))).as('minutes'))
+import { dateTimeDiff } from '@/helpers/datetime'
+
+function authDuration(authDate)
+{
+  let diff = dateTimeDiff(moment(), moment(authDate))
+
+  return ['months', 'days', 'hours', 'minutes'].map(it => {
+    return (diff[it] > 0) ? `${diff[it]} ${it}` : false
+  }).filter(it => !!it).join(' ')
 }
 
 const userActivity = store => {
 
   store.subscribe((mutation, state) => {
 
-    console.log('userActivity: ',
-      // moment(store.getters.user.authDate).format('DD.MM.YYYY HH:mm:ss'),
-      authDration(store), 'minutes',
-      mutation, store, state
-    )
+    let user = store.getters.user
 
-    // Force user to sign out if activity is idle AND user has not set `Remember me` option on authentication.
-    if (mutation.type === 'idleVue/IDLE_CHANGED' &&
-      mutation.payload &&
-      store.getters.user.authenticated &&
-      !store.getters.user.rememberMe
+    if(!user.authenticated) {
+      return
+    }
+
+    let duration = moment.duration(moment().diff(moment(user.authDate)))
+    let rememberMe = user.rememberMe
+
+    if(mutation.type === 'idleVue/IDLE_CHANGED')
+    {
+      console.group('mutation')
+      // console.log('Mutation type: ', mutation.type)
+      console.log('Auth duration: ', authDuration(user.authDate))
+      console.log('Payload: ', mutation.payload)
+      console.log('isIdle: ', store.state.idleVue.isIdle)
+      console.groupEnd()
+    }
+
+    if (mutation.type === 'idleVue/IDLE_CHANGED' && mutation.payload
+      && ((rememberMe && duration.asDays() >= 14) || (!rememberMe && duration.asHours() >= 24))
     ) {
-
-      console.log('Force signOut: ',
-        authDration(store), 'minutes',
-        mutation, store, state
-      )
-
       store.dispatch('signOut')
-      // location.reload()
-
+      location.reload()
     }
 
   })

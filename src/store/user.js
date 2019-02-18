@@ -23,7 +23,7 @@ export default {
   },
   mutations: {
     authenticateUser(state, values) {
-      state.authDate = moment().format('YYYY-MM-DD HH:mm:ss')
+      state.authDate = moment().format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS)
       state.refreshToken = values.refreshToken
       state.accessToken = values.accessToken
       state.permissions = values.permissions
