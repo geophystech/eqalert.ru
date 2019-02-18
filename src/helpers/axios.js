@@ -25,7 +25,9 @@ export function axiosAddRefreshTokenInterceptor() {
     error => {
       let errorResponse = error.response
 
-      if (errorResponse.status === 401 && apiSettings.endpointUserAuthentication !== error.response.config.url) {
+      if (errorResponse.status === 401
+        && apiSettings.endpointUserAuthentication !== errorResponse.config.url
+      ) {
         axios.interceptors.response.eject(axiosResponseInterceptor)
 
         return axios.post(apiSettings.endpointUserRefreshToken, {
