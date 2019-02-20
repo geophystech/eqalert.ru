@@ -7,7 +7,7 @@ function authDuration(authDate)
 {
   let diff = dateTimeDiff(moment(), moment(authDate))
 
-  return ['months', 'days', 'hours', 'minutes'].map(it => {
+  return ['months', 'days', 'hours', 'minutes', 'seconds'].map(it => {
     return (diff[it] > 0) ? `${diff[it]} ${it}` : false
   }).filter(it => !!it).join(' ')
 }

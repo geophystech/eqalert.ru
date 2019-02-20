@@ -1,75 +1,60 @@
 import store from '@/store'
 import axios from 'axios'
 
-import apiSettings from '@/settings/api.js'
+import {refreshToken} from '@/helpers/auth'
+import apiSettings from '@/settings/api'
 
 export function axiosRemoveAuthorizationHeaders() {
   delete axios.defaults.headers.common['Authorization']
 }
 
-export function axiosSetAuthorizationHeaders() {
-  const apiToken = store.getters.user.accessToken
-
-  if (apiToken) {
-    const apiType = apiSettings.authorizationType
-
-    axios.defaults.headers.common['Authorization'] = `${apiType} ${apiToken}`
+export function axiosSetAuthorizationHeaders(accessToken = store.getters.user.accessToken)
+{
+  if (accessToken) {
+    axios.defaults.headers.common['Authorization'] = `${apiSettings.authorizationType} ${accessToken}`
   }
 }
 
-export function axiosAddRefreshTokenInterceptor() {
-  const axiosResponseInterceptor = axios.interceptors.response.use(
-    response => {
-      return response
-    },
-    error => {
-      let errorResponse = error.response
+let _usedTokens = []
 
-      if (errorResponse.status === 401
-        && apiSettings.endpointUserAuthentication !== errorResponse.config.url
-      ) {
-        axios.interceptors.response.eject(axiosResponseInterceptor)
+export function axiosAddRefreshTokenInterceptor()
+{
+  const axiosResponseInterceptor = axios.interceptors.response.use(undefined, error => {
 
-        return axios.post(apiSettings.endpointUserRefreshToken, {
-          'refresh_token': store.getters.user.refreshToken
-        }).then(response => {
+    let errorResponse = error.response
 
-          this.$http.get(this.$root.$options.settings.api.endpointUserRefreshScopes, {
-            headers: { Authorization: `${apiSettings.authorizationType} ${response.data.access_token}` }
-          })
-            .then(scopesResponse => {
+    console.log('_usedTokens: ', _usedTokens)
 
-              let permissions = {}
+    if(errorResponse.status === 401
+      && apiSettings.endpointUserAuthentication !== errorResponse.config.url
+      && apiSettings.endpointUserRefreshToken !== errorResponse.config.url
+      && _usedTokens.indexOf(store.getters.user.refreshToken) === -1
+    ) {
 
-              scopesResponse.data.data.forEach(permission => {
-                permissions[permission.id] = permission.description
-              })
+      axios.interceptors.response.eject(axiosResponseInterceptor)
+      _usedTokens.push(store.getters.user.refreshToken)
 
-              store.dispatch('authenticateUser', {
-                accessToken: response.data.access_token,
-                refreshToken: response.data.refresh_token,
-                rememberMe: store.getters.user.rememberMe,
-                permissions: permissions
-              })
+      return refreshToken(store.getters.user.refreshToken)
 
-              errorResponse.config.headers['Authorization'] = `${apiSettings.authorizationType} ${response.data.access_token}`
-              axiosAddRefreshTokenInterceptor()
+        .then(response => {
 
-            })
-            .catch(error => {
-              console.log(error)
-            })
+          errorResponse.config.headers['Authorization'] = `${apiSettings.authorizationType} ${response.data.access_token}`
+          axiosAddRefreshTokenInterceptor()
 
           return axios(errorResponse.config)
-        }).catch(error => {
+
+        })
+
+        .catch(error => {
+
           axiosAddRefreshTokenInterceptor()
           store.dispatch('unauthenticateUser')
-
           return Promise.reject(error)
-        })
-      }
 
-      return Promise.reject(error)
+        })
     }
-  )
+
+    return Promise.reject(error)
+
+  })
 }

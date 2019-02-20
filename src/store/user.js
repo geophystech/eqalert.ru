@@ -32,8 +32,8 @@ export default {
     },
     unauthenticateUser(state) {
       state.authenticated = false
-      state.accessToken = null
       state.refreshToken = null
+      state.accessToken = null
       state.rememberMe = null
       state.authDate = null
       state.permissions = {}
@@ -42,10 +42,10 @@ export default {
   actions: {
     authenticateUser({ commit, state }, values) {
       commit('authenticateUser', {
-        accessToken: values.accessToken,
         refreshToken: values.refreshToken,
-        rememberMe: values.rememberMe,
-        permissions: values.permissions
+        accessToken: values.accessToken,
+        permissions: values.permissions,
+        rememberMe: values.rememberMe
       })
     },
     unauthenticateUser({ commit, state }) {

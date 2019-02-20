@@ -3,8 +3,13 @@ class Config
   constructor()
   {
     this.authorizationType = 'Bearer'
+
+    // this.baseURL = 'https://api-test.geophystech.ru/api'
+    // this.oauthBaseURL = 'https://oauth-client-test.geophystech.ru'
+
     this.baseURL = process.env.API_BASE_URL
     this.oauthBaseURL = process.env.API_OAUTH_BASE_URL
+
     this.version = process.env.API_VERSION
     this.endpointAnalyticsCumulativeCounts = `${this.baseURL}/${this.version}/analytics/cumulativeCounts`
     this.endpointAnalyticsDensityCounts = `${this.baseURL}/${this.version}/analytics/densityCounts`
