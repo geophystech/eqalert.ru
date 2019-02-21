@@ -13,8 +13,6 @@ function _getUserPermissions(accessToken)
 {
   return new Promise((resolve, reject) => {
 
-    axiosSetAuthorizationHeaders(accessToken)
-
     axios.get(apiSettings.endpointUserRefreshScopes).then(resp => {
 
       let permissions = {}
@@ -34,16 +32,25 @@ function _getUserPermissions(accessToken)
 }
 
 /**
+ *
+ * @type {Promise|null}
+ * @private
+ */
+let _refreshTokenRequest = null
+
+/**
  * @param {string} refreshToken
  * @return {Promise<any>}
  */
 export function refreshToken(refreshToken)
 {
-  return new Promise((resolve, reject) => {
+  return _refreshTokenRequest || (_refreshTokenRequest = new Promise((resolve, reject) => {
 
     axios.post(apiSettings.endpointUserRefreshToken, {'refresh_token': refreshToken})
 
       .then(authResp => {
+
+        axiosSetAuthorizationHeaders(authResp.data.access_token)
 
         // Get permissions
         _getUserPermissions(authResp.data.access_token)
@@ -60,21 +67,24 @@ export function refreshToken(refreshToken)
               permissions: permissions
             })
 
+            _refreshTokenRequest = null
             resolve(authResp)
 
           })
 
           .catch(error => {
+            _refreshTokenRequest = null
             reject(error)
           })
 
       })
 
       .catch(error => {
+        _refreshTokenRequest = null
         reject(error)
       })
 
-  })
+  }))
 
 }
 
@@ -97,6 +107,8 @@ export function auth({username, password, rememberMe = false})
     axios.post(apiSettings.endpointUserAuthentication, payload)
 
       .then(authResp => {
+
+        axiosSetAuthorizationHeaders(authResp.data.access_token)
 
         _getUserPermissions(authResp.data.access_token)
 
