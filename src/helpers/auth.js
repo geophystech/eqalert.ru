@@ -2,6 +2,7 @@ import {axiosSetAuthorizationHeaders} from '@/helpers/axios'
 import apiSettings from '@/settings/api'
 import store from '@/store'
 import axios from 'axios'
+import moment from 'moment'
 
 /**
  *
@@ -142,3 +143,42 @@ export function auth({username, password, rememberMe = false})
 
 }
 
+import authSettings from '@/settings/auth'
+import {camelCase} from '@/helpers/string'
+
+export function authTimeoutChech(store)
+{
+  let user = store.getters.user
+
+  if(!user.authenticated) {
+    return
+  }
+
+  let duration = moment.duration(moment().diff(moment(user.authDate)))
+  let rememberMe = user.rememberMe
+
+  let regexp = /^(\d+)\s+((minute|hour|day|month|year)s?)$/i
+
+  let match1 = regexp.exec(authSettings.duration.remember)
+  let match2 = regexp.exec(authSettings.duration.default)
+
+  if(!match1 || !match2) {
+    throw new Error('Invalid duration')
+  }
+
+  let [, rememberVal, rememberFn] = match1
+  let [, defaultVal, defaultFn] = match2
+
+  rememberFn = camelCase(`as_${rememberFn}`)
+  defaultFn = camelCase(`as_${defaultFn}`)
+
+  if(!/s$/.test(rememberFn)) rememberFn += 's'
+  if(!/s$/.test(defaultFn)) defaultFn += 's'
+
+  if ((rememberMe && duration[rememberFn]() >= Number(rememberVal))
+    || (!rememberMe && duration[defaultFn]() >= Number(defaultVal))
+  ) {
+    store.dispatch('signOut')
+    location.reload()
+  }
+}

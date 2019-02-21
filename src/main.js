@@ -51,6 +51,7 @@ import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.min'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css'
 
 import 'font-awesome/css/font-awesome.min.css'
+import {authTimeoutChech} from '@/helpers/auth'
 
 Vue.config.productionTip = false
 
@@ -95,6 +96,7 @@ Vue.use(VueYandexMetrika, {
 
 axiosSetAuthorizationHeaders()
 axiosAddRefreshTokenInterceptor()
+authTimeoutChech(store)
 
 /* eslint-disable no-new */
 new Vue({
