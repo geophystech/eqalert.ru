@@ -37,6 +37,23 @@
         let stateLabel = window.L.DomUtil.create('p')
         let markers = []
 
+        let reloadTimeout = 300 // sec
+        let reloadTimer
+
+        let _setReloadTimer = () => {
+
+          if(reloadTimer) {
+            clearTimeout(reloadTimer)
+          }
+
+          reloadTimer = setTimeout(() => {
+            let currentRangeBtn = this.$el.querySelector('[type=radio][name=__map_report__]:checked')
+            currentRangeBtn.dispatchEvent(new Event('change'))
+            this.mapNotify('Данные о землетрясениях обновлены')
+          }, 1000 * reloadTimeout)
+
+        }
+
         let addEvents = function(events)
         {
           markers.forEach(marker => map.removeLayer(marker))
@@ -99,6 +116,7 @@
               })
                 .then(response => {
                   addEvents(response.data.data)
+                  _setReloadTimer()
                 })
                 .catch(error => {
                   console.log(error)
@@ -130,6 +148,44 @@
         }
 
         text.addTo(map)
+      },
+
+      mapNotify: function(msg, delay = 3500)
+      {
+        let mapElem = document.getElementById(this.map.id)
+        let mapPopup = document.createElement('div')
+        let removeTimer
+
+        mapPopup.setAttribute('class', 'map-notify')
+        mapPopup.innerText = msg
+
+        mapPopup.addEventListener('transitionend', e => {
+
+          if(removeTimer) {
+            clearTimeout(removeTimer)
+          }
+
+          removeTimer = setTimeout(() => {
+
+            if(!mapPopup.classList.contains('show')) {
+              mapElem.removeChild(mapPopup)
+            }
+
+          }, 100)
+
+        }, false)
+
+        mapElem.appendChild(mapPopup)
+
+        setTimeout(() => {
+
+          mapPopup.classList.add('show')
+
+          setTimeout(() => {
+            mapPopup.classList.remove('show')
+          }, delay)
+
+        }, 100)
       }
     },
 
@@ -142,9 +198,34 @@
 <style lang="scss">
   @import '~scss/event_map';
 
-  .map {
+  .map
+  {
     .map-legend-mainpage {
       padding: 0 !important;
+    }
+
+    > .map-notify
+    {
+      box-shadow: 0 2px 10px 1px rgba(0,0,0,0.25);
+      text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+      transition: all 250ms ease-out;
+      color: rgba(255,255,255,0.8);
+      background-color: cadetblue;
+      transform: translateX(-50%);
+      border-radius: 3px;
+      padding: 10px 20px;
+      position: absolute;
+      z-index: 9999999;
+      font-size: 16px;
+      opacity: 0;
+      left: 50%;
+      top: 0;
+
+      &.show {
+        transition: all 350ms ease-out;
+        opacity: 1;
+        top: 20px;
+      }
     }
   }
 </style>

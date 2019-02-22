@@ -157,7 +157,7 @@ export function authTimeoutChech(store)
   let duration = moment.duration(moment().diff(moment(user.authDate)))
   let rememberMe = user.rememberMe
 
-  let regexp = /^(\d+)\s+((minute|hour|day|month|year)s?)$/i
+  let regexp = /^(\d+)\s+(minute|hour|day|month|year)s?$/i
 
   let match1 = regexp.exec(authSettings.duration.remember)
   let match2 = regexp.exec(authSettings.duration.default)
@@ -169,11 +169,8 @@ export function authTimeoutChech(store)
   let [, rememberVal, rememberFn] = match1
   let [, defaultVal, defaultFn] = match2
 
-  rememberFn = camelCase(`as_${rememberFn}`)
-  defaultFn = camelCase(`as_${defaultFn}`)
-
-  if(!/s$/.test(rememberFn)) rememberFn += 's'
-  if(!/s$/.test(defaultFn)) defaultFn += 's'
+  rememberFn = camelCase(`as_${rememberFn}s`)
+  defaultFn = camelCase(`as_${defaultFn}s`)
 
   if ((rememberMe && duration[rememberFn]() >= Number(rememberVal))
     || (!rememberMe && duration[defaultFn]() >= Number(defaultVal))
