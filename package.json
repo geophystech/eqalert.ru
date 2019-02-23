@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "chart.js": "^2.7.3",
     "font-awesome": "^4.7.0",
     "idle-vue": "^2.0.5",
