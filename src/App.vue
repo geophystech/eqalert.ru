@@ -4,23 +4,11 @@
       <app-header></app-header>
       <app-navbar></app-navbar>
 
-      <b-row v-if="is_android" class="mobile-app-alert">
-        <b-col cols="12">
-          <b-alert variant="danger" show dismissible>
-            <a href="https://play.google.com/store/apps/details?id=ru.geophystech.eqalert"
-               class="alert-link">Мы сделали приложение для Android</a>
-          </b-alert>
-        </b-col>
-      </b-row>
+      <MobileAppAlert v-if="is_android" message="Мы сделали приложение для Android"
+                      url="https://play.google.com/store/apps/details?id=ru.geophystech.eqalert" />
 
-      <b-row v-if="is_iOs" class="mobile-app-alert">
-        <b-col cols="12">
-          <b-alert variant="danger" show dismissible>
-            <a href="https://itunes.apple.com/ru/app/eqalert/id1448087679"
-               class="alert-link">Мы сделали приложение для iOs</a>
-          </b-alert>
-        </b-col>
-      </b-row>
+      <MobileAppAlert v-if="is_iOs" message="Мы сделали приложение для iOs"
+                      url="https://itunes.apple.com/ru/app/eqalert/id1448087679" />
 
       <router-view></router-view>
       <app-footer></app-footer>
@@ -32,6 +20,7 @@
 import AppHeader from '@/components/AppHeader'
 import AppNavbar from '@/components/AppNavbar'
 import AppFooter from '@/components/AppFooter'
+import MobileAppAlert from '@/components/MobileAppAlert'
 
 export default {
   metaInfo: {
@@ -53,7 +42,8 @@ export default {
   components: {
     AppHeader,
     AppNavbar,
-    AppFooter
+    AppFooter,
+    MobileAppAlert
   },
   created() {
     this.fetchSystemInfo()
@@ -94,25 +84,5 @@ export default {
 </script>
 
 <style lang="scss">
-
   @import '~scss/main';
-
-  .mobile-app-alert
-  {
-    .alert
-    {
-      border-color: darken(tomato, 10%);
-      background-color: tomato;
-      margin: 10px auto 5px;
-
-      &, .alert-link {
-        color: white;
-      }
-
-      .alert-link {
-        text-decoration: underline;
-      }
-    }
-  }
-
 </style>
