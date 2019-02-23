@@ -23,14 +23,14 @@
 </template>
 
 <script>
-  import AppSettings from '@/settings/app'
   import SocialMediaLinks from '@/components/SocialMediaLinks'
+  import appSettings from '@/settings/app'
   export default {
     name: 'app-footer',
     components: {SocialMediaLinks},
     data() {
       return {
-        feedbackUrl: AppSettings.feedbackUrl
+        feedbackUrl: appSettings.feedbackUrl
       }
     },
     computed: {
@@ -55,12 +55,6 @@
     @media screen and (max-width: 767px) {
       #geophystech-website {
         margin-bottom: 5%;
-      }
-    }
-
-    /deep/ .social-media-links {
-      a {
-        font-size: 150%;
       }
     }
   }

@@ -76,7 +76,7 @@
   import MomentTensor from '@/components/event/MomentTensor'
   import Settlements from '@/components/event/Settlements'
   import Tabs from '@/components/event/Tabs'
-  import AppSettings from '@/settings/app'
+  import appSettings from '@/settings/app'
 
   export default {
     components: {
@@ -88,7 +88,7 @@
     },
     data() {
       return {
-        feedbackUrl: AppSettings.feedbackUrl,
+        feedbackUrl: appSettings.feedbackUrl,
         mobileMapHidden: true,
         errorResponse: null,
         defaultViewport: '',

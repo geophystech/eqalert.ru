@@ -95,11 +95,5 @@
       margin-top: 5%;
     }
   }
-
-  /deep/ .social-media-links {
-    a {
-      font-size: 120%;
-    }
-  }
 </style>
 
