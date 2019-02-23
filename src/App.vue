@@ -3,14 +3,25 @@
     <b-container>
       <app-header></app-header>
       <app-navbar></app-navbar>
-      <b-row v-if="isAndroid" class="android-app-alert">
+
+      <b-row v-if="is_android" class="mobile-app-alert">
         <b-col cols="12">
-          <b-alert variant="danger" style="margin-top: 10px" show dismissible>
+          <b-alert variant="danger" show dismissible>
             <a href="https://play.google.com/store/apps/details?id=ru.geophystech.eqalert"
                class="alert-link">Мы сделали приложение для Android</a>
           </b-alert>
         </b-col>
       </b-row>
+
+      <b-row v-if="is_iOs" class="mobile-app-alert">
+        <b-col cols="12">
+          <b-alert variant="danger" show dismissible>
+            <a href="https://itunes.apple.com/ru/app/eqalert/id1448087679"
+               class="alert-link">Мы сделали приложение для iOs</a>
+          </b-alert>
+        </b-col>
+      </b-row>
+
       <router-view></router-view>
       <app-footer></app-footer>
     </b-container>
@@ -70,8 +81,13 @@ export default {
     this.fetchPlateBoundaries()
   },
   computed: {
-    isAndroid: function() {
+    is_android: function() {
       return this.$root.onMobile && /Android/i.test(navigator.userAgent)
+        && !/Windows\s+Phone/i.test(navigator.userAgent)
+    },
+    is_iOs: function() {
+      return this.$root.onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
+        && !/Windows\s+Phone/i.test(navigator.userAgent)
     }
   }
 }
@@ -81,12 +97,13 @@ export default {
 
   @import '~scss/main';
 
-  .android-app-alert
+  .mobile-app-alert
   {
     .alert
     {
       border-color: darken(tomato, 10%);
       background-color: tomato;
+      margin: 10px auto 5px;
 
       &, .alert-link {
         color: white;
