@@ -53,20 +53,12 @@ describe('AppHeader.vue', () => {
 
       const DYFILinkContainer = wrapper.find('.did-you-feel-it')
       const DYFILink = DYFILinkContainer.find('a')
-      const socialMediaLinksContainer = wrapper.find('.social-media-links')
-      const socialMediaLinks = socialMediaLinksContainer.findAll('a')
-      const telegramLink = socialMediaLinks.at(0)
 
       expect(DYFILinkContainer.classes()).to.contain('text-center')
 
       expect(DYFILink.attributes().href).to.equal('https://goo.gl/forms/Hd4E0BcA2ffRNjfY2')
       expect(DYFILink.attributes().target).to.equal('_blank')
       expect(DYFILink.text()).to.equal('Ощутили землетрясение?')
-
-      expect(socialMediaLinksContainer.classes()).to.contain('text-md-center')
-
-      expect(socialMediaLinks.length).to.equal(1)
-      expect(telegramLink.attributes().href).to.equal('tg://resolve?domain=eqalert_ru_bot')
 
     })
 

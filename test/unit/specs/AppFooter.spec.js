@@ -15,16 +15,12 @@ describe('AppFooter.vue', () => {
   it('renders links', () => {
     const feedbackLink = wrapper.find('#feedback').find('a')
     const geophystechWebsiteLink = wrapper.find('#geophystech-website').find('a')
-    const telegramLink = wrapper.find('#social-media-links').findAll('a').at(0)
 
     expect(feedbackLink.attributes().href).to.equal(AppSettings.feedbackUrl)
     expect(feedbackLink.text()).to.equal('Обратная связь')
 
     expect(geophystechWebsiteLink.attributes().href).to.equal('https://geophystech.ru/contacts')
     expect(geophystechWebsiteLink.text()).to.equal('ООО "Геофизические технологии"')
-
-    expect(telegramLink.attributes().href).to.equal('tg://resolve?domain=eqalert_ru_bot')
-    expect(telegramLink.find('i').classes()).to.contain('fa-telegram')
   })
 
 })

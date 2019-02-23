@@ -24,8 +24,8 @@
           </a>
         </b-col>
 
-        <b-col class="social-media-links text-right text-md-center" md="3" cols="6" order="2" order-md="4">
-          <a href="tg://resolve?domain=eqalert_ru_bot"><i class="fa fa-telegram" aria-hidden="true" /></a>
+        <b-col class="text-right text-md-center" md="3" cols="6" order="2" order-md="4">
+          <SocialMediaLinks />
         </b-col>
 
         <b-col class="sign-block text-right" cols="4" md="2" order="5" order-md="5">
@@ -45,7 +45,9 @@
 </template>
 
 <script>
+  import SocialMediaLinks from '@/components/SocialMediaLinks'
   export default {
+    components: {SocialMediaLinks},
     methods: {
       signOut: function() {
         this.$toasted.success(`Вы вышли из сайта`, { icon: 'check' })
@@ -94,7 +96,7 @@
     }
   }
 
-  .social-media-links {
+  /deep/ .social-media-links {
     a {
       font-size: 120%;
     }
