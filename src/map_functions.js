@@ -389,10 +389,17 @@ export function createMapMarkerClusterGroup()
 export function createMapBuildingMarker(building, damageLevel = null)
 {
   const coordinates = new window.L.LatLng(building.lat, building.lon)
-  const markerColor = buildingColor(damageLevel || building.destroyed)
+  let _damageLevel = damageLevel
+
+  if(damageLevel !== null && damageLevel < building.destroyed) {
+    _damageLevel = building.destroyed
+  }
+
+  const markerColor = buildingColor(_damageLevel || building.destroyed)
 
   let markerOpts = {
-    damageLevel: damageLevel || building.destroyed,
+    damageLevel: _damageLevel || building.destroyed,
+    color: colorDarken(markerColor, 15),
     fillColor: markerColor,
     dropShadow: true,
     gradient: true,
@@ -403,7 +410,6 @@ export function createMapBuildingMarker(building, damageLevel = null)
   if (building.is_primary)
   {
     marker = new window.L.RegularPolygonMarker(coordinates, Object.assign(markerOpts, {
-      color: colorDarken(markerColor, 10),
       numberOfSides: 4,
       fillOpacity: 0.7,
       radius: 15,
@@ -542,7 +548,6 @@ export function createMapMarkerPopupBuilding(building, {
   if(damageLevel === null) {
     caption = '<caption>Объект имеет повреждения от землетрясений</caption>'
   } else if (destroyedLevel && destroyedLevel > damageLevel) {
-    console.log(building)
     caption = '<caption>Здание повреждено другим землетрясением</caption>'
   }
 

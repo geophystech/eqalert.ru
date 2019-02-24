@@ -58,9 +58,9 @@
           damageLevels.forEach(dLevel => {
             buildingsLegends +=
               `<div class="buildings-legend">
-                  <span style="background: ${buildingColor(dLevel)}"></span>
-                  <span>d-${dLevel}</span>
-                </div>`
+                <span style="background: ${buildingColor(dLevel)}"></span>
+                <span>d-${dLevel}</span>
+              </div>`
           })
 
           legendsElem.innerHTML = buildingsLegends
