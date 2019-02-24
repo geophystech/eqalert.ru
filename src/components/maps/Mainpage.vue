@@ -37,27 +37,6 @@
         let stateLabel = window.L.DomUtil.create('p')
         let markers = []
 
-        let _setReloadTimer = (() => {
-
-          let reloadTimeout = 300 // sec
-          let reloadTimer
-
-          return () => {
-
-            if(reloadTimer) {
-              clearTimeout(reloadTimer)
-            }
-
-            reloadTimer = setTimeout(() => {
-              let currentRangeBtn = this.$el.querySelector('[type=radio][name=__map_report__]:checked')
-              currentRangeBtn.dispatchEvent(new Event('change'))
-              this.mapNotify('Данные о землетрясениях обновлены')
-            }, 1000 * reloadTimeout)
-
-          }
-
-        })()
-
         let addEvents = function(events)
         {
           markers.forEach(marker => map.removeLayer(marker))
@@ -74,6 +53,27 @@
         {
           /** @type HTMLElement */
           let btnGroup = window.L.DomUtil.create('div', 'btn-group btn-group-toggle map-legend map-legend-mainpage')
+          let getCheckedBtn = () => { return btnGroup.querySelector('input[type=radio]:checked') }
+
+          let setReloadTimer = (() => {
+
+            let reloadTimeout = 300 // sec
+            let reloadTimer
+
+            return () => {
+
+              if(reloadTimer) {
+                clearTimeout(reloadTimer)
+              }
+
+              reloadTimer = setTimeout(() => {
+                getCheckedBtn().dispatchEvent(new Event('change'))
+                this.mapNotify('Данные о землетрясениях обновлены')
+              }, 1000 * reloadTimeout)
+
+            }
+
+          })()
 
           let appendBtn = function(eventsRangeName, callBack)
           {
@@ -120,16 +120,16 @@
               })
                 .then(response => {
                   addEvents(response.data.data)
-                  _setReloadTimer()
+                  setReloadTimer()
                 })
                 .catch(error => {
-                  console.log(error)
+                  console.log(error.response || error)
                 })
             })
 
           })
 
-          let checkedBtn = btnGroup.querySelector('input[type=radio]:checked')
+          let checkedBtn = getCheckedBtn()
 
           if (!checkedBtn) {
             checkedBtn = btnGroup.querySelector('input[type=radio]:first-child')
