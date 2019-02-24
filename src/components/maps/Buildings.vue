@@ -5,10 +5,8 @@
 <script>
   import {
     addEpicenter, buildingColor, createMap, id, removeEpicenter,
-    setView, createMapMarkerPopupBuilding
+    setView, createMapBuildingMarker, createMapMarkerClusterGroup
   } from '@/map_functions.js'
-
-  import { colorDarken, colorLighten, colorHexToRGB } from '@/helpers/color'
 
   export default {
     props: ['event', 'tab'],
@@ -40,41 +38,7 @@
             damageLevels.push(dLevel)
           }
 
-          const {lat: latitude, lon: longitude} = building.building.data
-          const coordinates = new window.L.LatLng(latitude, longitude)
-          const markerColor = buildingColor(dLevel)
-          let markerOpts = {
-            fillColor: markerColor,
-            damageLevel: dLevel,
-            dropShadow: true,
-            gradient: true,
-            innerRadius: 0
-          }
-          let marker
-
-          if (building.building.data.is_primary)
-          {
-            marker = new window.L.RegularPolygonMarker(coordinates, Object.assign(markerOpts, {
-              color: colorDarken(markerColor, 10),
-              numberOfSides: 4,
-              fillOpacity: 0.7,
-              radius: 15,
-              weight: 1
-            }))
-          }
-          else
-          {
-            marker = new window.L.MapMarker(coordinates, Object.assign(markerOpts, {
-              radius: 7
-            }))
-          }
-
-          let popup = createMapMarkerPopupBuilding(building.building.data, {
-            pgaValue: building.pga_value,
-            damageLevel: dLevel
-          })
-
-          marker.bindPopup(popup)
+          let marker = createMapBuildingMarker(building.building.data, dLevel)
 
           if (!(dLevel in damageLevelMarkers)) {
             damageLevelMarkers[dLevel] = []
@@ -128,34 +92,7 @@
             _map.removeLayer(this.map.markers)
           }
 
-          let markerCluster = new window.L.MarkerClusterGroup({
-            disableClusteringAtZoom: 15,
-            iconCreateFunction: function(cluster)
-            {
-              let _damageLevels = []
-
-              cluster.getAllChildMarkers().forEach(marker => {
-                let damageLevel = marker.options.damageLevel
-                if (damageLevel && _damageLevels.indexOf(damageLevel) === -1) {
-                  _damageLevels.push(damageLevel)
-                }
-              })
-
-              _damageLevels = _damageLevels.sort((a, b) => b - a)
-              let _color = buildingColor(_damageLevels[0])
-
-              return new window.L.DivIcon({
-                className: `marker-cluster marker-cluster-damage-level`,
-                html:
-                  `<div style="background: ${colorHexToRGB(colorLighten(_color, 25), 0.6)}">
-                  <div style="background: ${colorHexToRGB(_color, 0.6)}">
-                      <span>${cluster.getChildCount()}</span>
-                  </div>
-                </div>`,
-                iconSize: new window.L.Point(40, 40)
-              })
-            }
-          })
+          let markerCluster = createMapMarkerClusterGroup()
 
           damageLevels.forEach(dLevel => {
             if(addedOverlays[dLevel]) {

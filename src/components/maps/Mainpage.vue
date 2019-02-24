@@ -24,6 +24,7 @@
       {
         let map = this.map.object = createMap(this.map.id, this.map.coordinates, {
           addToggleShowObjects: this.$store.getters.user.authenticated,
+          markerPopupHeader: '',
           showStations: false,
           zoom: 4
         })
