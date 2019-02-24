@@ -37,22 +37,26 @@
         let stateLabel = window.L.DomUtil.create('p')
         let markers = []
 
-        let reloadTimeout = 300 // sec
-        let reloadTimer
+        let _setReloadTimer = (() => {
 
-        let _setReloadTimer = () => {
+          let reloadTimeout = 300 // sec
+          let reloadTimer
 
-          if(reloadTimer) {
-            clearTimeout(reloadTimer)
+          return () => {
+
+            if(reloadTimer) {
+              clearTimeout(reloadTimer)
+            }
+
+            reloadTimer = setTimeout(() => {
+              let currentRangeBtn = this.$el.querySelector('[type=radio][name=__map_report__]:checked')
+              currentRangeBtn.dispatchEvent(new Event('change'))
+              this.mapNotify('Данные о землетрясениях обновлены')
+            }, 1000 * reloadTimeout)
+
           }
 
-          reloadTimer = setTimeout(() => {
-            let currentRangeBtn = this.$el.querySelector('[type=radio][name=__map_report__]:checked')
-            currentRangeBtn.dispatchEvent(new Event('change'))
-            this.mapNotify('Данные о землетрясениях обновлены')
-          }, 1000 * reloadTimeout)
-
-        }
+        })()
 
         let addEvents = function(events)
         {
