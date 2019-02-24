@@ -3,7 +3,7 @@
     <b-table hover outlined responsive :fields="fields" :items="items">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
       <template slot="description" slot-scope="data">
-        <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
+        <img v-if="data.value" src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>
   </div>
@@ -71,6 +71,11 @@
               'полного обрушения здания или сооружения с потерей его формы.'
           },
           {
+            parameter: 'Ранее повреждённые объекты',
+            value: 0,
+            description: 'Количество зданий на которые было оказано опасное сейсмическое воздействие от предыдущих землетрясений.'
+          },
+          {
             parameter: 'Версия базы',
             value: null,
             description: 'Версия банка данных зданий и сооружений'
@@ -100,17 +105,24 @@
           })
           .catch(error => { console.log(error) })
       },
-      setData: function(data) {
+      setData: function(buildings) {
         let itemsLen = this.items.length
         let damageLevels = Array.from({ length: itemsLen - 3 }, () => 0)
+        let destroyed = 0
 
-        data.forEach(building => {
+        buildings.forEach(building => {
           damageLevels[building.damage_level] += 1
+          if(building.building.data.destroyed > building.damage_level) {
+            destroyed++
+          }
         })
 
+        console.log(destroyed, this.items[itemsLen - 4].parameter)
+
         damageLevels.forEach((v, _level) => { this.items[_level].value = v })
+        this.items[itemsLen - 4].value = destroyed
         this.items[itemsLen - 3].value = this.$store.getters.srssDBVersion
-        this.items[itemsLen - 2].value = data.length
+        this.items[itemsLen - 2].value = buildings.length
         this.items[itemsLen - 1].value = `${this.$store.getters.msk64ConfigVersion}`
       }
     },

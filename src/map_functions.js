@@ -517,7 +517,7 @@ export function createMapMarkerPopupBuilding(building, {
   building.PGA = pgaValue ? (pgaValue || 0.0) : ''
 
   let destroyedLevel = building.destroyed
-  building.destroyed = destroyedLevel || ''
+  building.destroyed = destroyedLevel ? `d-${destroyedLevel}` : ''
 
   let rows = [
     ['building_type', 'Тип строения'],
