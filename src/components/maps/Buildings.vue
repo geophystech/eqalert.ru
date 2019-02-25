@@ -4,8 +4,8 @@
 
 <script>
   import {
-    addEpicenter, buildingColor, createMap, id, removeEpicenter,
-    setView, createMapBuildingMarker, createMapMarkerClusterGroup
+    addEpicenter, buildingColor, createMap, id, removeEpicenter, setView, createMapBuildingMarker,
+    createMapMarkerClusterGroup, mapCentering
   } from '@/map_functions.js'
 
   export default {
@@ -28,6 +28,7 @@
         let damageLevelMarkers = {}
         let destroyedMarkers = []
         let damageLevels = []
+        let coordinates = []
 
         buildings.forEach(building => {
 
@@ -37,6 +38,7 @@
           if (!dLevel && !building.destroyed) return
 
           let marker = createMapBuildingMarker(building, dLevel)
+          coordinates.push([building.lat, building.lon])
 
           if(building.destroyed > dLevel) {
             return destroyedMarkers.push(marker)
@@ -90,14 +92,14 @@
           legend.addTo(this.map.object)
         }
 
-        const _map = this.map.object
-        const controls = _map._controls
+        const map = this.map.object
+        const controls = map._controls
         let addedOverlays = {}
 
         let updateMarkerCluster = () => {
 
           if (this.map.markers) {
-            _map.removeLayer(this.map.markers)
+            map.removeLayer(this.map.markers)
           }
 
           let markerCluster = createMapMarkerClusterGroup()
@@ -114,7 +116,7 @@
           }
 
           this.map.markers = markerCluster
-          _map.addLayer(markerCluster)
+          map.addLayer(markerCluster)
 
         }
 
@@ -123,7 +125,7 @@
           const makerksGroup = new window.L.LayerGroup([])
 
           controls.addOverlay(makerksGroup, label)
-          _map.addLayer(makerksGroup)
+          map.addLayer(makerksGroup)
 
           addedOverlays[key] = true
           updateMarkerCluster()
@@ -148,6 +150,7 @@
           addOverlay('destroyed', 'Ранее повреждённые объекты')
         }
 
+        mapCentering(map, coordinates)
         this.putEpicenter()
       },
       createMap: function() {

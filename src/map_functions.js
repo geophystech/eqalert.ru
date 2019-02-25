@@ -574,3 +574,35 @@ function zoomHome() {
   return window.L.Control.zoomHome({ zoomHomeIcon: 'home' })
 }
 
+function isMarker(layer) {
+  return layer instanceof window.L.MapMarker || layer instanceof window.L.RegularPolygonMarker
+}
+
+export function mapCentering(map, allCoordinates)
+{
+  /*
+   * Автоматическое определение координат слишком жёстко центрирует почему-то.
+   * Лучше передавать координаты явно в параметре allCoordinates.
+   */
+
+  if(!allCoordinates)
+  {
+    allCoordinates = []
+    let addCoordinates = layer => {
+      !isMarker(layer) || allCoordinates.push(layer.getLatLng())
+    }
+
+    map.eachLayer(layer => {
+      if(layer instanceof window.L.MarkerClusterGroup) {
+        layer.getLayers().forEach(addCoordinates)
+      } else {
+        addCoordinates(layer)
+      }
+    })
+  }
+
+  let bound = map._getBoundsCenterZoom(window.L.latLngBounds(allCoordinates))
+  map._zoomHome.setHomeCoordinates(bound.center)
+  map._zoomHome.setHomeZoom(bound.zoom)
+  map.setView(bound.center, bound.zoom)
+}

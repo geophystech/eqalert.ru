@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import {createMap, createMapEventMarker} from '@/map_functions'
+  import {createMap, createMapEventMarker, mapCentering} from '@/map_functions'
 
   export default {
     name: 'ModalMap',
@@ -43,7 +43,6 @@
         })
 
         let $moment = this.$moment
-        let coordinates = []
 
         map.scrollWheelZoom.enable()
         map.spin(true)
@@ -52,6 +51,7 @@
 
           let startDate = $moment(events[events.length - 1].event_datetime).format('L')
           let endDate = $moment(events[0].event_datetime).format('L')
+          let coordinates = []
 
           this.title = `Загружено ${events.length} событий (${startDate} — ${endDate})`
 
@@ -60,12 +60,7 @@
             coordinates.push([event.lat, event.lon])
           })
 
-          let bound = map._getBoundsCenterZoom(window.L.latLngBounds(coordinates))
-
-          map._zoomHome.setHomeCoordinates(bound.center)
-          map._zoomHome.setHomeZoom(bound.zoom)
-          map.setView(bound.center, bound.zoom)
-
+          mapCentering(map, coordinates)
           map.spin(false)
 
         })
