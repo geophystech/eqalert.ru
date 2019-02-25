@@ -540,7 +540,7 @@ export function createMapMarkerPopupBuilding(building, {
     ['residents', 'Кол-во человек на объекте'],
     ['max_msk64', 'Проектная сейсмостойкость'],
     ['damage_level', 'Прогноз повреждений'],
-    ['destroyed', 'Повреждения от другого землетрясеним'],
+    ['destroyed', damageLevel === null ? 'Прогноз повреждений' : 'Повреждения от другого землетрясеним'],
     ['PGA', 'PGA'],
     ['notes', 'Доп. сведения'],
     ['data_source_reference', 'Источник данных']
@@ -556,10 +556,17 @@ export function createMapMarkerPopupBuilding(building, {
 
   let caption = ''
 
-  if(damageLevel === null) {
-    caption = '<caption>Объект имеет повреждения от землетрясений</caption>'
-  } else if (destroyedLevel && destroyedLevel > damageLevel) {
-    caption = '<caption>Здание повреждено другим землетрясением</caption>'
+  if(destroyedLevel)
+  {
+    if(damageLevel === null) {
+      caption = 'Объект имеет повреждения от землетрясений'
+    } else if (destroyedLevel > damageLevel) {
+      caption = 'Здание повреждено другим землетрясением'
+    }
+  }
+
+  if (caption) {
+    caption = `<caption>${caption}</caption>`
   }
 
   return (
