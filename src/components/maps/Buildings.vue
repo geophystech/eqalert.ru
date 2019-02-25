@@ -26,19 +26,25 @@
       addData: function(buildings)
       {
         let damageLevelMarkers = {}
+        let destroyedMarkers = []
         let damageLevels = []
 
         buildings.forEach(building => {
 
           let dLevel = building.damage_level
+          building = building.building.data
 
-          if (dLevel < 1) return
+          if (!dLevel && !building.destroyed) return
+
+          let marker = createMapBuildingMarker(building, dLevel)
+
+          if(building.destroyed > dLevel) {
+            return destroyedMarkers.push(marker)
+          }
 
           if (damageLevels.indexOf(dLevel) === -1) {
             damageLevels.push(dLevel)
           }
-
-          let marker = createMapBuildingMarker(building.building.data, dLevel)
 
           if (!(dLevel in damageLevelMarkers)) {
             damageLevelMarkers[dLevel] = []
@@ -51,8 +57,9 @@
         damageLevels.sort((a, b) => a - b)
 
         let buildingsLegendsElem = this.$el.querySelector('.buildings-legends')
-        let addLegends = function(legendsElem)
-        {
+
+        let addLegends = legendsElem => {
+
           let buildingsLegends = ''
 
           damageLevels.forEach(dLevel => {
@@ -86,48 +93,60 @@
         const _map = this.map.object
         const controls = _map._controls
         let addedOverlays = {}
-        let updateMarkerCluster = function()
-        {
+
+        let updateMarkerCluster = () => {
+
           if (this.map.markers) {
             _map.removeLayer(this.map.markers)
           }
 
           let markerCluster = createMapMarkerClusterGroup()
+          let addLayer = marker => { markerCluster.addLayer(marker) }
 
           damageLevels.forEach(dLevel => {
             if(addedOverlays[dLevel]) {
-              damageLevelMarkers[dLevel].forEach(marker => {
-                markerCluster.addLayer(marker)
-              })
+              damageLevelMarkers[dLevel].forEach(addLayer)
             }
           })
+
+          if(addedOverlays['destroyed']) {
+            destroyedMarkers.forEach(addLayer)
+          }
 
           this.map.markers = markerCluster
           _map.addLayer(markerCluster)
 
-        }.bind(this)
+        }
 
-        damageLevels.forEach(dLevel => {
+        let addOverlay = (key, label) => {
 
           const makerksGroup = new window.L.LayerGroup([])
 
-          controls.addOverlay(makerksGroup, `Прогноз повреждений d-${dLevel}`)
+          controls.addOverlay(makerksGroup, label)
           _map.addLayer(makerksGroup)
 
-          addedOverlays[dLevel] = true
+          addedOverlays[key] = true
           updateMarkerCluster()
 
           makerksGroup.on('add', () => {
-            addedOverlays[dLevel] = true
+            addedOverlays[key] = true
             updateMarkerCluster()
           })
 
           makerksGroup.on('remove', () => {
-            addedOverlays[dLevel] = false
+            addedOverlays[key] = false
             updateMarkerCluster()
           })
 
+        }
+
+        damageLevels.forEach(dLevel => {
+          addOverlay(dLevel, `Прогноз повреждений d-${dLevel}`)
         })
+
+        if (destroyedMarkers.length > 0) {
+          addOverlay('destroyed', 'Ранее повреждённые объекты')
+        }
 
         this.putEpicenter()
       },

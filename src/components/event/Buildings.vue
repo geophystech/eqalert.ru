@@ -111,13 +111,12 @@
         let destroyed = 0
 
         buildings.forEach(building => {
-          damageLevels[building.damage_level] += 1
           if(building.building.data.destroyed > building.damage_level) {
             destroyed++
+          } else {
+            damageLevels[building.damage_level] += 1
           }
         })
-
-        console.log(destroyed, this.items[itemsLen - 4].parameter)
 
         damageLevels.forEach((v, _level) => { this.items[_level].value = v })
         this.items[itemsLen - 4].value = destroyed
