@@ -202,6 +202,17 @@ export function createMap(mapID, coordinates, {
 
   const map = window.L.map(mapID, options)
 
+  if(gestureHandling)
+  {
+    map.on('fullscreenchange', () => {
+      if (map.isFullscreen()) {
+        map.gestureHandling.removeHooks()
+      } else {
+        map.gestureHandling.addHooks()
+      }
+    })
+  }
+
   setView(map, coordinates)
   listenerStoreCurrentTileProvider(map, store)
 
