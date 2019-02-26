@@ -51,6 +51,7 @@ import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.min'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css'
 
 import 'font-awesome/css/font-awesome.min.css'
+import {authTimeoutChech} from '@/helpers/auth'
 
 Vue.config.productionTip = false
 
@@ -58,18 +59,18 @@ Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 
 Vue.use(IdleVue, {
-  idleTime: 600000,
   startAtIdle: true,
+  idleTime: 600000,
   store
 })
 
 Vue.use(Toasted, {
   router,
   className: 'toast-message',
-  duration: 5000,
   iconPack: 'fontawesome',
   position: 'top-center',
-  theme: 'primary'
+  theme: 'primary',
+  duration: 5000
 })
 
 Vue.use(VueAnalytics, {
@@ -95,6 +96,7 @@ Vue.use(VueYandexMetrika, {
 
 axiosSetAuthorizationHeaders()
 axiosAddRefreshTokenInterceptor()
+authTimeoutChech(store)
 
 /* eslint-disable no-new */
 new Vue({

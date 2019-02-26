@@ -3,6 +3,9 @@ import store from '@/store'
 import apiSettings from '@/settings/api'
 import stationsSettings from '@/settings/stations.js'
 
+import {agency, eventColor, eventRadius} from '@/helpers/event'
+import {colorDarken, colorHexToRGB, colorLighten} from '@/helpers/color'
+
 function listenerStoreCurrentTileProvider(map) {
   // Store current tile provider to the storage
   map.on('baselayerchange', tileProvider => {
@@ -140,7 +143,7 @@ export function addStations(map, controls, show = true)
 }
 
 export const BUILDING_COLORS = [
-  '#00FFFF',
+  '#0000FF',
   '#008000',
   '#FFFF00',
   '#FFA500',
@@ -199,6 +202,17 @@ export function createMap(mapID, coordinates, {
 
   const map = window.L.map(mapID, options)
 
+  if(gestureHandling)
+  {
+    map.on('fullscreenchange', () => {
+      if (map.isFullscreen()) {
+        map.gestureHandling.removeHooks()
+      } else {
+        map.gestureHandling.addHooks()
+      }
+    })
+  }
+
   setView(map, coordinates)
   listenerStoreCurrentTileProvider(map, store)
 
@@ -233,9 +247,7 @@ export function createMap(mapID, coordinates, {
   {
     (function() {
 
-      let markerClusterGroup = new window.L.MarkerClusterGroup({
-        disableClusteringAtZoom: 15
-      })
+      let markerClusterGroup = createMapMarkerClusterGroup()
 
       map.spin(true)
 
@@ -244,18 +256,8 @@ export function createMap(mapID, coordinates, {
         axios.get(url, {params: { limit: 1000 }}).then(response => {
 
           response.data.data.forEach(building => {
-
-            let coordinates = new window.L.LatLng(building.lat, building.lon)
-            let marker = new window.L.MapMarker(coordinates, {
-              dropShadow: true,
-              gradient: true,
-              innerRadius: 0,
-              radius: 7
-            })
-
-            marker.bindPopup(createMapMarkerPopupBuilding(building))
+            let marker = createMapBuildingMarker(building)
             markerClusterGroup.addLayer(marker)
-
           })
 
           let pagination = response.data.meta.pagination
@@ -328,47 +330,126 @@ export function setView(map, coordinates, zoom = 5) {
   map.setView(coordinates, zoom)
 }
 
-export function createMapMarkerPopupBuilding(building, {damageLevel = null, pgaValue = null} = {})
+/**
+ *
+ * @return {window.L.MarkerClusterGroup}
+ */
+export function createMapMarkerClusterGroup()
 {
-  building = Object.assign({}, building)
+  function _defaultIconCreateFunction(cluster)
+  {
+    let childCount = cluster.getChildCount()
+    let markerSize = ''
 
-  building.address = `${building.street}, д. ${building.street_number}`
-  building.max_msk64 = `${building.max_msk64} (MSK64)`
-  building.damage_level = damageLevel ? `d-${damageLevel}` : ''
-  building.PGA = pgaValue ? (pgaValue || 0.0) : ''
+    if (childCount < 10) {
+      markerSize = 'small'
+    } else if (childCount < 100) {
+      markerSize = 'medium'
+    } else {
+      markerSize = 'large'
+    }
 
-  let rows = [
-    ['building_type', 'Тип строения'],
-    ['building_base_type', 'Тип фундамента'],
-    ['fabric_type', 'Материал'],
-    ['built_year', 'Год постройки'],
-    ['flats', 'Кол-во этажей'],
-    ['address', 'Адрес'],
-    ['residents', 'Кол-во человек на объекте'],
-    ['max_msk64', 'Проектная сейсмостойкость'],
-    ['damage_level', 'Прогноз повреждений'],
-    ['PGA', 'PGA'],
-    ['notes', 'Доп. сведения'],
-    ['data_source_reference', 'Источник данных']
-  ]
-    .filter(([prop] = []) => building[prop].toString() !== '')
-    .map(([prop, title] = []) => {
-      return (
-        `<tr class="row-building-${prop}">
-          <th scope="row" class="align-middle">${title}</th><td>${building[prop]}</td>
-        </tr>`
-      )
+    return new window.L.DivIcon({
+      className: `marker-cluster marker-cluster-${markerSize}`,
+      html: `<div><span>${childCount}</span></div>`,
+      iconSize: new window.L.Point(40, 40)
     })
+  }
 
-  return (
-    `<table class="table table-hover table-sm table-responsive">
-      <tbody>${rows.join('')}</tbody>
-    </table>`
-  )
+  return new window.L.MarkerClusterGroup({
+    disableClusteringAtZoom: 15,
+    iconCreateFunction: function(cluster)
+    {
+      let _damageLevels = []
+
+      cluster.getAllChildMarkers().forEach(marker => {
+        let damageLevel = marker.options.damageLevel
+        if (damageLevel && _damageLevels.indexOf(damageLevel) === -1) {
+          _damageLevels.push(damageLevel)
+        }
+      })
+
+      _damageLevels = _damageLevels.sort((a, b) => b - a)
+
+      if(!_damageLevels.length) {
+        return _defaultIconCreateFunction(cluster)
+      }
+
+      let _color = buildingColor(_damageLevels[0])
+
+      return new window.L.DivIcon({
+        className: `marker-cluster marker-cluster-damage-level`,
+        html:
+          `<div style="background: ${colorHexToRGB(colorLighten(_color, 25), 0.6)}">
+              <div style="background: ${colorHexToRGB(_color, 0.6)}">
+                  <span>${cluster.getChildCount()}</span>
+              </div>
+          </div>`,
+        iconSize: new window.L.Point(40, 40)
+      })
+    }
+  })
 }
 
-import {agency, eventColor, eventRadius} from '@/helpers/event'
+/**
+ *
+ * @param {{}} building
+ * @param {number|null} damageLevel
+ * @return {window.L.RegularPolygonMarker|window.L.MapMarker}
+ */
+export function createMapBuildingMarker(building, damageLevel = null)
+{
+  const coordinates = new window.L.LatLng(building.lat, building.lon)
+  let _damageLevel = damageLevel
 
+  if(damageLevel !== null && damageLevel < building.destroyed) {
+    _damageLevel = building.destroyed
+  }
+
+  const markerColor = buildingColor(_damageLevel || building.destroyed)
+
+  let markerOpts = {
+    damageLevel: _damageLevel || building.destroyed,
+    color: colorDarken(markerColor, 15),
+    fillColor: markerColor,
+    dropShadow: true,
+    gradient: true,
+    innerRadius: 0
+  }
+  let marker
+
+  if (building.is_primary)
+  {
+    marker = new window.L.RegularPolygonMarker(coordinates, Object.assign(markerOpts, {
+      numberOfSides: 4,
+      fillOpacity: 0.7,
+      radius: 15,
+      weight: 1
+    }))
+  }
+  else
+  {
+    marker = new window.L.MapMarker(coordinates, Object.assign(markerOpts, {
+      radius: 7
+    }))
+  }
+
+  let popup = createMapMarkerPopupBuilding(building, {
+    pgaValue: building.pga_value,
+    damageLevel: damageLevel
+  })
+
+  marker.bindPopup(popup)
+
+  return marker
+}
+
+/**
+ *
+ * @param {{}} event
+ * @param {moment} $moment
+ * @return {window.L.RegularPolygonMarker}
+ */
 export function createMapEventMarker(event, $moment)
 {
   const utcDatetime = $moment(event.event_datetime + ' +00:00', 'YYYY-MM-DD HH:mm:ss Z').utc()
@@ -390,44 +471,109 @@ export function createMapEventMarker(event, $moment)
   }
 
   const coordinates = new window.L.LatLng(latitude, longitude)
-  const marker = new window.L.RegularPolygonMarker(coordinates, options)
-  const message =
-    `<table class="table table-hover table-sm table-responsive">
-              <tbody>
-                <tr>
-                  <th class="align-middle" scope="row">Магнитуда</th>
-                  <td><span class="magnitude-color">${magnitude}</span> ( M<sub>${magnitudeType}</sub> )</td>
-                </tr>
-                <tr>
-                  <th scope="row">Время UTC</th>
-                  <td>${utcDatetime.format('LL в HH:mm:ss')}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Локальное время</th>
-                  <td>${utcDatetime.local().format('LL в HH:mm:ss (UTCZ)')}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Координаты</th>
-                  <td>${latitude}N, ${longitude}E</td>
-                </tr>
-                <tr>
-                  <th scope="row">Глубина</th>
-                  <td>${depth} км</td>
-                </tr>
-                <tr>
-                  <th scope="row">ID</th>
-                  <td>${event.id}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Агентство</th>
-                  <td>${agency(event.agency)}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="text-center read-more"><a href="#/events/${event.id}" class="btn btn-success">Подробнее</a></div>`
 
-  marker.bindPopup(message)
+  const marker = new window.L.RegularPolygonMarker(coordinates, options)
+
+  const popup =
+    `<table class="table table-hover table-sm table-responsive">
+       <tbody>
+         <tr>
+           <th class="align-middle" scope="row">Магнитуда</th>
+           <td><span class="magnitude-color">${magnitude}</span> ( M<sub>${magnitudeType}</sub> )</td>
+         </tr>
+         <tr>
+           <th scope="row">Время UTC</th>
+           <td>${utcDatetime.format('LL в HH:mm:ss')}</td>
+         </tr>
+         <tr>
+           <th scope="row">Локальное время</th>
+           <td>${utcDatetime.local().format('LL в HH:mm:ss (UTCZ)')}</td>
+         </tr>
+         <tr>
+           <th scope="row">Координаты</th>
+           <td>${latitude}N, ${longitude}E</td>
+         </tr>
+         <tr>
+           <th scope="row">Глубина</th>
+           <td>${depth} км</td>
+         </tr>
+         <tr>
+           <th scope="row">ID</th>
+           <td>${event.id}</td>
+         </tr>
+         <tr>
+           <th scope="row">Агентство</th>
+           <td>${agency(event.agency)}</td>
+         </tr>
+       </tbody>
+     </table>
+     <div class="text-center read-more">
+        <a href="#/events/${event.id}" class="btn btn-success">Подробнее</a>
+     </div>`
+
+  marker.bindPopup(popup)
   return marker
+}
+
+export function createMapMarkerPopupBuilding(building, {
+  damageLevel = null,
+  pgaValue = null
+} = {})
+{
+  building = Object.assign({}, building)
+
+  building.address = `${building.street}, д. ${building.street_number}`
+  building.damage_level = damageLevel ? `d-${damageLevel}` : ''
+  building.max_msk64 = `${building.max_msk64} (MSK64)`
+  building.PGA = pgaValue ? (pgaValue || 0.0) : ''
+
+  let destroyedLevel = building.destroyed
+  building.destroyed = destroyedLevel ? `d-${destroyedLevel}` : ''
+
+  let rows = [
+    ['building_type', 'Тип строения'],
+    ['building_base_type', 'Тип фундамента'],
+    ['fabric_type', 'Материал'],
+    ['built_year', 'Год постройки'],
+    ['flats', 'Кол-во этажей'],
+    ['address', 'Адрес'],
+    ['residents', 'Кол-во человек на объекте'],
+    ['max_msk64', 'Проектная сейсмостойкость'],
+    ['damage_level', 'Прогноз повреждений'],
+    ['destroyed', damageLevel === null ? 'Прогноз повреждений' : 'Повреждения от другого землетрясеним'],
+    ['PGA', 'PGA'],
+    ['notes', 'Доп. сведения'],
+    ['data_source_reference', 'Источник данных']
+  ]
+    .filter(([prop] = []) => building[prop].toString() !== '')
+    .map(([prop, title] = []) => {
+      return (
+        `<tr class="row-building-${prop}">
+          <th scope="row" class="align-middle">${title}</th><td>${building[prop]}</td>
+        </tr>`
+      )
+    })
+
+  let caption = ''
+
+  if(destroyedLevel)
+  {
+    if(damageLevel === null) {
+      caption = 'Объект имеет повреждения от землетрясений'
+    } else if (destroyedLevel > damageLevel) {
+      caption = 'Здание повреждено другим землетрясением'
+    }
+  }
+
+  if (caption) {
+    caption = `<caption>${caption}</caption>`
+  }
+
+  return (
+    `<table class="table table-hover table-sm table-responsive">
+      ${caption}<tbody>${rows.join('')}</tbody>
+    </table>`
+  )
 }
 
 // There is a bug when layers got disappeared on exiting from fullscreen.
@@ -446,3 +592,35 @@ function zoomHome() {
   return window.L.Control.zoomHome({ zoomHomeIcon: 'home' })
 }
 
+function isMarker(layer) {
+  return layer instanceof window.L.MapMarker || layer instanceof window.L.RegularPolygonMarker
+}
+
+export function mapCentering(map, allCoordinates)
+{
+  /*
+   * Автоматическое определение координат слишком жёстко центрирует почему-то.
+   * Лучше передавать координаты явно в параметре allCoordinates.
+   */
+
+  if(!allCoordinates)
+  {
+    allCoordinates = []
+    let addCoordinates = layer => {
+      !isMarker(layer) || allCoordinates.push(layer.getLatLng())
+    }
+
+    map.eachLayer(layer => {
+      if(layer instanceof window.L.MarkerClusterGroup) {
+        layer.getLayers().forEach(addCoordinates)
+      } else {
+        addCoordinates(layer)
+      }
+    })
+  }
+
+  let bound = map._getBoundsCenterZoom(window.L.latLngBounds(allCoordinates))
+  map._zoomHome.setHomeCoordinates(bound.center)
+  map._zoomHome.setHomeZoom(bound.zoom)
+  map.setView(bound.center, bound.zoom)
+}

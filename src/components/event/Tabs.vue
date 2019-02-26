@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import { round } from '@/helpers/math.js'
+  import { round } from '@/helpers/math'
 
   export default {
     props: ['event'],
@@ -98,10 +98,11 @@
       },
       getHref: function(tab) {
         let params = { id: this.event.id }
+        let query = { backUrlQuery: this.$route.query.backUrlQuery || '{}' }
 
         if (tab) params.tab = tab
 
-        return this.$router.resolve({ name: 'Event', params: params }).href
+        return this.$router.resolve({ name: 'Event', params, query }).href
       },
       getTitle: function() {
         const id = this.event.id
@@ -129,10 +130,18 @@
       setActiveTab: function(tab = this.$router.currentRoute.params.tab) {
         this.activeTab = this.tabs[this.convertTabName(tab)].href
       },
-      setAvailability: function() {
+      setAvailability: function()
+      {
+        // Ближайшие населенные пункты
         this.tabs.settlements.available = this.event.has_cities_msk64_analysis
+
+        // Здания и сооружения
         this.tabs.buildings.available = this.event.has_buildings_msk64_analysis
+
+        // Тензор момента
         this.tabs.momentTensor.available = this.event.has_mt
+
+        // Магистральные объекты
         this.tabs.ldos.available = this.event.has_long_distance_objects_analysis
       },
       setData: function() {

@@ -24,6 +24,7 @@
       {
         let map = this.map.object = createMap(this.map.id, this.map.coordinates, {
           addToggleShowObjects: this.$store.getters.user.authenticated,
+          markerPopupHeader: '',
           showStations: false,
           zoom: 4
         })
@@ -49,10 +50,40 @@
           })
         }
 
+        let _this = this
+
         legend.onAdd = function()
         {
           /** @type HTMLElement */
           let btnGroup = window.L.DomUtil.create('div', 'btn-group btn-group-toggle map-legend map-legend-mainpage')
+          let getCheckedBtn = () => { return btnGroup.querySelector('input[type=radio]:checked') }
+          let eventsRangeRequests = {}
+
+          let disableBtns = function(disabled = true) {
+            let btns = btnGroup.querySelectorAll('input[type=radio]')
+            Array.prototype.forEach.call(btns, btn => { btn.disabled = disabled })
+          }
+
+          let setReloadTimer = (() => {
+
+            let reloadTimeout = 300 // sec
+            let reloadTimer
+
+            return () => {
+
+              if(reloadTimer) {
+                clearTimeout(reloadTimer)
+              }
+
+              reloadTimer = setTimeout(() => {
+                eventsRangeRequests[getCheckedBtn().dataset.rangeName]().then(() => {
+                  _this.mapNotify('Данные о землетрясениях обновлены')
+                })
+              }, 1000 * reloadTimeout)
+
+            }
+
+          })()
 
           let appendBtn = function(eventsRangeName, callBack)
           {
@@ -75,7 +106,7 @@
             radio.addEventListener('change', changeHandler, false)
             if (checked) changeHandler()
 
-            radio.setAttribute('data-range', eventsRangeName)
+            radio.setAttribute('data-range-name', eventsRangeName)
             btn.style.backgroundColor = eventsRange.color
             btn.setAttribute('title', eventsRange.title)
 
@@ -86,12 +117,12 @@
 
             let eventsRange = EVENTS_RANGES[eventsRangeName]
             let minDateSubtract = eventsRange.minDateSubtract
-
-            appendBtn(eventsRangeName, () => {
-
+            let request = function()
+            {
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
+              disableBtns()
 
-              $http.get(apiSettings.endpointEventsLight, {
+              return $http.get(apiSettings.endpointEventsLight, {
                 params: {
                   datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
                   limit: eventsRange.limit || 1000
@@ -99,15 +130,20 @@
               })
                 .then(response => {
                   addEvents(response.data.data)
+                  disableBtns(false)
+                  setReloadTimer()
                 })
                 .catch(error => {
-                  console.log(error)
+                  console.log(error.response || error)
                 })
-            })
+            }
+
+            eventsRangeRequests[eventsRangeName] = request
+            appendBtn(eventsRangeName, () => request())
 
           })
 
-          let checkedBtn = btnGroup.querySelector('input[type=radio]:checked')
+          let checkedBtn = getCheckedBtn()
 
           if (!checkedBtn) {
             checkedBtn = btnGroup.querySelector('input[type=radio]:first-child')
@@ -130,6 +166,44 @@
         }
 
         text.addTo(map)
+      },
+
+      mapNotify: function(msg, delay = 3500)
+      {
+        let mapElem = document.getElementById(this.map.id)
+        let mapPopup = document.createElement('div')
+        let removeTimer
+
+        mapPopup.setAttribute('class', 'map-notify')
+        mapPopup.innerText = msg
+
+        mapPopup.addEventListener('transitionend', e => {
+
+          if(removeTimer) {
+            clearTimeout(removeTimer)
+          }
+
+          removeTimer = setTimeout(() => {
+
+            if(!mapPopup.classList.contains('show')) {
+              mapElem.removeChild(mapPopup)
+            }
+
+          }, 100)
+
+        }, false)
+
+        mapElem.appendChild(mapPopup)
+
+        setTimeout(() => {
+
+          mapPopup.classList.add('show')
+
+          setTimeout(() => {
+            mapPopup.classList.remove('show')
+          }, delay)
+
+        }, 100)
       }
     },
 
@@ -142,9 +216,34 @@
 <style lang="scss">
   @import '~scss/event_map';
 
-  .map {
+  .map
+  {
     .map-legend-mainpage {
       padding: 0 !important;
+    }
+
+    > .map-notify
+    {
+      box-shadow: 0 2px 10px 1px rgba(0,0,0,0.25);
+      text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+      transition: all 250ms ease-out;
+      color: rgba(255,255,255,0.8);
+      background-color: cadetblue;
+      transform: translateX(-50%);
+      border-radius: 3px;
+      padding: 10px 20px;
+      position: absolute;
+      z-index: 9999999;
+      font-size: 16px;
+      opacity: 0;
+      left: 50%;
+      top: 0;
+
+      &.show {
+        transition: all 350ms ease-out;
+        opacity: 1;
+        top: 20px;
+      }
     }
   }
 </style>

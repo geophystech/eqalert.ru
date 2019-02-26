@@ -415,8 +415,6 @@
         switch (value)
         {
           case false:
-          case '0':
-          case 0:
           case '':
             return null
 

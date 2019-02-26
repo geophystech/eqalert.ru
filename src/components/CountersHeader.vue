@@ -22,7 +22,7 @@
           :variant="showTrainingEvents ? 'event-training' : 'info'"
           :disabled="trainingEventsBtnDisabled"
           :pressed.sync="showTrainingEvents"
-          size="sm">Показать учебные</b-btn>
+          size="sm">{{ showTrainingEvents ? 'Скрыть' : 'Показать' }} учебные</b-btn>
 
         <ModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
         <ExportDropDown v-if="count > 0" @export2xls="export2xls" />

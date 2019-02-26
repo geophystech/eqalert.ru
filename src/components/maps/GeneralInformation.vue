@@ -3,8 +3,8 @@
 </template>
 
 <script>
-  import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
-  import { numberDeclension } from '@/helpers/number.js'
+  import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions'
+  import { numberDeclension } from '@/helpers/number'
 
   export default {
     props: ['event', 'tab'],

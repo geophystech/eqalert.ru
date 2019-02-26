@@ -14,20 +14,23 @@
         <a href="https://geophystech.ru/contacts">ООО "Геофизические технологии"</a>
       </b-col>
 
-      <b-col cols="2" md="4" order="3" order-md="3" align-self="center" class="text-right align-self-md-start" id="social-media-links">
-        <a href="tg://resolve?domain=eqalert_ru_bot"><i class="fa fa-telegram" aria-hidden="true" /></a>
+      <b-col class="text-right align-self-md-start" cols="2" md="4" order="3" order-md="3" align-self="center">
+        <SocialMediaLinks />
       </b-col>
+
     </b-row>
   </footer>
 </template>
 
 <script>
-  import AppSettings from '@/settings/app'
+  import SocialMediaLinks from '@/components/SocialMediaLinks'
+  import appSettings from '@/settings/app'
   export default {
     name: 'app-footer',
+    components: {SocialMediaLinks},
     data() {
       return {
-        feedbackUrl: AppSettings.feedbackUrl
+        feedbackUrl: appSettings.feedbackUrl
       }
     },
     computed: {
@@ -52,12 +55,6 @@
     @media screen and (max-width: 767px) {
       #geophystech-website {
         margin-bottom: 5%;
-      }
-    }
-
-    #social-media-links {
-      a {
-        font-size: 150%;
       }
     }
   }

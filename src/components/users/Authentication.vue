@@ -66,7 +66,8 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/api'
+  import {auth} from '@/helpers/auth'
+
   export default {
     data() {
       return {
@@ -118,51 +119,29 @@
 
         if (!this.$refs.form.checkValidity()) return
 
-        const payload = {
-          password: this.form.fields.password.value,
-          username: this.form.fields.email.value
-        }
-
         this.disableFields()
 
-        this.$http.post(this.$root.$options.settings.api.endpointUserAuthentication, payload)
-          .then(response => {
+        auth({
 
-            this.$http.get(this.$root.$options.settings.api.endpointUserRefreshScopes, {
-              headers: { Authorization: `${apiSettings.authorizationType} ${response.data.access_token}` }
-            })
-              .then(scopesResponse => {
+          rememberMe: this.form.fields.rememberMe.value,
+          password: this.form.fields.password.value,
+          username: this.form.fields.email.value
 
-                let permissions = {}
+        }).then(response => {
 
-                scopesResponse.data.data.forEach(permission => {
-                  permissions[permission.id] = permission.description
-                })
+          this.$toasted.success(`Добро пожаловать!`, { icon: 'check' })
+          this.$router.push(this.redirectTo)
 
-                this.$store.dispatch('authenticateUser', {
-                  accessToken: response.data.access_token,
-                  refreshToken: response.data.refresh_token,
-                  rememberMe: this.form.fields.rememberMe.value,
-                  permissions: permissions
-                })
+        }).catch(error => {
 
-                this.$toasted.success(`Добро пожаловать!`, { icon: 'check' })
-                this.$router.push(this.redirectTo)
+          if (error.response) {
+            this.$toasted.error(`${error.response.data.error.message}`, { icon: 'times' })
+            this.enableFields()
+          } else {
+            console.log(error)
+          }
 
-              })
-              .catch(error => {
-                console.log(error)
-              })
-          })
-          .catch(error => {
-            if (error.response) {
-              this.$toasted.error(`${error.response.data.error.message}`, { icon: 'times' })
-
-              this.enableFields()
-            } else {
-              console.log(error)
-            }
-          })
+        })
       }
     },
     beforeRouteEnter: (to, from, next) => {

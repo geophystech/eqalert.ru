@@ -36,7 +36,7 @@
         </b-row>
 
         <router-link v-for="(event, index) in events" :key="event.id"
-                     :to="{ name: 'Event', params: { id: event.id } }">
+                     :to="{ name: 'Event', params: { id: event.id }, query: {backUrlQuery: backUrlQuery} }">
 
           <b-row no-gutters class="events-row text-center">
 
@@ -83,7 +83,8 @@
 import CountersHeader from '@/components/CountersHeader.vue'
 import Filters from '@/components/Filters.vue'
 import Spinner from '@/components/Spinner'
-import { round } from '@/helpers/math.js'
+import apiSettings from '@/settings/api'
+import { round } from '@/helpers/math'
 
 export default {
   components: { CountersHeader, Filters, Spinner },
@@ -118,6 +119,10 @@ export default {
       } else {
         return 'LL в HH:mm:ss UTC'
       }
+    },
+    backUrlQuery: function()
+    {
+      return JSON.stringify(this.$route.query)
     }
   },
   metaInfo: {
@@ -147,7 +152,7 @@ export default {
         this.spinners.loadMoreEvents = true
         this.disabledFilters = true
 
-        this.$http.get(this.$root.$options.settings.api.endpointEvents, { params: params })
+        this.$http.get(apiSettings.endpointEvents, { params: params })
           .then(response => {
 
             this.spinners.loadMoreEvents = false
