@@ -17,7 +17,7 @@
 
 <script>
   import {createMap, createMapEventMarker, mapCentering} from '@/map_functions'
-  import apiSettings from '@/settings/app'
+  import apiSettings from '@/settings/api'
 
   export default {
     name: 'ModalMap',

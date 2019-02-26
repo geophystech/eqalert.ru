@@ -120,7 +120,9 @@
 
         let eventRequest = this.$http.get(apiSettings.endpointEvent(eventId), {
           params: { include: 'nearestCity' }
-        }).catch(error => { this.errorResponse = error.response })
+        }).catch(error => {
+          this.errorResponse = error.response
+        })
 
         let buildingsRequest = this.$http.get(apiSettings.endpointEventBuildings(eventId))
 

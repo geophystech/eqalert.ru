@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/app'
+  import apiSettings from '@/settings/api'
   import { round } from '@/helpers/math'
 
   export default {
@@ -53,6 +53,7 @@
           }
         })
           .then(response => {
+
             response.data.data.forEach(event => {
               if (event.nearestCity) {
                 const distance = round(event.nearestCity.data.ep_dis, 2)

@@ -3,8 +3,8 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/app'
   import { addEpicenter, createMap, id, convertMsk64, msk64Color, removeEpicenter, setView } from '@/map_functions'
+  import apiSettings from '@/settings/api'
 
   export default {
     props: ['event', 'tab'],
