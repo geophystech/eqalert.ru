@@ -50,6 +50,8 @@
           })
         }
 
+        let _this = this
+
         legend.onAdd = function()
         {
           /** @type HTMLElement */
@@ -69,7 +71,7 @@
 
               reloadTimer = setTimeout(() => {
                 getCheckedBtn().dispatchEvent(new Event('change'))
-                this.mapNotify('Данные о землетрясениях обновлены')
+                _this.mapNotify('Данные о землетрясениях обновлены')
               }, 1000 * reloadTimeout)
 
             }
