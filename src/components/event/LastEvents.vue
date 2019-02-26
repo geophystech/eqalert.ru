@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import { round } from '@/helpers/math.js'
+  import { round } from '@/helpers/math'
 
   export default {
     props: ['event'],

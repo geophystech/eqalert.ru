@@ -83,7 +83,7 @@
 import CountersHeader from '@/components/CountersHeader.vue'
 import Filters from '@/components/Filters.vue'
 import Spinner from '@/components/Spinner'
-import { round } from '@/helpers/math.js'
+import { round } from '@/helpers/math'
 
 export default {
   components: { CountersHeader, Filters, Spinner },

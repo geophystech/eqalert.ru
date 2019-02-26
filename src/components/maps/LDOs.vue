@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions.js'
+  import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions'
 
   export default {
     props: ['event', 'tab'],

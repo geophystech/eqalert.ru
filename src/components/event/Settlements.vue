@@ -23,8 +23,8 @@
 
 <script>
   import Spinner from '@/components/Spinner'
-  import { convertMsk64 } from '@/map_functions.js'
-  import { round } from '@/helpers/math.js'
+  import { convertMsk64 } from '@/map_functions'
+  import { round } from '@/helpers/math'
 
   export default {
     components: { Spinner },
