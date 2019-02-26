@@ -97,6 +97,11 @@ $legend-marker-size: 10px;
           color: #444;
         }
 
+        > input[type=radio]:disabled + span {
+          box-shadow: inset 1px 1px 20px 1px rgba(255, 255, 255, 0.7);
+          opacity: 0.5;
+        }
+
         > input[type=radio]:checked + span,
         &:hover > span {
           box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.15);

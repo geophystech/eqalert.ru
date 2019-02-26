@@ -57,6 +57,12 @@
           /** @type HTMLElement */
           let btnGroup = window.L.DomUtil.create('div', 'btn-group btn-group-toggle map-legend map-legend-mainpage')
           let getCheckedBtn = () => { return btnGroup.querySelector('input[type=radio]:checked') }
+          let eventsRangeRequests = {}
+
+          let disableBtns = function(disabled = true) {
+            let btns = btnGroup.querySelectorAll('input[type=radio]')
+            Array.prototype.forEach.call(btns, btn => { btn.disabled = disabled })
+          }
 
           let setReloadTimer = (() => {
 
@@ -70,8 +76,9 @@
               }
 
               reloadTimer = setTimeout(() => {
-                getCheckedBtn().dispatchEvent(new Event('change'))
-                _this.mapNotify('Данные о землетрясениях обновлены')
+                eventsRangeRequests[getCheckedBtn().dataset.rangeName]().then(() => {
+                  _this.mapNotify('Данные о землетрясениях обновлены')
+                })
               }, 1000 * reloadTimeout)
 
             }
@@ -99,7 +106,7 @@
             radio.addEventListener('change', changeHandler, false)
             if (checked) changeHandler()
 
-            radio.setAttribute('data-range', eventsRangeName)
+            radio.setAttribute('data-range-name', eventsRangeName)
             btn.style.backgroundColor = eventsRange.color
             btn.setAttribute('title', eventsRange.title)
 
@@ -110,12 +117,12 @@
 
             let eventsRange = EVENTS_RANGES[eventsRangeName]
             let minDateSubtract = eventsRange.minDateSubtract
-
-            appendBtn(eventsRangeName, () => {
-
+            let request = function()
+            {
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
+              disableBtns()
 
-              $http.get(apiSettings.endpointEventsLight, {
+              return $http.get(apiSettings.endpointEventsLight, {
                 params: {
                   datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
                   limit: eventsRange.limit || 1000
@@ -123,12 +130,16 @@
               })
                 .then(response => {
                   addEvents(response.data.data)
+                  disableBtns(false)
                   setReloadTimer()
                 })
                 .catch(error => {
                   console.log(error.response || error)
                 })
-            })
+            }
+
+            eventsRangeRequests[eventsRangeName] = request
+            appendBtn(eventsRangeName, () => request())
 
           })
 
