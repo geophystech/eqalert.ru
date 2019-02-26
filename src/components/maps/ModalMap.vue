@@ -17,6 +17,7 @@
 
 <script>
   import {createMap, createMapEventMarker, mapCentering} from '@/map_functions'
+  import apiSettings from '@/settings/app'
 
   export default {
     name: 'ModalMap',
@@ -110,7 +111,7 @@
 
         }.bind(this)
 
-        _getEvents(this.$root.$options.settings.api.endpointEventsLight)
+        _getEvents(apiSettings.endpointEventsLight)
       }
     }
   }
@@ -123,7 +124,7 @@
 <style lang="scss" scoped>
 
   @import '~scss/_variables';
-  @import '~scss/mixins/_calc';
+  @import '~scss/_mixins';
 
   .modal-map
   {

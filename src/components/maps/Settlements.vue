@@ -3,6 +3,7 @@
 </template>
 
 <script>
+  import apiSettings from '@/settings/app'
   import { addEpicenter, createMap, id, convertMsk64, msk64Color, removeEpicenter, setView } from '@/map_functions'
 
   export default {
@@ -54,7 +55,7 @@
         this.map.object = createMap(this.map.id, this.coordinates)
       },
       fetchData: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointEventMsk64(this.event.id))
+        this.$http.get(apiSettings.endpointEventMsk64(this.event.id))
           .then(response => { this.addData(response.data.data) })
           .catch(error => { console.log(error) })
       },
