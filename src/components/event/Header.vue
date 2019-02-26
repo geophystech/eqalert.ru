@@ -128,7 +128,7 @@
         {
           breadcrumbs.push({
             text: 'События',
-            href: this.$router.resolve({ name: 'Events', query: JSON.parse(this.$route.query.backUrlQuery) }).href
+            href: this.$router.resolve({ name: 'Events', query: JSON.parse(this.$route.query.backUrlQuery || '[]') }).href
           })
         }
 
