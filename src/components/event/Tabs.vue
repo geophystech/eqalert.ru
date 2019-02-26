@@ -98,10 +98,11 @@
       },
       getHref: function(tab) {
         let params = { id: this.event.id }
+        let query = { backUrlQuery: this.$route.query.backUrlQuery || '[]' }
 
         if (tab) params.tab = tab
 
-        return this.$router.resolve({ name: 'Event', params: params }).href
+        return this.$router.resolve({ name: 'Event', params: params, query }).href
       },
       getTitle: function() {
         const id = this.event.id
