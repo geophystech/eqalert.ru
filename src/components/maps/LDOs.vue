@@ -25,14 +25,21 @@
       }
     },
     methods: {
-      addData: function(data) {
+      addData: function(data)
+      {
+        const map = this.map.object
+        let allCoordinates = []
+
         data.forEach(ldo => {
+
           ldo.parts.data.forEach(part => {
+
             const coordinates = [[part.lat_first, part.lon_first], [part.lat_end, part.lon_end]]
             const damageLevel = part.damage ? part.damage.data.damage_level : 0
             const partPolyline = window.L.polyline(coordinates, { color: this.colors[damageLevel] })
 
-            partPolyline.addTo(this.map.object)
+            allCoordinates.push(coordinates)
+            partPolyline.addTo(map)
 
             let message =
               `<table class="table table-hover table-sm table-responsive">

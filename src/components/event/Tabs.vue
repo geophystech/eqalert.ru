@@ -129,10 +129,18 @@
       setActiveTab: function(tab = this.$router.currentRoute.params.tab) {
         this.activeTab = this.tabs[this.convertTabName(tab)].href
       },
-      setAvailability: function() {
+      setAvailability: function()
+      {
+        // Ближайшие населенные пункты
         this.tabs.settlements.available = this.event.has_cities_msk64_analysis
+
+        // Здания и сооружения
         this.tabs.buildings.available = this.event.has_buildings_msk64_analysis
+
+        // Тензор момента
         this.tabs.momentTensor.available = this.event.has_mt
+
+        // Магистральные объекты
         this.tabs.ldos.available = this.event.has_long_distance_objects_analysis
       },
       setData: function() {

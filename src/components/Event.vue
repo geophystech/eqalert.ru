@@ -77,6 +77,7 @@
   import Settlements from '@/components/event/Settlements'
   import Tabs from '@/components/event/Tabs'
   import appSettings from '@/settings/app'
+  import apiSettings from '@/settings/api'
 
   export default {
     components: {
@@ -113,21 +114,37 @@
     },
     methods: {
 
-      fetchData: function(id)
+      fetchData: function(eventId)
       {
         this.errorResponse = null
 
-        this.$http.get(this.$root.$options.settings.api.endpointEvent(id), {
-          params: {
-            include: 'nearestCity'
-          }
+        let eventRequest = this.$http.get(apiSettings.endpointEvent(eventId), {
+          params: { include: 'nearestCity' }
+        }).catch(error => { this.errorResponse = error.response })
+
+        let buildingsRequest = this.$http.get(apiSettings.endpointEventBuildings(eventId))
+
+        let ldosRequest = this.$http.get(apiSettings.endpointEventLDOs(eventId), {
+          params: { customer_ids: [1], show_all_parts: 1 }
         })
-          .then(response => {
-            this.setData(response.data.data)
-          })
-          .catch(error => {
-            this.errorResponse = error.response
-          })
+
+        Promise.all([eventRequest, buildingsRequest, ldosRequest]).then(responses => {
+
+          let [eventResp, buildingsResp, ldosResp] = responses
+
+          let event = eventResp.data.data
+          let buildings = buildingsResp.data.data
+          let ldos = ldosResp.data.data
+
+          buildings = buildings.filter(building => building.damage_level || building.building.data.destroyed)
+
+          event.has_long_distance_objects_analysis = (event.has_long_distance_objects_analysis && ldos.length > 0)
+          event.has_buildings_msk64_analysis = (event.has_buildings_msk64_analysis && buildings.length > 0)
+
+          this.setData(event)
+
+        })
+
       },
 
       magnitudeType: function(type)
