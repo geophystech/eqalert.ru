@@ -124,10 +124,11 @@
           href: this.$router.resolve({ name: 'Mainpage' }).href
         })
 
-        if (!this.$root.onMobile) {
+        if (!this.$root.onMobile)
+        {
           breadcrumbs.push({
             text: 'События',
-            href: this.$router.resolve({ name: 'Events' }).href
+            href: this.$router.resolve({ name: 'Events', query: JSON.parse(this.$route.query.backUrlQuery) }).href
           })
         }
 
