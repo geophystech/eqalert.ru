@@ -9239,9 +9239,9 @@ vue-yandex-metrika@^1.7.2:
   integrity sha512-dOv0E7HEQ3kj8f0zK2Bqph1IpacFXXmHFN+021RibS6xtw4xlEFx6QMFOCjtVIyGa+fJKqc1XMymZSC1cn7t2Q==
 
 vue@^2.5.21:
-  version "2.6.6"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.6.tgz#dde41e483c11c46a7bf523909f4f2f816ab60d25"
-  integrity sha512-Y2DdOZD8sxApS+iUlwv1v8U1qN41kq6Kw45lM6nVZKhygeWA49q7VCCXkjXqeDBXgurrKWkYQ9cJeEJwAq0b9Q==
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.7.tgz#254f188e7621d2d19ee28d0c0442c6d21b53ae2d"
+  integrity sha512-g7ADfQ82QU+j6F/bVDioVQf2ccIMYLuR4E8ev+RsDBlmwRkhGO3HhgF4PF9vpwjdPpxyb1zzLur2nQ2oIMAMEg==
 
 vuex-persistedstate@^2.5.4:
   version "2.5.4"
