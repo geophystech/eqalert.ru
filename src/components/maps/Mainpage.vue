@@ -120,6 +120,7 @@
             let request = function()
             {
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
+              map.spin(true)
               disableBtns()
 
               return $http.get(apiSettings.endpointEventsLight, {
@@ -132,6 +133,7 @@
                   addEvents(response.data.data)
                   disableBtns(false)
                   setReloadTimer()
+                  map.spin(false)
                 })
                 .catch(error => {
                   console.log(error.response || error)
