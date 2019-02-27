@@ -95,7 +95,7 @@
     "nightwatch": "^1.0.18",
     "node-sass": "^4.11.0",
     "opn": "^5.4.0",
-    "optimize-css-assets-webpack-plugin": "^4.0.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "ora": "^1.4.0",
     "phantomjs-prebuilt": "^2.1.16",
     "puppeteer": "^1.11.0",
