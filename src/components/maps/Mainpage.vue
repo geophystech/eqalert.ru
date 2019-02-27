@@ -139,7 +139,12 @@
             }
 
             eventsRangeRequests[eventsRangeName] = request
-            appendBtn(eventsRangeName, () => request())
+            appendBtn(eventsRangeName, () => {
+              map.spin(true)
+              request().then(() => {
+                map.spin(false)
+              })
+            })
 
           })
 
