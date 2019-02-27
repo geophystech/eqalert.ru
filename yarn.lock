@@ -8232,6 +8232,7 @@ vue-meta@^1.5.8:
 vue-moment@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-4.0.0.tgz#20809d1e7d7fca63d556fb8d008b95993d32f5ea"
+  integrity sha512-lNkEPuA3i3A4q4TDSwOXoRF4Y2vHHdaTOSvpPyGgxoFQP8n4sUh6jU5aJj3FIMlXo5UaHLPIz5hvvpvYx9Wj0w==
   dependencies:
     moment "^2.11.1"
 
