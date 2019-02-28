@@ -68,10 +68,8 @@
 
         let addLegends = legendsElem => {
 
+          let levels = [].concat(destroyedLevels, damageLevels).filter((v, i, a) => a.indexOf(v) === i)
           let buildingsLegends = ''
-          let levels = [].concat(destroyedLevels, damageLevels).filter(function(v, i, self) {
-            return self.indexOf(v) === i
-          })
 
           levels.sort((a, b) => a - b)
 
