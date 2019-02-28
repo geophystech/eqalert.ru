@@ -55,7 +55,7 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.lon_min" placeholder="145.1" :state="modelState('lon_min')"
+                <b-form-input v-model.number.trim="filters.lon_min" placeholder="130.0" :state="modelState('lon_min')"
                               @input.native="onFiltersChange($event, 'lon_min')" autocomplete="off"
                               :disabled="disabled"/>
               </b-input-group>
@@ -63,7 +63,7 @@
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
             <b-col cols="5">
               <b-input-group>
-                <b-form-input v-model.number.trim="filters.lon_max" placeholder="190.1" :state="modelState('lon_max')"
+                <b-form-input v-model.number.trim="filters.lon_max" placeholder="160.9" :state="modelState('lon_max')"
                               @input.native="onFiltersChange($event, 'lon_max')" autocomplete="off"
                               :disabled="disabled"/>
               </b-input-group>
