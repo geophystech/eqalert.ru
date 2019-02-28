@@ -4,7 +4,7 @@
       <app-header></app-header>
       <app-navbar></app-navbar>
       <MobileAppAlert v-if="is_android" message="Мы сделали приложение для Android" :url="googlePlayUrl" />
-      <MobileAppAlert v-if="is_iOs" message="Мы сделали приложение для iOs" :url="appStoreUrl" />
+      <MobileAppAlert v-if="is_iOS" message="Мы сделали приложение для iOS" :url="appStoreUrl" />
       <router-view></router-view>
       <app-footer></app-footer>
     </b-container>
@@ -77,7 +77,7 @@
         return this.$root.onMobile && /Android/i.test(navigator.userAgent)
           && !/Windows\s+Phone/i.test(navigator.userAgent)
       },
-      is_iOs: function() {
+      is_iOS: function() {
         return this.$root.onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
           && !/Windows\s+Phone/i.test(navigator.userAgent)
       }

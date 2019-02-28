@@ -124,28 +124,37 @@
           this.errorResponse = error.response
         })
 
-        let buildingsRequest = this.$http.get(apiSettings.endpointEventBuildings(eventId))
+        if(!this.$store.getters.user.authenticated)
+        {
+          eventRequest.then(response => {
+            this.setData(response.data.data)
+          })
+        }
+        else
+        {
+          let buildingsRequest = this.$http.get(apiSettings.endpointEventBuildings(eventId))
 
-        let ldosRequest = this.$http.get(apiSettings.endpointEventLDOs(eventId), {
-          params: { customer_ids: [1], show_all_parts: 1 }
-        })
+          let ldosRequest = this.$http.get(apiSettings.endpointEventLDOs(eventId), {
+            params: { customer_ids: [1], show_all_parts: 1 }
+          })
 
-        Promise.all([eventRequest, buildingsRequest, ldosRequest]).then(responses => {
+          Promise.all([eventRequest, buildingsRequest, ldosRequest]).then(responses => {
 
-          let [eventResp, buildingsResp, ldosResp] = responses
+            let [eventResp, buildingsResp, ldosResp] = responses
 
-          let event = eventResp.data.data
-          let buildings = buildingsResp.data.data
-          let ldos = ldosResp.data.data
+            let event = eventResp.data.data
+            let buildings = buildingsResp.data.data
+            let ldos = ldosResp.data.data
 
-          buildings = buildings.filter(building => building.damage_level || building.building.data.destroyed)
+            buildings = buildings.filter(building => building.damage_level || building.building.data.destroyed)
 
-          event.has_long_distance_objects_analysis = (event.has_long_distance_objects_analysis && ldos.length > 0)
-          event.has_buildings_msk64_analysis = (event.has_buildings_msk64_analysis && buildings.length > 0)
+            event.has_long_distance_objects_analysis = (event.has_long_distance_objects_analysis && ldos.length > 0)
+            event.has_buildings_msk64_analysis = (event.has_buildings_msk64_analysis && buildings.length > 0)
 
-          this.setData(event)
+            this.setData(event)
 
-        })
+          })
+        }
 
       },
 
