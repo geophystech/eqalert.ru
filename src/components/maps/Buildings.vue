@@ -27,6 +27,7 @@
       {
         let damageLevelMarkers = {}
         let destroyedMarkers = []
+        let destroyedLevels = []
         let damageLevels = []
         let coordinates = []
 
@@ -42,8 +43,8 @@
 
           if(building.destroyed > dLevel)
           {
-            if (damageLevels.indexOf(building.destroyed) === -1) {
-              damageLevels.push(building.destroyed)
+            if (destroyedLevels.indexOf(building.destroyed) === -1) {
+              destroyedLevels.push(building.destroyed)
             }
 
             return destroyedMarkers.push(marker)
@@ -67,9 +68,12 @@
 
         let addLegends = legendsElem => {
 
+          let levels = [].concat(destroyedLevels, damageLevels).filter((v, i, a) => a.indexOf(v) === i)
           let buildingsLegends = ''
 
-          damageLevels.forEach(dLevel => {
+          levels.sort((a, b) => a - b)
+
+          levels.forEach(dLevel => {
             buildingsLegends +=
               `<div class="buildings-legend">
                 <span style="background: ${buildingColor(dLevel)}"></span>
