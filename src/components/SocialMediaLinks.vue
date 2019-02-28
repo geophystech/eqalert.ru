@@ -35,6 +35,7 @@
   .social-media-links
   {
     display: inline-block;
+    width: 255px;
 
     > a
     {

@@ -22,7 +22,7 @@ export default {
   methods: {
     clicked: function(e) {
       if (e.target.classList.contains('nav-link')
-        && e.target.classList.contains('active')
+        && e.target.classList.contains('router-link-active')
         && !this.$router.currentRoute.params.id
       ) {
         e.preventDefault()
@@ -82,7 +82,7 @@ export default {
     }
   }
 
-  .active {
+  .router-link-active {
     border-bottom: $border-bottom-orange !important;
   }
 
