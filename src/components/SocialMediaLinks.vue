@@ -1,8 +1,10 @@
 <template>
   <div class="social-media-links">
     <a class="tg-bot-link" :href="tgBotUrl"><i class="fa fa-telegram" aria-hidden="true" /></a>
-    <a class="download-icon google-play-icon" :href="googlePlay.url" :title="googlePlay.title" target="_blank">{{ googlePlay.title }}</a>
-    <a class="download-icon app-store-icon" :href="appStore.url" :title="appStore.title" target="_blank">{{ appStore.title }}</a>
+    <a v-if="!$root.onMobile" :href="googlePlay.url" :title="googlePlay.title"
+       class="download-icon google-play-icon" target="_blank">{{ googlePlay.title }}</a>
+    <a v-if="!$root.onMobile" :href="appStore.url" :title="appStore.title"
+       class="download-icon app-store-icon" target="_blank">{{ appStore.title }}</a>
   </div>
 </template>
 
