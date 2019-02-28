@@ -21,7 +21,7 @@
         },
         appStore: {
           url: appSettings.mobileAppUrls.appStore,
-          title: 'Скачать для iOs из App Store'
+          title: 'Скачать для iOS из App Store'
         }
       }
     }
