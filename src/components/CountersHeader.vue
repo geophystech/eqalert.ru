@@ -53,6 +53,13 @@
     },
     components: { ModalMap, ExportDropDown },
 
+    created()
+    {
+      if (!this.$store.getters.user.authenticated) {
+        this.showTrainingEvents = false
+      }
+    },
+
     methods: {
       export2xls: function(request) {
         let params = Object.assign({}, this.filtersData)
