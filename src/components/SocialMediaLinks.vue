@@ -35,7 +35,10 @@
   .social-media-links
   {
     display: inline-block;
-    width: 255px;
+
+    @media (min-width: 920px) {
+      width: 255px;
+    }
 
     > a
     {

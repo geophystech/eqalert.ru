@@ -40,7 +40,12 @@
           let marker = createMapBuildingMarker(building, dLevel)
           coordinates.push([building.lat, building.lon])
 
-          if(building.destroyed > dLevel) {
+          if(building.destroyed > dLevel)
+          {
+            if (damageLevels.indexOf(building.destroyed) === -1) {
+              damageLevels.push(building.destroyed)
+            }
+
             return destroyedMarkers.push(marker)
           }
 

@@ -143,7 +143,7 @@ export function addStations(map, controls, show = true)
 }
 
 export const BUILDING_COLORS = [
-  '#0000FF',
+  '#67C333',
   '#008000',
   '#FFFF00',
   '#FFA500',
@@ -336,30 +336,11 @@ export function setView(map, coordinates, zoom = 5) {
  */
 export function createMapMarkerClusterGroup()
 {
-  function _defaultIconCreateFunction(cluster)
-  {
-    let childCount = cluster.getChildCount()
-    let markerSize = ''
-
-    if (childCount < 10) {
-      markerSize = 'small'
-    } else if (childCount < 100) {
-      markerSize = 'medium'
-    } else {
-      markerSize = 'large'
-    }
-
-    return new window.L.DivIcon({
-      className: `marker-cluster marker-cluster-${markerSize}`,
-      html: `<div><span>${childCount}</span></div>`,
-      iconSize: new window.L.Point(40, 40)
-    })
-  }
-
   return new window.L.MarkerClusterGroup({
     disableClusteringAtZoom: 15,
     iconCreateFunction: function(cluster)
     {
+      let _color = buildingColor(0)
       let _damageLevels = []
 
       cluster.getAllChildMarkers().forEach(marker => {
@@ -369,13 +350,10 @@ export function createMapMarkerClusterGroup()
         }
       })
 
-      _damageLevels = _damageLevels.sort((a, b) => b - a)
-
-      if(!_damageLevels.length) {
-        return _defaultIconCreateFunction(cluster)
+      if(_damageLevels.length) {
+        _damageLevels = _damageLevels.sort((a, b) => b - a)
+        _color = buildingColor(_damageLevels[0])
       }
-
-      let _color = buildingColor(_damageLevels[0])
 
       return new window.L.DivIcon({
         className: `marker-cluster marker-cluster-damage-level`,

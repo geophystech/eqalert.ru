@@ -52,7 +52,8 @@
       signOut: function() {
         this.$toasted.success(`Вы вышли из сайта`, { icon: 'check' })
         this.$store.dispatch('signOut')
-        this.$router.go()
+        this.$router.replace({ name: this.$route.name })
+        location.reload()
       }
     }
   }

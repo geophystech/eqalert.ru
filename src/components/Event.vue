@@ -120,14 +120,14 @@
 
         let eventRequest = this.$http.get(apiSettings.endpointEvent(eventId), {
           params: { include: 'nearestCity' }
-        }).catch(error => {
-          this.errorResponse = error.response
         })
 
         if(!this.$store.getters.user.authenticated)
         {
           eventRequest.then(response => {
             this.setData(response.data.data)
+          }).catch(error => {
+            this.errorResponse = error.response
           })
         }
         else

@@ -176,6 +176,6 @@ export function authTimeoutChech(store)
     || (!rememberMe && duration[defaultFn]() >= Number(defaultVal))
   ) {
     store.dispatch('signOut')
-    location.reload()
+    location.replace('/')
   }
 }
