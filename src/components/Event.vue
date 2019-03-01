@@ -125,7 +125,14 @@
         if(!this.$store.getters.user.authenticated)
         {
           eventRequest.then(response => {
-            this.setData(response.data.data)
+
+            let event = response.data.data
+
+            event.has_long_distance_objects_analysis = false
+            event.has_buildings_msk64_analysis = false
+
+            this.setData(event)
+
           }).catch(error => {
             this.errorResponse = error.response
           })
