@@ -7,8 +7,7 @@
       <b-row v-for="event in events" :key="event.id" no-gutters align-v="center"
              :class="{ event: true, 'highlight-event': highlightEvent(event.id) }">
 
-        <router-link :to="{ name: 'Event', params: { id: event.id } }"
-                     class="d-flex align-items-center" :key="event.id">
+        <router-link :to="routerLink(event.id)" class="d-flex align-items-center" :key="event.id">
 
           <b-col cols="2" class="magnitude text-center">
             <strong>{{ event.locValues.data.mag.toFixed(1) }}</strong>
@@ -44,10 +43,28 @@
       }
     },
     methods: {
-      fetchEvents: function() {
+      routerLink: function(eventId)
+      {
+        let query = {}
+
+        if (this.$route.query.backUrlQuery) {
+          query.backUrlQuery = this.$route.query.backUrlQuery
+        }
+
+        return {
+          name: 'Event',
+          params: {
+            id: eventId
+          },
+          query
+        }
+      },
+      fetchEvents: function()
+      {
         this.$http.get(apiSettings.endpointEvents, {
           params: {
             datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
+            has_training: this.event.has_training ? 1 : 0,
             include: 'nearestCity',
             limit: 10
           }
@@ -76,8 +93,15 @@
         return false
       }
     },
+    watch: {
+      event: function(data) {
+        if (this.inited === true) return
+        this.inited = true
+        this.fetchEvents()
+      }
+    },
     created() {
-      this.fetchEvents()
+
     }
   }
 </script>
