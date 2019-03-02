@@ -17,7 +17,8 @@
           epicenter: null,
           id: null,
           object: null,
-          markers: []
+          markerCluster: null,
+          makerksGroups: []
         }
       }
     },
@@ -102,13 +103,12 @@
         }
 
         const map = this.map.object
-        const controls = map._controls
         let addedOverlays = {}
 
         let updateMarkerCluster = () => {
 
-          if (this.map.markers) {
-            map.removeLayer(this.map.markers)
+          if (this.map.markerCluster) {
+            map.removeLayer(this.map.markerCluster)
           }
 
           let markerCluster = createMapMarkerClusterGroup()
@@ -124,7 +124,7 @@
             destroyedMarkers.forEach(addLayer)
           }
 
-          this.map.markers = markerCluster
+          this.map.markerCluster = markerCluster
           map.addLayer(markerCluster)
 
         }
@@ -132,8 +132,9 @@
         let addOverlay = (key, label) => {
 
           const makerksGroup = new window.L.LayerGroup([])
+          this.map.makerksGroups.push(makerksGroup)
 
-          controls.addOverlay(makerksGroup, label)
+          map._controls.addOverlay(makerksGroup, label)
           map.addLayer(makerksGroup)
 
           addedOverlays[key] = true
@@ -172,14 +173,26 @@
       putEpicenter: function() {
         this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
       },
-      removeData: function() {
+      removeData: function()
+      {
         // Remove building markers.
-        if (this.map.markers) this.map.object.removeLayer(this.map.markers)
+        if (this.map.markerCluster) {
+          this.map.object.removeLayer(this.map.markerCluster)
+        }
       },
-      resetMap: function() {
-        removeEpicenter(this.map.object, this.map.epicenter)
+      resetMap: function()
+      {
+        let map = this.map.object
+
+        removeEpicenter(map, this.map.epicenter)
+
+        this.map.makerksGroups.forEach(makerksGroup => {
+          map._controls.removeLayer(makerksGroup)
+        })
+
         this.removeData()
-        setView(this.map.object, this.coordinates)
+
+        setView(map, this.coordinates)
       }
     },
     created() {
