@@ -179,20 +179,17 @@
         if (this.map.markerCluster) {
           this.map.object.removeLayer(this.map.markerCluster)
         }
+
+        // Remove controls overlays.
+        this.map.makerksGroups.forEach(makerksGroup => {
+          this.map.object._controls.removeLayer(makerksGroup)
+        })
       },
       resetMap: function()
       {
-        let map = this.map.object
-
-        removeEpicenter(map, this.map.epicenter)
-
-        this.map.makerksGroups.forEach(makerksGroup => {
-          map._controls.removeLayer(makerksGroup)
-        })
-
+        removeEpicenter(this.map.object, this.map.epicenter)
         this.removeData()
-
-        setView(map, this.coordinates)
+        setView(this.map.object, this.coordinates)
       }
     },
     created() {
