@@ -64,7 +64,7 @@
         this.$http.get(apiSettings.endpointEvents, {
           params: {
             datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
-            has_training: this.event.has_training ? 1 : 0,
+            has_training: !this.event || !this.event.has_training ? 0 : 1,
             include: 'nearestCity',
             limit: 10
           }
