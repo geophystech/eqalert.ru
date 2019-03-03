@@ -64,9 +64,9 @@
         this.$http.get(apiSettings.endpointEvents, {
           params: {
             datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
-            has_training: this.event.has_training ? 1 : 0,
-            include: 'nearestCity',
-            limit: 10
+            has_training: !this.event || !this.event.has_training ? 0 : 1,
+            limit: this.$root.onMobile ? 20 : 10,
+            include: 'nearestCity'
           }
         })
           .then(response => {
@@ -93,15 +93,8 @@
         return false
       }
     },
-    watch: {
-      event: function(data) {
-        if (this.inited === true) return
-        this.inited = true
-        this.fetchEvents()
-      }
-    },
     created() {
-
+      this.fetchEvents()
     }
   }
 </script>

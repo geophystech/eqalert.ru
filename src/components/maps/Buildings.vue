@@ -173,24 +173,21 @@
       putEpicenter: function() {
         this.map.epicenter = addEpicenter(this.map.object, this.coordinates)
       },
-      removeData: function()
-      {
-        // Remove building markers.
-        if (this.map.markerCluster) {
-          this.map.object.removeLayer(this.map.markerCluster)
-        }
-      },
       resetMap: function()
       {
         let map = this.map.object
 
         removeEpicenter(map, this.map.epicenter)
 
+        // Remove building markers.
+        if (this.map.markerCluster) {
+          map.removeLayer(this.map.markerCluster)
+        }
+
+        // Remove controls overlays.
         this.map.makerksGroups.forEach(makerksGroup => {
           map._controls.removeLayer(makerksGroup)
         })
-
-        this.removeData()
 
         setView(map, this.coordinates)
       }

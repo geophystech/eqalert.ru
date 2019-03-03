@@ -53,7 +53,7 @@
 
       <b-col cols="4">
         <keep-alive>
-          <component :is="components.lastEvents" :event="event" v-if="!$root.onMobile" />
+          <component :is="components.lastEvents" :event="event" v-if="!$root.onMobile && !!event.id" />
         </keep-alive>
       </b-col>
 
