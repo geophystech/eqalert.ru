@@ -27,7 +27,7 @@ Built on <a href="https://vuejs.org">Vue.js 2.5</a>, <a href="https://webpack.js
 </p>
 
 
-# eqalert.ru [![Build Status](https://travis-ci.org/geophystech/eqalert.ru.svg?branch=master)](https://travis-ci.org/geophystech/eqalert.ru) https://codecov.io/gh/geophystech/eqalert.ru/branch/master/graph/badge.svg
+# eqalert.ru [![Build Status](https://travis-ci.org/geophystech/eqalert.ru.svg?branch=master)](https://travis-ci.org/geophystech/eqalert.ru) [![codecov](https://codecov.io/gh/geophystech/eqalert.ru/branch/master/graph/badge.svg)
 
 Eqalert.ru – the real-time information resource about earthquakes, seismic impacts and hazards
 
