@@ -101,7 +101,6 @@ Example of deploying the application manually to a staging host:
 rsync -avzr --delete -e ssh dist/ USERNAME@HOSTNAME:/opt/eqalert-frontend-test
 ```
 
-
 ## LICENSE
 
    Copyright 2017-2018 GEOPHYSTECH LLC
