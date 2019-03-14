@@ -22,8 +22,12 @@ before_script:
 
 install:
   - yarn install
+  - npm install -g codecov
 
 script:
   - yarn run lint
   - yarn run test
 
+after_success:
+  - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
+  - codecov
