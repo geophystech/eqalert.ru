@@ -5,6 +5,7 @@
 <script>
   import {createMap, createMapEventMarker} from '@/map_functions'
   import {EVENTS_RANGES} from '@/helpers/event'
+  import apiSettings from '@/settings/api'
 
   export default {
     data() {
@@ -30,7 +31,6 @@
         })
 
         const defaultEventsRange = this.map.defaultEventsRange
-        let apiSettings = this.$root.$options.settings.api
         let $moment = this.$moment
         let $http = this.$http
 
