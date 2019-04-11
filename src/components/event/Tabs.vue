@@ -29,39 +29,14 @@
 
 <script>
   import { round } from '@/helpers/math'
+  import eventTabs from '@/data/event-tabs'
 
   export default {
     props: ['event'],
     data() {
       return {
         activeTab: '#' + this.$router.currentRoute.fullPath,
-        tabs: {
-          generalInformation: {
-            label: 'Общая информация',
-            available: true,
-            href: '#'
-          },
-          settlements: {
-            label: 'Ближайшие населенные пункты',
-            available: false,
-            href: '#'
-          },
-          buildings: {
-            label: 'Здания и сооружения',
-            available: false,
-            href: '#'
-          },
-          momentTensor: {
-            label: 'Тензор момента',
-            available: false,
-            href: '#'
-          },
-          ldos: {
-            label: 'Магистральные объекты',
-            available: false,
-            href: '#'
-          }
-        }
+        tabs: eventTabs
       }
     },
     metaInfo() {

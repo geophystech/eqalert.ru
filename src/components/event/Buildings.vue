@@ -10,6 +10,7 @@
 </template>
 
 <script>
+  import apiSettings from '@/settings/api'
   export default {
     props: ['event'],
     data() {
@@ -98,7 +99,7 @@
     },
     methods: {
       fetchData: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointEventBuildings(this.event.id))
+        this.$http.get(apiSettings.endpointEventBuildings(this.event.id))
           .then(response => {
             this.$root.$emit('onMapBuildingsDataFetched', response.data.data)
             this.setData(response.data.data)
@@ -127,7 +128,7 @@
     },
     watch: {
       event: function() {
-        this.fetchData(this.event.id)
+        this.fetchData()
       }
     }
   }

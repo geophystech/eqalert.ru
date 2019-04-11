@@ -14,6 +14,7 @@
 
 <script>
 import Spinner from '@/components/Spinner'
+import apiSettings from '@/settings/api'
 
 export default {
   components: { Spinner },
@@ -61,7 +62,7 @@ export default {
   },
   methods: {
     fetchData: function() {
-      this.$http.get(this.$root.$options.settings.api.endpointEventLDOs(this.event.id), {
+      this.$http.get(apiSettings.endpointEventLDOs(this.event.id), {
         params: {
           customer_ids: [1], // Change id(s) when the user management is implemented.
           show_all_parts: 1

@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import StaticPage from '@/components/StaticPage'
-import * as $moment from 'moment'
+import $moment from 'moment'
 import $http from 'axios'
 
 describe('StaticPage.vue', () => {

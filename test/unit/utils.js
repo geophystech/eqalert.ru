@@ -1,5 +1,3 @@
-import * as $moment from 'moment'
-import $http from 'axios'
 
 export function mapPropDataGen(mapId)
 {
@@ -16,3 +14,4 @@ export function mapPropDataGen(mapId)
     tab: `test-${mapId}-tab`
   }
 }
+
