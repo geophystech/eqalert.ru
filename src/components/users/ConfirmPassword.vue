@@ -51,6 +51,8 @@
 </template>
 
 <script>
+  import apiSettings from '@/settings/api'
+
   export default {
     data() {
       return {
@@ -66,7 +68,11 @@
         email: null,
         form: {
           fields: {
-            password: { value: '', disabled: false, state: null }
+            password: {
+              value: '',
+              disabled: false,
+              state: null
+            }
           },
           messages: {
             password: 'Некорректный пароль'
@@ -107,7 +113,7 @@
 
         this.disableFields()
 
-        this.$http.post(this.$root.$options.settings.api.endpointUserResetPasswordComplete, payload)
+        this.$http.post(apiSettings.endpointUserResetPasswordComplete, payload)
           .then(response => {
             this.passwordChanged = true
           })

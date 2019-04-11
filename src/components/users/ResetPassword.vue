@@ -47,6 +47,8 @@
 </template>
 
 <script>
+  import apiSettings from '@/settings/api'
+
   export default {
     data() {
       return {
@@ -101,7 +103,7 @@
 
         this.disableFields()
 
-        this.$http.post(this.$root.$options.settings.api.endpointUserResetPassword, payload)
+        this.$http.post(apiSettings.endpointUserResetPassword, payload)
           .then(response => {
             this.resetComplete = true
           })

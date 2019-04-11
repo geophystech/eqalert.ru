@@ -63,6 +63,7 @@
   import Spinner from '@/components/Spinner'
   import ExportDropDown from '@/components/ExportDropDown'
   import { agency, agencyDescription } from '@/helpers/event'
+  import apiSettings from '@/settings/api'
 
   export default {
     components: { Spinner, ExportDropDown },
@@ -105,7 +106,7 @@
         }
       },
       export2xls: function(request) {
-        request(this.$root.$options.settings.api.endpointEvent(this.event.id))
+        request(apiSettings.endpointEvent(this.event.id))
       }
     },
     computed: {

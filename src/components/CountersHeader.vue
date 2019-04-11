@@ -36,6 +36,8 @@
 <script>
   import ModalMap from '@/components/maps/ModalMap'
   import ExportDropDown from '@/components/ExportDropDown'
+  import apiSettings from '@/settings/api'
+
   export default {
     props: {
       trainingEventsBtnDisabled: false,
@@ -56,7 +58,7 @@
     methods: {
       export2xls: function(request) {
         let params = Object.assign({}, this.filtersData)
-        request(this.$root.$options.settings.api.endpointEvents, Object.assign(params, {
+        request(apiSettings.endpointEvents, Object.assign(params, {
           limit: 5000
         }))
       },

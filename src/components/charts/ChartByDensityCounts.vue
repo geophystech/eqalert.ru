@@ -1,5 +1,6 @@
 <script>
 import { Line } from 'vue-chartjs'
+import apiSettings from '@/settings/api'
 
 export default Line.extend({
   props: ['filtersParams'],
@@ -71,7 +72,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function(params = {}) {
-      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsDensityCounts, { params: params })
+      this.$http.get(apiSettings.endpointAnalyticsDensityCounts, { params: params })
         .then(response => {
           this.chartData.datasets[0].label = 'Плотностное распределение повторяемости (ML)'
           this.chartData.datasets[0].data = response.data.data.counts

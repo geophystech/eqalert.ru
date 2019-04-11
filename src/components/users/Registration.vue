@@ -9,7 +9,7 @@
     <b-row v-if="registrationComplete">
       <b-col class="complete" cols="8" offset="2" align="center">
         <h5>Регистрация завершена</h5>
-        <p>На указанный электронный адрес отправлено письмо. </p>
+        <p>На указанный электронный адрес отправлено письмо.</p>
         <p>Вам осталось только открыть это письмо и нажать на кнопку "Подтвердить регистрацию".</p>
       </b-col>
     </b-row>
@@ -123,6 +123,8 @@
 </template>
 
 <script>
+  import apiSettings from '@/settings/api'
+
   export default {
     data() {
       return {
@@ -184,7 +186,7 @@
         this.changeFieldsDisabledState(true)
       },
       getPurposesList: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointPurposesList)
+        this.$http.get(apiSettings.endpointPurposesList)
           .then(response => {
             Object.keys(response.data.data).forEach(key => {
               this.form.purposes.values.push({ value: key, text: response.data.data[key] })
@@ -211,7 +213,7 @@
 
         this.disableFields()
 
-        this.$http.post(this.$root.$options.settings.api.endpointUserRegistration, payload)
+        this.$http.post(apiSettings.endpointUserRegistration, payload)
           .then(response => {
             this.registrationComplete = true
           })

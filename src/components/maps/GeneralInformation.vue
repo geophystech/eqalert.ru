@@ -5,6 +5,7 @@
 <script>
   import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions'
   import { numberDeclension } from '@/helpers/number'
+  import apiSettings from '@/settings/api'
 
   export default {
     props: ['event', 'tab'],
@@ -93,7 +94,7 @@
           return this.putEpicenter()
         }
 
-        this.$http.get(this.$root.$options.settings.api.endpointEventPga(this.event.id))
+        this.$http.get(apiSettings.endpointEventPga(this.event.id))
           .then(response => {
             this.addData(response.data.data)
           })

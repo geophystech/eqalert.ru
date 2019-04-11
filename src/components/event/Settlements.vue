@@ -25,6 +25,7 @@
   import Spinner from '@/components/Spinner'
   import { convertMsk64 } from '@/map_functions'
   import { round } from '@/helpers/math'
+  import apiSettings from '@/settings/api'
 
   export default {
     components: { Spinner },
@@ -89,7 +90,7 @@
         this.items = []
       },
       fetchData: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointEventSettlements(this.event.id), {
+        this.$http.get(apiSettings.endpointEventSettlements(this.event.id), {
           params: {
             cursor: this.cursor,
             limit: 10

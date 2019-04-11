@@ -1,5 +1,6 @@
 <script>
 import { Line } from 'vue-chartjs'
+import apiSettings from '@/settings/api'
 
 export default Line.extend({
   props: ['filtersParams'],
@@ -65,7 +66,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function(params = {}) {
-      this.$http.get(this.$root.$options.settings.api.endpointAnalyticsEarthquakeCounts, { params: params })
+      this.$http.get(apiSettings.endpointAnalyticsEarthquakeCounts, { params: params })
         .then(response => {
           const dates = this.prepareDates(response.data.data.dates)
           this.chartData.datasets[0].label = 'Количество землетрясений'
