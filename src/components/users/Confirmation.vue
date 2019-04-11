@@ -20,6 +20,8 @@
 </template>
 
 <script>
+  import apiSettings from '@/settings/api'
+
   export default {
     data() {
       return {
@@ -44,7 +46,7 @@
     },
     methods: {
       confirmEmail: function(token) {
-        this.$http.post(this.$root.$options.settings.api.endpointEmailConfirmation(token))
+        this.$http.post(apiSettings.endpointEmailConfirmation(token))
           .then(response => {
             this.status = 'success'
             this.message = response.data.data

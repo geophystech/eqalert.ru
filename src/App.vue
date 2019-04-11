@@ -57,7 +57,7 @@
           .catch(error => { console.log(error) })
       },
       fetchSystemInfo: function() {
-        this.$http.get(this.$root.$options.settings.api.endpointSystemInfo)
+        this.$http.get(appSettings.endpointSystemInfo)
           .then(response => {
             (data => {
               this.$store.dispatch('setMsk64ConfigVersion', data.msk64Config.data.config_version)
