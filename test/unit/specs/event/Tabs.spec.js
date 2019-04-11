@@ -3,28 +3,15 @@ import Tabs from '@/components/event/Tabs'
 import $moment from 'moment'
 import $http from 'axios'
 import eventTabs from '@/data/event-tabs'
+import {$routerMocks} from '../../utils'
 
 describe('event/Tabs.vue', () => {
 
   const wrapper = shallowMount(Tabs, {
+    mocks: Object.assign({ $http, $moment }, $routerMocks),
     propsData: {
       tabs: eventTabs,
       event: {}
-    },
-    mocks: {
-      $http,
-      $moment,
-      $router: {
-        resolve: data => {
-          return { href: '' }
-        },
-        currentRoute: {
-          params: {}
-        }
-      },
-      $route: {
-        query: {}
-      }
     }
   })
 

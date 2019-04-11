@@ -85,6 +85,7 @@ import Filters from '@/components/Filters.vue'
 import Spinner from '@/components/Spinner'
 import apiSettings from '@/settings/api'
 import { round } from '@/helpers/math'
+import eventsSettings from '@/settings/events'
 
 export default {
   components: { CountersHeader, Filters, Spinner },
@@ -101,7 +102,7 @@ export default {
       },
       events: [],
       disabledFilters: false,
-      highlightEventTreshold: this.$root.$options.settings.events.highlightTreshold,
+      highlightEventTreshold: eventsSettings.highlightTreshold,
       spinners: {
         loadMoreEvents: false
       },

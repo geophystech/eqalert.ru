@@ -15,3 +15,19 @@ export function mapPropDataGen(mapId)
   }
 }
 
+export const $routerMocks = {
+  $router: {
+    resolve: data => {
+      return { href: '' }
+    },
+    replace: data => {
+
+    },
+    currentRoute: {
+      params: {}
+    }
+  },
+  $route: {
+    query: {}
+  }
+}
