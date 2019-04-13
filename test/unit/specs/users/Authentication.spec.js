@@ -1,8 +1,12 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Authentication from '@/components/users/Authentication'
-import {$routerMocks} from '../../utils'
+import BootstrapVue from 'bootstrap-vue'
+import { $routerMocks, RouterLink } from '../../utils'
 import $moment from 'moment'
 import $http from 'axios'
+
+const localVue = createLocalVue()
+localVue.use(BootstrapVue)
 
 describe('users/Authentication.vue', () => {
 
@@ -12,7 +16,11 @@ describe('users/Authentication.vue', () => {
       form: {
 
       }
-    }
+    },
+    stubs: {
+      RouterLink
+    },
+    localVue
   })
 
   it('Check component Authentication', () => {

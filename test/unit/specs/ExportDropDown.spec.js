@@ -1,7 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import ExportDropDown from '@/components/ExportDropDown'
+import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
 import $http from 'axios'
+
+const localVue = createLocalVue()
+localVue.use(BootstrapVue)
 
 describe('ExportDropDown.vue', () => {
 
@@ -14,7 +18,8 @@ describe('ExportDropDown.vue', () => {
   }
 
   const wrapper = shallowMount(ExportDropDown, {
-    mocks: { $http, $moment, $store }
+    mocks: { $http, $moment, $store },
+    localVue
   })
 
   it('Check component ExportDropDown', () => {

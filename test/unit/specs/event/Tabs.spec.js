@@ -1,9 +1,13 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Tabs from '@/components/event/Tabs'
+import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
 import $http from 'axios'
 import eventTabs from '@/data/event-tabs'
 import {$routerMocks} from '../../utils'
+
+const localVue = createLocalVue()
+localVue.use(BootstrapVue)
 
 describe('event/Tabs.vue', () => {
 
@@ -12,7 +16,8 @@ describe('event/Tabs.vue', () => {
     propsData: {
       tabs: eventTabs,
       event: {}
-    }
+    },
+    localVue
   })
 
   it('Check component Tabs', () => {

@@ -1,7 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import StaticPage from '@/components/StaticPage'
+import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
 import $http from 'axios'
+
+const localVue = createLocalVue()
+localVue.use(BootstrapVue)
 
 describe('StaticPage.vue', () => {
 
@@ -14,9 +18,8 @@ describe('StaticPage.vue', () => {
   }
 
   const wrapper = shallowMount(StaticPage, {
-    mocks: {
-      $http, $moment, $router
-    }
+    mocks: { $http, $moment, $router },
+    localVue
   })
 
   it('Check component StaticPage', () => {

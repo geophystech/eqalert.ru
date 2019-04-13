@@ -1,15 +1,13 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-
 import AppHeader from '@/components/AppHeader'
+import BootstrapVue from 'bootstrap-vue'
 import VueRouter from 'vue-router'
+import { RouterLink } from '../utils'
 
-const RouterLink = {
-  name: 'router-link',
-  render: function(h) {
-    return h('a', this.$slots.default)
-  },
-  props: ['to']
-}
+const localVue = createLocalVue()
+const router = new VueRouter()
+localVue.use(BootstrapVue)
+localVue.use(VueRouter)
 
 describe('AppHeader.vue', () => {
 
@@ -21,10 +19,6 @@ describe('AppHeader.vue', () => {
     }
   }
 
-  const localVue = createLocalVue()
-  localVue.use(VueRouter)
-
-  const router = new VueRouter()
   const wrapper = shallowMount(AppHeader, {
     localVue,
     router,
@@ -78,6 +72,7 @@ describe('AppHeader.vue', () => {
       }
 
       const wrapper = shallowMount(AppHeader, {
+        localVue,
         router,
         mocks: {
           $store
@@ -119,6 +114,7 @@ describe('AppHeader.vue', () => {
         }
 
         const wrapper = shallowMount(AppHeader, {
+          localVue,
           router,
           mocks: {
             $store
