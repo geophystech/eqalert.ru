@@ -23,8 +23,8 @@ export default {
     }
   },
   methods: {
-    getContent: function(page = this.page) {
-      this.$http.get(`/static/markdown/${this.page}.md`)
+    getContent: async function() {
+      return await this.$http.get(`/static/markdown/${this.page}.md`)
         .then(response => {
           this.content = response.data
         })
