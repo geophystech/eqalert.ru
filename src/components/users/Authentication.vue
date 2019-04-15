@@ -21,6 +21,7 @@
                           maxlength="150"
                           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                           placeholder="Электронная почта"
+                          name="email"
                           required>
             </b-form-input>
             <b-form-invalid-feedback>{{ form.messages.email }}</b-form-invalid-feedback>
@@ -34,6 +35,7 @@
                           placeholder="Пароль"
                           minlength="6"
                           maxlength="150"
+                          name="password"
                           required>
             </b-form-input>
             <b-form-invalid-feedback>{{ form.messages.password }}</b-form-invalid-feedback>

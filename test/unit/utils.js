@@ -40,44 +40,19 @@ export const RouterLink = {
   props: ['to']
 }
 
-export const eventFilters = {
-  datetime_max: {
-    tag: 'flat-pickr-stub'
-  },
-  datetime_min: {
-    tag: 'flat-pickr-stub'
-  },
-  depth_max: {
-    tag: 'b-form-input-stub'
-  },
-  depth_min: {
-    tag: 'b-form-input-stub'
-  },
-  has_mt: {
-    tag: 'b-form-checkbox-stub'
-  },
-  mag_max: {
-    tag: 'b-form-input-stub'
-  },
-  mag_min: {
-    tag: 'b-form-input-stub'
-  },
-  lat_max: {
-    tag: 'b-form-input-stub'
-  },
-  lat_min: {
-    tag: 'b-form-input-stub'
-  },
-  lon_max: {
-    tag: 'b-form-input-stub'
-  },
-  lon_min: {
-    tag: 'b-form-input-stub'
-  },
-  rms_max: {
-    tag: 'b-form-input-stub'
-  },
-  sta_num_min: {
-    tag: 'b-form-input-stub'
-  }
+export function describeCheckFormFields(wrapper, {fields = {}, label = 'Check form fields'} = {})
+{
+  describe(label, () => {
+
+    for (let item of Object.entries(fields))
+    {
+      const [fieldName, fieldConf] = item
+      const field = wrapper.find(`${fieldConf.tag}[name="${fieldName}"]`)
+
+      it(`Check field ${fieldName}`, () => {
+        expect(field.exists()).to.eql(true)
+      })
+    }
+
+  })
 }

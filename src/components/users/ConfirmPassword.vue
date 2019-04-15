@@ -32,8 +32,9 @@
                           :state="form.fields.password.state"
                           v-model="form.fields.password.value"
                           placeholder="Новый пароль"
-                          minlength="6"
+                          name="password"
                           maxlength="150"
+                          minlength="6"
                           required>
             </b-form-input>
             <b-form-invalid-feedback>{{ form.messages.password }}</b-form-invalid-feedback>

@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import ConfirmPassword from '@/components/users/ConfirmPassword'
 import BootstrapVue from 'bootstrap-vue'
-import {$routerMocks} from '../../utils'
+import {$routerMocks, describeCheckFormFields} from '../../utils'
 import $moment from 'moment'
 import $http from 'axios'
 
@@ -22,6 +22,10 @@ describe('users/ConfirmPassword.vue', () => {
 
   it('Check component ConfirmPassword', () => {
     expect(wrapper.is(ConfirmPassword)).to.eql(true)
+  })
+
+  describeCheckFormFields(wrapper, {
+    password: {tag: 'b-form-input-stub'}
   })
 
 })
