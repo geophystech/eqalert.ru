@@ -1,7 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import LastEvents from '@/components/event/LastEvents'
+import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
 import $http from 'axios'
+
+const localVue = createLocalVue()
+localVue.use(BootstrapVue)
 
 describe('event/LastEvents.vue', () => {
 
@@ -10,9 +14,8 @@ describe('event/LastEvents.vue', () => {
   }
 
   const wrapper = shallowMount(LastEvents, {
-    mocks: {
-      $http, $moment, $route
-    }
+    mocks: { $http, $moment, $route },
+    localVue
   })
 
   it('Check component LastEvents', () => {

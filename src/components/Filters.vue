@@ -9,7 +9,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.mag_min" placeholder="2.5" :state="modelState('mag_min')"
                               @input.native="onFiltersChange($event, 'mag_min')" autocomplete="off"
-                              :disabled="disabled" />
+                              :disabled="disabled" name="mag_min" />
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
@@ -17,7 +17,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.mag_max" placeholder="10.0" :state="modelState('mag_max')"
                               @input.native="onFiltersChange($event, 'mag_max')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="mag_max"/>
               </b-input-group>
             </b-col>
           </b-row>
@@ -33,7 +33,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.lat_min" placeholder="51.1" :state="modelState('lat_min')"
                               @input.native="onFiltersChange($event, 'lat_min')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="lat_min"/>
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
@@ -41,7 +41,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.lat_max" placeholder="70.1" :state="modelState('lat_max')"
                               @input.native="onFiltersChange($event, 'lat_max')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="lat_max"/>
               </b-input-group>
             </b-col>
           </b-row>
@@ -57,7 +57,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.lon_min" placeholder="130.0" :state="modelState('lon_min')"
                               @input.native="onFiltersChange($event, 'lon_min')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="lon_min"/>
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
@@ -65,7 +65,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.lon_max" placeholder="160.9" :state="modelState('lon_max')"
                               @input.native="onFiltersChange($event, 'lon_max')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="lon_max"/>
               </b-input-group>
             </b-col>
           </b-row>
@@ -81,7 +81,7 @@
               <b-input-group prepend="Минимум">
                 <b-form-input v-model.number.trim="filters.sta_num_min" placeholder="1" :state="modelState('sta_num_min')"
                               @input.native="onFiltersChange($event, 'sta_num_min')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="sta_num_min"/>
               </b-input-group>
             </b-col>
           </b-row>
@@ -96,7 +96,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.depth_min" placeholder="0" :state="modelState('depth_min')"
                               @input.native="onFiltersChange($event, 'depth_min')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="depth_min"/>
               </b-input-group>
             </b-col>
             <b-col class="text-center middle-col"><i class="fa fa-arrows-h" aria-hidden="true"></i></b-col>
@@ -104,7 +104,7 @@
               <b-input-group>
                 <b-form-input v-model.number.trim="filters.depth_max" placeholder="10" :state="modelState('depth_max')"
                               @input.native="onFiltersChange($event, 'depth_max')" autocomplete="off"
-                              :disabled="disabled"/>
+                              :disabled="disabled" name="depth_max"/>
               </b-input-group>
             </b-col>
           </b-row>
@@ -130,6 +130,7 @@
                   @input.native="onFiltersChange($event, 'datetime_min')"
                   :state="modelState('datetime_min')"
                   :disabled="disabled"
+                  name="datetime_min"
                 />
               </b-input-group>
             </b-col>
@@ -146,6 +147,7 @@
                   @input.native="onFiltersChange($event, 'datetime_max')"
                   :state="modelState('datetime_max')"
                   :disabled="disabled"
+                  name="datetime_max"
                 />
               </b-input-group>
             </b-col>
@@ -160,7 +162,8 @@
           <b-row no-gutters class="filter-inputs" align-v="center">
             <b-col>
               <b-input-group prepend="Максимум">
-                <b-form-input v-model.number.trim="filters.rms_max" placeholder="0.9" :state="modelState('rms_max')" />
+                <b-form-input v-model.number.trim="filters.rms_max" placeholder="0.9"
+                              :state="modelState('rms_max')" name="rms_max" />
               </b-input-group>
             </b-col>
           </b-row>
@@ -171,8 +174,7 @@
         <b-col>
           <b-row no-gutters class="filter-inputs">
             <b-col>
-              <b-form-checkbox
-                @change.native="onFiltersChange($event)"
+              <b-form-checkbox name="has_mt" @change.native="onFiltersChange($event)"
                 v-model="filters.has_mt" :disabled="disabled">Только с тензором момента</b-form-checkbox>
             </b-col>
           </b-row>
@@ -366,10 +368,14 @@
           if (prop in this.filters) {
             this.errorMessages[prop] = `<p>${errorList.join('</p><p>')}</p>`
           } else {
-            otherErrors.push(`${prop}: ${errorList.join(', ')}`)
+            otherErrors.push(`${prop}:\n\t${errorList.join(', ')}`)
           }
 
         })
+
+        if (otherErrors.length > 0) {
+          window.alert(otherErrors.join('\n\n'))
+        }
       },
 
       filtersUpdated: function(delay = 500)

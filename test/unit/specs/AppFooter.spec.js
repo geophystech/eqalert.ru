@@ -1,10 +1,16 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import AppFooter from '@/components/AppFooter'
+import BootstrapVue from 'bootstrap-vue'
 import AppSettings from '@/settings/app'
+
+const localVue = createLocalVue()
+localVue.use(BootstrapVue)
 
 describe('AppFooter.vue', () => {
 
-  const wrapper = shallowMount(AppFooter)
+  const wrapper = shallowMount(AppFooter, {
+    localVue
+  })
 
   it('renders copyright', () => {
     const copyright = wrapper.find('#copyright').text()

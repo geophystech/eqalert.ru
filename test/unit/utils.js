@@ -31,3 +31,28 @@ export const $routerMocks = {
     query: {}
   }
 }
+
+export const RouterLink = {
+  name: 'router-link',
+  render: function(h) {
+    return h('a', this.$slots.default)
+  },
+  props: ['to']
+}
+
+export function describeCheckFormFields(wrapper, {fields = {}, label = 'Check form fields'} = {})
+{
+  describe(label, () => {
+
+    for (let item of Object.entries(fields))
+    {
+      const [fieldName, fieldConf] = item
+      const field = wrapper.find(`${fieldConf.tag}[name="${fieldName}"]`)
+
+      it(`Check field ${fieldName}`, () => {
+        expect(field.exists()).to.eql(true)
+      })
+    }
+
+  })
+}

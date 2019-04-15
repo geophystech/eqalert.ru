@@ -39,9 +39,10 @@
                           :disabled="form.fields.email.disabled"
                           :state="form.fields.email.state"
                           v-model="form.fields.email.value"
-                          maxlength="150"
                           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                           placeholder="Электронная почта"
+                          maxlength="150"
+                          name="email"
                           required>
             </b-form-input>
             <b-form-invalid-feedback>{{ form.messages.email }}</b-form-invalid-feedback>
@@ -53,8 +54,9 @@
                           :state="form.fields.password.state"
                           v-model="form.fields.password.value"
                           placeholder="Пароль"
-                          minlength="6"
                           maxlength="150"
+                          name="password"
+                          minlength="6"
                           required>
             </b-form-input>
             <b-form-invalid-feedback>{{ form.messages.password }}</b-form-invalid-feedback>
@@ -67,6 +69,7 @@
                           v-model="form.fields.company.value"
                           placeholder="Организация"
                           maxlength="150"
+                          name="company"
                           required>
             </b-form-input>
             <b-form-invalid-feedback>{{ form.messages.company }}</b-form-invalid-feedback>
@@ -78,6 +81,7 @@
                            :disabled="form.fields.purpose.disabled"
                            :options="form.purposes.values"
                            placeholder="Цель использования расширенных данных"
+                           name="purpose"
                            required />
             <b-form-invalid-feedback>{{ form.messages.purpose }}</b-form-invalid-feedback>
           </b-form-group>
@@ -88,6 +92,7 @@
                           :state="form.fields.fullname.state"
                           v-model="form.fields.fullname.value"
                           placeholder="Фамилия, имя и отчество"
+                          name="fullname"
                           maxlength="150"
                           required>
             </b-form-input>
@@ -107,6 +112,7 @@
                              class="additional-info"
                              placeholder="Дополнительная информация"
                              maxlength="2000"
+                             name="additionalInfo"
                              v-show="form.showAdditionalInfo">
             </b-form-textarea>
           </b-form-group>

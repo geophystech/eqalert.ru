@@ -1,8 +1,12 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import ResetPassword from '@/components/users/ResetPassword'
-import {$routerMocks} from '../../utils'
+import BootstrapVue from 'bootstrap-vue'
+import {$routerMocks, describeCheckFormFields} from '../../utils'
 import $moment from 'moment'
 import $http from 'axios'
+
+const localVue = createLocalVue()
+localVue.use(BootstrapVue)
 
 describe('users/ResetPassword.vue', () => {
 
@@ -12,11 +16,16 @@ describe('users/ResetPassword.vue', () => {
       form: {
 
       }
-    }
+    },
+    localVue
   })
 
   it('Check component ResetPassword', () => {
     expect(wrapper.is(ResetPassword)).to.eql(true)
+  })
+
+  describeCheckFormFields(wrapper, {
+    email: {tag: 'b-form-input-stub'}
   })
 
 })
