@@ -10,9 +10,9 @@ import moment from 'moment'
  * @return {Promise<any>}
  * @private
  */
-async function _getUserPermissions(accessToken)
+function _getUserPermissions(accessToken)
 {
-  return await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
 
     axios.get(apiSettings.endpointUserRefreshScopes).then(resp => {
 
@@ -43,9 +43,9 @@ let _refreshTokenRequest = null
  * @param {string} refreshToken
  * @return {Promise<any>}
  */
-export async function refreshToken(refreshToken)
+export function refreshToken(refreshToken)
 {
-  return await _refreshTokenRequest || (_refreshTokenRequest = new Promise((resolve, reject) => {
+  return _refreshTokenRequest || (_refreshTokenRequest = new Promise((resolve, reject) => {
 
     axios.post(apiSettings.endpointUserRefreshToken, {'refresh_token': refreshToken})
 
@@ -96,9 +96,9 @@ export async function refreshToken(refreshToken)
  * @param {boolean} rememberMe
  * @return {Promise<any>}
  */
-export async function auth({username, password, rememberMe = false})
+export function auth({username, password, rememberMe = false})
 {
-  return await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
 
     const payload = {
       username: username,
