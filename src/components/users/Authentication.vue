@@ -43,7 +43,7 @@
         </b-form>
 
         <b-form-group>
-          <b-form-checkbox v-model="form.fields.rememberMe.value">Запомнить меня</b-form-checkbox>
+          <b-form-checkbox v-model="form.fields.rememberMe.value" name="rememberMe">Запомнить меня</b-form-checkbox>
 
           <router-link :to="{ name: 'UserResetPassword' }" key="reset-password" class="reset-password-link">
             Сбросить пароль
