@@ -21,30 +21,30 @@ const mockHttp = {
   post: request
 }
 
-describe('users/Authentication.vue', () => {
+const mocks = {
 
-  const mocks = {
+  $http: mockHttp,
+  $moment,
 
-    $http: mockHttp,
-    $moment,
-
-    $refs: {
-      form: {
-        checkValidity: () => false
-      }
-    },
-
-    $toasted: {
-      success: (msg, params) => {}
-    }
-
-  }
-
-  const propsData = {
+  $refs: {
     form: {
-
+      checkValidity: () => true
     }
+  },
+
+  $toasted: {
+    success: (msg, params) => {}
   }
+
+}
+
+const propsData = {
+  form: {
+
+  }
+}
+
+describe('users/Authentication.vue', () => {
 
   const fields = {
     email: { tag: 'b-form-input-stub', value: 'test@mail.com' },

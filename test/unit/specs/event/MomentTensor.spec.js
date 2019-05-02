@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import MomentTensor from '@/components/event/MomentTensor'
 import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
-import $http from 'axios'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -16,7 +15,16 @@ describe('event/MomentTensor.vue', () => {
       }
     },
     mocks: {
-      $http, $moment
+      $moment,
+      $http: {
+        get: () => Promise.resolve({
+          data: {
+            data: [
+
+            ]
+          }
+        })
+      }
     },
     localVue
   })
