@@ -1,12 +1,14 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Authentication from '@/components/users/Authentication'
 import BootstrapVue from 'bootstrap-vue'
-import {$routerMocks, RouterLink, describeCheckFormFields} from '../../utils'
+import Toasted from 'vue-toasted'
 import $moment from 'moment'
+import {$routerMocks, RouterLink, describeCheckFormFields} from '../../utils'
 // import $http from 'axios'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
+localVue.use(Toasted)
 
 const request = (_url, _data) => {
   return new Promise((resolve, reject) => {
@@ -20,6 +22,23 @@ const mockHttp = {
 }
 
 describe('users/Authentication.vue', () => {
+
+  const mocks = {
+
+    $http: mockHttp,
+    $moment,
+
+    $refs: {
+      form: {
+        checkValidity: () => false
+      }
+    },
+
+    $toasted: {
+      success: (msg, params) => {}
+    }
+
+  }
 
   const propsData = {
     form: {
@@ -38,7 +57,7 @@ describe('users/Authentication.vue', () => {
   })
 
   const wrapper = shallowMount(Authentication, {
-    mocks: Object.assign({ $http: mockHttp, $moment }, $routerMocks),
+    mocks: Object.assign(mocks, $routerMocks),
     stubs: { RouterLink },
     propsData,
     localVue
@@ -49,11 +68,5 @@ describe('users/Authentication.vue', () => {
   })
 
   describeCheckFormFields(wrapper, { fields })
-
-  /*it('Auth', async () => {
-
-    wrapper.find('b-button-stub[type="submit"]').trigger('click')
-
-  })*/
 
 })
