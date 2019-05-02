@@ -24,7 +24,10 @@ describe('event/LastEvents.vue', () => {
   const wrapper = mount(LastEvents, {
     mocks: { $http, $moment, $route },
     stubs: { RouterLink },
-    localVue
+    localVue,
+    propsData: {
+      events: []
+    }
   })
 
   it('Check component LastEvents', () => {
