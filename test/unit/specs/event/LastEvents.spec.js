@@ -1,12 +1,19 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import LastEvents from '@/components/event/LastEvents'
 import BootstrapVue from 'bootstrap-vue'
 import { RouterLink } from '../../utils'
 import $moment from 'moment'
-import $http from 'axios'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
+
+const $http = {
+  get: () => Promise.resolve({
+    data: {
+      data: []
+    }
+  })
+}
 
 describe('event/LastEvents.vue', () => {
 
@@ -14,7 +21,7 @@ describe('event/LastEvents.vue', () => {
     query: {}
   }
 
-  const wrapper = shallowMount(LastEvents, {
+  const wrapper = mount(LastEvents, {
     mocks: { $http, $moment, $route },
     stubs: { RouterLink },
     localVue
