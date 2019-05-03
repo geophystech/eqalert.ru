@@ -76,19 +76,15 @@ const errorResp = {
 
 describe('users/Registration.vue', () => {
 
-  const wrapper = createWrapper()
-
-  it('Check component Registration', () => {
-    expect(wrapper.is(Registration)).to.eql(true)
-  })
-
-  describeCheckFormFields(wrapper, formFields)
+  describeCheckFormFields(createWrapper(), formFields)
 
   describe('Form', () => {
 
+    const wrapper = createWrapper()
+
     it('Show additional info', () => {
       wrapper.find('.show-additional-info').trigger('click')
-      expect(wrapper.vm.showAdditionalInfo).to.equal(true)
+      expect(wrapper.vm.form.showAdditionalInfo).to.equal(true)
     })
 
   })
