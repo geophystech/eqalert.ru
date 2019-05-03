@@ -8,11 +8,17 @@ import flushPromises from 'flush-promises'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
+const PURPOSES = {
+  1: 'purpose 1',
+  2: 'purpose 2',
+  3: 'purpose 3'
+}
+
 const formFields = {
-  email: {tag: 'input', value: 'test@mail.ru'},
+  email: {tag: 'input', value: 'email@test.ru'},
   password: {tag: 'input', value: '12345'},
   company: {tag: 'input', value: 'My company'},
-  purpose: {tag: 'select', value: 'purpose'},
+  purpose: {tag: 'select', value: Object.keys(PURPOSES)[0]},
   fullname: {tag: 'input', value: 'fullname'},
   additionalInfo: {tag: 'textarea', value: 'Additional Info'}
 }
@@ -22,7 +28,11 @@ function createWrapper(httpRespHandler = Promise.resolve())
   const mocks = {
     $http: {
       post: () => httpRespHandler,
-      get: () => Promise.resolve({data: {data: []}})
+      get: () => Promise.resolve({
+        data: {
+          data: PURPOSES
+        }
+      })
     },
     $moment
   }
@@ -77,21 +87,18 @@ describe('users/Registration.vue', () => {
   describe('Form send', () => {
 
     const formInit = async (wrapper) => {
-
       for (let [fieldName, fieldData] of Object.entries(formFields)) {
         wrapper.find(`${fieldData.tag}[name="${fieldName}"]`).setValue(fieldData.value)
       }
-
       wrapper.find('form').trigger('submit.prevent')
-
       return await flushPromises()
     }
 
-    /*const wrapper1 = createWrapper()
+    const wrapper1 = createWrapper()
     it('Success response', async () => {
       await formInit(wrapper1)
       expect(wrapper1.vm.registrationComplete).to.equal(true)
-    })*/
+    })
 
     const wrapper2 = createWrapper(Promise.reject(errorResp))
     it('Error response', async () => {

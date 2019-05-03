@@ -194,9 +194,9 @@
       getPurposesList: function() {
         this.$http.get(apiSettings.endpointPurposesList)
           .then(response => {
-            Object.keys(response.data.data).forEach(key => {
-              this.form.purposes.values.push({ value: key, text: response.data.data[key] })
-            })
+            for (let [id, title] of Object.entries(response.data.data)) {
+              this.form.purposes.values.push({ value: id, text: title })
+            }
           })
           .catch(error => { console.log(error) })
       },
