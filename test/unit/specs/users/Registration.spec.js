@@ -67,7 +67,10 @@ const errorResp = {
     data: {
       errors: {
         data: {
-          [ERROR_PROP]: ['Purpose error']
+          [ERROR_PROP]: ['Purpose error'],
+          company_name: ['Company error'],
+          full_name: ['Full name error'],
+          other: ['Other error']
         }
       }
     }
