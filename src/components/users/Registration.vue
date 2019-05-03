@@ -198,7 +198,6 @@
               this.form.purposes.values.push({ value: id, text: title })
             }
           })
-          .catch(error => { console.log(error) })
       },
       onShowAdditionalInfo: function() {
         this.form.showAdditionalInfo = true

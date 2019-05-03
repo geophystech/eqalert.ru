@@ -29,9 +29,7 @@ function createWrapper(httpRespHandler = Promise.resolve())
     $http: {
       post: () => httpRespHandler,
       get: () => Promise.resolve({
-        data: {
-          data: PURPOSES
-        }
+        data: { data: PURPOSES }
       })
     },
     $moment
@@ -85,6 +83,15 @@ describe('users/Registration.vue', () => {
   })
 
   describeCheckFormFields(wrapper, formFields)
+
+  describe('Form', () => {
+
+    it('Show additional info', () => {
+      wrapper.find('.show-additional-info').trigger('click')
+      expect(wrapper.vm.showAdditionalInfo).to.equal(true)
+    })
+
+  })
 
   describe('Form send', () => {
 
