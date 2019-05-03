@@ -1,9 +1,9 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Confirmation from '@/components/users/Confirmation'
-import BootstrapVue from 'bootstrap-vue'
-import {$routerMocks} from '../../utils'
-import $moment from 'moment'
+import {$routerMocks, RouterLink} from '../../utils'
 import flushPromises from 'flush-promises'
+import BootstrapVue from 'bootstrap-vue'
+import $moment from 'moment'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -15,8 +15,9 @@ function createWrapper(httpResp)
     $moment
   }
 
-  return shallowMount(Confirmation, {
+  return mount(Confirmation, {
     mocks: Object.assign(mocks, $routerMocks),
+    stubs: { RouterLink },
     propsData: {},
     localVue
   })
@@ -24,14 +25,14 @@ function createWrapper(httpResp)
 
 describe('users/Confirmation.vue', () => {
 
-  /*const wrapper = createWrapper(Promise.resolve())
+  /*let wrapper = createWrapper(Promise.resolve())
 
   it('Success request', async () => {
     await flushPromises()
     expect(wrapper.vm.status).to.equal('success')
   })*/
 
-  const wrapper2 = createWrapper(Promise.reject())
+  let wrapper2 = createWrapper(Promise.reject())
 
   it('Error request', async () => {
     await flushPromises()
