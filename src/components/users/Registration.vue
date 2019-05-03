@@ -225,9 +225,10 @@
           .catch(error => {
             if (error.response) {
               this.showValidationErrors(error.response.data.errors.data)
-
               this.enableFields()
-            } else { console.log(error) }
+            } else {
+              console.log(error)
+            }
           })
       },
 
