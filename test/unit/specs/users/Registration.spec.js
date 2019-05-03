@@ -94,17 +94,26 @@ describe('users/Registration.vue', () => {
       return await flushPromises()
     }
 
-    const wrapper1 = createWrapper()
-    it('Success response', async () => {
-      await formInit(wrapper1)
-      expect(wrapper1.vm.registrationComplete).to.equal(true)
-    })
+    const expects = [
+      [
+        'Success response',
+        Promise.resolve(),
+        wrapper => expect(wrapper.vm.registrationComplete).to.equal(true)
+      ], [
+        'Error response',
+        Promise.reject(errorResp),
+        wrapper => expect(wrapper.vm.registrationComplete).to.equal(false)
+      ]
+    ]
 
-    const wrapper2 = createWrapper(Promise.reject(errorResp))
-    it('Error response', async () => {
-      await formInit(wrapper2)
-      expect(wrapper2.vm.registrationComplete).to.equal(false)
-    })
+    for (let [ title, resp, expect ] of expects)
+    {
+      let wrapper = createWrapper(resp)
+      it(title, async () => {
+        await formInit(wrapper)
+        expect(wrapper)
+      })
+    }
 
   })
 

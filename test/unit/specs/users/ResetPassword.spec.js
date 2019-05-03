@@ -43,7 +43,7 @@ const errorResp = {
     data: {
       errors: {
         data: {
-          email: 'email'
+          email: ['email']
         }
       }
     }
@@ -70,17 +70,30 @@ describe('users/ResetPassword.vue', () => {
       return await flushPromises()
     }
 
-    const wrapper1 = createWrapper()
-    it('Success response', async () => {
-      await formInit(wrapper1)
-      expect(wrapper1.vm.resetComplete).to.equal(true)
-    })
+    const expects = [
+      [
+        'Success response',
+        Promise.resolve(),
+        wrapper => expect(wrapper.vm.resetComplete).to.equal(true)
+      ], [
+        'Error empty response',
+        Promise.reject({}),
+        wrapper => expect(wrapper.vm.validationError).to.equal('')
+      ], [
+        'Error response',
+        Promise.reject(errorResp),
+        wrapper => expect(wrapper.vm.validationError).to.equal(errorResp.response.data.errors.data.email[0])
+      ]
+    ]
 
-    const wrapper2 = createWrapper(Promise.reject(errorResp))
-    it('Error response', async () => {
-      await formInit(wrapper2)
-      expect(wrapper2.vm.validationError).to.equal(errorResp.response.data.errors.data.email[0])
-    })
+    for (let [ title, resp, expect ] of expects)
+    {
+      let wrapper = createWrapper(resp)
+      it(title, async () => {
+        await formInit(wrapper)
+        expect(wrapper)
+      })
+    }
 
   })
 
