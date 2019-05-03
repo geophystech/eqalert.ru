@@ -60,18 +60,18 @@ function createWrapper(httpRespHandler = Promise.resolve())
   })
 }
 
-const ERROR_PROP = 'purpose_of_use'
+const errors = {
+  purpose_of_use: ['Purpose error'],
+  company_name: ['Company error'],
+  full_name: ['Full name error'],
+  other: ['Other error']
+}
 
 const errorResp = {
   response: {
     data: {
       errors: {
-        data: {
-          [ERROR_PROP]: ['Purpose error'],
-          company_name: ['Company error'],
-          full_name: ['Full name error'],
-          other: ['Other error']
-        }
+        data: errors
       }
     }
   }
@@ -114,8 +114,11 @@ describe('users/Registration.vue', () => {
       ], [
         'Error response',
         Promise.reject(errorResp),
-        wrapper => expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(ERROR_PROP)])
-          .to.equal(errorResp.response.data.errors.data[ERROR_PROP][0])
+        wrapper => {
+          for (let [errorProp, msgs] of Object.entries(errors)) {
+            expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
+          }
+        }
       ]
     ]
 
