@@ -10,7 +10,7 @@ localVue.use(BootstrapVue)
 
 function createWrapper(httpResp)
 {
-  const mocks = {
+  let mocks = {
     $http: { post: () => httpResp },
     $moment
   }
@@ -25,14 +25,14 @@ function createWrapper(httpResp)
 
 describe('users/Confirmation.vue', () => {
 
-  /*let wrapper = createWrapper(Promise.resolve())
+  /*const wrapper = createWrapper(Promise.resolve())
 
   it('Success request', async () => {
     await flushPromises()
     expect(wrapper.vm.status).to.equal('success')
   })*/
 
-  let wrapper2 = createWrapper(Promise.reject())
+  const wrapper2 = createWrapper(Promise.reject())
 
   it('Error request', async () => {
     await flushPromises()
