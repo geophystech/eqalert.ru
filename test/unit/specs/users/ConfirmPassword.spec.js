@@ -55,29 +55,22 @@ describe('users/ConfirmPassword.vue', () => {
 
   describe('Form send', () => {
 
-    const wrapper = createWrapper()
+    const wrapper1 = createWrapper()
     const wrapper2 = createWrapper(Promise.reject(errorResp))
-
-    it('Success response', async () => {
-
+    const formInit = async (wrapper) => {
       wrapper.find('input[name="password"]').setValue('12345')
       wrapper.find('form').trigger('submit.prevent')
+      return await flushPromises()
+    }
 
-      await flushPromises()
-
-      expect(wrapper.vm.passwordChanged).to.equal(true)
-
+    it('Success response', async () => {
+      await formInit(wrapper1)
+      expect(wrapper1.vm.passwordChanged).to.equal(true)
     })
 
     it('Error response', async () => {
-
-      wrapper2.find('input[name="password"]').setValue('12345')
-      wrapper2.find('form').trigger('submit.prevent')
-
-      await flushPromises()
-
+      await formInit(wrapper2)
       expect(wrapper2.vm.validationError).to.equal(errorResp.response.data.email[0])
-
     })
 
   })

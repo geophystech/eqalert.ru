@@ -52,9 +52,9 @@ describe('users/Authentication.vue', () => {
     rememberMe: { tag: 'b-form-checkbox-stub', value: false }
   }
 
-  Object.entries(fields).forEach((fieldName, fieldData) => {
+  for (let [fieldName, fieldData] of Object.entries(fields)) {
     propsData.form[fieldName] = { value: fieldData.value, disabled: false }
-  })
+  }
 
   const wrapper = shallowMount(Authentication, {
     mocks: Object.assign(mocks, $routerMocks),

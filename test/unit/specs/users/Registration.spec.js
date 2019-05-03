@@ -1,40 +1,104 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Registration from '@/components/users/Registration'
 import BootstrapVue from 'bootstrap-vue'
 import {$routerMocks, describeCheckFormFields, RouterLink} from '../../utils'
 import $moment from 'moment'
-import $http from 'axios'
+import flushPromises from 'flush-promises'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-describe('users/Registration.vue', () => {
+const formFields = {
+  email: {tag: 'input', value: 'test@mail.ru'},
+  password: {tag: 'input', value: '12345'},
+  company: {tag: 'input', value: 'My company'},
+  purpose: {tag: 'select', value: 'purpose'},
+  fullname: {tag: 'input', value: 'fullname'},
+  additionalInfo: {tag: 'textarea', value: 'Additional Info'}
+}
 
-  const wrapper = shallowMount(Registration, {
-    mocks: Object.assign({ $http, $moment }, $routerMocks),
-    propsData: {
-      breadcrumbs: [],
-      form: {
-
-      }
+function createWrapper(httpRespHandler = Promise.resolve())
+{
+  const mocks = {
+    $http: {
+      post: () => httpRespHandler,
+      get: () => Promise.resolve({data: {data: []}})
     },
+    $moment
+  }
+
+  const propsData = {
+    registrationComplete: false,
+    breadcrumbs: [],
+    form: {
+      validated: false,
+      messages: {},
+      fields: {}
+    }
+  }
+
+  for (let [fieldName, fieldData] of Object.entries(formFields)) {
+    propsData.form.fields[fieldName] = { value: fieldData.value, disabled: false }
+    propsData.form.messages[fieldName] = `Message fot ${fieldName}`
+  }
+
+  return mount(Registration, {
+    mocks: Object.assign(mocks, $routerMocks),
+    propsData,
     stubs: {
       RouterLink
     },
     localVue
   })
+}
+
+const errorResp = {
+  response: {
+    data: {
+      errors: {
+        data: [
+
+        ]
+      }
+    }
+  }
+}
+
+describe('users/Registration.vue', () => {
+
+  const wrapper = createWrapper()
 
   it('Check component Registration', () => {
     expect(wrapper.is(Registration)).to.eql(true)
   })
 
-  describeCheckFormFields(wrapper, {
-    email: {tag: 'b-form-input-stub'},
-    password: {tag: 'b-form-input-stub'},
-    company: {tag: 'b-form-input-stub'},
-    purpose: {tag: 'b-form-select-stub'},
-    fullname: {tag: 'b-form-input-stub'},
-    additionalInfo: {tag: 'b-form-textarea-stub'}
+  describeCheckFormFields(wrapper, formFields)
+
+  describe('Form send', () => {
+
+    const formInit = async (wrapper) => {
+
+      for (let [fieldName, fieldData] of Object.entries(formFields)) {
+        wrapper.find(`${fieldData.tag}[name="${fieldName}"]`).setValue(fieldData.value)
+      }
+
+      wrapper.find('form').trigger('submit.prevent')
+
+      return await flushPromises()
+    }
+
+    /*const wrapper1 = createWrapper()
+    it('Success response', async () => {
+      await formInit(wrapper1)
+      expect(wrapper1.vm.registrationComplete).to.equal(true)
+    })*/
+
+    const wrapper2 = createWrapper(Promise.reject(errorResp))
+    it('Error response', async () => {
+      await formInit(wrapper2)
+      expect(wrapper2.vm.registrationComplete).to.equal(false)
+    })
+
   })
 
 })
