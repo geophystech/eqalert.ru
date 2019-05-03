@@ -111,34 +111,52 @@ describe('users/Registration.vue', () => {
         'Error empty response',
         Promise.reject({}),
         wrapper => expect(wrapper.vm.registrationComplete).to.equal(false)
+      ], [
+        'Error response',
+        Promise.reject(errorResp),
+        [
+          [
+            'Show validation errors',
+            wrapper => {
+              for (let [errorProp, msgs] of Object.entries(errors)) {
+                expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
+              }
+            }
+          ]/*, [
+            'Submit button enabled',
+            wrapper => expect(wrapper.vm.form.submitButtonDisabled).to.equal(false)
+          ]*/
+        ]
       ]
     ]
 
     for (let [ title, resp, expect ] of expects)
     {
-      let wrapper = createWrapper(resp)
-      it(title, async () => {
-        await formInit(wrapper)
-        expect(wrapper)
-      })
-    }
+      if (Array.isArray(expect))
+      {
+        for (let [title2, expect2] of expect)
+        {
+          let wrapper = createWrapper(resp)
 
-    describe('Error response', () => {
-
-      const wrapper = createWrapper(Promise.reject(errorResp))
-
-      it('Show validation errors', async () => {
-        await formInit(wrapper)
-        for (let [errorProp, msgs] of Object.entries(errors)) {
-          expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
+          describe(title, () => {
+            it(title2, async () => {
+              await formInit(wrapper)
+              expect2(wrapper)
+            })
+          })
         }
-      })
+      }
+      else
+      {
+        let wrapper = createWrapper(resp)
 
-      it('Submit button enabled', () => {
-        expect(wrapper.vm.form.submitButtonDisabled).to.equal(true)
-      })
+        it(title, async () => {
+          await formInit(wrapper)
+          expect(wrapper)
+        })
+      }
 
-    })
+    }
 
   })
 
