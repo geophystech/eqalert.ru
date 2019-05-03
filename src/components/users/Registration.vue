@@ -231,13 +231,16 @@
             } else { console.log(error) }
           })
       },
-      showValidationErrors: function(messages) {
-        Object.keys(messages).forEach(messageKey => {
+
+      showValidationErrors: function(messages)
+      {
+        for (let [messageKey, messageList] of Object.entries(messages)) {
           const key = this.transformFieldName(messageKey)
-          this.form.messages[key] = messages[messageKey][0]
+          this.form.messages[key] = messageList[0]
           this.form.fields[key].state = false
-        })
+        }
       },
+
       // Transforms field names taken from API into local field names.
       transformFieldName: function(fieldName) {
         switch (fieldName) {

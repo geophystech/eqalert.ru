@@ -62,13 +62,15 @@ function createWrapper(httpRespHandler = Promise.resolve())
   })
 }
 
+const ERROR_PROP = 'purpose_of_use'
+
 const errorResp = {
   response: {
     data: {
       errors: {
-        data: [
-
-        ]
+        data: {
+          [ERROR_PROP]: ['Purpose error']
+        }
       }
     }
   }
@@ -100,9 +102,14 @@ describe('users/Registration.vue', () => {
         Promise.resolve(),
         wrapper => expect(wrapper.vm.registrationComplete).to.equal(true)
       ], [
+        'Error empty response',
+        Promise.reject({}),
+        wrapper => expect(wrapper.vm.registrationComplete).to.equal(false)
+      ], [
         'Error response',
         Promise.reject(errorResp),
-        wrapper => expect(wrapper.vm.registrationComplete).to.equal(false)
+        wrapper => expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(ERROR_PROP)])
+          .to.equal(errorResp.response.data.errors.data[ERROR_PROP][0])
       ]
     ]
 
