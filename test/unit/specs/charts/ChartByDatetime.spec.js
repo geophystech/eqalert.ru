@@ -31,15 +31,23 @@ describe('charts/ChartByDatetime.vue', () => {
 
   const respData = resp.data.data
 
-  it('Request data', async () => {
+  describe('Request data', () => {
 
-    let wrapper = createWrapper({
+    const wrapper = createWrapper({
       get: () => Promise.resolve(resp)
     })
 
-    flushPromises().then(() => {
-      expect(JSON.stringify(wrapper.vm.chartData.datasets[0].data))
-        .to.equal(JSON.stringify(respData.counts))
+    it('Datasets', async () => {
+      flushPromises().then(() => {
+        expect(wrapper.vm.chartData.datasets[0].data).to.equal(respData.counts)
+      })
+    })
+
+    it('Labels', async () => {
+      flushPromises().then(() => {
+        const dates = wrapper.vm.prepareDates(respData.dates)
+        expect(wrapper.vm.chartData.labels).to.equal(dates)
+      })
     })
 
   })

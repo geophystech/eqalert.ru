@@ -50,7 +50,7 @@ describe('users/Authentication.vue', () => {
   const fields = {
     email: { tag: 'input', value: 'test@mail.com' },
     password: { tag: 'input', value: '12345' },
-    rememberMe: { tag: 'checkbox', value: false }
+    rememberMe: { tag: 'input[type=checkbox]', value: false }
   }
 
   for (let [fieldName, fieldData] of Object.entries(fields)) {
