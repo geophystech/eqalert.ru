@@ -11,7 +11,6 @@ function createWrapper($http)
 {
   return mount(ChartByDatetime, {
     mocks: { $http, $moment },
-    sync: false,
     localVue
   })
 }
@@ -37,18 +36,17 @@ describe('charts/ChartByDatetime.vue', () => {
       get: () => Promise.resolve(resp)
     })
 
-    // wrapper.vm.filtersParams = {}
     wrapper.vm.drawChart()
-
-    it('Chart datasets data', async () => {
-      flushPromises().then(() => {
-        expect(wrapper.vm.chartData.datasets[0].data).to.equal(respData.counts)
-      })
-    })
 
     it('Chart datasets label', async () => {
       flushPromises().then(() => {
         expect(wrapper.vm.chartData.datasets[0].label).to.equal('Количество землетрясений')
+      })
+    })
+
+    it('Chart datasets data', async () => {
+      flushPromises().then(() => {
+        expect(wrapper.vm.chartData.datasets[0].data).to.equal(respData.counts)
       })
     })
 

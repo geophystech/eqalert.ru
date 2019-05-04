@@ -74,9 +74,12 @@ export default Line.extend({
     drawChart: function(params = {}) {
       this.$http.get(apiSettings.endpointAnalyticsDensityCounts, { params: params })
         .then(response => {
+
+          const respData = response.data.data
+
           this.chartData.datasets[0].label = 'Плотностное распределение повторяемости (ML)'
-          this.chartData.datasets[0].data = response.data.data.counts
-          this.chartData.labels = response.data.data.magnitudes
+          this.chartData.datasets[0].data = respData.counts
+          this.chartData.labels = respData.magnitudes
 
           // Ugly hack to prevent showing old data on hovering.
           // No idea why it doesn't covered by https://github.com/apertureless/vue-chartjs/blob/master/src/BaseCharts.js#L71
@@ -86,7 +89,6 @@ export default Line.extend({
 
           this.renderChart(this.chartData, this.options)
         })
-        .catch(error => { console.log(error) })
     }
   },
   watch: {
