@@ -95,9 +95,9 @@
             cursor: this.cursor,
             limit: 10
           }
+        }).then(response => {
+          this.setData(response.data.data)
         })
-          .then(response => { this.setData(response.data.data) })
-          .catch(error => { console.log(error) })
       },
       setData(data) {
         data.forEach(settlement => {
