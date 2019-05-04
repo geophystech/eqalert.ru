@@ -37,7 +37,8 @@ describe('charts/ChartByDatetime.vue', () => {
       get: () => Promise.resolve(resp)
     })
 
-    wrapper.vm.filtersParams = {}
+    // wrapper.vm.filtersParams = {}
+    wrapper.vm.drawChart()
 
     it('Chart datasets data', async () => {
       flushPromises().then(() => {
