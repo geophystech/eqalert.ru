@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Authentication from '@/components/users/Authentication'
 import BootstrapVue from 'bootstrap-vue'
 import Toasted from 'vue-toasted'
@@ -12,6 +12,7 @@ localVue.use(Toasted)
 
 const request = (_url, _data) => {
   return new Promise((resolve, reject) => {
+    console.log(_url, _data)
     resolve()
   })
 }
@@ -47,16 +48,16 @@ const propsData = {
 describe('users/Authentication.vue', () => {
 
   const fields = {
-    email: { tag: 'b-form-input-stub', value: 'test@mail.com' },
-    password: { tag: 'b-form-input-stub', value: '12345' },
-    rememberMe: { tag: 'b-form-checkbox-stub', value: false }
+    email: { tag: 'input', value: 'test@mail.com' },
+    password: { tag: 'input', value: '12345' },
+    rememberMe: { tag: 'checkbox', value: false }
   }
 
   for (let [fieldName, fieldData] of Object.entries(fields)) {
     propsData.form[fieldName] = { value: fieldData.value, disabled: false }
   }
 
-  const wrapper = shallowMount(Authentication, {
+  const wrapper = mount(Authentication, {
     mocks: Object.assign(mocks, $routerMocks),
     stubs: { RouterLink },
     propsData,
