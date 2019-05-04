@@ -33,7 +33,7 @@ describe('charts/ChartByDensityCounts.vue', () => {
 
   ([
 
-    [ 'Request data by filters', wrapper => { wrapper.vm.filtersParams = {} } ],
+    [ 'Request data by filters change', wrapper => { wrapper.vm.filtersParams = {} } ],
     [ 'Request data default', wrapper => { wrapper.vm.drawChart() } ]
 
   ]).forEach(conf => {
