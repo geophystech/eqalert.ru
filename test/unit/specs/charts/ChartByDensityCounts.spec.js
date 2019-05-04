@@ -39,6 +39,7 @@ describe('charts/ChartByDensityCounts.vue', () => {
       get: () => Promise.resolve(resp)
     })
 
+    wrapper.vm.filtersParams = {}
     wrapper.vm.drawChart()
 
     it('Chart datasets label', async () => {
