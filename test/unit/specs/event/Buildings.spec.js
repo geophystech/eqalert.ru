@@ -7,18 +7,22 @@ import flushPromises from 'flush-promises'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
+const $store = {
+  getters: {
+    msk64ConfigVersion: 'msk64ConfigVersion'
+  }
+}
+
 function createWrapper($http)
 {
   return mount(Buildings, {
+    mocks: { $http, $moment, $store },
+    localVue,
     propsData: {
       event: {
         id: 'ob93enBa'
       }
-    },
-    mocks: {
-      $http, $moment
-    },
-    localVue
+    }
   })
 }
 
@@ -67,6 +71,7 @@ describe('event/Buildings.vue', () => {
       it('Load data', async () => {
         flushPromises().then(() => {
           expect(wrapper.vm.items[wrapper.vm.items.length - 2].value).to.equal(respData.length)
+          expect(wrapper.vm.items[wrapper.vm.items.length - 1].value).to.equal($store.getters.msk64ConfigVersion)
         })
       })
 
