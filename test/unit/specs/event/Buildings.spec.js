@@ -32,6 +32,13 @@ const resp = {
             destroyed: 3
           }
         }
+      }, {
+        damage_level: 4,
+        building: {
+          data: {
+            destroyed: 3
+          }
+        }
       }
     ]
   }
