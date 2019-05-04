@@ -77,7 +77,7 @@ describe('users/ResetPassword.vue', () => {
         wrapper => expect(wrapper.vm.resetComplete).to.equal(true)
       ], [
         'Error empty response',
-        Promise.reject({}),
+        Promise.reject({ error: 'User not exists!' }),
         wrapper => expect(wrapper.vm.validationError).to.equal('')
       ], [
         'Error response',

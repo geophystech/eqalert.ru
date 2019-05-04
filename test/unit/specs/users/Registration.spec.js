@@ -109,7 +109,7 @@ describe('users/Registration.vue', () => {
         wrapper => expect(wrapper.vm.registrationComplete).to.equal(true)
       ], [
         'Error empty response',
-        Promise.reject({}),
+        Promise.reject({ error: 'Email already used!' }),
         wrapper => expect(wrapper.vm.registrationComplete).to.equal(false)
       ], [
         'Error response',

@@ -68,16 +68,20 @@ export default Line.extend({
     drawChart: function(params = {}) {
       this.$http.get(apiSettings.endpointAnalyticsEarthquakeCounts, { params: params })
         .then(response => {
-          const dates = this.prepareDates(response.data.data.dates)
+
+          const respData = response.data.data
+          console.log(respData)
+
+          const dates = this.prepareDates(respData.dates)
           this.chartData.datasets[0].label = 'Количество землетрясений'
-          this.chartData.datasets[0].data = response.data.data.counts
+          this.chartData.datasets[0].data = respData.counts
           this.chartData.labels = dates
 
           // Pass data to the Analytics.vue component.
           this.$emit('update', {
-            eventsCount: response.data.data.total_count,
-            startDate: this.$moment(response.data.data.range.start).format('L'),
-            endDate: this.$moment(response.data.data.range.end).format('L')
+            eventsCount: respData.total_count,
+            startDate: this.$moment(respData.range.start).format('L'),
+            endDate: this.$moment(respData.range.end).format('L')
           })
 
           // Ugly hack to prevent showing old data on hovering.
@@ -88,7 +92,6 @@ export default Line.extend({
 
           this.renderChart(this.chartData, this.options)
         })
-        .catch(error => { console.log(error) })
     },
     prepareDates: function(dates) {
       return dates.map(date => {
