@@ -8,10 +8,10 @@ import flushPromises from 'flush-promises'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-function createWrapper($http)
+function createWrapper($http, $route)
 {
   return mount(LastEvents, {
-    mocks: { $http, $moment, $route: {query: {}} },
+    mocks: { $http, $moment, $route },
     stubs: { RouterLink },
     localVue,
     propsData: {
@@ -49,6 +49,10 @@ describe('event/LastEvents.vue', () => {
 
   const wrapper = createWrapper({
     get: () => Promise.resolve(resp)
+  }, {
+    query: {
+      backUrlQuery: 'Back url query'
+    }
   })
 
   const respData = resp.data.data
