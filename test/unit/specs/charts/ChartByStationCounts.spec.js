@@ -26,32 +26,42 @@ const resp = {
 
 describe('charts/ChartByStationCounts.vue', () => {
 
-  const respData = resp.data.data
+  ([
 
-  describe('Request data', () => {
+    [ 'Request data by filters change', wrapper => { wrapper.vm.filtersParams = {} } ],
+    [ 'Request data default', wrapper => { wrapper.vm.drawChart() } ]
 
-    const wrapper = createWrapper({
-      get: () => Promise.resolve(resp)
-    })
+  ]).forEach(conf => {
 
-    wrapper.vm.drawChart()
+    const [label, mod] = conf
 
-    it('Chart datasets label', async () => {
-      flushPromises().then(() => {
-        expect(wrapper.vm.chartData.datasets[0].label).to.equal('События по количеству станций')
+    describe(label, () => {
+
+      const wrapper = createWrapper({
+        get: () => Promise.resolve(resp)
       })
-    })
 
-    it('Chart datasets data', async () => {
-      flushPromises().then(() => {
-        expect(wrapper.vm.chartData.datasets[0].data).to.equal(respData.counts)
-      })
-    })
+      const respData = resp.data.data
+      mod(wrapper)
 
-    it('Chart labels', async () => {
-      flushPromises().then(() => {
-        expect(wrapper.vm.chartData.labels).to.equal(respData.station_counts)
+      it('Chart datasets label', async () => {
+        flushPromises().then(() => {
+          expect(wrapper.vm.chartData.datasets[0].label).to.equal('События по количеству станций')
+        })
       })
+
+      it('Chart datasets data', async () => {
+        flushPromises().then(() => {
+          expect(wrapper.vm.chartData.datasets[0].data).to.equal(respData.counts)
+        })
+      })
+
+      it('Chart labels', async () => {
+        flushPromises().then(() => {
+          expect(wrapper.vm.chartData.labels).to.equal(respData.station_counts)
+        })
+      })
+
     })
 
   })
