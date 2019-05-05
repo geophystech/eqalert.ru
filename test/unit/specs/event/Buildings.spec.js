@@ -3,6 +3,7 @@ import Buildings from '@/components/event/Buildings'
 import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
 import flushPromises from 'flush-promises'
+import {EVENT_BUIDINGS} from '../../utils'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -28,23 +29,7 @@ function createWrapper($http)
 
 const resp = {
   data: {
-    data: [
-      {
-        damage_level: 1,
-        building: {
-          data: {
-            destroyed: 3
-          }
-        }
-      }, {
-        damage_level: 4,
-        building: {
-          data: {
-            destroyed: 3
-          }
-        }
-      }
-    ]
+    data: EVENT_BUIDINGS
   }
 }
 

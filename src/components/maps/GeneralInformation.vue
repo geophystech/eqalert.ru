@@ -22,6 +22,7 @@
     },
     methods: {
       addData: function(data) {
+        
         let legendData = `
           <table>
             <thead>
@@ -34,6 +35,7 @@
             <tbody>`
 
         Object.keys(data).forEach((key) => {
+
           const lineColor = this.pgaLineColor(key)
           const pga = window.L.polygon(data[key].data, { color: lineColor, weigh: 2 })
 
