@@ -18,21 +18,14 @@ export default {
     }
   },
   metaInfo() {
-    const page = this.page
-    console.log('page & pages', page, this.pages)
     return {
-      title: this.pages[page]
+      title: this.pages[this.page]
     }
   },
   methods: {
-    getContent: async function() {
-      return await this.$http.get(`/static/markdown/${this.page}.md`)
-        .then(response => {
-          this.content = response.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    getContent: function() {
+      this.$http.get(`/static/markdown/${this.page}.md`)
+        .then(response => { this.content = response.data })
     }
   },
   created() {
