@@ -53,34 +53,4 @@ describe('Events.vue', () => {
     })
   })
 
-  wrapper.destroy()
-
-  ;([
-      [422, {errors: {data: 'errors.data'}}],
-      [400, {error: {message: 'error.message'}}],
-      [501, {error: {message: 'error.message'}}],
-      [500, {error: 'Other error'}]
-  ]).forEach(resp => {
-
-    const [statusCode, data] = resp
-
-    wrapper = createWrapper({
-      get: () => Promise.reject({
-        response: {
-          status: statusCode,
-          data: data
-        }
-      })
-    })
-
-    it(`Check response error status code  ${statusCode}`, async () => {
-      flushPromises().then(() => {
-        expect(true).to.equal(true)
-      })
-    })
-
-    wrapper.destroy()
-
-  })
-
 })
