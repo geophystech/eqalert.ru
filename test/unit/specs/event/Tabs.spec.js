@@ -88,7 +88,8 @@ describe('event/Tabs.vue', () => {
   describe('Meta Info', () => {
     const wrapper = createWrapper()
     it('Title', () => {
-      expect(!!wrapper.vm.getTitle().length).to.equal(true)
+      const metaInfo = wrapper.vm.$options.metaInfo.call(wrapper.vm)
+      expect(!!metaInfo.title.length).to.equal(true)
     })
   })
 
