@@ -6,13 +6,26 @@ import flushPromises from 'flush-promises'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
+const previousRequest = {abort: () => {}}
+
 function createWrapper($http)
 {
-  return mount(ModalMap, {
+  const wrapper = mount(ModalMap, {
     attachToDocument: true,
     mocks: {$http},
     localVue
   })
+
+  wrapper.setData({previousRequest})
+
+  return wrapper
+}
+
+const $http = {
+  get: (url, opts) => {
+    opts.before(previousRequest)
+    return Promise.resolve(resp)
+  }
 }
 
 const resp = {
@@ -64,26 +77,41 @@ const resp = {
 
 describe('maps/ModalMap.vue', () => {
 
-  let wrapper = createWrapper({
-    get: () => Promise.resolve(resp)
-  })
+  let wrapper = createWrapper($http)
 
   it('Modal map rendered', () => {
     wrapper.find('#map-dialog-btn').trigger('click')
     expect(wrapper.contains('#map-dialog')).to.eql(true)
   })
 
+  wrapper.destroy()
+  wrapper = createWrapper($http)
+
   it('Modal opening', async () => {
+    wrapper.find('#map-dialog-btn').trigger('click')
     wrapper.vm.onOpen()
     flushPromises().then(() => {
       expect(!!wrapper.vm.map.object).to.eql(true)
     })
   })
 
+  wrapper.destroy()
+  wrapper = createWrapper($http)
+
   it('Modal closing', async () => {
+
+    wrapper.find('#map-dialog-btn').trigger('click')
+
     flushPromises().then(() => {
-      expect(wrapper.contains('#map-dialog')).to.eql(false)
-      expect(!!wrapper.vm.map.object).to.eql(false)
+
+      wrapper.find('#map-dialog .close').trigger('click')
+      wrapper.vm.onClose()
+
+      flushPromises().then(() => {
+        expect(wrapper.contains('#map-dialog')).to.eql(false)
+        expect(!!wrapper.vm.map.object).to.eql(false)
+      })
+
     })
   })
 
