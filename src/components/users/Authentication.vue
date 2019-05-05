@@ -116,14 +116,14 @@
       disableFields: function() {
         this.changeFieldsDisabledState(true)
       },
-      onSubmit: function() {
+      onSubmit: async function() {
         this.form.validated = true
 
         if (!this.$refs.form.checkValidity()) return
 
         this.disableFields()
 
-        auth({
+        return await auth({
 
           rememberMe: this.form.fields.rememberMe.value,
           password: this.form.fields.password.value,

@@ -18,8 +18,10 @@ export default {
     }
   },
   metaInfo() {
+    const page = this.page
+    console.log('page & pages', page, this.pages)
     return {
-      title: this.pages[this.page]
+      title: this.pages[page]
     }
   },
   methods: {
