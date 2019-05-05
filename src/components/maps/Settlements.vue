@@ -57,7 +57,6 @@
       fetchData: function() {
         this.$http.get(apiSettings.endpointEventMsk64(this.event.id))
           .then(response => { this.addData(response.data.data) })
-          .catch(error => { console.log(error) })
       },
       initialize: function() {
         this.map.id = id(this.event.id, this.tab)

@@ -28,6 +28,8 @@ describe('maps/GeneralInformation.vue', () => {
 
   ([
 
+    ['Request data', () => {}, true],
+
     ['Request data by event change', wrapper => {
       wrapper.vm.event = deepClone(EVENT_DATA)
     }, true],
@@ -36,9 +38,7 @@ describe('maps/GeneralInformation.vue', () => {
       const event = deepClone(EVENT_DATA)
       event.has_pga_data = false
       wrapper.vm.event = event
-    }],
-
-    ['Request data default', () => {}, true]
+    }]
 
   ]).forEach(conf => {
 
@@ -50,7 +50,6 @@ describe('maps/GeneralInformation.vue', () => {
         get: () => Promise.resolve(resp)
       })
 
-      // const respData = resp.data.data
       mod(wrapper)
 
       it('Success load data', async () => {

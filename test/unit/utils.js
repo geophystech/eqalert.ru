@@ -116,6 +116,57 @@ export function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
+export const EVENT_SETTLEMENTS = [
+  {
+    value: 1,
+    distance: 898.44333,
+    lat: 51.45341,
+    lon: 156.324385
+  },
+  {
+    value: 2,
+    distance: 525.272,
+    lat: 51.45341,
+    lon: 150.942385
+  },
+  {
+    value: 3,
+    distance: 307.12379,
+    lat: 51.45341,
+    lon: 147.801385
+  },
+  {
+    value: 4,
+    distance: 178.91284,
+    lat: 51.45341,
+    lon: 145.956385
+  },
+  {
+    value: 5,
+    distance: 103.84806,
+    lat: 51.45341,
+    lon: 144.876385
+  },
+  {
+    value: 6,
+    distance: 58.18063,
+    lat: 51.45341,
+    lon: 144.219385
+  },
+  {
+    value: 7,
+    distance: 30.02883,
+    lat: 51.45341,
+    lon: 143.814385
+  },
+  {
+    value: 8,
+    distance: 6.88162,
+    lat: 51.45341,
+    lon: 143.481385
+  }
+]
+
 export const EVENT_LDOS = [
   {
     id: 3,
