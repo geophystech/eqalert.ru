@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import GeneralInformationMap from '@/components/maps/GeneralInformation'
 import {EVENT_GENERAL_INFO, EVENT_DATA, mapPropDataGen, deepClone} from '../../utils'
+import GeneralInformationMap from '@/components/maps/GeneralInformation'
 import flushPromises from 'flush-promises'
 import BootstrapVue from 'bootstrap-vue'
 import '@/leaflet'
@@ -66,7 +66,6 @@ describe('maps/GeneralInformation.vue', () => {
           get: () => Promise.reject({})
         })
 
-        // const respData = resp.data.data
         mod(wrapper)
 
         it('Error load data', async () => {

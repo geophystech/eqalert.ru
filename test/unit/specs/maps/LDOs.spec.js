@@ -1,8 +1,8 @@
 import { mount, createLocalVue } from '@vue/test-utils'
+import {EVENT_LDOS, mapPropDataGen} from '../../utils'
 import LDOsMap from '@/components/maps/LDOs'
 import BootstrapVue from 'bootstrap-vue'
 import '@/leaflet'
-import {EVENT_LDOS, mapPropDataGen} from '../../utils'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)

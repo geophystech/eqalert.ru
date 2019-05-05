@@ -1,6 +1,6 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import SettlementsMap from '@/components/maps/Settlements'
+import { mount, createLocalVue } from '@vue/test-utils'
 import {EVENT_DATA, EVENT_SETTLEMENTS, deepClone, mapPropDataGen} from '../../utils'
+import SettlementsMap from '@/components/maps/Settlements'
 import flushPromises from 'flush-promises'
 import BootstrapVue from 'bootstrap-vue'
 import '@/leaflet'
@@ -10,7 +10,7 @@ localVue.use(BootstrapVue)
 
 function createWrapper($http)
 {
-  return shallowMount(SettlementsMap, {
+  return mount(SettlementsMap, {
     propsData: mapPropDataGen('SettlementsMap'),
     attachToDocument: true,
     mocks: { $http },
@@ -39,7 +39,6 @@ describe('maps/Settlements.vue', () => {
         get: () => Promise.resolve(resp)
       })
 
-      // const respData = resp.data.data
       mod(wrapper)
 
       it('Check map', async () => {
