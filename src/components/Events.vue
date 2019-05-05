@@ -1,9 +1,9 @@
 <template>
   <div class="events">
     <CountersHeader v-if="!error"
+      :trainingEventsBtnShow="$store.getters.user.authenticated"
       :trainingEventsBtnDisabled="spinners.loadMoreEvents"
       @toggleTrainingEvents="toggleTrainingEvents"
-      :trainingEventsBtnShow="true"
       :filtersData="filtersData"
       :showModalMap="true"
       :count="events.length"

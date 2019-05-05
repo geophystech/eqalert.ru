@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Filters from '@/components/Filters'
 import BootstrapVue from 'bootstrap-vue'
 import { $routerMocks, describeCheckFormFields } from '../utils'
@@ -18,7 +18,7 @@ describe('Filters.vue', () => {
     }
   }
 
-  const wrapper = shallowMount(Filters, {
+  const wrapper = mount(Filters, {
     mocks: Object.assign({ $http, $moment, $store }, $routerMocks),
     attachToDocument: true,
     localVue
@@ -31,19 +31,19 @@ describe('Filters.vue', () => {
   describeCheckFormFields(wrapper, {
     label: 'Check filter fields',
     fields: {
-      datetime_max: { tag: 'flat-pickr-stub' },
-      datetime_min: { tag: 'flat-pickr-stub' },
-      depth_max: { tag: 'b-form-input-stub' },
-      depth_min: { tag: 'b-form-input-stub' },
-      has_mt: { tag: 'b-form-checkbox-stub' },
-      mag_max: { tag: 'b-form-input-stub' },
-      mag_min: { tag: 'b-form-input-stub' },
-      lat_max: { tag: 'b-form-input-stub' },
-      lat_min: { tag: 'b-form-input-stub' },
-      lon_max: { tag: 'b-form-input-stub' },
-      lon_min: { tag: 'b-form-input-stub' },
-      rms_max: { tag: 'b-form-input-stub' },
-      sta_num_min: { tag: 'b-form-input-stub' }
+      datetime_max: { tag: 'input' },
+      datetime_min: { tag: 'input' },
+      depth_max: { tag: 'input' },
+      depth_min: { tag: 'input' },
+      has_mt: { tag: 'input[type=checkbox]' },
+      mag_max: { tag: 'input' },
+      mag_min: { tag: 'input' },
+      lat_max: { tag: 'input' },
+      lat_min: { tag: 'input' },
+      lon_max: { tag: 'input' },
+      lon_min: { tag: 'input' },
+      rms_max: { tag: 'input' },
+      sta_num_min: { tag: 'input' }
     }
   })
 

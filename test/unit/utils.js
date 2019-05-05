@@ -548,3 +548,29 @@ let eventGeneralInfo = {}
 })
 
 export const EVENT_GENERAL_INFO = eventGeneralInfo
+
+export function range(start, stop) {
+  let result = []
+  for (let idx = start.toString().charCodeAt(0), end = stop.toString().charCodeAt(0); idx <= end; ++idx) {
+    result.push(String.fromCharCode(idx))
+  }
+  return result
+}
+
+export function rand(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export function UID(length)
+{
+  let chars = range(0, 9).concat(range('A', 'Z'), range('a', 'z'))
+  let uid = ''
+
+  for(let i = 0; i < length; i++) {
+    uid += chars[rand(0, chars.length - 1)]
+  }
+
+  return uid
+}
