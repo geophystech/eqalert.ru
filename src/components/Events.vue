@@ -69,7 +69,7 @@
         <b-row class="load-more-events" no-gutters>
           <b-col class="text-center">
             <Spinner v-if="spinners.loadMoreEvents" />
-            <a href="#" v-if="apiParams.cursor && !spinners.loadMoreEvents"
+            <a href="#" v-if="apiParams.cursor && !spinners.loadMoreEvents" id="loadMoreEventsBtn"
                @click.prevent="loadMoreEvents">Показать больше событий</a>
             <span v-if="!apiParams.cursor">Загружены все события</span>
           </b-col>

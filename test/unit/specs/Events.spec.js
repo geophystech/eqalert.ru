@@ -31,25 +31,37 @@ function createWrapper($http)
   })
 }
 
-const resp = {
-  data: {
-    data: Array.from({length: 10}).map(it => {
-      it = deepClone(EVENT_DATA)
-      it.id = UID(10)
-      return it
-    })
+const respLength = 10
+
+const resp = () => {
+  return {
+    data: {
+      data: Array.from({length: respLength}).map(it => {
+        it = deepClone(EVENT_DATA)
+        it.id = UID(10)
+        return it
+      })
+    }
   }
 }
 
 describe('Events.vue', () => {
 
   let wrapper = createWrapper({
-    get: () => Promise.resolve(resp)
+    get: () => Promise.resolve(resp())
   })
 
   it('Event list rendered', async () => {
     flushPromises().then(() => {
-      expect(wrapper.findAll('.events-row').length).to.equal(resp.data.data.length)
+      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
+    })
+  })
+
+  it('Event list rendered by load more', async () => {
+    wrapper.vm.apiParams.cursor = 'apiParams.cursor'
+    wrapper.find('#loadMoreEventsBtn').trigger('click.prevent')
+    flushPromises().then(() => {
+      expect(wrapper.findAll('.events-row').length).to.equal(respLength * 2)
     })
   })
 
