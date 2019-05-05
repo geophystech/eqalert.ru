@@ -28,12 +28,21 @@ describe('maps/GeneralInformation.vue', () => {
 
   ([
 
-    [ 'Request data by event change', wrapper => { wrapper.vm.event = deepClone(EVENT_DATA) } ],
-    [ 'Request data default', () => {} ]
+    ['Request data by event change', wrapper => {
+      wrapper.vm.event = deepClone(EVENT_DATA)
+    }, true],
+
+    ['Request data by !has_pga_data', wrapper => {
+      const event = deepClone(EVENT_DATA)
+      event.has_pga_data = false
+      wrapper.vm.event = event
+    }],
+
+    ['Request data default', () => {}, true]
 
   ]).forEach(conf => {
 
-    const [label, mod] = conf
+    const [label, mod, reject] = conf
 
     describe(label, () => {
 
@@ -52,20 +61,23 @@ describe('maps/GeneralInformation.vue', () => {
 
       wrapper.destroy()
 
-      wrapper = createWrapper({
-        get: () => Promise.reject({})
-      })
-
-      // const respData = resp.data.data
-      mod(wrapper)
-
-      it('Error load data', async () => {
-        flushPromises().then(() => {
-          expect(!!wrapper.vm.map.object).to.equal(true)
+      if (reject)
+      {
+        wrapper = createWrapper({
+          get: () => Promise.reject({})
         })
-      })
 
-      wrapper.destroy()
+        // const respData = resp.data.data
+        mod(wrapper)
+
+        it('Error load data', async () => {
+          flushPromises().then(() => {
+            expect(!!wrapper.vm.map.object).to.equal(true)
+          })
+        })
+
+        wrapper.destroy()
+      }
 
     })
 
