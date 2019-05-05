@@ -41,24 +41,36 @@ function createWrapper()
 
 describe('StaticPage.vue', () => {
 
-  ([
-    ['Request page before route update', wrapper => {
-      const beforeRouteUpdate = wrapper.vm.$options.beforeRouteUpdate[0]
-      beforeRouteUpdate.apply(wrapper.vm, [$router.currentRoute, null, () => {}])
-    }],
-    ['Request page default', wrapper => {
-
-    }]
-  ]).forEach(conf => {
-
+  describe('Meta Info', () => {
     const wrapper = createWrapper()
-    const [label, mod] = conf
+    it('Title', () => {
+      const metaInfo = wrapper.vm.$options.metaInfo.call(wrapper.vm)
+      expect(!!metaInfo.title.length).to.equal(true)
+    })
+  })
 
-    it(label, async () => {
-      mod(wrapper)
-      flushPromises().then(() => {
-        expect(wrapper.vm.content).to.equal(PAGE_CONTENT)
+  describe('Request page', () => {
+
+    ([
+      ['Before route update', wrapper => {
+        const beforeRouteUpdate = wrapper.vm.$options.beforeRouteUpdate[0]
+        beforeRouteUpdate.apply(wrapper.vm, [$router.currentRoute, null, () => {}])
+      }],
+      ['Default', wrapper => {
+
+      }]
+    ]).forEach(conf => {
+
+      const wrapper = createWrapper()
+      const [label, mod] = conf
+
+      it(label, async () => {
+        mod(wrapper)
+        flushPromises().then(() => {
+          expect(wrapper.vm.content).to.equal(PAGE_CONTENT)
+        })
       })
+
     })
 
   })
