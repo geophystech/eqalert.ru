@@ -88,26 +88,33 @@
         let _getEvents = function(url)
         {
           this.$http.get(url, {
+
             params: params,
-            before: (request) => {
+
+            before: (request) =>
+            {
               if (this.previousRequest) {
                 this.previousRequest.abort()
               }
 
               this.previousRequest = request
             }
+
+          }).then(response => {
+
+            events = events.concat(response.data.data)
+
+            let pagination = response.data.meta.pagination
+            let nextPageUrl = pagination.links.next
+
+            this.title = `Загружено ${events.length} из ${pagination.total} событий`
+
+            nextPageUrl ? _getEvents(nextPageUrl) : callBack(events)
+
+          }).catch(error => {
+            this.map.object.spin(false)
+            console.log(error)
           })
-            .then(response => {
-              events = events.concat(response.data.data)
-              let pagination = response.data.meta.pagination
-              let nextPageUrl = pagination.links.next
-              this.title = `Загружено ${events.length} из ${pagination.total} событий`
-              nextPageUrl ? _getEvents(nextPageUrl) : callBack(events)
-            })
-            .catch(error => {
-              this.map.object.spin(false)
-              console.log(error)
-            })
 
         }.bind(this)
 
