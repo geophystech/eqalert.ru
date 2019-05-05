@@ -23,8 +23,8 @@ describe('maps/Buildings.vue', () => {
 
   ;([
 
-    [ 'Create map by event change', wrapper => { wrapper.vm.event = mapPropDataGen('BuildingsMap').event } ],
-    [ 'Create map default', wrapper => { wrapper.vm.addData(EVENT_BUIDINGS) } ]
+    [ 'Create map', wrapper => { wrapper.vm.addData(EVENT_BUIDINGS) } ],
+    [ 'Create map by event change', wrapper => { wrapper.vm.event = mapPropDataGen('BuildingsMap').event } ]
 
   ]).forEach(conf => {
 

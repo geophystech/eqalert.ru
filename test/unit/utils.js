@@ -116,6 +116,205 @@ export function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
+export const EVENT_LDOS = [
+  {
+    id: 3,
+    name: 'Канатная дорога «Горный воздух»',
+    notes: 'Спортивное сооружение &quot;Горный воздух&quot; (Гондольно-кресельная канатная дорога) 75-21-63',
+    part_num: 17,
+    shift_analysis: false,
+    is_primary: true,
+    data_source_reference: 'Федеральная служба государственной регистрации, кадастра и картографии (Росреестр), https://rosreestr.ru/',
+    parts: {
+      data: [
+        {
+          id: 1449,
+          parent_id: 3,
+          part: 1,
+          soil_type: 0,
+          lat_first: 46.953232,
+          lon_first: 142.763522,
+          lat_end: 46.954233,
+          lon_end: 142.770011,
+          max_msk64: 8,
+          max_pga: 0,
+          deterioration: 0,
+          built_year: 2010,
+          height: 0,
+          fabric_type: '',
+          notes: '',
+          vs30: 610,
+          destroyed: 0,
+          damage: {
+            data: {
+              id: 17827,
+              report_id: 34670,
+              parent_id: 3,
+              part_id: 1449,
+              pga_value: 0.02,
+              has_damage: false,
+              damage_level: 0,
+              version_id: 3,
+              msk64_value: 2.1,
+              ssi17_value: 0.14,
+              delta_intensity: -7.86
+            }
+          }
+        },
+        {
+          id: 1450,
+          parent_id: 3,
+          part: 2,
+          soil_type: 0,
+          lat_first: 46.954233,
+          lon_first: 142.770011,
+          lat_end: 46.955121,
+          lon_end: 142.776463,
+          max_msk64: 8,
+          max_pga: 0,
+          deterioration: 0,
+          built_year: 2010,
+          height: 0,
+          fabric_type: '',
+          notes: '',
+          vs30: 682,
+          destroyed: 0,
+          damage: {
+            data: {
+              id: 17828,
+              report_id: 34670,
+              parent_id: 3,
+              part_id: 1450,
+              pga_value: 0.02,
+              has_damage: false,
+              damage_level: 0,
+              version_id: 3,
+              msk64_value: 2.1,
+              ssi17_value: 0.14,
+              delta_intensity: -7.86
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    id: 2,
+    name: 'Сегмент автодороги Южно-Сахалинск - Оха',
+    notes: 'Участок от с. Ныш до г. Оха (тестовый объект)',
+    part_num: 1448,
+    shift_analysis: false,
+    is_primary: true,
+    data_source_reference: 'Open Street Map https://www.openstreetmap.org',
+    parts: {
+      data: [
+        {
+          id: 101,
+          parent_id: 2,
+          part: 1,
+          soil_type: 0,
+          lat_first: 51.46357216,
+          lon_first: 142.777259353,
+          lat_end: 51.465124418,
+          lon_end: 142.778704801,
+          max_msk64: 8,
+          max_pga: 20,
+          deterioration: 20,
+          built_year: 2010,
+          height: 0,
+          fabric_type: 'асфальт, грунт',
+          notes: 'тестовый объект',
+          vs30: 300,
+          destroyed: 0,
+          damage: {
+            data: {
+              id: 16479,
+              report_id: 34670,
+              parent_id: 2,
+              part_id: 101,
+              pga_value: 10.67,
+              has_damage: true,
+              damage_level: 1,
+              version_id: 3,
+              msk64_value: 6.5,
+              ssi17_value: 6.96,
+              delta_intensity: -1.04
+            }
+          }
+        },
+        {
+          id: 102,
+          parent_id: 2,
+          part: 2,
+          soil_type: 0,
+          lat_first: 51.465124418,
+          lon_first: 142.778704801,
+          lat_end: 51.466827408,
+          lon_end: 142.77962826,
+          max_msk64: 8,
+          max_pga: 20,
+          deterioration: 20,
+          built_year: 2010,
+          height: 0,
+          fabric_type: 'асфальт, грунт',
+          notes: 'тестовый объект',
+          vs30: 300,
+          destroyed: 0,
+          damage: {
+            data: {
+              id: 16480,
+              report_id: 34670,
+              parent_id: 2,
+              part_id: 102,
+              pga_value: 10.69,
+              has_damage: true,
+              damage_level: 1,
+              version_id: 3,
+              msk64_value: 6.5,
+              ssi17_value: 6.96,
+              delta_intensity: -1.04
+            }
+          }
+        },
+        {
+          id: 103,
+          parent_id: 2,
+          part: 3,
+          soil_type: 0,
+          lat_first: 51.466827408,
+          lon_first: 142.77962826,
+          lat_end: 51.468549016,
+          lon_end: 142.780455965,
+          max_msk64: 8,
+          max_pga: 20,
+          deterioration: 20,
+          built_year: 2010,
+          height: 0,
+          fabric_type: 'асфальт, грунт',
+          notes: 'тестовый объект',
+          vs30: 300,
+          destroyed: 0,
+          damage: {
+            data: {
+              id: 16481,
+              report_id: 34670,
+              parent_id: 2,
+              part_id: 103,
+              pga_value: 10.7,
+              has_damage: true,
+              damage_level: 1,
+              version_id: 3,
+              msk64_value: 6.5,
+              ssi17_value: 6.96,
+              delta_intensity: -1.04
+            }
+          }
+        }
+      ]
+    }
+  }
+]
+
 export const EVENT_BUIDINGS = [
   {
     ep_dis: 42.72871,
