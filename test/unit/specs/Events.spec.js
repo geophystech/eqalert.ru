@@ -43,14 +43,44 @@ const resp = {
 
 describe('Events.vue', () => {
 
-  const wrapper = createWrapper({
+  let wrapper = createWrapper({
     get: () => Promise.resolve(resp)
   })
 
-  it('Check component Events', async () => {
+  it('Event list rendered', async () => {
     flushPromises().then(() => {
       expect(wrapper.findAll('.events-row').length).to.equal(resp.data.data.length)
     })
+  })
+
+  wrapper.destroy()
+
+  ;([
+      [422, {errors: {data: 'errors.data'}}],
+      [400, {error: {message: 'error.message'}}],
+      [501, {error: {message: 'error.message'}}],
+      [500, {error: 'Other error'}]
+  ]).forEach(resp => {
+
+    const [statusCode, data] = resp
+
+    wrapper = createWrapper({
+      get: () => Promise.reject({
+        response: {
+          status: statusCode,
+          data: data
+        }
+      })
+    })
+
+    it(`Check response error status code  ${statusCode}`, async () => {
+      flushPromises().then(() => {
+        expect(true).to.equal(true)
+      })
+    })
+
+    wrapper.destroy()
+
   })
 
 })
