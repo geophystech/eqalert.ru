@@ -38,6 +38,8 @@ describe('maps/LDOs.vue', () => {
         expect(!!wrapper.vm.map.object).to.equal(true)
       })
 
+      wrapper.vm.$options.beforeDestroy[0].call(wrapper.vm)
+
     })
 
   })
