@@ -68,10 +68,16 @@ describe('maps/ModalMap.vue', () => {
     get: () => Promise.resolve(resp)
   })
 
-  it('Modal map rendered', async () => {
+  it('Modal map rendered', () => {
     wrapper.find('#map-dialog-btn').trigger('click')
+    expect(wrapper.contains('#map-dialog')).to.eql(true)
+  })
+
+  it('Modal opened', async () => {
+    wrapper.find('#map-dialog-btn').trigger('click')
+    wrapper.find('#map-dialog').trigger('shown.bs.modal')
     flushPromises().then(() => {
-      expect(wrapper.contains('#map-dialog')).to.eql(true)
+      expect(!!wrapper.vm.map.object).to.eql(true)
     })
   })
 
