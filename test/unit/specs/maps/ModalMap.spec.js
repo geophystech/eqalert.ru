@@ -64,18 +64,15 @@ const resp = {
 
 describe('maps/ModalMap.vue', () => {
 
-  const wrapper = createWrapper({
+  let wrapper = createWrapper({
     get: () => Promise.resolve(resp)
   })
 
   it('Modal map rendered', async () => {
-
-    wrapper.contains('#map-dialog').trigger('click')
-
+    wrapper.find('#map-dialog-btn').trigger('click')
     flushPromises().then(() => {
-      expect(!!wrapper.vm.map.object).to.equal(true)
+      expect(wrapper.contains('#map-dialog')).to.eql(true)
     })
-
   })
 
 })
