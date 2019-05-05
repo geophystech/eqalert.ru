@@ -86,4 +86,13 @@ describe('maps/Mainpage.vue', () => {
     })
   })
 
+  it('Map notification', async () => {
+    wrapper.vm.mapNotify('Notification msg', 0)
+    flushPromises().then(() => {
+      wrapper.find('.map-notify').trigger('transitionend') // 1
+      wrapper.find('.map-notify').trigger('transitionend') // 2
+      expect(wrapper.find('.map-notify').text()).to.equal('Notification msg')
+    })
+  })
+
 })
