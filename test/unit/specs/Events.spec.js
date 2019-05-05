@@ -1,25 +1,56 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
+import {$routerMocks, deepClone, EVENT_DATA, RouterLink, UID} from '../utils'
+import flushPromises from 'flush-promises'
 import Events from '@/components/Events'
 import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
-import $http from 'axios'
+import Vue from 'vue'
 
+Vue.filter('moment', f => $moment.format(f))
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-describe('Events.vue', () => {
+function createWrapper($http)
+{
+  const $store = {
+    getters: {
+      user: {
+        authenticated: false
+      }
+    }
+  }
 
-  const wrapper = shallowMount(Events, {
-    mocks: { $http, $moment },
+  return mount(Events, {
+    mocks: Object.assign({ $http, $moment, $store }, $routerMocks),
+    stubs: { RouterLink },
     propsData: {
       spinners: {},
       events: []
     },
     localVue
   })
+}
 
-  it('Check component Events', () => {
-    expect(wrapper.is(Events)).to.eql(true)
+const resp = {
+  data: {
+    data: Array.from({length: 10}).map(it => {
+      it = deepClone(EVENT_DATA)
+      it.id = UID(10)
+      return it
+    })
+  }
+}
+
+describe('Events.vue', () => {
+
+  const wrapper = createWrapper({
+    get: () => Promise.resolve(resp)
+  })
+
+  it('Check component Events', async () => {
+    flushPromises().then(() => {
+      expect(wrapper.findAll('.events-row').length).to.equal(resp.data.data.length)
+    })
   })
 
 })
