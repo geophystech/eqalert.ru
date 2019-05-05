@@ -1,35 +1,40 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import GeneralInformation from '@/components/event/GeneralInformation'
+import {deepClone, EVENT_DATA} from '../../utils'
 import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
-import $http from 'axios'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-describe('event/GeneralInformation.vue', () => {
-
-  const wrapper = shallowMount(GeneralInformation, {
-    propsData: {
-      event: {
-        processingMethod: {
-          long: null
-        },
-        locValues: {
-          data: {
-            event_datetime: new Date()
-          }
-        }
-      }
-    },
-    mocks: {
-      $http, $moment
-    },
+function createWrapper()
+{
+  return mount(GeneralInformation, {
+    propsData: { event: EVENT_DATA },
+    mocks: { $moment },
     localVue
   })
+}
 
-  it('Check component GeneralInformation', () => {
-    expect(wrapper.is(GeneralInformation)).to.eql(true)
+describe('event/GeneralInformation.vue', () => {
+
+  let wrapper = createWrapper()
+
+  ;([
+
+    ['Set data', () => {}],
+    ['Set data by event change', wrapper => { wrapper.vm.event = deepClone(EVENT_DATA) }]
+
+  ]).forEach(conf => {
+
+    const [label, mod] = conf
+    mod(wrapper)
+
+    it(label, () => {
+      const tableRows = wrapper.findAll('.table > tbody > tr')
+      expect(tableRows.length).to.equal(wrapper.vm.items.length)
+    })
+
   })
 
 })

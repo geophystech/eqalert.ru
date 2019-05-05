@@ -74,6 +74,9 @@ export const EVENT_DATA = {
   has_long_distance_objects_analysis: true,
   has_ffm: false,
   has_training: true,
+  processingMethod: {
+    long: null
+  },
   locValues: {
     data: {
       event_datetime: '2019-04-11 00:00:01',
