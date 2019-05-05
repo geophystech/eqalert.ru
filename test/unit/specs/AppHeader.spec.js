@@ -61,7 +61,7 @@ describe('AppHeader.vue', () => {
       expect(logoLink.props().to).to.equal('/')
 
       expect(logoImage.attributes().alt).to.equal('EQA!ert')
-      expect(logoImage.attributes().src).to.not.be.empty
+      expect(!!logoImage.attributes().src).to.equal(true)
     })
 
     it('renders links', () => {

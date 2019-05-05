@@ -18,7 +18,8 @@ export function mapPropDataGen(mapId)
 export const $routerMocks = {
   $router: {
     resolve: data => {
-      return { href: '' }
+      let url = data.name ? `#/${data.name.toLowerCase()}` : '#'
+      return { href: data.params ? `${url}/${Object.values(data.params).join('/')}` : url }
     },
     replace: data => {
 
