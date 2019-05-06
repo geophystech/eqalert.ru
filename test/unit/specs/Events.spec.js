@@ -34,7 +34,13 @@ function createWrapper($http, additionaMocks = {})
         render: function(h) {
           return h('div', this.$slots.default)
         },
-        props: []
+        props: [],
+        methods: {
+          setErrors: function(errors)
+          {
+
+          }
+        }
       }
     },
     propsData: {
@@ -48,10 +54,10 @@ function createWrapper($http, additionaMocks = {})
 
 const respLength = 10
 
-const resp = () => {
+const resp = empty => {
   return {
     data: {
-      data: Array.from({length: respLength}).map(it => {
+      data: empty ? [] : Array.from({length: respLength}).map(it => {
         it = deepClone(EVENT_DATA)
         it.id = UID(10)
         return it
@@ -73,6 +79,30 @@ describe('Events.vue', () => {
     })
   })
 
+  it('Event list rendered by filters', async () => {
+
+    const wrapper = createWrapper({
+      get: () => Promise.resolve(resp())
+    })
+
+    wrapper.vm.getEvents({})
+
+    flushPromises().then(() => {
+      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
+    })
+  })
+
+  it('Response empty', async () => {
+
+    const wrapper = createWrapper({
+      get: () => Promise.resolve(resp(true))
+    })
+
+    flushPromises().then(() => {
+      expect(wrapper.findAll('.events-row').length).to.equal(0)
+    })
+  })
+
   it('Event list rendered by load more', async () => {
 
     const wrapper = createWrapper({
@@ -87,7 +117,7 @@ describe('Events.vue', () => {
     })
   })
 
-  it('Check datetime format', () => {
+  it('Check datetime format', async () => {
 
     const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
@@ -97,7 +127,10 @@ describe('Events.vue', () => {
       }
     })
 
-    expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss UTC')
+    flushPromises().then(() => {
+      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
+      expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss UTC')
+    })
   })
 
 })

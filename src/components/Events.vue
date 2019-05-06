@@ -104,7 +104,7 @@ export default {
       disabledFilters: false,
       highlightEventTreshold: eventsSettings.highlightTreshold,
       spinners: {
-        loadMoreEvents: false
+        loadMoreEvroundents: false
       },
       startDate: '',
       endDate: ''
