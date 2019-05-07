@@ -160,24 +160,32 @@ describe('Events.vue', () => {
 
   describe('Check datetime formats', () => {
 
-    const wrapper = createWrapper({
-      get: () => Promise.resolve(resp())
-    }, {
-      $root: {
-        onMobile: null
-      }
-    })
-
     it('If Mobile', async () => {
+
+      const wrapper = createWrapper({
+        get: () => Promise.resolve(resp())
+      }, {
+        $root: {
+          onMobile: true
+        }
+      })
+
       flushPromises().then(() => {
-        wrapper.vm.$root.onMobile = true
         expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss')
       })
     })
 
     it('If Not Mobile', async () => {
+
+      const wrapper = createWrapper({
+        get: () => Promise.resolve(resp())
+      }, {
+        $root: {
+          onMobile: false
+        }
+      })
+
       flushPromises().then(() => {
-        wrapper.vm.$root.onMobile = false
         expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss UTC')
       })
     })
