@@ -114,12 +114,13 @@ export default {
     round: function() {
       return round
     },
-    datetimeFormat: function() {
+    datetimeFormat: function()
+    {
       if (this.$root.onMobile) {
         return 'L в HH:mm:ss'
-      } else {
-        return 'LL в HH:mm:ss UTC'
       }
+
+      return 'LL в HH:mm:ss UTC'
     },
     backUrlQuery: function()
     {

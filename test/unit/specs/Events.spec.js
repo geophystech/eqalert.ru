@@ -172,7 +172,6 @@ describe('Events.vue', () => {
 
       flushPromises().then(() => {
         expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss')
-        wrapper.destroy()
       })
     })
 
@@ -188,7 +187,6 @@ describe('Events.vue', () => {
 
       flushPromises().then(() => {
         expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss UTC')
-        wrapper.destroy()
       })
     })
 

@@ -62,12 +62,12 @@ describe('users/ResetPassword.vue', () => {
 
   describe('Form send', () => {
 
-    const formInit = async (wrapper) => {
+    const formInit = (wrapper) => {
       for (let [fieldName, fieldData] of Object.entries(formFields)) {
         wrapper.find(`${fieldData.tag}[name="${fieldName}"]`).setValue(fieldData.value)
       }
       wrapper.find('form').trigger('submit.prevent')
-      return await flushPromises()
+      return flushPromises()
     }
 
     const expects = [
@@ -90,8 +90,9 @@ describe('users/ResetPassword.vue', () => {
     {
       let wrapper = createWrapper(resp)
       it(title, async () => {
-        await formInit(wrapper)
-        expect(wrapper)
+        formInit(wrapper).then(() => {
+          expect(wrapper)
+        })
       })
     }
 
