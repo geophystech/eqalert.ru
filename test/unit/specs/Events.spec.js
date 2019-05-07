@@ -73,7 +73,7 @@ describe('Events.vue', () => {
     })
 
     flushPromises().then(() => {
-      wrapper.vm.getEvents()
+      wrapper.vm.getEvents({})
       expect(wrapper.findAll('.events-row').length).to.equal(resp.data.data.length)
     })
 
