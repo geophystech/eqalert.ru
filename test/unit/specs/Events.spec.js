@@ -52,10 +52,12 @@ function createWrapper($http, additionaMocks = {})
   })
 }
 
+const respLength = 10
+
 const resp = (empty) => {
   return {
     data: {
-      data: empty ? [] : Array.from({length: 10}).map(it => {
+      data: empty ? [] : Array.from({length: respLength}).map(it => {
         it = deepClone(EVENT_DATA)
         it.id = UID(10)
         return it
@@ -66,7 +68,7 @@ const resp = (empty) => {
 
 describe('Events.vue', () => {
 
-  it('Event list rendered', async () => {
+  it('Event list rendered by filter', async () => {
 
     let wrapper = createWrapper({
       get: () => Promise.resolve(resp())
@@ -74,7 +76,54 @@ describe('Events.vue', () => {
 
     flushPromises().then(() => {
       wrapper.vm.getEvents({})
-      expect(wrapper.findAll('.events-row').length).to.equal(resp.data.data.length)
+      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
+    })
+
+  })
+
+  it('Event list rendered by empty filter', async () => {
+
+    let wrapper = createWrapper({
+      get: () => Promise.resolve(resp())
+    })
+
+    flushPromises().then(() => {
+      wrapper.vm.getEvents({})
+      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
+    })
+
+  })
+
+  it('Event list more rendered', async () => {
+
+    let wrapper = createWrapper({
+      get: () => Promise.resolve(resp())
+    })
+
+    wrapper.setData({
+      apiParams: {
+        cursor: 'cursor simulate'
+      }
+    })
+
+    wrapper.find('#loadMoreEventsBtn').trigger('click')
+
+    flushPromises().then(() => {
+      wrapper.vm.getEvents({})
+      expect(wrapper.findAll('.events-row').length).to.equal(respLength * 2)
+    })
+
+  })
+
+  it('Event list empty response', async () => {
+
+    let wrapper = createWrapper({
+      get: () => Promise.resolve(resp(true))
+    })
+
+    flushPromises().then(() => {
+      wrapper.vm.getEvents()
+      expect(wrapper.findAll('.events-row').length).to.equal(0)
     })
 
   })
