@@ -88,8 +88,8 @@ describe('users/ResetPassword.vue', () => {
 
     for (let [ title, resp, expect ] of expects)
     {
-      let wrapper = createWrapper(resp)
       it(title, async () => {
+        let wrapper = createWrapper(resp)
         formInit(wrapper).then(() => {
           expect(wrapper)
         })
