@@ -135,6 +135,7 @@ describe('users/Registration.vue', () => {
           for (let [errorProp, msgs] of Object.entries(errors)) {
             expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
           }
+          expect(wrapper.vm.form.submitButtonDisabled).to.equal(false)
         }
       ]
 
