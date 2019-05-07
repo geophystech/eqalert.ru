@@ -162,62 +162,40 @@ describe('Events.vue', () => {
 
     ([
 
-      ['Response error code 422', {
-        response: {
-          status: 422,
-          data: {
-            errors: {
-              data: 'errors.data'
-            }
-          }
-        }
-      }, wrapper => {
+      ['response error code 422', 422, {errors: {data: 'errors.data'}}, wrapper => {
         expect(wrapper.find('Filters').find('.errors').text()).to.equal('errors.data')
       }],
 
-      ['Response error code 400', {
-        response: {
-          status: 400,
-          data: {
-            error: {
-              message: 'error.message'
-            }
-          }
-        }
-      }, wrapper => {
+      ['response error code 400', 400, {error: {message: 'error.message'}}, wrapper => {
         expect(wrapper.vm.error).to.equal('error.message')
       }],
 
-      ['Response error other code', {
-        response: {
-          status: 500,
-          data: {
-            error: {
-              message: 'other.code.error.message'
-            }
-          }
-        }
-      }, wrapper => {
+      ['response error other code', 500, {error: {message: 'other.code.error.message'}}, wrapper => {
         expect(wrapper.vm.error).to.equal('other.code.error.message')
       }],
 
-      ['Response other error', 500, 'other.error', wrapper => {
+      ['response other error', 500, 'other.error', wrapper => {
         expect(wrapper.vm.error).to.equal('other.error')
       }]
 
     ]).forEach(conf => {
 
-      const [label, error, callBack] = conf
+      const [label, statusCode, data, reject] = conf
 
       it(label, async () => {
 
         const wrapper = createWrapper({
-          get: () => Promise.reject(error)
+          get: () => Promise.reject({
+            response: {
+              status: statusCode,
+              data: data
+            }
+          })
         })
 
         flushPromises().then(() => {
           wrapper.vm.getEvents()
-          callBack(wrapper)
+          reject(wrapper)
         })
 
       })
