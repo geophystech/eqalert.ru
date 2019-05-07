@@ -2,6 +2,7 @@ import { mount, createLocalVue } from '@vue/test-utils'
 import {$routerMocks, deepClone, EVENT_DATA, RouterLink, UID} from '../utils'
 import flushPromises from 'flush-promises'
 import Events from '@/components/Events'
+import CountersHeader from '@/components/CountersHeader'
 import BootstrapVue from 'bootstrap-vue'
 import $moment from 'moment'
 import Vue from 'vue'
@@ -30,12 +31,20 @@ function createWrapper($http, additionaMocks = {})
     mocks: Object.assign({ $http, $moment, $store }, $routerMocks),
     stubs: {
       RouterLink,
+      CountersHeader,
       Filters: {
         name: 'Filters',
         render: function(createElement) {
           return createElement('div', this.$slots.default)
         },
         props: [],
+        data() {
+          return {
+            filters: {
+              has_training: null
+            }
+          }
+        },
         methods: {
           setErrors: function(errors)
           {
@@ -124,6 +133,21 @@ describe('Events.vue', () => {
     flushPromises().then(() => {
       wrapper.vm.getEvents()
       expect(wrapper.findAll('.events-row').length).to.equal(0)
+    })
+
+  })
+
+  it('Show Training Events', async () => {
+
+    let wrapper = createWrapper({
+      get: () => Promise.resolve(resp())
+    })
+
+    flushPromises().then(() => {
+      wrapper.find(CountersHeader).vm.showTrainingEvents = true
+      expect(wrapper.vm.$refs.filters.filters.has_training).to.equal(1)
+      wrapper.find(CountersHeader).vm.showTrainingEvents = false
+      expect(wrapper.vm.$refs.filters.filters.has_training).to.equal(null)
     })
 
   })
