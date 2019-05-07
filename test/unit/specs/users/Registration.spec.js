@@ -110,55 +110,25 @@ describe('users/Registration.vue', () => {
       ], [
         'Error response',
         () => Promise.reject(errorResp),
-        [
-          [
-            'Show validation errors',
-            wrapper => {
-              for (let [errorProp, msgs] of Object.entries(errors)) {
-                expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
-              }
-            }
-          ]/*, [
-            'Submit button enabled',
-            wrapper => expect(wrapper.vm.form.submitButtonDisabled).to.equal(false)
-          ]*/
-        ]
+        wrapper => {
+          for (let [errorProp, msgs] of Object.entries(errors)) {
+            expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
+          }
+        }
       ]
 
     ]).forEach(conf => {
 
       const [ title, httpRespHandler, expect ] = conf
+      const wrapper = createWrapper(httpRespHandler)
 
-      if (!Array.isArray(expect))
-      {
-        const wrapper = createWrapper(httpRespHandler)
-
-        it(title, async () => {
-          formInit(wrapper).then(() => {
-            expect(wrapper)
-          })
+      it(title, async () => {
+        formInit(wrapper).then(() => {
+          expect(wrapper)
         })
-
-        wrapper.destroy()
-        return
-      }
-
-      describe(title, () => {
-
-        const wrapper = createWrapper(httpRespHandler)
-
-        expect.forEach(conf => {
-          const [ title, expect ] = conf
-          it(title, async () => {
-            formInit(wrapper).then(() => {
-              expect(wrapper)
-            })
-          })
-        })
-
-        wrapper.destroy()
-
       })
+
+      wrapper.destroy()
 
     })
 
