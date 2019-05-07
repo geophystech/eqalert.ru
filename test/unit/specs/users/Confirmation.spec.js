@@ -25,18 +25,18 @@ function createWrapper(httpResp)
 
 describe('users/Confirmation.vue', () => {
 
-  /*const wrapper = createWrapper(Promise.resolve())
-
   it('Success request', async () => {
-    await flushPromises()
-    expect(wrapper.vm.status).to.equal('success')
-  })*/
-
-  const wrapper2 = createWrapper(Promise.reject())
+    const wrapper = createWrapper(Promise.resolve())
+    flushPromises().then(() => {
+      expect(wrapper.vm.status).to.equal('success')
+    })
+  })
 
   it('Error request', async () => {
-    await flushPromises()
-    expect(wrapper2.vm.status).to.equal('failure')
+    const wrapper = createWrapper(Promise.resolve())
+    flushPromises().then(() => {
+      expect(wrapper.vm.status).to.equal('failure')
+    })
   })
 
 })
