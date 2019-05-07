@@ -69,7 +69,7 @@ describe('Events.vue', () => {
   it('Event list rendered', async () => {
 
     let wrapper = createWrapper({
-      get: () => Promise.resolve(resp())
+      get: () => Promise.resolve(resp(true))
     })
 
     flushPromises().then(() => {

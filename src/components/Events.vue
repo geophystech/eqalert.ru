@@ -211,9 +211,6 @@ export default {
     loadMoreEvents: function() {
       this.getEvents()
     },
-    openEvent: function(item, index, event) {
-      this.$router.push({ name: 'Event', params: { id: item.id } })
-    },
     toggleTrainingEvents: function(checked) {
       this.$refs.filters.filters.has_training = checked ? 1 : null
       this.$refs.filters.send()
