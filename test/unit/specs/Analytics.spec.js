@@ -5,26 +5,15 @@ import BootstrapVue from 'bootstrap-vue'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-const stubs = {
-  CountersHeader: {
-    name: 'CountersHeader',
-    render(createElement) {
-      return createElement('div', this.$slots.default)
-    }
-  },
-  Filters: {
-    name: 'Filters',
-    render(createElement) {
-      return createElement('div', this.$slots.default)
-    }
-  },
-  ChartByDatetime: {
-    name: 'ChartByDatetime',
-    render(createElement) {
-      return createElement('div', this.$slots.default)
-    }
-  }
-}
+const stubs = {}
+
+;([
+  'ChartByDatetime',
+  'CountersHeader',
+  'Filters'
+]).forEach(stub => {
+  stubs[stub] = { name: stub, template: '<div></div>' }
+})
 
 describe('Analytics.vue', () => {
 
