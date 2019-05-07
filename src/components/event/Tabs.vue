@@ -60,7 +60,9 @@
           return this.isTabActive(this.tabs[key])
         })
 
-        return this.tabs[currentTab].label
+        return currentTab
+          ? this.tabs[currentTab].label
+          : 'Информация о событии'
       },
       isTabActive: function(tab) {
         return this.activeTab === tab.href
