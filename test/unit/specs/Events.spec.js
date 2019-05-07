@@ -28,28 +28,45 @@ function createWrapper($http, additionaMocks = {})
   })
 
   return mount(Events, {
-    mocks: Object.assign({ $http, $moment, $store }, $routerMocks),
+    mocks,
     stubs: {
       RouterLink,
       CountersHeader,
       Filters: {
         name: 'Filters',
-        render: function(createElement) {
-          return createElement('div', this.$slots.default)
-        },
+        template: `
+          <div>
+            <div class="errors">{{ errors }}</div>
+          </div>
+        `,
         props: [],
         data() {
           return {
             filters: {
               has_training: null
-            }
+            },
+            errors: ''
           }
         },
         methods: {
-          setErrors: function(errors)
-          {
+          setErrors(errors) {
+            this.errors = errors
+          },
+          send() {
 
           }
+        }
+      },
+      bRow: {
+        name: 'b-row',
+        render: function(createElement) {
+          return createElement('div', this.$slots.default)
+        }
+      },
+      bCol: {
+        name: 'b-col',
+        render: function(createElement) {
+          return createElement('div', this.$slots.default)
         }
       }
     },
@@ -79,7 +96,7 @@ describe('Events.vue', () => {
 
   it('Event list rendered by filter', async () => {
 
-    let wrapper = createWrapper({
+    const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
     })
 
@@ -92,7 +109,7 @@ describe('Events.vue', () => {
 
   it('Event list rendered by empty filter', async () => {
 
-    let wrapper = createWrapper({
+    const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
     })
 
@@ -105,7 +122,7 @@ describe('Events.vue', () => {
 
   it('Event list more rendered', async () => {
 
-    let wrapper = createWrapper({
+    const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
     })
 
@@ -126,7 +143,7 @@ describe('Events.vue', () => {
 
   it('Event list empty response', async () => {
 
-    let wrapper = createWrapper({
+    const wrapper = createWrapper({
       get: () => Promise.resolve(resp(true))
     })
 
@@ -139,7 +156,7 @@ describe('Events.vue', () => {
 
   it('Show Training Events', async () => {
 
-    let wrapper = createWrapper({
+    const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
     })
 
@@ -148,6 +165,48 @@ describe('Events.vue', () => {
       expect(wrapper.vm.$refs.filters.filters.has_training).to.equal(1)
       wrapper.find(CountersHeader).vm.showTrainingEvents = false
       expect(wrapper.vm.$refs.filters.filters.has_training).to.equal(null)
+    })
+
+  })
+
+  describe('Error responses', () => {
+
+    ([
+
+      ['response error code 422', 422, {errors: {data: 'errors.data'}}, wrapper => {
+        expect(wrapper.find('Filters').find('.errors').text()).to.equal('errors.data')
+      }],
+
+      ['response error code 400', 400, {error: {message: 'error.message'}}, wrapper => {
+        expect(wrapper.vm.error).to.equal('error.message')
+      }],
+
+      ['response error other code', 500, {error: {message: 'other.code.error.message'}}, wrapper => {
+        expect(wrapper.vm.error).to.equal('other.code.error.message')
+      }],
+
+      ['response other error', 500, {error: {message: 'other.error'}}, wrapper => {
+        expect(wrapper.vm.error).to.equal('other.error')
+      }]
+
+    ]).forEach(conf => {
+
+      const [label, statusCode, data, reject] = conf
+
+      it(label, async () => {
+
+        const wrapper = createWrapper({
+          get: () => Promise.reject({
+            response: { status: statusCode, data }
+          })
+        })
+
+        flushPromises().then(() => {
+          reject(wrapper)
+        })
+
+      })
+
     })
 
   })
