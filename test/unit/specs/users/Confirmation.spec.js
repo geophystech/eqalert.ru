@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import {mount, createLocalVue} from '@vue/test-utils'
 import Confirmation from '@/components/users/Confirmation'
 import {$routerMocks, RouterLink} from '../../utils'
 import flushPromises from 'flush-promises'
@@ -15,7 +15,7 @@ function createWrapper(httpResp)
     $moment
   }
 
-  return shallowMount(Confirmation, {
+  return mount(Confirmation, {
     mocks: Object.assign(mocks, $routerMocks),
     stubs: { RouterLink },
     propsData: {},

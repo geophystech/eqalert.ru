@@ -52,10 +52,8 @@ function createWrapper(httpRespHandler = Promise.resolve())
 
   return mount(Registration, {
     mocks: Object.assign(mocks, $routerMocks),
+    stubs: {RouterLink},
     propsData,
-    stubs: {
-      RouterLink
-    },
     localVue
   })
 }
