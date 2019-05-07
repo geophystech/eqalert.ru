@@ -23,18 +23,8 @@ const formFields = {
   additionalInfo: {tag: 'textarea', value: 'Additional Info'}
 }
 
-function createWrapper(httpRespHandler = Promise.resolve())
+function createWrapper(httpRespHandler = () => Promise.reject())
 {
-  const mocks = {
-    $http: {
-      post: () => httpRespHandler,
-      get: () => Promise.resolve({
-        data: { data: PURPOSES }
-      })
-    },
-    $moment
-  }
-
   const propsData = {
     registrationComplete: false,
     breadcrumbs: [],
@@ -50,8 +40,15 @@ function createWrapper(httpRespHandler = Promise.resolve())
     propsData.form.messages[fieldName] = `Message fot ${fieldName}`
   }
 
+  const $http = {
+    get: () => Promise.resolve({
+      data: { data: PURPOSES }
+    }),
+    post: httpRespHandler
+  }
+
   return mount(Registration, {
-    mocks: Object.assign(mocks, $routerMocks),
+    mocks: Object.assign({ $http, $moment }, $routerMocks),
     stubs: {RouterLink},
     propsData,
     localVue
@@ -77,7 +74,9 @@ const errorResp = {
 
 describe('users/Registration.vue', () => {
 
-  describeCheckFormFields(createWrapper(), formFields)
+  describeCheckFormFields(createWrapper(), formFields, {
+    async: true
+  })
 
   describe('Form', () => {
 
@@ -100,63 +99,36 @@ describe('users/Registration.vue', () => {
       return flushPromises()
     }
 
-    const expects = [
+    ;([
+
       [
         'Success response',
-        Promise.resolve(),
+        () => Promise.resolve(),
         wrapper => expect(wrapper.vm.registrationComplete).to.equal(true)
       ], [
-        'Error empty response',
-        Promise.reject({ error: 'Email already used!' }),
-        wrapper => expect(wrapper.vm.registrationComplete).to.equal(false)
-      ], [
         'Error response',
-        Promise.reject(errorResp),
-        [
-          [
-            'Show validation errors',
-            wrapper => {
-              for (let [errorProp, msgs] of Object.entries(errors)) {
-                expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
-              }
-            }
-          ]/*, [
-            'Submit button enabled',
-            wrapper => expect(wrapper.vm.form.submitButtonDisabled).to.equal(false)
-          ]*/
-        ]
-      ]
-    ]
-
-    for (let [ title, resp, expect ] of expects)
-    {
-      if (Array.isArray(expect))
-      {
-        for (let [title2, expect2] of expect)
-        {
-          let wrapper = createWrapper(resp)
-
-          describe(title, () => {
-            it(title2, async () => {
-              formInit(wrapper).then(() => {
-                expect2(wrapper)
-              })
-            })
-          })
+        () => Promise.reject(errorResp),
+        wrapper => {
+          for (let [errorProp, msgs] of Object.entries(errors)) {
+            expect(wrapper.vm.form.messages[wrapper.vm.transformFieldName(errorProp)]).to.equal(msgs[0])
+          }
         }
-      }
-      else
-      {
-        let wrapper = createWrapper(resp)
+      ]
 
-        it(title, async () => {
-          formInit(wrapper).then(() => {
-            expect(wrapper)
-          })
+    ]).forEach(conf => {
+
+      const [ title, httpRespHandler, expect ] = conf
+      const wrapper = createWrapper(httpRespHandler)
+
+      it(title, async () => {
+        formInit(wrapper).then(() => {
+          expect(wrapper)
         })
-      }
+      })
 
-    }
+      wrapper.destroy()
+
+    })
 
   })
 

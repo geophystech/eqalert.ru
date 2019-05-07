@@ -68,6 +68,6 @@ describe('users/Authentication.vue', () => {
     expect(wrapper.is(Authentication)).to.eql(true)
   })
 
-  describeCheckFormFields(wrapper, { fields })
+  describeCheckFormFields(wrapper, fields)
 
 })

@@ -12,10 +12,10 @@ const formFields = {
   password: {tag: 'input', value: '12345'}
 }
 
-function createWrapper(httpRespHandler = Promise.resolve())
+function createWrapper(httpRespHandler = () => Promise.resolve())
 {
   const mocks = {
-    $http: { post: () => httpRespHandler },
+    $http: { post: httpRespHandler },
     $moment
   }
 
@@ -65,27 +65,30 @@ describe('users/ConfirmPassword.vue', () => {
       return flushPromises()
     }
 
-    const expects = [
+    ;([
+
       [
         'Success response',
-        Promise.resolve(),
+        () => Promise.resolve(),
         wrapper => expect(wrapper.vm.passwordChanged).to.equal(true)
       ], [
         'Error response',
-        Promise.reject(errorResp),
+        () => Promise.reject(errorResp),
         wrapper => expect(wrapper.vm.validationError).to.equal(errorResp.response.data.email[0])
       ]
-    ]
 
-    for (let [ title, resp, _expect ] of expects)
-    {
-      let wrapper = createWrapper(resp)
+    ]).forEach(conf => {
+
+      const [ title, resp, expect ] = conf
+      const wrapper = createWrapper(resp)
+
       it(title, async () => {
         formInit(wrapper).then(() => {
-          _expect(wrapper)
+          expect(wrapper)
         })
       })
-    }
+
+    })
 
   })
 

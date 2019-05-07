@@ -12,10 +12,10 @@ const formFields = {
   email: {tag: 'input', value: 'email@test.ru'}
 }
 
-function createWrapper(httpRespHandler = Promise.resolve())
+function createWrapper(httpRespHandler = () => Promise.resolve())
 {
   const mocks = {
-    $http: { post: () => httpRespHandler },
+    $http: { post: httpRespHandler },
     $moment
   }
 
@@ -70,31 +70,34 @@ describe('users/ResetPassword.vue', () => {
       return flushPromises()
     }
 
-    const expects = [
+    ;([
+
       [
         'Success response',
-        Promise.resolve(),
+        () => Promise.resolve(),
         wrapper => expect(wrapper.vm.resetComplete).to.equal(true)
       ], [
         'Error empty response',
-        Promise.reject({ error: 'User not exists!' }),
+        () => Promise.reject({ error: 'User not exists!' }),
         wrapper => expect(wrapper.vm.validationError).to.equal('')
       ], [
         'Error response',
-        Promise.reject(errorResp),
+        () => Promise.reject(errorResp),
         wrapper => expect(wrapper.vm.validationError).to.equal(errorResp.response.data.errors.data.email[0])
       ]
-    ]
 
-    for (let [ title, resp, _expect ] of expects)
-    {
-      let wrapper = createWrapper(resp)
+    ]).forEach(conf => {
+
+      const [ title, resp, expect ] = conf
+      const wrapper = createWrapper(resp)
+
       it(title, async () => {
         formInit(wrapper).then(() => {
-          _expect(wrapper)
+          expect(wrapper)
         })
       })
-    }
+
+    })
 
   })
 

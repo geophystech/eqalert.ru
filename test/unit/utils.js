@@ -1,3 +1,4 @@
+import flushPromises from 'flush-promises'
 
 export function mapPropDataGen(mapId)
 {
@@ -54,8 +55,13 @@ export const BS_STUBS = {
   }
 }
 
-export function describeCheckFormFields(wrapper, {fields = {}, label = 'Check form fields'} = {})
-{
+export function describeCheckFormFields(wrapper, fields, {
+
+  label = 'Check form fields',
+  async = false
+
+} = {}) {
+
   describe(label, () => {
 
     for (let item of Object.entries(fields))
@@ -63,12 +69,25 @@ export function describeCheckFormFields(wrapper, {fields = {}, label = 'Check fo
       const [fieldName, fieldConf] = item
       const field = wrapper.find(`${fieldConf.tag}[name="${fieldName}"]`)
 
-      it(`Check field ${fieldName}`, () => {
-        expect(field.exists()).to.eql(true)
-      })
+      if (async)
+      {
+        it(`Check field ${fieldName}`, async () => {
+          flushPromises().then(() => {
+            expect(field.exists()).to.eql(true)
+          })
+        })
+      }
+      else
+      {
+        it(`Check field ${fieldName}`, () => {
+          expect(field.exists()).to.eql(true)
+        })
+      }
+
     }
 
   })
+
 }
 
 export const EVENT_DATA = {

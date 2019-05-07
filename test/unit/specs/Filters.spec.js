@@ -29,22 +29,21 @@ describe('Filters.vue', () => {
   })
 
   describeCheckFormFields(wrapper, {
-    label: 'Check filter fields',
-    fields: {
-      datetime_max: { tag: 'input' },
-      datetime_min: { tag: 'input' },
-      depth_max: { tag: 'input' },
-      depth_min: { tag: 'input' },
-      has_mt: { tag: 'input[type=checkbox]' },
-      mag_max: { tag: 'input' },
-      mag_min: { tag: 'input' },
-      lat_max: { tag: 'input' },
-      lat_min: { tag: 'input' },
-      lon_max: { tag: 'input' },
-      lon_min: { tag: 'input' },
-      rms_max: { tag: 'input' },
-      sta_num_min: { tag: 'input' }
-    }
+    datetime_max: { tag: 'input' },
+    datetime_min: { tag: 'input' },
+    depth_max: { tag: 'input' },
+    depth_min: { tag: 'input' },
+    has_mt: { tag: 'input[type=checkbox]' },
+    mag_max: { tag: 'input' },
+    mag_min: { tag: 'input' },
+    lat_max: { tag: 'input' },
+    lat_min: { tag: 'input' },
+    lon_max: { tag: 'input' },
+    lon_min: { tag: 'input' },
+    rms_max: { tag: 'input' },
+    sta_num_min: { tag: 'input' }
+  }, {
+    label: 'Check filter fields'
   })
 
 })
