@@ -162,37 +162,62 @@ describe('Events.vue', () => {
 
     ([
 
-      ['response error code 422', 422, {errors: {data: 'errors.data'}}, wrapper => {
+      ['Response error code 422', {
+        response: {
+          status: 422,
+          data: {
+            errors: {
+              data: 'errors.data'
+            }
+          }
+        }
+      }, wrapper => {
         expect(wrapper.find('Filters').find('.errors').text()).to.equal('errors.data')
       }],
 
-      ['response error code 400', 400, {error: {message: 'error.message'}}, wrapper => {
+      ['Response error code 400', {
+        response: {
+          status: 400,
+          data: {
+            error: {
+              message: 'error.message'
+            }
+          }
+        }
+      }, wrapper => {
         expect(wrapper.vm.error).to.equal('error.message')
       }],
 
-      ['response error other code', 500, {error: {message: 'other.code.error.message'}}, wrapper => {
+      ['Response error other code', {
+        response: {
+          status: 500,
+          data: {
+            error: {
+              message: 'other.code.error.message'
+            }
+          }
+        }
+      }, wrapper => {
         expect(wrapper.vm.error).to.equal('other.code.error.message')
       }],
 
-      ['response other error', 500, {error: 'other.error'}, wrapper => {
+      ['Response other error', 500, 'other.error', wrapper => {
         expect(wrapper.vm.error).to.equal('other.error')
       }]
 
     ]).forEach(conf => {
 
-      const [label, statusCode, data, reject] = conf
+      const [label, error, callBack] = conf
 
       it(label, async () => {
 
         const wrapper = createWrapper({
-          get: () => Promise.reject({
-            response: { status: statusCode, data }
-          })
+          get: () => Promise.reject(error)
         })
 
         flushPromises().then(() => {
           wrapper.vm.getEvents()
-          reject(wrapper)
+          callBack(wrapper)
         })
 
       })
