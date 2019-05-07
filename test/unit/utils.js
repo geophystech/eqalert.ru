@@ -27,10 +27,31 @@ export const $routerMocks = {
 
 export const RouterLink = {
   name: 'router-link',
-  render: function(createElement) {
+  render(createElement) {
     return createElement('a', this.$slots.default)
   },
   props: ['to']
+}
+
+export const BS_STUBS = {
+  bAlert: {
+    name: 'b-alert',
+    render(createElement) {
+      return createElement('div', this.$slots.default)
+    }
+  },
+  bRow: {
+    name: 'b-row',
+    render(createElement) {
+      return createElement('div', this.$slots.default)
+    }
+  },
+  bCol: {
+    name: 'b-col',
+    render(createElement) {
+      return createElement('div', this.$slots.default)
+    }
+  }
 }
 
 export function describeCheckFormFields(wrapper, {fields = {}, label = 'Check form fields'} = {})

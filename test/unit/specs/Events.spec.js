@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import {$routerMocks, deepClone, EVENT_DATA, RouterLink, UID} from '../utils'
+import {$routerMocks, BS_STUBS, deepClone, EVENT_DATA, RouterLink, UID} from '../utils'
 import flushPromises from 'flush-promises'
 import Events from '@/components/Events'
 import CountersHeader from '@/components/CountersHeader'
@@ -27,54 +27,43 @@ function createWrapper($http, additionaMocks = {})
     mocks[k] = additionaMocks[k]
   })
 
-  return mount(Events, {
-    mocks,
-    stubs: {
-      RouterLink,
-      CountersHeader,
-      Filters: {
-        name: 'Filters',
-        template: `
+  const stubs = Object.assign({
+    RouterLink,
+    Filters: {
+      name: 'Filters',
+      template: `
           <div>
             <div class="errors">{{ errors }}</div>
           </div>
         `,
-        props: [],
-        data() {
-          return {
-            filters: {
-              has_training: null
-            },
-            errors: ''
-          }
-        },
-        methods: {
-          setErrors(errors) {
-            this.errors = errors
+      props: [],
+      data() {
+        return {
+          filters: {
+            has_training: null
           },
-          send() {
+          errors: ''
+        }
+      },
+      methods: {
+        setErrors(errors) {
+          this.errors = errors
+        },
+        send() {
 
-          }
-        }
-      },
-      bRow: {
-        name: 'b-row',
-        render: function(createElement) {
-          return createElement('div', this.$slots.default)
-        }
-      },
-      bCol: {
-        name: 'b-col',
-        render: function(createElement) {
-          return createElement('div', this.$slots.default)
         }
       }
-    },
+    }
+  }, BS_STUBS)
+
+  return mount(Events, {
     propsData: {
       spinners: {},
       events: []
     },
-    localVue
+    localVue,
+    mocks,
+    stubs
   })
 }
 
@@ -202,6 +191,7 @@ describe('Events.vue', () => {
         })
 
         flushPromises().then(() => {
+          wrapper.vm.getEvents()
           reject(wrapper)
         })
 
