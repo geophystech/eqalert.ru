@@ -27,12 +27,13 @@ function createWrapper($http, additionaMocks = {})
   })
 
   return mount(Events, {
+    mocks: Object.assign({ $http, $moment, $store }, $routerMocks),
     stubs: {
       RouterLink,
       Filters: {
         name: 'Filters',
-        render: function(h) {
-          return h('div', this.$slots.default)
+        render: function(createElement) {
+          return createElement('div', this.$slots.default)
         },
         props: [],
         methods: {
@@ -47,17 +48,14 @@ function createWrapper($http, additionaMocks = {})
       spinners: {},
       events: []
     },
-    localVue,
-    mocks
+    localVue
   })
 }
 
-const respLength = 10
-
-const resp = empty => {
+const resp = (empty) => {
   return {
     data: {
-      data: empty ? [] : Array.from({length: respLength}).map(it => {
+      data: empty ? [] : Array.from({length: 10}).map(it => {
         it = deepClone(EVENT_DATA)
         it.id = UID(10)
         return it
@@ -70,67 +68,14 @@ describe('Events.vue', () => {
 
   it('Event list rendered', async () => {
 
-    const wrapper = createWrapper({
+    let wrapper = createWrapper({
       get: () => Promise.resolve(resp())
     })
 
     flushPromises().then(() => {
-      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
-    })
-  })
-
-  it('Event list rendered by filters', async () => {
-
-    const wrapper = createWrapper({
-      get: () => Promise.resolve(resp())
+      expect(wrapper.findAll('.events-row').length).to.equal(resp.data.data.length)
     })
 
-    wrapper.vm.getEvents({})
-
-    flushPromises().then(() => {
-      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
-    })
-  })
-
-  it('Response empty', async () => {
-
-    const wrapper = createWrapper({
-      get: () => Promise.resolve(resp(true))
-    })
-
-    flushPromises().then(() => {
-      expect(wrapper.findAll('.events-row').length).to.equal(0)
-    })
-  })
-
-  it('Event list rendered by load more', async () => {
-
-    const wrapper = createWrapper({
-      get: () => Promise.resolve(resp())
-    })
-
-    wrapper.vm.apiParams.cursor = 'apiParams.cursor'
-    wrapper.find('#loadMoreEventsBtn').trigger('click.prevent')
-
-    flushPromises().then(() => {
-      expect(wrapper.findAll('.events-row').length).to.equal(respLength * 2)
-    })
-  })
-
-  it('Check datetime format', async () => {
-
-    const wrapper = createWrapper({
-      get: () => Promise.resolve(resp())
-    }, {
-      $root: {
-        onMobile: true
-      }
-    })
-
-    flushPromises().then(() => {
-      expect(wrapper.findAll('.events-row').length).to.equal(respLength)
-      expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss UTC')
-    })
   })
 
 })

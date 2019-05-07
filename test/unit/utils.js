@@ -27,8 +27,8 @@ export const $routerMocks = {
 
 export const RouterLink = {
   name: 'router-link',
-  render: function(h) {
-    return h('a', this.$slots.default)
+  render: function(createElement) {
+    return createElement('a', this.$slots.default)
   },
   props: ['to']
 }
