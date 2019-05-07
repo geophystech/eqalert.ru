@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import StaticPage from '@/components/StaticPage'
 import flushPromises from 'flush-promises'
 import BootstrapVue from 'bootstrap-vue'
+import {BS_STUBS} from '../utils'
 import $moment from 'moment'
 
 const localVue = createLocalVue()
@@ -30,6 +31,7 @@ function createWrapper()
 {
   return shallowMount(StaticPage, {
     mocks: { $moment, $http, $router },
+    stubs: BS_STUBS,
     propsData: {
       pages: { [DEFAULT_PAGE]: 'About' },
       // page: DEFAULT_PAGE,
