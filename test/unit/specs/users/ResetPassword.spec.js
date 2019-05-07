@@ -58,7 +58,11 @@ describe('users/ResetPassword.vue', () => {
     expect(wrapper.is(ResetPassword)).to.eql(true)
   })
 
-  describeCheckFormFields(wrapper, formFields)
+  describeCheckFormFields(wrapper, formFields, {
+    async: true
+  })
+
+  wrapper.destroy()
 
   describe('Form send', () => {
 
@@ -96,6 +100,8 @@ describe('users/ResetPassword.vue', () => {
           expect(wrapper)
         })
       })
+
+      wrapper.destroy()
 
     })
 

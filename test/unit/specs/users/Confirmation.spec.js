@@ -41,6 +41,8 @@ describe('users/Confirmation.vue', () => {
       })
     })
 
+    wrapper.destroy()
+
   })
 
 })
