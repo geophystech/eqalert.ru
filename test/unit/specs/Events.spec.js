@@ -158,6 +158,32 @@ describe('Events.vue', () => {
 
   })
 
+  describe('Check datetime formats', () => {
+
+    const wrapper = createWrapper({
+      get: () => Promise.resolve(resp())
+    }, {
+      $root: {
+        onMobile: null
+      }
+    })
+
+    it('If Mobile', async () => {
+      flushPromises().then(() => {
+        wrapper.vm.$root.onMobile = true
+        expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss')
+      })
+    })
+
+    it('If Not Mobile', async () => {
+      flushPromises().then(() => {
+        wrapper.vm.$root.onMobile = false
+        expect(wrapper.vm.datetimeFormat).to.equal('LL в HH:mm:ss UTC')
+      })
+    })
+
+  })
+
   describe('Error responses', () => {
 
     ([
