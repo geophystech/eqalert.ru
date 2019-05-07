@@ -1,9 +1,9 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import Registration from '@/components/users/Registration'
-import BootstrapVue from 'bootstrap-vue'
 import {$routerMocks, describeCheckFormFields, RouterLink} from '../../utils'
-import $moment from 'moment'
+import Registration from '@/components/users/Registration'
 import flushPromises from 'flush-promises'
+import BootstrapVue from 'bootstrap-vue'
+import $moment from 'moment'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -18,7 +18,15 @@ const formFields = {
   email: {tag: 'input', value: 'email@test.ru'},
   password: {tag: 'input', value: '12345'},
   company: {tag: 'input', value: 'My company'},
-  purpose: {tag: 'select', value: Object.keys(PURPOSES)[0]},
+
+  purpose: {
+    tag: 'select',
+    value: Object.keys(PURPOSES)[0],
+    setValue: (field, data) => {
+      field.findAll('option').at(1).setSelected()
+    }
+  },
+
   fullname: {tag: 'input', value: 'fullname'},
   additionalInfo: {tag: 'textarea', value: 'Additional Info'}
 }
@@ -31,7 +39,11 @@ function createWrapper(httpRespHandler = () => Promise.reject())
     form: {
       validated: false,
       messages: {},
-      fields: {}
+      fields: {},
+      purposes: {
+        values: [],
+        disabled: false
+      }
     }
   }
 
@@ -94,9 +106,18 @@ describe('users/Registration.vue', () => {
   describe('Form send', () => {
 
     const formInit = (wrapper) => {
-      for (let [fieldName, fieldData] of Object.entries(formFields)) {
-        wrapper.find(`${fieldData.tag}[name="${fieldName}"]`).setValue(fieldData.value)
+
+      for (let [fieldName, fieldData] of Object.entries(formFields))
+      {
+        const field = wrapper.find(`${fieldData.tag}[name="${fieldName}"]`)
+
+        if ('setValue' in formFields[fieldName]) {
+          formFields[fieldName].setValue(field, fieldData)
+        } else {
+          field.setValue(fieldData.value)
+        }
       }
+
       wrapper.find('form').trigger('submit.prevent')
       return flushPromises()
     }
@@ -121,6 +142,10 @@ describe('users/Registration.vue', () => {
 
       const [ title, httpRespHandler, expect ] = conf
       const wrapper = createWrapper(httpRespHandler)
+
+      wrapper.vm.form.purposes.values = Object.entries(PURPOSES).map(it => {
+        return {value: it[0], text: it[1]}
+      })
 
       it(title, async () => {
         formInit(wrapper).then(() => {
