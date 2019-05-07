@@ -1,9 +1,9 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import ConfirmPassword from '@/components/users/ConfirmPassword'
-import BootstrapVue from 'bootstrap-vue'
 import {$routerMocks, describeCheckFormFields, RouterLink} from '../../utils'
-import $moment from 'moment'
+import ConfirmPassword from '@/components/users/ConfirmPassword'
 import flushPromises from 'flush-promises'
+import BootstrapVue from 'bootstrap-vue'
+import $moment from 'moment'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -57,12 +57,12 @@ describe('users/ConfirmPassword.vue', () => {
 
   describe('Form send', () => {
 
-    const formInit = async (wrapper) => {
+    const formInit = (wrapper) => {
       for (let [fieldName, fieldData] of Object.entries(formFields)) {
         wrapper.find(`${fieldData.tag}[name="${fieldName}"]`).setValue(fieldData.value)
       }
       wrapper.find('form').trigger('submit.prevent')
-      return await flushPromises()
+      return flushPromises()
     }
 
     const expects = [
@@ -77,12 +77,13 @@ describe('users/ConfirmPassword.vue', () => {
       ]
     ]
 
-    for (let [ title, resp, expect ] of expects)
+    for (let [ title, resp, _expect ] of expects)
     {
       let wrapper = createWrapper(resp)
       it(title, async () => {
-        await formInit(wrapper)
-        expect(wrapper)
+        formInit(wrapper).then(() => {
+          _expect(wrapper)
+        })
       })
     }
 
