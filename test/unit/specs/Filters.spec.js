@@ -37,8 +37,8 @@ describe('Filters.vue', () => {
   $routerMocks.$route.query = {}
   const values = [false, '', '1', 1, true]
   Object.keys(fields).forEach(prop => {
-    values.push(values[0])
     $routerMocks.$route.query[prop] = values[0]
+    values.push(values.shift())
   })
 
   const wrapper = mount(Filters, {
