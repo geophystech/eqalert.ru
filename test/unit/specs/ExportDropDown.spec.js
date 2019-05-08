@@ -1,29 +1,53 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import ExportDropDown from '@/components/ExportDropDown'
+import flushPromises from 'flush-promises'
 import BootstrapVue from 'bootstrap-vue'
-import $moment from 'moment'
-import $http from 'axios'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-describe('ExportDropDown.vue', () => {
-
+function createWrapper($http)
+{
   const $store = {
     getters: {
       user: {
-        authenticated: false
+        authenticated: true,
+        permissions: {
+          xls_access: 'xls_access'
+        }
       }
     }
   }
 
-  const wrapper = shallowMount(ExportDropDown, {
-    mocks: { $http, $moment, $store },
+  return mount(ExportDropDown, {
+    mocks: { $http, $store },
+    attachToDocument: true,
     localVue
   })
+}
 
-  it('Check component ExportDropDown', () => {
-    expect(wrapper.is(ExportDropDown)).to.eql(true)
+const resp = {
+  response: {
+    data: {
+      data: {
+        url: 'xls file url'
+      }
+    }
+  }
+}
+
+describe('ExportDropDown.vue', () => {
+
+  const wrapper = createWrapper({
+    get: () => Promise.resolve(resp)
+  })
+
+  it('Request xls file url', async () => {
+    wrapper.find('.dropdown-item').trigger('click')
+    flushPromises().then(() => {
+      expect(window.location.href).to.equal(resp.response.data.data.url)
+      wrapper.trigger('hide')
+    })
   })
 
 })
