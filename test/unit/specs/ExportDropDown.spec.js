@@ -42,11 +42,11 @@ describe('ExportDropDown.vue', () => {
     get: () => Promise.resolve(resp)
   })
 
-  it('Request xls file url', async () => {
+  wrapper.vm.$on('export2xls', request => {
+    request('url', {})
+  })
 
-    wrapper.vm.$on('export2xls', request => {
-      request('url', {})
-    })
+  it('Request xls file url', async () => {
 
     wrapper.find('.dropdown-item').trigger('click')
 
