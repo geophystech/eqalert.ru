@@ -8,6 +8,22 @@ import $moment from 'moment'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
+const fields = {
+  datetime_max: { tag: 'input' },
+  datetime_min: { tag: 'input' },
+  depth_max: { tag: 'input' },
+  depth_min: { tag: 'input' },
+  has_mt: { tag: 'input[type=checkbox]' },
+  mag_max: { tag: 'input' },
+  mag_min: { tag: 'input' },
+  lat_max: { tag: 'input' },
+  lat_min: { tag: 'input' },
+  lon_max: { tag: 'input' },
+  lon_min: { tag: 'input' },
+  rms_max: { tag: 'input' },
+  sta_num_min: { tag: 'input' }
+}
+
 describe('Filters.vue', () => {
 
   const $store = {
@@ -17,6 +33,13 @@ describe('Filters.vue', () => {
       }
     }
   }
+
+  $routerMocks.$route.query = {}
+  const values = [false, '', '1', true]
+  Object.keys(fields).forEach(prop => {
+    values.push(values[0])
+    $routerMocks.$route.query[prop] = values[0]
+  })
 
   const wrapper = mount(Filters, {
     mocks: Object.assign({ $moment, $store }, $routerMocks),
@@ -28,27 +51,14 @@ describe('Filters.vue', () => {
     expect(wrapper.is(Filters)).to.eql(true)
   })
 
-  describeCheckFormFields(wrapper, {
-    datetime_max: { tag: 'input' },
-    datetime_min: { tag: 'input' },
-    depth_max: { tag: 'input' },
-    depth_min: { tag: 'input' },
-    has_mt: { tag: 'input[type=checkbox]' },
-    mag_max: { tag: 'input' },
-    mag_min: { tag: 'input' },
-    lat_max: { tag: 'input' },
-    lat_min: { tag: 'input' },
-    lon_max: { tag: 'input' },
-    lon_min: { tag: 'input' },
-    rms_max: { tag: 'input' },
-    sta_num_min: { tag: 'input' }
-  }, {
+  describeCheckFormFields(wrapper, fields, {
     label: 'Check filter fields'
   })
 
   describe('Filters Change', () => {
 
     const magMinField = wrapper.find('input[name="mag_min"]')
+    wrapper.vm._filtersUpdateTimeout = setTimeout(() => {})
 
     it('Form change', async () => {
 
@@ -68,6 +78,7 @@ describe('Filters.vue', () => {
       flushPromises().then(() => {
         expect(wrapper.vm.filtersChanged).to.equal(false)
         expect(wrapper.vm.sendBtnFade).to.equal(false)
+        wrapper.trigger('reset')
       })
     })
 
