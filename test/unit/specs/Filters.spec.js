@@ -35,7 +35,7 @@ describe('Filters.vue', () => {
   }
 
   $routerMocks.$route.query = {}
-  const values = [false, '', '1', 1, true]
+  const values = [true, false, 1, '1', '']
   Object.keys(fields).forEach(prop => {
     $routerMocks.$route.query[prop] = values[0]
     values.push(values.shift())
