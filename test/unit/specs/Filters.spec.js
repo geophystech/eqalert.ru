@@ -48,16 +48,27 @@ describe('Filters.vue', () => {
 
   describe('Filters Change', () => {
 
-    wrapper.find('input[name="mag_min"]').setValue(1)
-    wrapper.trigger('submit')
+    const magMinField = wrapper.find('input[name="mag_min"]')
 
-    it('Form submit', async () => {
+    it('Form change', async () => {
+
+      magMinField.setValue(1)
+      magMinField.trigger('input.native')
 
       flushPromises().then(() => {
         expect(wrapper.vm.filtersChanged).to.equal(true)
         expect(wrapper.vm.sendBtnFade).to.equal(true)
       })
 
+    })
+
+    it('Form submit', async () => {
+      wrapper.trigger('submit')
+
+      flushPromises().then(() => {
+        expect(wrapper.vm.filtersChanged).to.equal(false)
+        expect(wrapper.vm.sendBtnFade).to.equal(false)
+      })
     })
 
   })

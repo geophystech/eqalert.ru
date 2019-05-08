@@ -10,12 +10,15 @@ export function mapPropDataGen(mapId)
 
 export const $routerMocks = {
   $router: {
+    opts: {},
     resolve: data => {
       let url = data.name ? `#/${data.name.toLowerCase()}` : '#'
       return { href: data.params ? `${url}/${Object.values(data.params).join('/')}` : url }
     },
     replace: data => {
-
+      for (let [k, v] of Object.entries(data)) {
+        $routerMocks.$router.opts[k] = v
+      }
     },
     currentRoute: {
       params: {}
