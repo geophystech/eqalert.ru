@@ -49,12 +49,13 @@ describe('ExportDropDown.vue', () => {
   it('Request xls file url', async () => {
 
     wrapper.find('.dropdown-item').trigger('click')
+    wrapper.trigger('hide')
 
     flushPromises().then(() => {
       expect(window.location.href).to.equal(resp.response.data.data.url)
       expect(wrapper.vm.$refs.dropdown.visible).to.equal(false)
       expect(wrapper.vm.xlsSpinnerShow).to.equal(false)
-      wrapper.vm.$refs.dropdown.trigger('hide')
+      wrapper.trigger('hide')
     })
 
   })
