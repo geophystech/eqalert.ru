@@ -31,9 +31,10 @@ describe('event/Header.vue', () => {
 
   describe('Label variant', () => {
 
+    const wrapper = createWrapper()
+
     Object.entries(labelVariants).forEach(labelVariant => {
 
-      const wrapper = createWrapper()
       const event = deepClone(EVENT_DATA)
 
       Object.keys(labelVariants).forEach(prop => {
@@ -41,7 +42,7 @@ describe('event/Header.vue', () => {
       })
 
       event[labelVariant[0]] = true
-      wrapper.event = event
+      wrapper.vm.event = event
 
       it(labelVariant[1], async () => {
         flushPromises().then(() => {
@@ -49,9 +50,9 @@ describe('event/Header.vue', () => {
         })
       })
 
-      wrapper.destroy()
-
     })
+
+    wrapper.destroy()
 
   })
 
