@@ -22,6 +22,7 @@
           :variant="showTrainingEvents ? 'event-training' : 'info'"
           :disabled="trainingEventsBtnDisabled"
           :pressed.sync="showTrainingEvents"
+          id="showTraining"
           size="sm">{{ showTrainingEvents ? 'Скрыть' : 'Показать' }} учебные</b-btn>
 
         <ModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
