@@ -58,7 +58,6 @@ describe('Filters.vue', () => {
   describe('Filters Change', () => {
 
     const magMinField = wrapper.find('input[name="mag_min"]')
-    wrapper.vm._filtersUpdateTimeout = setTimeout(() => {})
 
     it('Form change', async () => {
 
@@ -79,6 +78,25 @@ describe('Filters.vue', () => {
         expect(wrapper.vm.filtersChanged).to.equal(false)
         expect(wrapper.vm.sendBtnFade).to.equal(false)
         wrapper.trigger('reset')
+      })
+    })
+
+    it('Response errors', async () => {
+
+      const errors = {
+        _otherError: ['Other error']
+      }
+
+      Object.keys(fields).forEach(prop => {
+        errors[prop] = [`Error msg ${prop}`]
+      })
+
+      wrapper.vm.setErrors(errors)
+
+      flushPromises().then(() => {
+        for (let [prop, msg] of Object.entries(wrapper.vm.errorMessages)) {
+          expect(msg).to.equal(`<p>${errors[prop].join('</p><p>')}</p>`)
+        }
       })
     })
 
