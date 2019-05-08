@@ -21,28 +21,6 @@ function createWrapper($store)
 
 describe('AppHeader.vue', () => {
 
-  /*describe('SignOut', () => {
-
-    let signOutDispatch
-
-    const wrapper = createWrapper({
-      getters: {
-        user: {
-          authenticated: true
-        }
-      },
-      dispatch: dispatch => {
-        signOutDispatch = dispatch
-      }
-    })
-
-    it('SignOut btn click', () => {
-      wrapper.find('a[data-btn="sign-out"]').trigger('click.prevent')
-      expect(signOutDispatch).to.equal('signOut')
-    })
-
-  })*/
-
   describe('static elements', () => {
 
     const wrapper = createWrapper({
