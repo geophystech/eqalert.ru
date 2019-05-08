@@ -1,10 +1,11 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import {$routerMocks, EVENT_DATA, RouterLink} from '../utils'
+import {$routerMocks, EVENT_BUIDINGS, EVENT_DATA, EVENT_LDOS, RouterLink} from '../utils'
 import EventHeader from '@/components/event/Header'
 import BootstrapVue from 'bootstrap-vue'
 import Event from '@/components/Event'
 import $moment from 'moment'
 import flushPromises from 'flush-promises'
+import apiSettings from '@/settings/api'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -31,9 +32,11 @@ function createWrapper($http, authenticated)
   })
 }
 
-const resp = {
-  data: {
-    data: EVENT_DATA
+const respData = (data) => {
+  return {
+    data: {
+      data: data
+    }
   }
 }
 
@@ -43,7 +46,7 @@ describe('Event.vue', () => {
 
     ([
 
-      ['Response Success if user authenticated', () => Promise.resolve(resp), wrapper => {
+      ['Response Success if user authenticated', resp => Promise.resolve(resp), wrapper => {
 
         wrapper.vm.$store.getters.user.authenticated = true
 
@@ -53,7 +56,7 @@ describe('Event.vue', () => {
 
       }, true],
 
-      ['Response Success if not user authenticated', () => Promise.resolve(resp), wrapper => {
+      ['Response Success if not user authenticated', resp => Promise.resolve(resp), wrapper => {
         flushPromises().then(() => {
           expect(wrapper.vm.event.id).to.eql(EVENT_DATA.id)
         })
@@ -70,7 +73,7 @@ describe('Event.vue', () => {
         })
       }],
 
-      ['Magnitude Types', () => Promise.resolve(resp), wrapper => {
+      ['Magnitude Types', resp => Promise.resolve(resp), wrapper => {
 
         const magnitudeTypes = {
           'L': [['M', 'L']],
@@ -96,7 +99,16 @@ describe('Event.vue', () => {
       const [label, httpResp, callBack, authenticated] = conf
 
       const wrapper = createWrapper({
-        get: httpResp
+        get: (url) => {
+          switch(url) {
+            case (apiSettings.endpointEventBuildings(EVENT_DATA.id)):
+              return httpResp(respData(EVENT_BUIDINGS))
+            case(apiSettings.endpointEventLDOs(EVENT_DATA.id)):
+              return httpResp(respData(EVENT_LDOS))
+            default:
+              return httpResp(respData(EVENT_DATA))
+          }
+        }
       }, !!authenticated)
 
       it(label, async () => {
