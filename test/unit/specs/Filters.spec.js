@@ -1,9 +1,9 @@
 import { mount, createLocalVue } from '@vue/test-utils'
+import { $routerMocks, describeCheckFormFields } from '../utils'
+import flushPromises from 'flush-promises'
 import Filters from '@/components/Filters'
 import BootstrapVue from 'bootstrap-vue'
-import { $routerMocks, describeCheckFormFields } from '../utils'
 import $moment from 'moment'
-import $http from 'axios'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -19,7 +19,7 @@ describe('Filters.vue', () => {
   }
 
   const wrapper = mount(Filters, {
-    mocks: Object.assign({ $http, $moment, $store }, $routerMocks),
+    mocks: Object.assign({ $moment, $store }, $routerMocks),
     attachToDocument: true,
     localVue
   })
@@ -44,6 +44,22 @@ describe('Filters.vue', () => {
     sta_num_min: { tag: 'input' }
   }, {
     label: 'Check filter fields'
+  })
+
+  describe('Filters Change', () => {
+
+    wrapper.vm.filters.mag_min = 1
+    wrapper.trigger('submit')
+
+    it('Form submit', async () => {
+
+      flushPromises().then(() => {
+        expect(wrapper.vm.filtersChanged).to.equal(true)
+        expect(wrapper.vm.sendBtnFade).to.equal(true)
+      })
+
+    })
+
   })
 
 })
