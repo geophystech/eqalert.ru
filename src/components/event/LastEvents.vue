@@ -72,6 +72,7 @@
           .then(response => {
 
             response.data.data.forEach(event => {
+
               if (event.nearestCity) {
                 const distance = round(event.nearestCity.data.ep_dis, 2)
                 const title = event.nearestCity.data.settlement.data.translation.data.title
@@ -81,10 +82,9 @@
               }
 
               this.events.push(event)
+
             })
-          })
-          .catch(error => {
-            console.log(error.response)
+
           })
       },
       highlightEvent: function(id) {

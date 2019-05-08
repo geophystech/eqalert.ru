@@ -1,24 +1,47 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
+import {EVENT_LDOS, mapPropDataGen} from '../../utils'
 import LDOsMap from '@/components/maps/LDOs'
 import BootstrapVue from 'bootstrap-vue'
-import $http from 'axios'
 import '@/leaflet'
-import {mapPropDataGen} from '../../utils'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-describe('maps/LDOs.vue', () => {
-
-  const wrapper = shallowMount(LDOsMap, {
+function createWrapper()
+{
+  return mount(LDOsMap, {
     propsData: mapPropDataGen('LDOsMap'),
     attachToDocument: true,
-    mocks: { $http },
+    mocks: {},
     localVue
   })
+}
 
-  it('LDOs map rendered', () => {
-    expect(wrapper.is(LDOsMap)).to.eql(true)
+describe('maps/LDOs.vue', () => {
+
+  const wrapper = createWrapper()
+
+  ;([
+
+    [ 'Create map', wrapper => { wrapper.vm.addData(EVENT_LDOS) } ],
+    [ 'Create map by event change', wrapper => { wrapper.vm.event = mapPropDataGen('LDOsMap').event } ]
+
+  ]).forEach(conf => {
+
+    const [label, mod] = conf
+
+    describe(label, () => {
+
+      mod(wrapper)
+
+      it('Check map', () => {
+        expect(!!wrapper.vm.map.object).to.equal(true)
+      })
+
+      wrapper.vm.$options.beforeDestroy[0].call(wrapper.vm)
+
+    })
+
   })
 
 })

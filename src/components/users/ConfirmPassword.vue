@@ -121,10 +121,7 @@
           .catch(error => {
             if (error.response) {
               this.validationError = error.response.data.email[0]
-
               this.enableFields()
-            } else {
-              console.log(error)
             }
           })
       }

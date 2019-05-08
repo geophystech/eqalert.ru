@@ -133,9 +133,6 @@
                   disableBtns(false)
                   setReloadTimer()
                 })
-                .catch(error => {
-                  console.log(error.response || error)
-                })
             }
 
             eventsRangeRequests[eventsRangeName] = request

@@ -72,7 +72,6 @@ export default {
           this.$root.$emit('onMapLDOsDataFetched', response.data.data)
           this.setData(response.data.data)
         })
-        .catch(error => { console.log(error) })
     },
     setData: function(data) {
       const damagedParts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
@@ -84,8 +83,6 @@ export default {
           }
         })
       })
-
-      const msk64ConfigVersion = this.$store.getters.msk64ConfigVersion
 
       Object.keys(damagedParts).forEach((k, i) => {
         this.items[i].value = damagedParts[k]
@@ -99,7 +96,7 @@ export default {
 
       this.items[6].value = this.$store.getters.srssDBVersion
       this.items[7].value = data.length
-      this.items[8].value = `${msk64ConfigVersion}`
+      this.items[8].value = this.$store.getters.msk64ConfigVersion
 
       this.spinner = false
     }

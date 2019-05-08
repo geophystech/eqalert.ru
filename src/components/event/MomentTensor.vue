@@ -142,9 +142,6 @@
           .then(response => {
             this.setData(response.data.data[0])
           })
-          .catch(error => {
-            console.log(error)
-          })
       },
       setData: function(data) {
         this.setImage(data)

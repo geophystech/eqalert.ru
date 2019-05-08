@@ -104,7 +104,6 @@
             this.$root.$emit('onMapBuildingsDataFetched', response.data.data)
             this.setData(response.data.data)
           })
-          .catch(error => { console.log(error) })
       },
       setData: function(buildings) {
         let itemsLen = this.items.length

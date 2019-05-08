@@ -1,17 +1,17 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Header from '@/components/event/Header'
 import BootstrapVue from 'bootstrap-vue'
+import {$routerMocks, deepClone, EVENT_DATA} from '../../utils'
 import $moment from 'moment'
-import $http from 'axios'
-import {$routerMocks} from '../../utils'
+import flushPromises from 'flush-promises'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-describe('event/Header.vue', () => {
-
-  const wrapper = shallowMount(Header, {
-    mocks: Object.assign({ $http, $moment }, $routerMocks),
+function createWrapper()
+{
+  return shallowMount(Header, {
+    mocks: Object.assign({ $moment }, $routerMocks),
     propsData: {
       event: {
         id: 'ob93enBa'
@@ -19,9 +19,41 @@ describe('event/Header.vue', () => {
     },
     localVue
   })
+}
 
-  it('Check component Header', () => {
-    expect(wrapper.is(Header)).to.eql(true)
+const labelVariants = {
+  has_processing: 'processing',
+  has_delete: 'deleted',
+  has_final: 'final'
+}
+
+describe('event/Header.vue', () => {
+
+  describe('Label variant', () => {
+
+    const wrapper = createWrapper()
+
+    Object.entries(labelVariants).forEach(labelVariant => {
+
+      const event = deepClone(EVENT_DATA)
+
+      Object.keys(labelVariants).forEach(prop => {
+        event[prop] = false
+      })
+
+      event[labelVariant[0]] = true
+      wrapper.vm.event = event
+
+      it(labelVariant[1], async () => {
+        flushPromises().then(() => {
+          expect(wrapper.vm.label.variant).to.eql(labelVariant[1])
+        })
+      })
+
+    })
+
+    wrapper.destroy()
+
   })
 
 })

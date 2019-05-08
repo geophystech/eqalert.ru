@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import AppHeader from '@/components/AppHeader'
 import BootstrapVue from 'bootstrap-vue'
 import VueRouter from 'vue-router'
@@ -9,28 +9,27 @@ const router = new VueRouter()
 localVue.use(BootstrapVue)
 localVue.use(VueRouter)
 
+function createWrapper($store)
+{
+  return mount(AppHeader, {
+    stubs: { RouterLink },
+    mocks: { $store },
+    localVue,
+    router
+  })
+}
+
 describe('AppHeader.vue', () => {
 
-  const $store = {
-    getters: {
-      user: {
-        authenticated: false
-      }
-    }
-  }
-
-  const wrapper = shallowMount(AppHeader, {
-    localVue,
-    router,
-    stubs: {
-      RouterLink
-    },
-    mocks: {
-      $store
-    }
-  })
-
   describe('static elements', () => {
+
+    const wrapper = createWrapper({
+      getters: {
+        user: {
+          authenticated: false
+        }
+      }
+    })
 
     it('renders logo', () => {
       const logoContainer = wrapper.find('#logo')
@@ -40,7 +39,7 @@ describe('AppHeader.vue', () => {
       expect(logoLink.props().to).to.equal('/')
 
       expect(logoImage.attributes().alt).to.equal('EQA!ert')
-      expect(logoImage.attributes().src).to.not.be.empty
+      expect(!!logoImage.attributes().src).to.equal(true)
     })
 
     it('renders links', () => {
@@ -62,20 +61,12 @@ describe('AppHeader.vue', () => {
 
     describe('events count', () => {
 
-      const $store = {
+      const wrapper = createWrapper({
         getters: {
           totalEventsCount: 100500,
           user: {
             authenticated: false
           }
-        }
-      }
-
-      const wrapper = shallowMount(AppHeader, {
-        localVue,
-        router,
-        mocks: {
-          $store
         }
       })
 
@@ -87,6 +78,14 @@ describe('AppHeader.vue', () => {
     })
 
     describe('user authentication block', () => {
+
+      const wrapper = createWrapper({
+        getters: {
+          user: {
+            authenticated: false
+          }
+        }
+      })
 
       describe('when not authenticated', () => {
 
@@ -105,19 +104,12 @@ describe('AppHeader.vue', () => {
       })
 
       describe('when authenticated', () => {
-        const $store = {
+
+        const wrapper = createWrapper({
           getters: {
             user: {
               authenticated: true
             }
-          }
-        }
-
-        const wrapper = shallowMount(AppHeader, {
-          localVue,
-          router,
-          mocks: {
-            $store
           }
         })
 
@@ -126,7 +118,7 @@ describe('AppHeader.vue', () => {
         const link = signInOutContainer.find('a')
 
         it('renders correct link', () => {
-          expect(link.attributes().href).to.equal('javascript:void(0)')
+          expect(link.attributes().href).to.equal('#')
           expect(link.text()).to.equal('Выйти')
 
           expect(icon.classes()).to.contain('fa')

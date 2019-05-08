@@ -57,12 +57,12 @@
       },
       currentTabName: function() {
         const currentTab = Object.keys(this.tabs).find(key => {
-          return this.tabs[key].href === this.activeTab
+          return this.isTabActive(this.tabs[key])
         })
 
-        if (currentTab) return this.tabs[currentTab].label
-
-        return 'Информация о событии'
+        return currentTab
+          ? this.tabs[currentTab].label
+          : 'Информация о событии'
       },
       isTabActive: function(tab) {
         return this.activeTab === tab.href
@@ -135,7 +135,6 @@
     },
     created() {
       this.setData()
-      this.currentTabName()
     },
     watch: {
       event: function() {

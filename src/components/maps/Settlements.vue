@@ -57,7 +57,6 @@
       fetchData: function() {
         this.$http.get(apiSettings.endpointEventMsk64(this.event.id))
           .then(response => { this.addData(response.data.data) })
-          .catch(error => { console.log(error) })
       },
       initialize: function() {
         this.map.id = id(this.event.id, this.tab)
@@ -68,7 +67,8 @@
       },
       removeData: function() {
         // Remove map legend and MSK64 circles.
-        this.$el.querySelector('.map-legend').remove()
+        const legend = this.$el.querySelector('.map-legend')
+        if (legend) legend.remove()
         this.map.circles.forEach(circle => { this.map.object.removeLayer(circle) })
       },
       resetMap: function() {

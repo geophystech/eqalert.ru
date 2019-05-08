@@ -1,9 +1,9 @@
 <template>
   <div class="events">
     <CountersHeader v-if="!error"
+      :trainingEventsBtnShow="$store.getters.user.authenticated"
       :trainingEventsBtnDisabled="spinners.loadMoreEvents"
       @toggleTrainingEvents="toggleTrainingEvents"
-      :trainingEventsBtnShow="true"
       :filtersData="filtersData"
       :showModalMap="true"
       :count="events.length"
@@ -69,7 +69,7 @@
         <b-row class="load-more-events" no-gutters>
           <b-col class="text-center">
             <Spinner v-if="spinners.loadMoreEvents" />
-            <a href="#" v-if="apiParams.cursor && !spinners.loadMoreEvents"
+            <a href="#" v-if="apiParams.cursor && !spinners.loadMoreEvents" id="loadMoreEventsBtn"
                @click.prevent="loadMoreEvents">Показать больше событий</a>
             <span v-if="!apiParams.cursor">Загружены все события</span>
           </b-col>
@@ -104,7 +104,7 @@ export default {
       disabledFilters: false,
       highlightEventTreshold: eventsSettings.highlightTreshold,
       spinners: {
-        loadMoreEvents: false
+        loadMoreEvroundents: false
       },
       startDate: '',
       endDate: ''
@@ -114,12 +114,13 @@ export default {
     round: function() {
       return round
     },
-    datetimeFormat: function() {
+    datetimeFormat: function()
+    {
       if (this.$root.onMobile) {
         return 'L в HH:mm:ss'
-      } else {
-        return 'LL в HH:mm:ss UTC'
       }
+
+      return 'LL в HH:mm:ss UTC'
     },
     backUrlQuery: function()
     {
@@ -210,9 +211,6 @@ export default {
     },
     loadMoreEvents: function() {
       this.getEvents()
-    },
-    openEvent: function(item, index, event) {
-      this.$router.push({ name: 'Event', params: { id: item.id } })
     },
     toggleTrainingEvents: function(checked) {
       this.$refs.filters.filters.has_training = checked ? 1 : null

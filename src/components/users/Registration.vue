@@ -194,11 +194,10 @@
       getPurposesList: function() {
         this.$http.get(apiSettings.endpointPurposesList)
           .then(response => {
-            Object.keys(response.data.data).forEach(key => {
-              this.form.purposes.values.push({ value: key, text: response.data.data[key] })
-            })
+            for (let [id, title] of Object.entries(response.data.data)) {
+              this.form.purposes.values.push({ value: id, text: title })
+            }
           })
-          .catch(error => { console.log(error) })
       },
       onShowAdditionalInfo: function() {
         this.form.showAdditionalInfo = true
@@ -224,20 +223,20 @@
             this.registrationComplete = true
           })
           .catch(error => {
-            if (error.response) {
-              this.showValidationErrors(error.response.data.errors.data)
-
-              this.enableFields()
-            } else { console.log(error) }
+            this.showValidationErrors(error.response.data.errors.data)
+            this.enableFields()
           })
       },
-      showValidationErrors: function(messages) {
-        Object.keys(messages).forEach(messageKey => {
+
+      showValidationErrors: function(messages)
+      {
+        for (let [messageKey, messageList] of Object.entries(messages)) {
           const key = this.transformFieldName(messageKey)
-          this.form.messages[key] = messages[messageKey][0]
+          this.form.messages[key] = messageList[0]
           this.form.fields[key].state = false
-        })
+        }
       },
+
       // Transforms field names taken from API into local field names.
       transformFieldName: function(fieldName) {
         switch (fieldName) {

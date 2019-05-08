@@ -23,14 +23,9 @@ export default {
     }
   },
   methods: {
-    getContent: async function() {
-      return await this.$http.get(`/static/markdown/${this.page}.md`)
-        .then(response => {
-          this.content = response.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    getContent: function() {
+      this.$http.get(`/static/markdown/${this.page}.md`)
+        .then(response => { this.content = response.data })
     }
   },
   created() {

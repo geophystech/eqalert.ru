@@ -1,23 +1,45 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import BuildingsMap from '@/components/maps/Buildings'
 import BootstrapVue from 'bootstrap-vue'
-import $http from 'axios'
+import {EVENT_BUIDINGS, mapPropDataGen} from '../../utils'
 import '@/leaflet'
-import {mapPropDataGen} from '../../utils'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-describe('maps/Buildings.vue', () => {
-
-  const wrapper = shallowMount(BuildingsMap, {
+function createWrapper()
+{
+  return mount(BuildingsMap, {
     propsData: mapPropDataGen('BuildingsMap'),
     attachToDocument: true,
-    mocks: { $http },
+    mocks: {},
     localVue
   })
+}
 
-  it('Buildings map rendered', () => {
-    expect(wrapper.is(BuildingsMap)).to.eql(true)
+describe('maps/Buildings.vue', () => {
+
+  const wrapper = createWrapper()
+
+  ;([
+
+    [ 'Create map', wrapper => { wrapper.vm.addData(EVENT_BUIDINGS) } ],
+    [ 'Create map by event change', wrapper => { wrapper.vm.event = mapPropDataGen('BuildingsMap').event } ]
+
+  ]).forEach(conf => {
+
+    const [label, mod] = conf
+
+    describe(label, () => {
+
+      mod(wrapper)
+
+      it('Check map', () => {
+        expect(!!wrapper.vm.map.object).to.equal(true)
+      })
+
+    })
+
   })
+
 })

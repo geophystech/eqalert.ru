@@ -1,21 +1,50 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Analytics from '@/components/Analytics'
 import BootstrapVue from 'bootstrap-vue'
-import $moment from 'moment'
-import $http from 'axios'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
+const stubs = {}
+
+;([
+  'ChartByDatetime',
+  'CountersHeader',
+  'Filters'
+]).forEach(stub => {
+  stubs[stub] = { name: stub, template: '<div></div>' }
+})
+
 describe('Analytics.vue', () => {
 
   const wrapper = shallowMount(Analytics, {
-    mocks: { $http, $moment },
-    localVue
+    mocks: {},
+    localVue,
+    stubs
   })
 
-  it('Check component Analytics', () => {
-    expect(wrapper.is(Analytics)).to.eql(true)
+  it('Chart By Datetime Update', async () => {
+    wrapper.find(stubs.ChartByDatetime).vm.$emit('update', {
+      eventsCount: 10,
+      startDate: 'startDate',
+      endDate: 'endDate'
+    })
+    expect(wrapper.vm.eventsCount).to.eql(10)
+    expect(wrapper.vm.startDate).to.eql('startDate')
+    expect(wrapper.vm.endDate).to.eql('endDate')
+  })
+
+  it('Filters Updated', () => {
+    wrapper.find(stubs.Filters).vm.$emit('filtersUpdated', {
+      param1: 'param1',
+      param2: 'param2',
+      param3: 'param3'
+    })
+    expect(wrapper.vm.filtersParams).to.eql({
+      param1: 'param1',
+      param2: 'param2',
+      param3: 'param3'
+    })
   })
 
 })

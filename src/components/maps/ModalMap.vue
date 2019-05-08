@@ -1,6 +1,6 @@
 <template>
   <div class="modal-map">
-    <b-btn size="sm" v-b-modal.map-dialog>Показать на карте</b-btn>
+    <b-btn size="sm" id="map-dialog-btn" v-b-modal.map-dialog>Показать на карте</b-btn>
     <b-modal
       id="map-dialog"
       size="lg"
@@ -73,6 +73,7 @@
         }
 
         this.map.object.remove()
+        this.map.object = null
         this.title = ''
       },
 
@@ -88,26 +89,30 @@
         let _getEvents = function(url)
         {
           this.$http.get(url, {
+
             params: params,
-            before: (request) => {
+
+            before: (request) =>
+            {
               if (this.previousRequest) {
                 this.previousRequest.abort()
               }
 
               this.previousRequest = request
             }
+
+          }).then(response => {
+
+            events = events.concat(response.data.data)
+
+            let pagination = response.data.meta.pagination
+            let nextPageUrl = pagination.links.next
+
+            this.title = `Загружено ${events.length} из ${pagination.total} событий`
+
+            nextPageUrl ? _getEvents(nextPageUrl) : callBack(events)
+
           })
-            .then(response => {
-              events = events.concat(response.data.data)
-              let pagination = response.data.meta.pagination
-              let nextPageUrl = pagination.links.next
-              this.title = `Загружено ${events.length} из ${pagination.total} событий`
-              nextPageUrl ? _getEvents(nextPageUrl) : callBack(events)
-            })
-            .catch(error => {
-              this.map.object.spin(false)
-              console.log(error)
-            })
 
         }.bind(this)
 
