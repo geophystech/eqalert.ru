@@ -20,15 +20,6 @@ function createWrapper($http)
   }
 
   return mount(ExportDropDown, {
-    parentComponent: {
-      name: 'EventHeader',
-      template: `<div><ExportDropDown @export2xls="export2xls" /></div>`,
-      methods: {
-        export2xls(request) {
-          request('url', {})
-        }
-      }
-    },
     mocks: { $http, $store },
     attachToDocument: true,
     localVue
@@ -52,6 +43,10 @@ describe('ExportDropDown.vue', () => {
   })
 
   it('Request xls file url', async () => {
+
+    wrapper.vm.$on('export2xls', request => {
+      request('url', {})
+    })
 
     wrapper.find('.dropdown-item').trigger('click')
 
