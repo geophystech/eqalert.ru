@@ -54,7 +54,7 @@ describe('ExportDropDown.vue', () => {
       expect(window.location.href).to.equal(resp.response.data.data.url)
       expect(wrapper.vm.$refs.dropdown.visible).to.equal(false)
       expect(wrapper.vm.xlsSpinnerShow).to.equal(false)
-      wrapper.trigger('hide')
+      wrapper.vm.$refs.dropdown.trigger('hide')
     })
 
   })
