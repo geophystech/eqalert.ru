@@ -36,144 +36,147 @@
           zoom: 4
         })
 
-        const defaultEventsRange = this.map.defaultEventsRange
-        let $moment = this.$moment
-        let $http = this.$http
-
-        let legend = window.L.control({position: 'bottomright'})
-        let stateLabel = window.L.DomUtil.create('p')
-        let markers = []
-
-        let addEvents = function(events)
+        if(!this.onlyStations)
         {
-          markers.forEach(marker => map.removeLayer(marker))
-          markers = []
+          const defaultEventsRange = this.map.defaultEventsRange
+          let $moment = this.$moment
+          let $http = this.$http
 
-          events.reverse().forEach(event => {
-            let marker = createMapEventMarker(event, $moment)
-            markers.push(marker)
-            marker.addTo(map)
-          })
-        }
+          let legend = window.L.control({position: 'bottomright'})
+          let stateLabel = window.L.DomUtil.create('p')
+          let markers = []
 
-        let _this = this
+          let addEvents = function(events)
+          {
+            markers.forEach(marker => map.removeLayer(marker))
+            markers = []
 
-        legend.onAdd = function()
-        {
-          /** @type HTMLElement */
-          let btnGroup = window.L.DomUtil.create('div', 'btn-group btn-group-toggle map-legend map-legend-mainpage')
-          let getCheckedBtn = () => { return btnGroup.querySelector('input[type=radio]:checked') }
-          let eventsRangeRequests = {}
-
-          let disableBtns = function(disabled = true) {
-            let btns = btnGroup.querySelectorAll('input[type=radio]')
-            Array.prototype.forEach.call(btns, btn => { btn.disabled = disabled })
+            events.reverse().forEach(event => {
+              let marker = createMapEventMarker(event, $moment)
+              markers.push(marker)
+              marker.addTo(map)
+            })
           }
 
-          let setReloadTimer = (() => {
+          let _this = this
 
-            let reloadTimeout = 300 // sec
-            let reloadTimer
-
-            return () => {
-
-              if(reloadTimer) {
-                clearTimeout(reloadTimer)
-              }
-
-              reloadTimer = setTimeout(() => {
-                eventsRangeRequests[getCheckedBtn().dataset.rangeName]().then(() => {
-                  _this.mapNotify('Данные о землетрясениях обновлены')
-                })
-              }, 1000 * reloadTimeout)
-
-            }
-
-          })()
-
-          let appendBtn = function(eventsRangeName, callBack)
+          legend.onAdd = function()
           {
             /** @type HTMLElement */
-            let btn = window.L.DomUtil.create('label', 'btn btn-sm btn-default')
-            let eventsRange = EVENTS_RANGES[eventsRangeName]
-            let checked = (eventsRangeName === defaultEventsRange)
-            let changeHandler = function() {
-              stateLabel.innerText = eventsRange.title
-              callBack()
+            let btnGroup = window.L.DomUtil.create('div', 'btn-group btn-group-toggle map-legend map-legend-mainpage')
+            let getCheckedBtn = () => { return btnGroup.querySelector('input[type=radio]:checked') }
+            let eventsRangeRequests = {}
+
+            let disableBtns = function(disabled = true) {
+              let btns = btnGroup.querySelectorAll('input[type=radio]')
+              Array.prototype.forEach.call(btns, btn => { btn.disabled = disabled })
             }
 
-            btn.innerHTML =
-              `<input type="radio" name="__map_report__" ${checked ? 'checked' : ''} />
+            let setReloadTimer = (() => {
+
+              let reloadTimeout = 300 // sec
+              let reloadTimer
+
+              return () => {
+
+                if(reloadTimer) {
+                  clearTimeout(reloadTimer)
+                }
+
+                reloadTimer = setTimeout(() => {
+                  eventsRangeRequests[getCheckedBtn().dataset.rangeName]().then(() => {
+                    _this.mapNotify('Данные о землетрясениях обновлены')
+                  })
+                }, 1000 * reloadTimeout)
+
+              }
+
+            })()
+
+            let appendBtn = function(eventsRangeName, callBack)
+            {
+              /** @type HTMLElement */
+              let btn = window.L.DomUtil.create('label', 'btn btn-sm btn-default')
+              let eventsRange = EVENTS_RANGES[eventsRangeName]
+              let checked = (eventsRangeName === defaultEventsRange)
+              let changeHandler = function() {
+                stateLabel.innerText = eventsRange.title
+                callBack()
+              }
+
+              btn.innerHTML =
+                `<input type="radio" name="__map_report__" ${checked ? 'checked' : ''} />
                <span>${eventsRange.label}</span>`
 
-            /** @type HTMLInputElement */
-            let radio = btn.querySelector('input[type=radio]')
+              /** @type HTMLInputElement */
+              let radio = btn.querySelector('input[type=radio]')
 
-            radio.addEventListener('change', changeHandler, false)
-            if (checked) changeHandler()
+              radio.addEventListener('change', changeHandler, false)
+              if (checked) changeHandler()
 
-            radio.setAttribute('data-range-name', eventsRangeName)
-            btn.style.backgroundColor = eventsRange.color
-            btn.setAttribute('title', eventsRange.title)
+              radio.setAttribute('data-range-name', eventsRangeName)
+              btn.style.backgroundColor = eventsRange.color
+              btn.setAttribute('title', eventsRange.title)
 
-            btnGroup.appendChild(btn)
-          }
-
-          Object.keys(EVENTS_RANGES).forEach(eventsRangeName => {
-
-            let eventsRange = EVENTS_RANGES[eventsRangeName]
-            let minDateSubtract = eventsRange.minDateSubtract
-            let request = function()
-            {
-              let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
-              disableBtns()
-
-              return $http.get(apiSettings.endpointEventsLight, {
-                params: {
-                  datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
-                  limit: eventsRange.limit || 1000
-                }
-              })
-                .then(response => {
-                  addEvents(response.data.data)
-                  disableBtns(false)
-                  setReloadTimer()
-                })
+              btnGroup.appendChild(btn)
             }
 
-            eventsRangeRequests[eventsRangeName] = request
-            appendBtn(eventsRangeName, () => {
-              map.spin(true)
-              request().then(() => {
-                map.spin(false)
+            Object.keys(EVENTS_RANGES).forEach(eventsRangeName => {
+
+              let eventsRange = EVENTS_RANGES[eventsRangeName]
+              let minDateSubtract = eventsRange.minDateSubtract
+              let request = function()
+              {
+                let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
+                disableBtns()
+
+                return $http.get(apiSettings.endpointEventsLight, {
+                  params: {
+                    datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
+                    limit: eventsRange.limit || 1000
+                  }
+                })
+                  .then(response => {
+                    addEvents(response.data.data)
+                    disableBtns(false)
+                    setReloadTimer()
+                  })
+              }
+
+              eventsRangeRequests[eventsRangeName] = request
+              appendBtn(eventsRangeName, () => {
+                map.spin(true)
+                request().then(() => {
+                  map.spin(false)
+                })
               })
+
             })
 
-          })
+            let checkedBtn = getCheckedBtn()
 
-          let checkedBtn = getCheckedBtn()
+            if (!checkedBtn) {
+              checkedBtn = btnGroup.querySelector('input[type=radio]:first-child')
+              checkedBtn.checked = true
+              checkedBtn.dispatchEvent(new Event('change'))
+            }
 
-          if (!checkedBtn) {
-            checkedBtn = btnGroup.querySelector('input[type=radio]:first-child')
-            checkedBtn.checked = true
-            checkedBtn.dispatchEvent(new Event('change'))
+            return btnGroup
+
           }
 
-          return btnGroup
+          legend.addTo(map)
 
+          let text = window.L.control({position: 'bottomright'})
+
+          text.onAdd = function() {
+            let div = window.L.DomUtil.create('div', 'map-text')
+            div.appendChild(stateLabel)
+            return div
+          }
+
+          text.addTo(map)
         }
-
-        legend.addTo(map)
-
-        let text = window.L.control({position: 'bottomright'})
-
-        text.onAdd = function() {
-          let div = window.L.DomUtil.create('div', 'map-text')
-          div.appendChild(stateLabel)
-          return div
-        }
-
-        text.addTo(map)
       },
 
       mapNotify: function(msg, delay = 3500)

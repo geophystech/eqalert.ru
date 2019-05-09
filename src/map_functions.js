@@ -132,7 +132,7 @@ export function createMap(mapID, coordinates, {
 
   if(onlyStations)
   {
-    addStations(map, controls, true)
+    addStations(map)
   }
   else
   {
@@ -263,11 +263,13 @@ function addStations(map, controls, show = true)
 
       const makerksGroup = new window.L.LayerGroup(markers)
 
-      if (show) {
+      if (!controls || show) {
         map.addLayer(makerksGroup)
       }
 
-      controls.addOverlay(makerksGroup, 'Show seismic stations')
+      if (controls) {
+        controls.addOverlay(makerksGroup, 'Show seismic stations')
+      }
     })
     .catch(error => {
       console.log(error)
