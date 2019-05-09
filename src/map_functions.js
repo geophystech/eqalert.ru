@@ -645,8 +645,10 @@ export function createMapEventMarker(event, $moment)
   }
 
   const coordinates = new window.L.LatLng(latitude, longitude)
+  const marker = new window.L.CircleMarker(coordinates, options)
 
-  const marker = new window.L.RegularPolygonMarker(coordinates, options)
+  /*options.icon = window.L.divIcon({className: 'circle-marker-map'})
+  const marker = window.L.marker(coordinates, options)*/
 
   const popup =
     `<table class="table table-hover table-sm table-responsive">
