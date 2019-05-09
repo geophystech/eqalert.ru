@@ -9,7 +9,7 @@
       :lazy="true"
       size="lg"
       @shown="onMapDialogOpen">
-      <MainMageMap ref="map" :onlyStations="true" />
+      <MainMageMap ref="map" :onlyStations="true" :gestureHandling="false" />
     </b-modal>
   </div>
 </template>

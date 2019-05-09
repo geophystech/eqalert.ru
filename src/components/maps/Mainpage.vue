@@ -10,6 +10,7 @@
   export default
   {
     props: {
+      gestureHandling: true,
       onlyStations: false
     },
     data() {
@@ -30,6 +31,7 @@
         let map = this.map.object = createMap(this.map.id, this.map.coordinates, {
           addToggleShowBuildings: this.$store.getters.user.authenticated,
           addToggleShowLDOs: this.$store.getters.user.authenticated,
+          gestureHandling: this.gestureHandling,
           onlyStations: this.onlyStations,
           markerPopupHeader: '',
           showStations: false,
