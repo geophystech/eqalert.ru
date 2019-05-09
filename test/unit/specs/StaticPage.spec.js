@@ -9,7 +9,7 @@ import $moment from 'moment'
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-const PAGE_CONTENT = 'Page content'
+const PAGE_CONTENT = '<a class="mainpage-map-link">Посмотреть карту сейсмических станций</a>'
 const DEFAULT_PAGE = 'about'
 
 const $http = {
