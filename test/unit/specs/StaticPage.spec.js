@@ -83,7 +83,6 @@ describe('StaticPage.vue', () => {
     const wrapper = createWrapper()
 
     it('Check map link', async () => {
-      wrapper.find(VueMarkdown).trigger('rendered')
       flushPromises().then(() => {
         expect(wrapper.find('.mainpage-map-link').exists()).to.eql(true)
       })
