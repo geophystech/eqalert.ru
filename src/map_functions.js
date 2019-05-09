@@ -32,116 +32,6 @@ export function addEpicenter(map, coordinates)
   return epicenter
 }
 
-export function addPlateBoundaries(controls)
-{
-  const boundaries = new window.L.GeoJSON(store.getters.plateBoundaries, {
-
-    style: {
-      color: '#8A0707',
-      weight: 2
-    },
-
-    onEachFeature: function(feature, layer)
-    {
-      const message = `Обновленная модель границ тектонических плит.
-        <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
-        P.Bird, 2003</a>`
-
-      layer.on('mouseover', function(event) {
-        return this.bindPopup(message).openPopup(event.latlng)
-      })
-
-      layer.on('mouseout', function(event) {
-        const popups = document.getElementsByClassName('leaflet-popup')
-
-        Array.from(popups).forEach((popup) => {
-          popup.addEventListener('mouseleave', () => {
-            return layer.closePopup()
-          })
-        })
-      })
-    }
-
-  })
-
-  controls.addOverlay(boundaries, 'Plate Boundaries')
-}
-
-export function addStations(map, controls, show = true)
-{
-  axios.get(apiSettings.endpointStations)
-    .then(response => {
-      let markers = []
-
-      response.data.data.forEach(station => {
-
-        let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
-        let marker = new window.L.RegularPolygonMarker(coordinates, {
-          fillColor: stationsSettings.colors[station.scnl_network],
-          fillOpacity: 1.0,
-          numberOfSides: 3,
-          rotation: 30.0,
-          color: false,
-          radius: 7
-        })
-
-        let message =
-          `<table class="table table-hover table-sm table-responsive">
-            <thead>
-              <tr>
-                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Каналов</th>
-                <td>${station.channel_num}</td>
-              </tr>
-              <tr>
-                <th scope="row">Высота</th>
-                <td>${station.sta_elevation}</td>
-              </tr>
-              <tr>
-                <th scope="row">Тип датчика</th>
-                <td>${station.instrument}</td>
-              </tr>
-              <tr>
-                <th scope="row">Регистратор</th>
-                <td>${station.datalogger}</td>
-              </tr>
-              <tr>
-                <th scope="row">Частота дискр.</th>
-                <td>${station.sample_rate}</td>
-              </tr>
-              <tr>
-                <th scope="row">Телеметрия</th>
-                <td>${station.has_realtime}</td>
-              </tr>
-              <tr>
-                <th scope="row">Оператор</th>
-                <td>${station.operator}</td>
-              </tr>
-            </tbody>
-          </table>`
-
-        marker.bindPopup(message)
-        markers.push(marker)
-
-      })
-
-      const makerksGroup = new window.L.LayerGroup(markers)
-
-      if (show) {
-        map.addLayer(makerksGroup)
-      }
-
-      controls.addOverlay(makerksGroup, 'Show seismic stations')
-    })
-    .catch(error => {
-      console.log(error)
-    })
-}
-
 export const BUILDING_COLORS = [
   '#67C333',
   '#008000',
@@ -183,9 +73,11 @@ export function convertMsk64(value) {
 
 export function createMap(mapID, coordinates, {
 
-  addToggleShowObjects = false,
+  addToggleShowBuildings = false,
+  addToggleShowLDOs = false,
   gestureHandling = true,
   showStations = true,
+  onlyStations = false,
   zoom = 8,
   store
 
@@ -238,46 +130,29 @@ export function createMap(mapID, coordinates, {
   map._zoomHome.setHomeZoom(zoom)
   map._zoomHome.addTo(map)
 
-  // Plate Boundaries
-  addPlateBoundaries(controls)
-  // Show seismic stations
-  addStations(map, controls, showStations)
-
-  if(addToggleShowObjects)
+  if(onlyStations)
   {
-    (function() {
+    addStations(map).then(coordinates => {
+      mapCentering(map, coordinates)
+    })
+  }
+  else
+  {
+    // Plate Boundaries
+    addPlateBoundaries(controls)
 
-      let markerClusterGroup = createMapMarkerClusterGroup()
+    // Show seismic stations
+    addStations(map, controls, showStations)
 
-      map.spin(true)
+    // Show Buildings
+    if(addToggleShowBuildings) {
+      showBuildings(map, controls)
+    }
 
-      let getBuildings = function(url)
-      {
-        axios.get(url, {params: { limit: 1000 }}).then(response => {
-
-          response.data.data.forEach(building => {
-            let marker = createMapBuildingMarker(building)
-            markerClusterGroup.addLayer(marker)
-          })
-
-          let pagination = response.data.meta.pagination
-
-          if (pagination.current_page < pagination.total_pages) {
-            return getBuildings(pagination.links.next)
-          }
-
-          controls.addOverlay(markerClusterGroup, 'Show objects')
-          map.spin(false)
-
-        }).catch(error => {
-          console.log(error)
-          map.spin(false)
-        })
-      }
-
-      getBuildings(apiSettings.endpointBuildings)
-
-    })()
+    // Show LDOs (long distance objects)
+    if(addToggleShowLDOs) {
+      showLDOs(map, controls)
+    }
   }
 
   map.setZoom(zoom)
@@ -289,8 +164,329 @@ export function createMap(mapID, coordinates, {
   return map
 }
 
+// Plate Boundaries
+function addPlateBoundaries(controls)
+{
+  const boundaries = new window.L.GeoJSON(store.getters.plateBoundaries, {
+
+    style: {
+      color: '#8A0707',
+      weight: 2
+    },
+
+    onEachFeature: function(feature, layer)
+    {
+      const message = `Обновленная модель границ тектонических плит.
+        <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
+        P.Bird, 2003</a>`
+
+      layer.on('mouseover', function(event) {
+        return this.bindPopup(message).openPopup(event.latlng)
+      })
+
+      layer.on('mouseout', function(event) {
+        const popups = document.getElementsByClassName('leaflet-popup')
+
+        Array.from(popups).forEach((popup) => {
+          popup.addEventListener('mouseleave', () => {
+            return layer.closePopup()
+          })
+        })
+      })
+    }
+
+  })
+
+  controls.addOverlay(boundaries, 'Границы плит')
+}
+
+// Show seismic stations
+function addStations(map, controls, show = true)
+{
+  const allCoords = []
+
+  return new Promise((resolve, reject) => {
+
+    axios.get(apiSettings.endpointStations)
+      .then(response => {
+        let markers = []
+
+        response.data.data.forEach(station => {
+
+          let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
+          let marker = new window.L.RegularPolygonMarker(coordinates, {
+            fillColor: stationsSettings.colors[station.scnl_network],
+            fillOpacity: 1.0,
+            numberOfSides: 3,
+            rotation: 30.0,
+            color: false,
+            radius: 7
+          })
+
+          allCoords.push([station.sta_lat, station.sta_lon])
+
+          let message =
+            `<table class="table table-hover table-sm table-responsive">
+            <thead>
+              <tr>
+                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Каналов</th>
+                <td>${station.channel_num}</td>
+              </tr>
+              <tr>
+                <th scope="row">Высота</th>
+                <td>${station.sta_elevation}</td>
+              </tr>
+              <tr>
+                <th scope="row">Тип датчика</th>
+                <td>${station.instrument}</td>
+              </tr>
+              <tr>
+                <th scope="row">Регистратор</th>
+                <td>${station.datalogger}</td>
+              </tr>
+              <tr>
+                <th scope="row">Частота дискр.</th>
+                <td>${station.sample_rate}</td>
+              </tr>
+              <tr>
+                <th scope="row">Телеметрия</th>
+                <td>${station.has_realtime}</td>
+              </tr>
+              <tr>
+                <th scope="row">Оператор</th>
+                <td>${station.operator}</td>
+              </tr>
+            </tbody>
+          </table>`
+
+          marker.bindPopup(message)
+          markers.push(marker)
+
+        })
+
+        const makerksGroup = new window.L.LayerGroup(markers)
+
+        if (!controls || show) {
+          map.addLayer(makerksGroup)
+        }
+
+        if (controls) {
+          controls.addOverlay(makerksGroup, 'Сейсмические станции')
+        }
+
+        resolve(allCoords)
+
+      })
+
+  })
+}
+
+// Show Buildings
+function showBuildings(map, controls)
+{
+  let _getBuildings = (function() {
+
+    const axiosConf = { params: { limit: 1000 } }
+    let buildings = []
+
+    return function(url)
+    {
+      return new Promise((resolve, reject) => {
+
+        axios.get(url, axiosConf).then(response => {
+
+          buildings = buildings.concat(response.data.data)
+          const pagination = response.data.meta.pagination
+
+          if (pagination.current_page < pagination.total_pages) {
+            _getBuildings(pagination.links.next)
+          } else {
+            resolve(buildings)
+          }
+
+        })
+
+      })
+    }
+
+  })()
+
+  function getBuildings(markerClusterGroup)
+  {
+    map.spin(true)
+
+    _getBuildings(apiSettings.endpointBuildings).then(buildings => {
+
+      buildings.forEach(building => {
+        let marker = createMapBuildingMarker(building)
+        markerClusterGroup.addLayer(marker)
+      })
+
+      map.spin(false)
+
+    })
+  }
+
+  const markerClusterGroup = createMapMarkerClusterGroup()
+  controls.addOverlay(markerClusterGroup, 'Здания и сооружения')
+  let downloaded = false
+
+  markerClusterGroup.on('add', () => {
+    if(!downloaded) {
+      downloaded = true
+      getBuildings(markerClusterGroup)
+    }
+  })
+
+}
+
+// Show LDOs (long distance objects)
+function showLDOs(map, controls)
+{
+  async function getLDOs(layerGroup)
+  {
+    map.spin(true)
+
+    const LDOs = (await axios.get(apiSettings.endpointLDOs)).data.data
+
+    LDOs.forEach(async ldo => {
+      ldo.parts = (await axios.get(apiSettings.endpointLdoParts(ldo.id))).data
+      mapLDOsLayerCreate(ldo, layerGroup)
+    })
+
+    map.spin(false)
+  }
+
+  const layer = new window.L.LayerGroup([])
+  controls.addOverlay(layer, 'Линейные объекты')
+  let downloaded = false
+
+  layer.on('add', () => {
+    if(!downloaded) {
+      downloaded = true
+      getLDOs(layer)
+    }
+  })
+}
+
+export function mapLDOsLayerCreate(ldo, layer)
+{
+  ldo.parts.data.forEach(part => {
+
+    const coordinates = [[part.lat_first, part.lon_first], [part.lat_end, part.lon_end]]
+
+    let damageLevel = part.damage && part.damage.data.damage_level > part.destroyed
+      ? part.damage.data.damage_level
+      : part.destroyed
+
+    const partPolyline = window.L.polyline(coordinates, {
+      color: ldoPartColor(damageLevel)
+    })
+
+    partPolyline.addTo(layer)
+
+    let message =
+      `<table class="table table-hover table-sm table-responsive">
+       <thead>
+         <tr>
+           <th class="text-center" colspan=2>Общая информация</th>
+         </tr>
+       </thead>
+       <tbody>
+       <tr>
+         <th class="align-middle" scope="row">Наименование</th>
+         <td>${ldo.name}</td>
+       </tr>
+       <tr>
+         <th scope="row">Год постройки</th>
+         <td>${part.built_year}</td>
+       </tr>
+       <tr>
+         <th scope="row">Глубина залегания</th>
+         <td>${part.height}</td>
+       </tr>
+       <tr>
+         <th scope="row">Проектная сейсмостойкость</th>
+         <td>${part.max_msk64} (MSK64)</td>
+       </tr>
+       <tr>
+         <th scope="row">Материал конструкций</th>
+         <td>${part.fabric_type}</td>
+       </tr>
+       <tr>
+         <th scope="row">Тип грунта</th>
+         <td>${ldoSoilType(part.soil_type)}</td>
+       </tr>
+       <tr>
+         <th class="text-center" colspan=2>Информация о сейсмических воздействиях</th>
+       </tr>
+      `
+
+    if (part.damage && part.damage.data.has_damage) {
+      message +=
+        `<tr>
+          <th scope="row">PGA</th>
+          <td>${part.damage.data.pga_value}</td>
+        </tr>
+        <tr>
+          <th scope="row">Вероятность повреждения</th>
+          <td>${damageLevel}</td>
+        </tr>`
+    } else {
+      message += `<tr><td class="text-center" colspan=2>сейсмическое воздействие не оказано</t></tr>`
+    }
+
+    message +=
+      `   <tr>
+            <th scope="row">Примечания</th>
+            <td>${part.notes}</td>
+          </tr>
+        </tbody>
+      </table>`
+
+    partPolyline.bindPopup(message)
+
+    let partColor = null
+
+    partPolyline.on('mouseover', function(event) {
+      partColor = this.options.color
+
+      partPolyline.setStyle({ color: 'cyan' })
+    })
+
+    partPolyline.on('mouseout', function(event) {
+      partPolyline.setStyle({ color: partColor })
+    })
+  })
+}
+
 export function id(id, tab) {
   return `map-${id}-${tab}`
+}
+
+export function ldoPartColor(damageLevel)
+{
+  switch(damageLevel) {
+    case(0): return 'green'
+    case(1): return 'yellow'
+    case(2): return 'orange'
+    default: return 'red'
+  }
+}
+
+export function ldoSoilType(type) {
+  switch (type) {
+    case 0: return 'не задан'
+    case 1: return 'природные скальные грунты'
+    case 2: return 'природные дисперсные грунты'
+    case 3: return 'природные мерзлые грунты'
+    case 4: return 'техногенные грунты'
+  }
 }
 
 export function msk64Color(value) {
@@ -449,8 +645,7 @@ export function createMapEventMarker(event, $moment)
   }
 
   const coordinates = new window.L.LatLng(latitude, longitude)
-
-  const marker = new window.L.RegularPolygonMarker(coordinates, options)
+  const marker = new window.L.CircleMarker(coordinates, options)
 
   const popup =
     `<table class="table table-hover table-sm table-responsive">
@@ -574,18 +769,18 @@ function isMarker(layer) {
   return layer instanceof window.L.MapMarker || layer instanceof window.L.RegularPolygonMarker
 }
 
-export function mapCentering(map, allCoordinates)
+export function mapCentering(map, coordinates)
 {
   /*
    * Автоматическое определение координат слишком жёстко центрирует почему-то.
-   * Лучше передавать координаты явно в параметре allCoordinates.
+   * Лучше передавать координаты явно в параметре coordinates.
    */
 
-  if(!allCoordinates)
+  if(!coordinates)
   {
-    allCoordinates = []
+    coordinates = []
     let addCoordinates = layer => {
-      !isMarker(layer) || allCoordinates.push(layer.getLatLng())
+      !isMarker(layer) || coordinates.push(layer.getLatLng())
     }
 
     map.eachLayer(layer => {
@@ -597,7 +792,7 @@ export function mapCentering(map, allCoordinates)
     })
   }
 
-  let bound = map._getBoundsCenterZoom(window.L.latLngBounds(allCoordinates))
+  let bound = map._getBoundsCenterZoom(window.L.latLngBounds(coordinates))
   map._zoomHome.setHomeCoordinates(bound.center)
   map._zoomHome.setHomeZoom(bound.zoom)
   map.setView(bound.center, bound.zoom)

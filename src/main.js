@@ -27,7 +27,7 @@ import 'moment/locale/ru'
 import './leaflet'
 
 import 'font-awesome/css/font-awesome.min.css'
-import {authTimeoutChech} from '@/helpers/auth'
+import {authTimeoutCheck} from '@/helpers/auth'
 
 Vue.config.productionTip = false
 
@@ -72,7 +72,7 @@ Vue.use(VueYandexMetrika, {
 
 axiosSetAuthorizationHeaders()
 axiosAddRefreshTokenInterceptor()
-authTimeoutChech(store)
+authTimeoutCheck(store)
 
 /* eslint-disable no-new */
 new Vue({

@@ -217,3 +217,12 @@ details {
     }
   }
 }
+
+.circle-marker-map {
+  > div {
+    border: 1px solid #222;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+  }
+}

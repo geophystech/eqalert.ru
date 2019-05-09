@@ -3,18 +3,12 @@
 </template>
 
 <script>
-  import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions'
+  import {addEpicenter, createMap, id, mapLDOsLayerCreate, removeEpicenter, setView} from '@/map_functions'
 
   export default {
     props: ['event', 'tab'],
     data() {
       return {
-        colors: {
-          0: 'green',
-          1: 'yellow',
-          2: 'orange',
-          3: 'red'
-        },
         coordinates: [],
         map: {
           epicenter: null,
@@ -28,95 +22,9 @@
       addData: function(data)
       {
         const map = this.map.object
-        let allCoordinates = []
 
         data.forEach(ldo => {
-
-          ldo.parts.data.forEach(part => {
-
-            const coordinates = [[part.lat_first, part.lon_first], [part.lat_end, part.lon_end]]
-            const damageLevel = part.damage ? part.damage.data.damage_level : 0
-            const partPolyline = window.L.polyline(coordinates, { color: this.colors[damageLevel] })
-
-            allCoordinates.push(coordinates)
-            partPolyline.addTo(map)
-
-            let message =
-              `<table class="table table-hover table-sm table-responsive">
-                <thead>
-                  <tr>
-                    <th class="text-center" colspan=2>Общая информация</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th class="align-middle" scope="row">Наименование</th>
-                    <td>${ldo.name}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Год постройки</th>
-                    <td>${part.built_year}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Глубина залегания</th>
-                    <td>${part.height}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Проектная сейсмостойкость</th>
-                    <td>${part.max_msk64} (MSK64)</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Материал конструкций</th>
-                    <td>${part.fabric_type}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Тип грунта</th>
-                    <td>${this.soilType(part.soil_type)}</td>
-                  </tr>
-
-                  <tr>
-                    <th class="text-center" colspan=2>Информация о сейсмических воздействиях</th>
-                  </tr>`
-
-            if (part.damage && part.damage.data.has_damage) {
-              message +=
-                `<tr>
-                  <th scope="row">PGA</th>
-                  <td>${part.damage.data.pga_value}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Вероятность повреждения</th>
-                  <td>${damageLevel}</td>
-                </tr>`
-            } else {
-              message +=
-                `<tr>
-                  <td class="text-center" colspan=2>сейсмическое воздействие не оказано</t>
-                </tr>`
-            }
-
-            message +=
-              `   <tr>
-                    <th scope="row">Примечания</th>
-                    <td>${part.notes}</td>
-                  </tr>
-                </tbody>
-              </table>`
-
-            partPolyline.bindPopup(message)
-
-            let partColor = null
-
-            partPolyline.on('mouseover', function(event) {
-              partColor = this.options.color
-
-              partPolyline.setStyle({ color: 'cyan' })
-            })
-
-            partPolyline.on('mouseout', function(event) {
-              partPolyline.setStyle({ color: partColor })
-            })
-          })
+          mapLDOsLayerCreate(ldo, map)
         })
 
         this.putEpicenter()
@@ -139,15 +47,6 @@
         removeEpicenter(this.map.object, this.map.epicenter)
         this.removeData()
         setView(this.map.object, this.coordinates)
-      },
-      soilType: function(type) {
-        switch (type) {
-          case 0: return 'не задан'
-          case 1: return 'природные скальные грунты'
-          case 2: return 'природные дисперсные грунты'
-          case 3: return 'природные мерзлые грунты'
-          case 4: return 'техногенные грунты'
-        }
       }
     },
     created() {

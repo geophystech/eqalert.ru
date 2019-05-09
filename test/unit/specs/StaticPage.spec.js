@@ -2,13 +2,14 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import StaticPage from '@/components/StaticPage'
 import flushPromises from 'flush-promises'
 import BootstrapVue from 'bootstrap-vue'
+import VueMarkdown from 'vue-markdown'
 import {BS_STUBS} from '../utils'
 import $moment from 'moment'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
 
-const PAGE_CONTENT = 'Page content'
+const PAGE_CONTENT = '<a class="mainpage-map-link">Посмотреть карту сейсмических станций</a>'
 const DEFAULT_PAGE = 'about'
 
 const $http = {
@@ -31,7 +32,7 @@ function createWrapper()
 {
   return shallowMount(StaticPage, {
     mocks: { $moment, $http, $router },
-    stubs: BS_STUBS,
+    stubs: Object.assign({VueMarkdown}, BS_STUBS),
     propsData: {
       pages: { [DEFAULT_PAGE]: 'About' },
       // page: DEFAULT_PAGE,
@@ -73,6 +74,27 @@ describe('StaticPage.vue', () => {
         })
       })
 
+    })
+
+  })
+
+  describe('Mainpage map', () => {
+
+    const wrapper = createWrapper()
+
+    it('Check map link', async () => {
+      flushPromises().then(() => {
+        expect(wrapper.find('.mainpage-map-link').exists()).to.eql(true)
+      })
+    })
+
+    it('Open dialog', async () => {
+      flushPromises().then(() => {
+        wrapper.find('.mainpage-map-link').trigger('click')
+        flushPromises().then(() => {
+          expect(wrapper.find('#map-mainpage').exists()).to.eql(true)
+        })
+      })
     })
 
   })

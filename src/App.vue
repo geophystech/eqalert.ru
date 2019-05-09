@@ -17,6 +17,7 @@
   import AppNavbar from '@/components/AppNavbar'
   import AppFooter from '@/components/AppFooter'
   import appSettings from '@/settings/app'
+  import apiSettings from '@/settings/api'
 
   export default {
     metaInfo: {
@@ -52,20 +53,17 @@
     },
     methods: {
       fetchPlateBoundaries: function() {
-        this.$http.get('/static/json/plate_boundaries.geo.json')
-          .then(response => { this.$store.dispatch('setPlateBoundaries', response.data) })
-          .catch(error => { console.log(error) })
+        this.$http.get('/static/json/plate_boundaries.geo.json').then(response => {
+          this.$store.dispatch('setPlateBoundaries', response.data)
+        })
       },
       fetchSystemInfo: function() {
-        this.$http.get(appSettings.endpointSystemInfo)
-          .then(response => {
-            (data => {
-              this.$store.dispatch('setMsk64ConfigVersion', data.msk64Config.data.config_version)
-              this.$store.dispatch('setSrssDBVersion', data.srssCoreConfig.data.db_version)
-              this.$store.dispatch('setTotalEventsCount', data.counters.reports)
-            })(response.data.data)
-          })
-          .catch(error => { console.log(error) })
+        this.$http.get(apiSettings.endpointSystemInfo).then(response => {
+          const data = response.data.data
+          this.$store.dispatch('setMsk64ConfigVersion', data.msk64Config.data.config_version)
+          this.$store.dispatch('setSrssDBVersion', data.srssCoreConfig.data.db_version)
+          this.$store.dispatch('setTotalEventsCount', data.counters.reports)
+        })
       }
     },
     mounted() {

@@ -1,13 +1,26 @@
 <template>
-  <vue-markdown :source="content" class="static-page-content" />
+  <div>
+    <vue-markdown :source="content" class="static-page-content" @rendered="onRendered" />
+    <b-modal
+      ref="mapDialog"
+      title="Карта сейсмических станций"
+      :no-close-on-backdrop="true"
+      :hide-footer="true"
+      :lazy="true"
+      size="lg"
+      @shown="onMapDialogOpen">
+      <MainMageMap ref="map" :onlyStations="true" :gestureHandling="false" />
+    </b-modal>
+  </div>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown'
+import MainMageMap from '@/components/maps/Mainpage'
 
 export default {
   name: 'static-page',
-  components: { VueMarkdown },
+  components: { VueMarkdown, MainMageMap },
   data() {
     return {
       content: '',
@@ -23,9 +36,21 @@ export default {
     }
   },
   methods: {
-    getContent: function() {
-      this.$http.get(`/static/markdown/${this.page}.md`)
-        .then(response => { this.content = response.data })
+    getContent() {
+      this.$http.get(`/static/markdown/${this.page}.md`).then(response => {
+        this.content = response.data
+      })
+    },
+    onRendered() {
+      !this.$el || setTimeout(() => {
+        this.$el.querySelector('.mainpage-map-link').addEventListener('click', e => {
+          e.preventDefault()
+          this.$refs.mapDialog.show()
+        })
+      })
+    },
+    onMapDialogOpen() {
+      this.$refs.map.map.object.invalidateSize()
     }
   },
   created() {
@@ -40,9 +65,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/_variables';
 
-  div /deep/ {
+  @import '~scss/_variables';
+  @import '~scss/_mixins';
+  @import '~scss/_modal_map.scss';
+
+  .static-page-content /deep/
+  {
     margin-top: 3%;
 
     h1, h2, h3, h4, h5, h6 {
@@ -55,4 +84,5 @@ export default {
       max-width: 100%;
     }
   }
+
 </style>

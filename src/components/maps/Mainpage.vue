@@ -7,7 +7,12 @@
   import {EVENTS_RANGES} from '@/helpers/event'
   import apiSettings from '@/settings/api'
 
-  export default {
+  export default
+  {
+    props: {
+      gestureHandling: true,
+      onlyStations: false
+    },
     data() {
       return {
         map: {
@@ -23,13 +28,24 @@
 
       createMap: function()
       {
-        let map = this.map.object = createMap(this.map.id, this.map.coordinates, {
-          addToggleShowObjects: this.$store.getters.user.authenticated,
+        this.map.object = createMap(this.map.id, this.map.coordinates, {
+          addToggleShowBuildings: this.$store.getters.user.authenticated,
+          addToggleShowLDOs: this.$store.getters.user.authenticated,
+          gestureHandling: this.gestureHandling,
+          onlyStations: this.onlyStations,
           markerPopupHeader: '',
           showStations: false,
           zoom: 4
         })
 
+        if(!this.onlyStations) {
+          this.addMapLegend()
+        }
+      },
+
+      addMapLegend()
+      {
+        const map = this.map.object
         const defaultEventsRange = this.map.defaultEventsRange
         let $moment = this.$moment
         let $http = this.$http

@@ -21,6 +21,7 @@ class Config
     this.endpointPurposesList = `${this.baseURL}/${this.version}/user/purposesList`
     this.endpointStations = `${this.baseURL}/${this.version}/stations`
     this.endpointBuildings = `${this.baseURL}/${this.version}/buildings`
+    this.endpointLDOs = `${this.baseURL}/${this.version}/ldo`
     this.endpointSystemInfo = `${this.baseURL}/${this.version}/systemInfo`
     this.endpointUserAuthentication = `${this.oauthBaseURL}/token`
     this.endpointUserRefreshToken = `${this.oauthBaseURL}/refreshToken`
@@ -45,6 +46,10 @@ class Config
 
   endpointEventLDOs(id) {
     return `${this.baseURL}/${this.version}/pga/damagedLongDistanceObjects/${id}`
+  }
+
+  endpointLdoParts(ldoId) {
+    return `${this.baseURL}/${this.version}/ldo/${ldoId}`
   }
 
   endpointEventMsk64(id) {
