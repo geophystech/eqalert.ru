@@ -131,47 +131,9 @@
   @import '~scss/_variables';
   @import '~scss/_mixins';
 
-  .modal-map
-  {
+  .modal-map {
     display: inline-block;
-
-    /deep/ .modal
-    {
-      padding-left: 15px;
-      height: 100%;
-
-      .modal-dialog
-      {
-        @include calc(height, '100% - 57px', 100%);
-        max-width: none;
-
-        .modal-content
-        {
-          height: 100%;
-
-          .modal-header
-          {
-            padding: 0.6rem 1rem;
-
-            .modal-title {
-              text-align: center;
-              font-size: 1rem;
-              width: 100%;
-            }
-          }
-
-          .modal-body
-          {
-            padding: 2px;
-            height: 1%;
-
-            .map {
-              height: 100%;
-            }
-          }
-        }
-      }
-    }
+    @import '~scss/_modal_map.scss';
   }
 
 </style>

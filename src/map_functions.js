@@ -77,6 +77,7 @@ export function createMap(mapID, coordinates, {
   addToggleShowLDOs = false,
   gestureHandling = true,
   showStations = true,
+  onlyStations = false,
   zoom = 8,
   store
 
@@ -129,18 +130,27 @@ export function createMap(mapID, coordinates, {
   map._zoomHome.setHomeZoom(zoom)
   map._zoomHome.addTo(map)
 
-  // Plate Boundaries
-  addPlateBoundaries(controls)
-
-  // Show seismic stations
-  addStations(map, controls, showStations)
-
-  if(addToggleShowBuildings) {
-    showBuildings(map, controls)
+  if(onlyStations)
+  {
+    addStations(map, controls, true)
   }
+  else
+  {
+    // Plate Boundaries
+    addPlateBoundaries(controls)
 
-  if(addToggleShowLDOs) {
-    showLDOs(map, controls)
+    // Show seismic stations
+    addStations(map, controls, showStations)
+
+    // Show Buildings
+    if(addToggleShowBuildings) {
+      showBuildings(map, controls)
+    }
+
+    // Show LDOs (long distance objects)
+    if(addToggleShowLDOs) {
+      showLDOs(map, controls)
+    }
   }
 
   map.setZoom(zoom)
@@ -264,7 +274,7 @@ function addStations(map, controls, show = true)
     })
 }
 
-// Show objects
+// Show Buildings
 function showBuildings(map, controls)
 {
   let _getBuildings = (function() {
@@ -357,8 +367,14 @@ export function mapLDOsLayerCreate(ldo, layer)
   ldo.parts.data.forEach(part => {
 
     const coordinates = [[part.lat_first, part.lon_first], [part.lat_end, part.lon_end]]
-    const damageLevel = part.damage ? part.damage.data.damage_level : 0
-    const partPolyline = window.L.polyline(coordinates, { color: ldoPartColor(damageLevel) })
+
+    let damageLevel = part.damage && part.damage.data.damage_level > part.destroyed
+      ? part.damage.data.damage_level
+      : part.destroyed
+
+    const partPolyline = window.L.polyline(coordinates, {
+      color: ldoPartColor(damageLevel)
+    })
 
     partPolyline.addTo(layer)
 
@@ -394,7 +410,6 @@ export function mapLDOsLayerCreate(ldo, layer)
          <th scope="row">Тип грунта</th>
          <td>${ldoSoilType(part.soil_type)}</td>
        </tr>
-
        <tr>
          <th class="text-center" colspan=2>Информация о сейсмических воздействиях</th>
        </tr>
@@ -403,18 +418,15 @@ export function mapLDOsLayerCreate(ldo, layer)
     if (part.damage && part.damage.data.has_damage) {
       message +=
         `<tr>
-           <th scope="row">PGA</th>
-           <td>${part.damage.data.pga_value}</td>
-         </tr>
-         <tr>
-           <th scope="row">Вероятность повреждения</th>
-           <td>${damageLevel}</td>
-         </tr>`
+          <th scope="row">PGA</th>
+          <td>${part.damage.data.pga_value}</td>
+        </tr>
+        <tr>
+          <th scope="row">Вероятность повреждения</th>
+          <td>${damageLevel}</td>
+        </tr>`
     } else {
-      message +=
-        `<tr>
-           <td class="text-center" colspan=2>сейсмическое воздействие не оказано</t>
-         </tr>`
+      message += `<tr><td class="text-center" colspan=2>сейсмическое воздействие не оказано</t></tr>`
     }
 
     message +=

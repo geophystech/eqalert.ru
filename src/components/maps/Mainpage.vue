@@ -7,7 +7,11 @@
   import {EVENTS_RANGES} from '@/helpers/event'
   import apiSettings from '@/settings/api'
 
-  export default {
+  export default
+  {
+    props: {
+      onlyStations: false
+    },
     data() {
       return {
         map: {
@@ -26,6 +30,7 @@
         let map = this.map.object = createMap(this.map.id, this.map.coordinates, {
           addToggleShowBuildings: this.$store.getters.user.authenticated,
           addToggleShowLDOs: this.$store.getters.user.authenticated,
+          onlyStations: this.onlyStations,
           markerPopupHeader: '',
           showStations: false,
           zoom: 4
