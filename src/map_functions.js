@@ -197,7 +197,7 @@ function addPlateBoundaries(controls)
 
   })
 
-  controls.addOverlay(boundaries, 'Plate Boundaries')
+  controls.addOverlay(boundaries, 'Границы плит')
 }
 
 // Show seismic stations
@@ -276,7 +276,7 @@ function addStations(map, controls, show = true)
         }
 
         if (controls) {
-          controls.addOverlay(makerksGroup, 'Show seismic stations')
+          controls.addOverlay(makerksGroup, 'Сейсмические станции')
         }
 
         resolve(allCoords)
@@ -333,7 +333,7 @@ function showBuildings(map, controls)
   }
 
   const markerClusterGroup = createMapMarkerClusterGroup()
-  controls.addOverlay(markerClusterGroup, 'Show buildings')
+  controls.addOverlay(markerClusterGroup, 'Здания и сооружения')
   let downloaded = false
 
   markerClusterGroup.on('add', () => {
@@ -363,7 +363,7 @@ function showLDOs(map, controls)
   }
 
   const layer = new window.L.LayerGroup([])
-  controls.addOverlay(layer, 'Show long distance objects')
+  controls.addOverlay(layer, 'Линейные объекты')
   let downloaded = false
 
   layer.on('add', () => {
