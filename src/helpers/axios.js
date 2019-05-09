@@ -23,7 +23,7 @@ export function axiosAddRefreshTokenInterceptor()
 
     error => {
 
-      let errorResponse = error.response
+      let errorResponse = error.response || {}
 
       if(errorResponse.status === 401
         && apiSettings.endpointUserAuthentication !== errorResponse.config.url

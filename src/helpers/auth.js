@@ -146,7 +146,7 @@ export async function auth({username, password, rememberMe = false})
 import authSettings from '@/settings/auth'
 import {camelCase} from '@/helpers/string'
 
-export function authTimeoutChech(store)
+export function authTimeoutCheck(store)
 {
   let user = store.getters.user
 

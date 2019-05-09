@@ -32,116 +32,6 @@ export function addEpicenter(map, coordinates)
   return epicenter
 }
 
-export function addPlateBoundaries(controls)
-{
-  const boundaries = new window.L.GeoJSON(store.getters.plateBoundaries, {
-
-    style: {
-      color: '#8A0707',
-      weight: 2
-    },
-
-    onEachFeature: function(feature, layer)
-    {
-      const message = `Обновленная модель границ тектонических плит.
-        <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
-        P.Bird, 2003</a>`
-
-      layer.on('mouseover', function(event) {
-        return this.bindPopup(message).openPopup(event.latlng)
-      })
-
-      layer.on('mouseout', function(event) {
-        const popups = document.getElementsByClassName('leaflet-popup')
-
-        Array.from(popups).forEach((popup) => {
-          popup.addEventListener('mouseleave', () => {
-            return layer.closePopup()
-          })
-        })
-      })
-    }
-
-  })
-
-  controls.addOverlay(boundaries, 'Plate Boundaries')
-}
-
-export function addStations(map, controls, show = true)
-{
-  axios.get(apiSettings.endpointStations)
-    .then(response => {
-      let markers = []
-
-      response.data.data.forEach(station => {
-
-        let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
-        let marker = new window.L.RegularPolygonMarker(coordinates, {
-          fillColor: stationsSettings.colors[station.scnl_network],
-          fillOpacity: 1.0,
-          numberOfSides: 3,
-          rotation: 30.0,
-          color: false,
-          radius: 7
-        })
-
-        let message =
-          `<table class="table table-hover table-sm table-responsive">
-            <thead>
-              <tr>
-                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Каналов</th>
-                <td>${station.channel_num}</td>
-              </tr>
-              <tr>
-                <th scope="row">Высота</th>
-                <td>${station.sta_elevation}</td>
-              </tr>
-              <tr>
-                <th scope="row">Тип датчика</th>
-                <td>${station.instrument}</td>
-              </tr>
-              <tr>
-                <th scope="row">Регистратор</th>
-                <td>${station.datalogger}</td>
-              </tr>
-              <tr>
-                <th scope="row">Частота дискр.</th>
-                <td>${station.sample_rate}</td>
-              </tr>
-              <tr>
-                <th scope="row">Телеметрия</th>
-                <td>${station.has_realtime}</td>
-              </tr>
-              <tr>
-                <th scope="row">Оператор</th>
-                <td>${station.operator}</td>
-              </tr>
-            </tbody>
-          </table>`
-
-        marker.bindPopup(message)
-        markers.push(marker)
-
-      })
-
-      const makerksGroup = new window.L.LayerGroup(markers)
-
-      if (show) {
-        map.addLayer(makerksGroup)
-      }
-
-      controls.addOverlay(makerksGroup, 'Show seismic stations')
-    })
-    .catch(error => {
-      console.log(error)
-    })
-}
-
 export const BUILDING_COLORS = [
   '#67C333',
   '#008000',
@@ -243,41 +133,8 @@ export function createMap(mapID, coordinates, {
   // Show seismic stations
   addStations(map, controls, showStations)
 
-  if(addToggleShowObjects)
-  {
-    (function() {
-
-      let markerClusterGroup = createMapMarkerClusterGroup()
-
-      map.spin(true)
-
-      let getBuildings = function(url)
-      {
-        axios.get(url, {params: { limit: 1000 }}).then(response => {
-
-          response.data.data.forEach(building => {
-            let marker = createMapBuildingMarker(building)
-            markerClusterGroup.addLayer(marker)
-          })
-
-          let pagination = response.data.meta.pagination
-
-          if (pagination.current_page < pagination.total_pages) {
-            return getBuildings(pagination.links.next)
-          }
-
-          controls.addOverlay(markerClusterGroup, 'Show objects')
-          map.spin(false)
-
-        }).catch(error => {
-          console.log(error)
-          map.spin(false)
-        })
-      }
-
-      getBuildings(apiSettings.endpointBuildings)
-
-    })()
+  if(addToggleShowObjects) {
+    showObjects(map, controls)
   }
 
   map.setZoom(zoom)
@@ -287,6 +144,162 @@ export function createMap(mapID, coordinates, {
   window.L.control.scale().addTo(map)
 
   return map
+}
+
+// Plate Boundaries
+function addPlateBoundaries(controls)
+{
+  const boundaries = new window.L.GeoJSON(store.getters.plateBoundaries, {
+
+    style: {
+      color: '#8A0707',
+      weight: 2
+    },
+
+    onEachFeature: function(feature, layer)
+    {
+      const message = `Обновленная модель границ тектонических плит.
+        <a href="http://onlinelibrary.wiley.com/doi/10.1029/2001GC000252/abstract">
+        P.Bird, 2003</a>`
+
+      layer.on('mouseover', function(event) {
+        return this.bindPopup(message).openPopup(event.latlng)
+      })
+
+      layer.on('mouseout', function(event) {
+        const popups = document.getElementsByClassName('leaflet-popup')
+
+        Array.from(popups).forEach((popup) => {
+          popup.addEventListener('mouseleave', () => {
+            return layer.closePopup()
+          })
+        })
+      })
+    }
+
+  })
+
+  controls.addOverlay(boundaries, 'Plate Boundaries')
+}
+
+// Show seismic stations
+function addStations(map, controls, show = true)
+{
+  axios.get(apiSettings.endpointStations)
+    .then(response => {
+      let markers = []
+
+      response.data.data.forEach(station => {
+
+        let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
+        let marker = new window.L.RegularPolygonMarker(coordinates, {
+          fillColor: stationsSettings.colors[station.scnl_network],
+          fillOpacity: 1.0,
+          numberOfSides: 3,
+          rotation: 30.0,
+          color: false,
+          radius: 7
+        })
+
+        let message =
+          `<table class="table table-hover table-sm table-responsive">
+            <thead>
+              <tr>
+                <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Каналов</th>
+                <td>${station.channel_num}</td>
+              </tr>
+              <tr>
+                <th scope="row">Высота</th>
+                <td>${station.sta_elevation}</td>
+              </tr>
+              <tr>
+                <th scope="row">Тип датчика</th>
+                <td>${station.instrument}</td>
+              </tr>
+              <tr>
+                <th scope="row">Регистратор</th>
+                <td>${station.datalogger}</td>
+              </tr>
+              <tr>
+                <th scope="row">Частота дискр.</th>
+                <td>${station.sample_rate}</td>
+              </tr>
+              <tr>
+                <th scope="row">Телеметрия</th>
+                <td>${station.has_realtime}</td>
+              </tr>
+              <tr>
+                <th scope="row">Оператор</th>
+                <td>${station.operator}</td>
+              </tr>
+            </tbody>
+          </table>`
+
+        marker.bindPopup(message)
+        markers.push(marker)
+
+      })
+
+      const makerksGroup = new window.L.LayerGroup(markers)
+
+      if (show) {
+        map.addLayer(makerksGroup)
+      }
+
+      controls.addOverlay(makerksGroup, 'Show seismic stations')
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+// Show objects
+function showObjects(map, controls)
+{
+  let getBuildings = (function() {
+
+    const axiosConf = { params: { limit: 100 } }
+    let buildings = []
+
+    return function(url, callBack)
+    {
+      axios.get(url, axiosConf).then(response => {
+
+        buildings = buildings.concat(response.data.data)
+        const pagination = response.data.meta.pagination
+
+        if (pagination.current_page < pagination.total_pages) {
+          getBuildings(pagination.links.next, callBack)
+        } else {
+          callBack(buildings)
+        }
+
+      })
+    }
+
+  })()
+
+  map.spin(true)
+
+  getBuildings(apiSettings.endpointBuildings, buildings => {
+
+    const markerClusterGroup = createMapMarkerClusterGroup()
+
+    buildings.forEach(building => {
+      let marker = createMapBuildingMarker(building)
+      markerClusterGroup.addLayer(marker)
+    })
+
+    controls.addOverlay(markerClusterGroup, 'Show objects')
+    map.spin(false)
+
+  })
+
 }
 
 export function id(id, tab) {
