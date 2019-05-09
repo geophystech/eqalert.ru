@@ -130,6 +130,7 @@ export function createMap(mapID, coordinates, {
 
   // Plate Boundaries
   addPlateBoundaries(controls)
+
   // Show seismic stations
   addStations(map, controls, showStations)
 
@@ -261,43 +262,58 @@ function addStations(map, controls, show = true)
 // Show objects
 function showObjects(map, controls)
 {
-  let getBuildings = (function() {
+  let _getBuildings = (function() {
 
-    const axiosConf = { params: { limit: 100 } }
+    const axiosConf = { params: { limit: 1000 } }
     let buildings = []
 
-    return function(url, callBack)
+    return function(url)
     {
-      axios.get(url, axiosConf).then(response => {
+      return new Promise((resolve, reject) => {
 
-        buildings = buildings.concat(response.data.data)
-        const pagination = response.data.meta.pagination
+        axios.get(url, axiosConf).then(response => {
 
-        if (pagination.current_page < pagination.total_pages) {
-          getBuildings(pagination.links.next, callBack)
-        } else {
-          callBack(buildings)
-        }
+          buildings = buildings.concat(response.data.data)
+          const pagination = response.data.meta.pagination
+
+          if (pagination.current_page < pagination.total_pages) {
+            _getBuildings(pagination.links.next)
+          } else {
+            resolve(buildings)
+          }
+
+        })
 
       })
     }
 
   })()
 
-  map.spin(true)
+  function getBuildings()
+  {
+    map.spin(true)
 
-  getBuildings(apiSettings.endpointBuildings, buildings => {
+    _getBuildings(apiSettings.endpointBuildings).then(buildings => {
 
-    const markerClusterGroup = createMapMarkerClusterGroup()
+      buildings.forEach(building => {
+        let marker = createMapBuildingMarker(building)
+        markerClusterGroup.addLayer(marker)
+      })
 
-    buildings.forEach(building => {
-      let marker = createMapBuildingMarker(building)
-      markerClusterGroup.addLayer(marker)
+      map.spin(false)
+
     })
+  }
 
-    controls.addOverlay(markerClusterGroup, 'Show objects')
-    map.spin(false)
+  const markerClusterGroup = createMapMarkerClusterGroup()
+  controls.addOverlay(markerClusterGroup, 'Show objects')
+  let buildingsDownloaded = false
 
+  markerClusterGroup.on('add', () => {
+    if(!buildingsDownloaded) {
+      buildingsDownloaded = true
+      getBuildings()
+    }
   })
 
 }
