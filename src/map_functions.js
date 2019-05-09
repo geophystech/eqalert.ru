@@ -73,7 +73,8 @@ export function convertMsk64(value) {
 
 export function createMap(mapID, coordinates, {
 
-  addToggleShowObjects = false,
+  addToggleShowBuildings = false,
+  addToggleShowLDOs = false,
   gestureHandling = true,
   showStations = true,
   zoom = 8,
@@ -134,8 +135,12 @@ export function createMap(mapID, coordinates, {
   // Show seismic stations
   addStations(map, controls, showStations)
 
-  if(addToggleShowObjects) {
-    showObjects(map, controls)
+  if(addToggleShowBuildings) {
+    showBuildings(map, controls)
+  }
+
+  if(addToggleShowLDOs) {
+    showLDOs(map, controls)
   }
 
   map.setZoom(zoom)
@@ -260,7 +265,7 @@ function addStations(map, controls, show = true)
 }
 
 // Show objects
-function showObjects(map, controls)
+function showBuildings(map, controls)
 {
   let _getBuildings = (function() {
 
@@ -289,7 +294,7 @@ function showObjects(map, controls)
 
   })()
 
-  function getBuildings()
+  function getBuildings(markerClusterGroup)
   {
     map.spin(true)
 
@@ -306,20 +311,158 @@ function showObjects(map, controls)
   }
 
   const markerClusterGroup = createMapMarkerClusterGroup()
-  controls.addOverlay(markerClusterGroup, 'Show objects')
-  let buildingsDownloaded = false
+  controls.addOverlay(markerClusterGroup, 'Show buildings')
+  let downloaded = false
 
   markerClusterGroup.on('add', () => {
-    if(!buildingsDownloaded) {
-      buildingsDownloaded = true
-      getBuildings()
+    if(!downloaded) {
+      downloaded = true
+      getBuildings(markerClusterGroup)
     }
   })
 
 }
 
+// Show LDOs (long distance objects)
+function showLDOs(map, controls)
+{
+  async function getLDOs(layerGroup)
+  {
+    map.spin(true)
+
+    const LDOs = (await axios.get(apiSettings.endpointLDOs)).data.data
+
+    LDOs.forEach(async ldo => {
+      ldo.parts = (await axios.get(apiSettings.endpointLdoParts(ldo.id))).data
+      mapLDOsLayerCreate(ldo, layerGroup)
+    })
+
+    map.spin(false)
+  }
+
+  const layer = new window.L.LayerGroup([])
+  controls.addOverlay(layer, 'Show long distance objects')
+  let downloaded = false
+
+  layer.on('add', () => {
+    if(!downloaded) {
+      downloaded = true
+      getLDOs(layer)
+    }
+  })
+}
+
+export function mapLDOsLayerCreate(ldo, layer)
+{
+  ldo.parts.data.forEach(part => {
+
+    const coordinates = [[part.lat_first, part.lon_first], [part.lat_end, part.lon_end]]
+    const damageLevel = part.damage ? part.damage.data.damage_level : 0
+    const partPolyline = window.L.polyline(coordinates, { color: ldoPartColor(damageLevel) })
+
+    partPolyline.addTo(layer)
+
+    let message =
+      `<table class="table table-hover table-sm table-responsive">
+       <thead>
+         <tr>
+           <th class="text-center" colspan=2>Общая информация</th>
+         </tr>
+       </thead>
+       <tbody>
+       <tr>
+         <th class="align-middle" scope="row">Наименование</th>
+         <td>${ldo.name}</td>
+       </tr>
+       <tr>
+         <th scope="row">Год постройки</th>
+         <td>${part.built_year}</td>
+       </tr>
+       <tr>
+         <th scope="row">Глубина залегания</th>
+         <td>${part.height}</td>
+       </tr>
+       <tr>
+         <th scope="row">Проектная сейсмостойкость</th>
+         <td>${part.max_msk64} (MSK64)</td>
+       </tr>
+       <tr>
+         <th scope="row">Материал конструкций</th>
+         <td>${part.fabric_type}</td>
+       </tr>
+       <tr>
+         <th scope="row">Тип грунта</th>
+         <td>${ldoSoilType(part.soil_type)}</td>
+       </tr>
+
+       <tr>
+         <th class="text-center" colspan=2>Информация о сейсмических воздействиях</th>
+       </tr>
+      `
+
+    if (part.damage && part.damage.data.has_damage) {
+      message +=
+        `<tr>
+           <th scope="row">PGA</th>
+           <td>${part.damage.data.pga_value}</td>
+         </tr>
+         <tr>
+           <th scope="row">Вероятность повреждения</th>
+           <td>${damageLevel}</td>
+         </tr>`
+    } else {
+      message +=
+        `<tr>
+           <td class="text-center" colspan=2>сейсмическое воздействие не оказано</t>
+         </tr>`
+    }
+
+    message +=
+      `   <tr>
+            <th scope="row">Примечания</th>
+            <td>${part.notes}</td>
+          </tr>
+        </tbody>
+      </table>`
+
+    partPolyline.bindPopup(message)
+
+    let partColor = null
+
+    partPolyline.on('mouseover', function(event) {
+      partColor = this.options.color
+
+      partPolyline.setStyle({ color: 'cyan' })
+    })
+
+    partPolyline.on('mouseout', function(event) {
+      partPolyline.setStyle({ color: partColor })
+    })
+  })
+}
+
 export function id(id, tab) {
   return `map-${id}-${tab}`
+}
+
+export function ldoPartColor(damageLevel)
+{
+  switch(damageLevel) {
+    case(0): return 'green'
+    case(1): return 'yellow'
+    case(2): return 'orange'
+    default: return 'red'
+  }
+}
+
+export function ldoSoilType(type) {
+  switch (type) {
+    case 0: return 'не задан'
+    case 1: return 'природные скальные грунты'
+    case 2: return 'природные дисперсные грунты'
+    case 3: return 'природные мерзлые грунты'
+    case 4: return 'техногенные грунты'
+  }
 }
 
 export function msk64Color(value) {
