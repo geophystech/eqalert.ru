@@ -91,7 +91,6 @@ describe('StaticPage.vue', () => {
     it('Open dialog', async () => {
       flushPromises().then(() => {
         wrapper.find('.mainpage-map-link').trigger('click')
-        wrapper.vm.onMapDialogOpen()
         flushPromises().then(() => {
           expect(wrapper.find('#map-mainpage').exists()).to.eql(true)
         })
