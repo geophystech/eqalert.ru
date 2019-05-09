@@ -219,6 +219,10 @@ details {
 }
 
 .circle-marker-map {
-  border: 1px solid #666;
-  border-radius: 50%;
+  > div {
+    border: 1px solid #222;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+  }
 }
