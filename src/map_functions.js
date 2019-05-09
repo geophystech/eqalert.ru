@@ -132,7 +132,9 @@ export function createMap(mapID, coordinates, {
 
   if(onlyStations)
   {
-    addStations(map)
+    addStations(map).then(coordinates => {
+      mapCentering(map, coordinates)
+    })
   }
   else
   {
@@ -201,24 +203,30 @@ function addPlateBoundaries(controls)
 // Show seismic stations
 function addStations(map, controls, show = true)
 {
-  axios.get(apiSettings.endpointStations)
-    .then(response => {
-      let markers = []
+  const allCoords = []
 
-      response.data.data.forEach(station => {
+  return new Promise((resolve, reject) => {
 
-        let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
-        let marker = new window.L.RegularPolygonMarker(coordinates, {
-          fillColor: stationsSettings.colors[station.scnl_network],
-          fillOpacity: 1.0,
-          numberOfSides: 3,
-          rotation: 30.0,
-          color: false,
-          radius: 7
-        })
+    axios.get(apiSettings.endpointStations)
+      .then(response => {
+        let markers = []
 
-        let message =
-          `<table class="table table-hover table-sm table-responsive">
+        response.data.data.forEach(station => {
+
+          let coordinates = new window.L.LatLng(station.sta_lat, station.sta_lon)
+          let marker = new window.L.RegularPolygonMarker(coordinates, {
+            fillColor: stationsSettings.colors[station.scnl_network],
+            fillOpacity: 1.0,
+            numberOfSides: 3,
+            rotation: 30.0,
+            color: false,
+            radius: 7
+          })
+
+          allCoords.push([station.sta_lat, station.sta_lon])
+
+          let message =
+            `<table class="table table-hover table-sm table-responsive">
             <thead>
               <tr>
                 <th class="text-center" colspan=2>${station.scnl_name}.${station.scnl_network}</th>
@@ -256,24 +264,26 @@ function addStations(map, controls, show = true)
             </tbody>
           </table>`
 
-        marker.bindPopup(message)
-        markers.push(marker)
+          marker.bindPopup(message)
+          markers.push(marker)
+
+        })
+
+        const makerksGroup = new window.L.LayerGroup(markers)
+
+        if (!controls || show) {
+          map.addLayer(makerksGroup)
+        }
+
+        if (controls) {
+          controls.addOverlay(makerksGroup, 'Show seismic stations')
+        }
+
+        resolve(allCoords)
 
       })
 
-      const makerksGroup = new window.L.LayerGroup(markers)
-
-      if (!controls || show) {
-        map.addLayer(makerksGroup)
-      }
-
-      if (controls) {
-        controls.addOverlay(makerksGroup, 'Show seismic stations')
-      }
-    })
-    .catch(error => {
-      console.log(error)
-    })
+  })
 }
 
 // Show Buildings
@@ -760,18 +770,18 @@ function isMarker(layer) {
   return layer instanceof window.L.MapMarker || layer instanceof window.L.RegularPolygonMarker
 }
 
-export function mapCentering(map, allCoordinates)
+export function mapCentering(map, coordinates)
 {
   /*
    * Автоматическое определение координат слишком жёстко центрирует почему-то.
-   * Лучше передавать координаты явно в параметре allCoordinates.
+   * Лучше передавать координаты явно в параметре coordinates.
    */
 
-  if(!allCoordinates)
+  if(!coordinates)
   {
-    allCoordinates = []
+    coordinates = []
     let addCoordinates = layer => {
-      !isMarker(layer) || allCoordinates.push(layer.getLatLng())
+      !isMarker(layer) || coordinates.push(layer.getLatLng())
     }
 
     map.eachLayer(layer => {
@@ -783,7 +793,7 @@ export function mapCentering(map, allCoordinates)
     })
   }
 
-  let bound = map._getBoundsCenterZoom(window.L.latLngBounds(allCoordinates))
+  let bound = map._getBoundsCenterZoom(window.L.latLngBounds(coordinates))
   map._zoomHome.setHomeCoordinates(bound.center)
   map._zoomHome.setHomeZoom(bound.zoom)
   map.setView(bound.center, bound.zoom)
