@@ -636,16 +636,16 @@ export function createMapEventMarker(event, $moment)
   const options = {
     fillColor: eventColor(datetimeDiff),
     radius: eventRadius(magnitude),
-    fillOpacity: 0.75
+    numberOfSides: 360,
+    colorOpacity: 1.0,
+    fillOpacity: 0.8,
+    gradient: false,
+    color: 'black',
+    weight: 1
   }
 
-  const marker = window.L.marker(new window.L.LatLng(latitude, longitude), {
-    icon: window.L.divIcon({
-      html: `<div style="background: ${colorHexToRGB(options.fillColor, options.fillOpacity)}"></div>`,
-      iconSize: eventRadius(magnitude) * 2.2,
-      className: 'circle-marker-map'
-    })
-  })
+  const coordinates = new window.L.LatLng(latitude, longitude)
+  const marker = new window.L.CircleMarker(coordinates, options)
 
   const popup =
     `<table class="table table-hover table-sm table-responsive">
