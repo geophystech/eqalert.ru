@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import StaticPage from '@/components/StaticPage'
 import flushPromises from 'flush-promises'
 import BootstrapVue from 'bootstrap-vue'
+import VueMarkdown from 'vue-markdown'
 import {BS_STUBS} from '../utils'
 import $moment from 'moment'
 
@@ -31,7 +32,7 @@ function createWrapper()
 {
   return shallowMount(StaticPage, {
     mocks: { $moment, $http, $router },
-    stubs: BS_STUBS,
+    stubs: Object.assign({VueMarkdown}, BS_STUBS),
     propsData: {
       pages: { [DEFAULT_PAGE]: 'About' },
       // page: DEFAULT_PAGE,
@@ -73,6 +74,19 @@ describe('StaticPage.vue', () => {
         })
       })
 
+    })
+
+  })
+
+  describe('Mainpage map', () => {
+
+    const wrapper = createWrapper()
+
+    it('Check map link', async () => {
+      wrapper.find(VueMarkdown).trigger('rendered')
+      flushPromises().then(() => {
+        expect(wrapper.find('.mainpage-map-link').exists()).to.eql(true)
+      })
     })
 
   })
