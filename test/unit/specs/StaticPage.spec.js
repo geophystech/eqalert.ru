@@ -89,6 +89,15 @@ describe('StaticPage.vue', () => {
       })
     })
 
+    it('Open dialog', async () => {
+      flushPromises().then(() => {
+        wrapper.find('.mainpage-map-link').trigger('click')
+        flushPromises().then(() => {
+          expect(wrapper.find('#map-mainpage').exists()).to.eql(true)
+        })
+      })
+    })
+
   })
 
 })
