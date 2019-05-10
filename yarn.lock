@@ -9124,9 +9124,9 @@ void-elements@^2.0.0:
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
 vue-analytics@^5.16.1:
-  version "5.16.1"
-  resolved "https://registry.yarnpkg.com/vue-analytics/-/vue-analytics-5.16.1.tgz#2fa909a245e1cee9993a69f0b72caf1dd6126c10"
-  integrity sha512-3gnS0c9lxS7+eOtzEPZKZHgWur+qSFLsM+ZIXgPOGPBLfG4mIttT18RJROEozQ+qrCRmqnSCj/dgyg6FxVMM0A==
+  version "5.16.4"
+  resolved "https://registry.yarnpkg.com/vue-analytics/-/vue-analytics-5.16.4.tgz#7f9e197cbc64afac96884a05214b17efaf8e9d09"
+  integrity sha512-M67cUqpPeyk2rftrvlx2uU+BQ/C4E8SkF2Ct9LizOYUoTccZtCCJwhMJfQ3XL8xep6p3K8KYz58FzRWvx5zlPw==
 
 vue-axios@^2.1.4:
   version "2.1.4"
@@ -9252,9 +9252,9 @@ vue-toasted@^1.1.26:
   integrity sha512-Z4/gfPcqdzsRvif7UITrZOkh3C6jm0yQKJyr9kX31IGWXor5dNipE1Sc5SnlL5RLmY7vlLa+SqIjc9Gbpy7V0g==
 
 vue-yandex-metrika@^1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/vue-yandex-metrika/-/vue-yandex-metrika-1.7.2.tgz#80c4c8bb66211f7e45768d5c9aa3789b8f29edda"
-  integrity sha512-dOv0E7HEQ3kj8f0zK2Bqph1IpacFXXmHFN+021RibS6xtw4xlEFx6QMFOCjtVIyGa+fJKqc1XMymZSC1cn7t2Q==
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/vue-yandex-metrika/-/vue-yandex-metrika-1.8.0.tgz#702b39568845b6ff6d2c24b6d7937e47f05efde9"
+  integrity sha512-9CN51Mg6TMVuGaeEiDXDbebJKcYBKgT4QJCh0qfWHeRQxfQoKaguTA6Z+pC6OTd6Y8V13nO85tDGNa041iP+6Q==
 
 vue@^2.5.21:
   version "2.6.7"
