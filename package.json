@@ -14,7 +14,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.18.1",
     "bootstrap": "^4.1.1",
     "chart.js": "^2.7.3",
     "cryptiles": "^4.1.3",
