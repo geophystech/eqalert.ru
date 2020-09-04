@@ -36,7 +36,7 @@
     "vue-flatpickr-component": "^7.0.6",
     "vue-markdown": "^2.2.4",
     "vue-meta": "^1.5.8",
-    "vue-moment": "^4.0.0",
+    "vue-moment": "^4.1.0",
     "vue-router": "^3.0.2",
     "vue-simple-spinner": "^1.2.8",
     "vue-toasted": "^1.1.26",
