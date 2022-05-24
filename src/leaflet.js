@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet'
 import 'leaflet/dist/leaflet.css'
 
-// import 'leaflet-spin/example/spin/dist/spin'
+import 'leaflet-spin/example/spin/dist/spin'
 import 'leaflet-spin/leaflet.spin'
 
 import 'leaflet-fullscreen/dist/Leaflet.fullscreen'
