@@ -31,7 +31,7 @@
     "leaflet.markercluster": "^1.4.1",
     "vue": "^2.5.21",
     "vue-analytics": "^5.16.1",
-    "vue-axios": "^2.1.4",
+    "vue-axios": "^3.4.1",
     "vue-chartjs": "^2.8.7",
     "vue-flatpickr-component": "^7.0.6",
     "vue-markdown": "^2.2.4",
