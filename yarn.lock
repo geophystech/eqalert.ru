@@ -5683,15 +5683,15 @@ leaflet-fullscreen@^1.0.2:
   resolved "https://registry.yarnpkg.com/leaflet-fullscreen/-/leaflet-fullscreen-1.0.2.tgz#09c61c4bac45f63b2ee126afd87e5cd97650fc1b"
   integrity sha1-CcYcS6xF9jsu4Sav2H5c2XZQ/Bs=
 
-leaflet-gesture-handling@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/leaflet-gesture-handling/-/leaflet-gesture-handling-1.1.8.tgz#6c0cc434604f514183f69dc98c8d8411b91c7733"
-  integrity sha512-QnKNAqZxaO4nzCsHA9l/vPazF15TILkSaYNoDqMtiVXrsWMWh6fWD4phRuftPC+kvY9OBzVKuTfKlLdhZ/2oIg==
+leaflet-gesture-handling@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/leaflet-gesture-handling/-/leaflet-gesture-handling-1.2.2.tgz#ea10afb94f2d477d77d47beb21e409ed327df07a"
+  integrity sha512-Blf5V4PoNphWkzL7Y1qge+Spkd4OCQ2atjwUNhMhLIcjKzPcBH++x/lwOinaR9jSqLWqJ6oKYO8d0XdTffy4hQ==
 
-leaflet-spin@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/leaflet-spin/-/leaflet-spin-1.1.0.tgz#7298be3be9ab05b540913d84915d6347f49b1e4e"
-  integrity sha1-cpi+O+mrBbVAkT2EkV1jR/SbHk4=
+leaflet-spin@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/leaflet-spin/-/leaflet-spin-1.1.2.tgz#d77f93d9a6ce70a62f33bc367b1e16e8356d22b2"
+  integrity sha512-OLpeDrrAv1YY8NVSnOP0YfICFFm+IFauL77erXH87ZiTIXl3aPwUJXOd336DrQCe4aFsY+F3oG/1+aXyjqKV2w==
   dependencies:
     spin.js "^2.3.1"
 
@@ -5705,20 +5705,20 @@ leaflet-spin@^1.1.0:
   version "0.2.0"
   resolved "https://codeload.github.com/armd-pro/leaflet.zoomhome/tar.gz/b1b7b450b546c379423db1bc87113c610bd043cd"
 
-leaflet.gridlayer.googlemutant@^0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.7.1.tgz#c178d5fab9b88edbc01f2903d2fc309fac8e562f"
-  integrity sha512-j1IGrXOQ9A+QiOjaX4XiaIVzrABhPq61x/AfJtf1NhK2DT/dL/hWlEO6r5f3zKBPcXD3BWmkk96fiPiWqvElvA==
+leaflet.gridlayer.googlemutant@^0.13.5:
+  version "0.13.5"
+  resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.13.5.tgz#7182c26f479e726bff8b85a7ebf9d3f44dd3ea57"
+  integrity sha512-DHUEXpo1t0WZ9tpdLUHHkrTK7LldCXr/gqkV5E/4hHidDJB2srceLLCZj4PV/pl0jPdTkVBT+Lr8nL9EZDB5hw==
 
-leaflet.markercluster@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.4.1.tgz#b53f2c4f2ca7306ddab1dbb6f1861d5e8aa6c5e5"
-  integrity sha512-ZSEpE/EFApR0bJ1w/dUGwTSUvWlpalKqIzkaYdYB7jaftQA/Y2Jav+eT4CMtEYFj+ZK4mswP13Q2acnPBnhGOw==
+leaflet.markercluster@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.5.3.tgz#9cdb52a4eab92671832e1ef9899669e80efc4056"
+  integrity sha512-vPTw/Bndq7eQHjLBVlWpnGeLa3t+3zGiuM7fJwCkiMFq+nmRuG3RI3f7f4N4TDX7T4NpbAXpR2+NTRSEGfCSeA==
 
-leaflet@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.4.0.tgz#d5f56eeb2aa32787c24011e8be4c77e362ae171b"
-  integrity sha512-x9j9tGY1+PDLN9pcWTx9/y6C5nezoTMB8BLK5jTakx+H7bPlnbCHfi9Hjg+Qt36sgDz/cb9lrSpNQXmk45Tvhw==
+leaflet@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.8.0.tgz#4615db4a22a304e8e692cae9270b983b38a2055e"
+  integrity sha512-gwhMjFCQiYs3x/Sf+d49f10ERXaEFCPr+nVTryhAW8DWbMGqJqt9G4XuIaHmFW08zYvhgdzqXGr8AlW8v8dQkA==
 
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
@@ -6513,15 +6513,10 @@ mocha@^5.1.1, mocha@^5.2.0:
     mkdirp "0.5.1"
     supports-color "5.4.0"
 
-moment@^2.10.2:
+moment@^2.10.2, moment@^2.19.2:
   version "2.29.3"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
   integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
-
-moment@^2.11.1:
-  version "2.24.0"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
-  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -10160,12 +10155,12 @@ vue-meta@^1.5.8:
     lodash.uniqueid "^4.0.1"
     object-assign "^4.1.1"
 
-vue-moment@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-4.0.0.tgz#20809d1e7d7fca63d556fb8d008b95993d32f5ea"
-  integrity sha512-lNkEPuA3i3A4q4TDSwOXoRF4Y2vHHdaTOSvpPyGgxoFQP8n4sUh6jU5aJj3FIMlXo5UaHLPIz5hvvpvYx9Wj0w==
+vue-moment@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-4.1.0.tgz#092a8ff723a96c6f85a0a8e23ad30f0bf320f3b0"
+  integrity sha512-Gzisqpg82ItlrUyiD9d0Kfru+JorW2o4mQOH06lEDZNgxci0tv/fua1Hl0bo4DozDV2JK1r52Atn/8QVCu8qQw==
   dependencies:
-    moment "^2.11.1"
+    moment "^2.19.2"
 
 vue-router@^3.0.2:
   version "3.0.2"
