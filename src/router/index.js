@@ -11,6 +11,7 @@ import UserAuthentication from '@/components/users/Authentication'
 import UserRegistration from '@/components/users/Registration'
 import UserConfirmPassword from '@/components/users/ConfirmPassword'
 import UserResetPassword from '@/components/users/ResetPassword'
+import FeltReportPoll from '@/components/poll/FeltReportPoll'
 
 Vue.use(Router)
 Vue.use(Meta)
@@ -53,6 +54,12 @@ export default new Router({
       name: 'UserResetPassword',
       component: UserResetPassword,
       meta: { redirectable: false }
+    },
+    {
+      path: '/felt-report',
+      name: 'FeltReportPoll',
+      component: FeltReportPoll,
+      meta: { redirectable: true }
     },
     {
       path: '/analytics',

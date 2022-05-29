@@ -19,9 +19,9 @@
         </b-col>
 
         <b-col class="did-you-feel-it text-center" cols="8" md="4" order="3" order-md="3">
-          <a href="https://goo.gl/forms/Hd4E0BcA2ffRNjfY2" target="_blank">
+          <router-link :to="{ name: 'FeltReportPoll' }">
             Ощутили землетрясение?
-          </a>
+          </router-link>
         </b-col>
 
         <b-col class="text-right text-md-center" md="3" cols="6" order="2" order-md="4">
