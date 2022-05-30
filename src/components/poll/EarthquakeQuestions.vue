@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="earthquake-questions__container">
     <div v-for="question in questions" :key="`question-${question.id}`">
       <b-form-group :label="question.text[localisation]">
         <b-form-radio
@@ -38,6 +38,18 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.earthquake-questions__container {
+  .form-group {
+    legend {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .custom-radio {
+      label {
+        font-size: 1.075rem;
+      }
+    }
+  }
+}
 </style>

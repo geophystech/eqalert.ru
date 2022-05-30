@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="poll__container">
     <earthquake-questions :questions="questions" :key="questions.length"/>
   </div>
 </template>
@@ -43,6 +43,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.poll__container {
+  margin-top: 3%;
+}
 </style>
