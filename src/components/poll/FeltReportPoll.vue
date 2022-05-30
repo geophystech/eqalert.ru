@@ -7,10 +7,12 @@
 <script>
 import apiSettings from '@/settings/api'
 import EarthquakeQuestions from './EarthquakeQuestions'
+import geolocation from './mixins/geolocation'
 
 export default {
   name: 'FeltReportPoll',
   components: {EarthquakeQuestions},
+  mixins: [geolocation],
   data() {
     return {
       pollId: null,
