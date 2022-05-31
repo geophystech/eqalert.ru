@@ -6080,6 +6080,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+luxon@^1.28.0:
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.28.0.tgz#e7f96daad3938c06a62de0fb027115d251251fbf"
+  integrity sha512-TfTiyvZhwBYM/7QdAVDh+7dBTBA29v4ik0Ce9zda3Mnf8on1S5KJI8P2jKFZ8+5C0jhmr0KwJEO/Wdpm0VeWJQ==
+
 make-dir@^1.0.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-1.3.0.tgz#79c1033b80515bd6d24ec9933e860ca75ee27f0c"
@@ -10193,6 +10198,11 @@ vue-chartjs@^2.8.7:
   dependencies:
     lodash.merge "^4.6.0"
 
+vue-datetime@^1.0.0-beta.14:
+  version "1.0.0-beta.14"
+  resolved "https://registry.yarnpkg.com/vue-datetime/-/vue-datetime-1.0.0-beta.14.tgz#791e724500929cdfeb31395154d9a26fd27ffb46"
+  integrity sha512-n25LqldE1xryeoweohiqlxy8iUsi+UwZnKLaN4gXjk7xxGL6rUl1y/GGvkoMwJUzRKttw+QnQV4oFAYupUQdug==
+
 vue-flatpickr-component@^7.0.6:
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/vue-flatpickr-component/-/vue-flatpickr-component-7.0.6.tgz#f0e750f5c43c59471eb07dd88f7e534391305815"
@@ -10457,6 +10467,11 @@ webpack@^4.29.5:
     terser-webpack-plugin "^1.1.0"
     watchpack "^1.5.0"
     webpack-sources "^1.3.0"
+
+weekstart@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/weekstart/-/weekstart-1.1.0.tgz#af642eb10dc24b1af9d4dcc0415056edc087b897"
+  integrity sha512-ZO3I7c7J9nwGN1PZKZeBYAsuwWEsCOZi5T68cQoVNYrzrpp5Br0Bgi0OF4l8kH/Ez7nKfxa5mSsXjsgris3+qg==
 
 whet.extend@~0.9.9:
   version "0.9.9"

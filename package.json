@@ -30,10 +30,12 @@
     "leaflet-zoomhome": "github:armd-pro/leaflet.zoomhome",
     "leaflet.gridlayer.googlemutant": "^0.13.5",
     "leaflet.markercluster": "^1.5.3",
+    "luxon": "^1.28.0",
     "vue": "^2.5.21",
     "vue-analytics": "^5.16.1",
     "vue-axios": "^3.4.1",
     "vue-chartjs": "^2.8.7",
+    "vue-datetime": "^1.0.0-beta.14",
     "vue-flatpickr-component": "^7.0.6",
     "vue-markdown": "^2.2.4",
     "vue-meta": "^1.5.8",
@@ -43,7 +45,8 @@
     "vue-toasted": "^1.1.26",
     "vue-yandex-metrika": "^1.7.2",
     "vuex": "^3.0.1",
-    "vuex-persistedstate": "^2.5.4"
+    "vuex-persistedstate": "^2.5.4",
+    "weekstart": "^1.1.0"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.28",

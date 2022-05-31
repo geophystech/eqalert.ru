@@ -1,6 +1,7 @@
 <template>
   <div class="poll__container">
-    <earthquake-questions :questions="questions" :key="questions.length"/>
+    <date-time-questions :key="`dt-${refreshKey}`" :timezone="timezone"/>
+    <earthquake-questions :questions="questions" :key="`eq-${refreshKey}`"/>
   </div>
 </template>
 
@@ -8,17 +9,19 @@
 import apiSettings from '@/settings/api'
 import EarthquakeQuestions from './EarthquakeQuestions'
 import geolocation from './mixins/geolocation'
+import DateTimeQuestions from './DateTimeQuestions'
 
 export default {
   name: 'FeltReportPoll',
-  components: {EarthquakeQuestions},
+  components: {DateTimeQuestions, EarthquakeQuestions},
   mixins: [geolocation],
   data() {
     return {
       pollId: null,
       localisations: [],
       questions: [],
-      actions: {}
+      actions: {},
+      refreshKey: null
     }
   },
   methods: {
@@ -41,6 +44,9 @@ export default {
   },
   created() {
     this.fetchData()
+  },
+  mounted() {
+    this.refreshKey = Math.random() * Math.random()
   }
 }
 </script>
