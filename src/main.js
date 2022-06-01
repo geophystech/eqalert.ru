@@ -29,7 +29,16 @@ import './leaflet'
 import 'font-awesome/css/font-awesome.min.css'
 import {authTimeoutCheck} from '@/helpers/auth'
 
+import { Datetime } from 'vue-datetime'
+import 'vue-datetime/dist/vue-datetime.css'
+
+import { Settings } from 'luxon'
+
+Settings.defaultLocale = 'ru'
+
 Vue.config.productionTip = false
+
+Vue.component('v-datetime', Datetime)
 
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
