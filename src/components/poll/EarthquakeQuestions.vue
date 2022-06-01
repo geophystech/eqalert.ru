@@ -1,7 +1,10 @@
 <template>
   <div class="earthquake-questions__container">
     <div v-for="question in questions" :key="`question-${question.id}`">
-      <b-form-group :label="question.text[localisation]">
+      <b-form-group>
+        <template slot="label">
+          {{ question.text[localisation] }} <span style="color: red" title="Обязательный вопрос">*</span>
+        </template>
         <b-form-radio
           v-for="answer in question.answers.data"
           :key="`answer-${answer.id}`"

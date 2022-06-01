@@ -10,7 +10,7 @@
           :value-zone="timezone"
         >
           <legend slot="before" class="col-form-label pt-0">
-            Когда вы почувствовали землетрясение?
+            Когда вы почувствовали землетрясение? <span style="color: red" title="Обязательный вопрос">*</span>
           </legend>
           <template slot="button-cancel">
             Отмена
@@ -38,10 +38,10 @@ export default {
     }
   },
   watch: {
-    datetime(value) {
+    datetime: function(value) {
       this.formatDatetime(value)
     },
-    formattedDatetime(value) {
+    formattedDatetime: function(value) {
       this.$emit('update', value)
     }
   },
@@ -52,7 +52,7 @@ export default {
     }
   },
   methods: {
-    formatDatetime(value) {
+    formatDatetime: function(value) {
       if (value) {
         this.formattedDatetime = this.$moment(value).utc().format('YYYY-MM-DD HH:mm:ss')
       }

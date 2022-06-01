@@ -1,16 +1,23 @@
 <template>
   <div class="poll__container">
-    <date-time-questions
-      :key="`dt-${refreshKey}`"
-      :timezone="timezone"
-      @update="requestData.eventData.eventDateTime = $event"
-    />
-    <earthquake-questions
-      :questions="questions"
-      :key="`eq-${refreshKey}`"
-      @update="updateAnswers"
-    />
-    <b-button variant="primary" @click="submit">Отправить</b-button>
+    <template v-if="submitted">
+      <b-alert variant="success" show>
+        Благодарим за уделенное Вами время! Форма была успешно отправлена.
+      </b-alert>
+    </template>
+    <template v-else>
+      <date-time-questions
+        :key="`dt-${refreshKey}`"
+        :timezone="timezone"
+        @update="requestData.eventData.eventDateTime = $event"
+      />
+      <earthquake-questions
+        :questions="questions"
+        :key="`eq-${refreshKey}`"
+        @update="updateAnswers"
+      />
+      <b-button variant="primary" @click="submit">Отправить</b-button>
+    </template>
   </div>
 </template>
 
@@ -43,7 +50,8 @@ export default {
           pollId: null,
           answers: []
         }
-      }
+      },
+      submitted: false
     }
   },
   watch: {
@@ -60,17 +68,27 @@ export default {
       if (this.validate(formData)) {
         this.$http.post(apiSettings.endpointFeltReport, formData)
           .then(response => {
-            console.debug(response)
-          }).catch(error => {
-            this.errorResponse = error.response
+            this.submitted = response.data.message
+          }).catch(() => {
+            this.alertPostError()
           })
       } else {
-        // @todo: alert error
-        console.error('Please fill out all the mandatory fields')
+        this.alertPostError()
       }
     },
+    alertPostError: function() {
+      alert('Пожалуйста, разрешите сайту определить Вашу геолокацию и ответьте на все обязательные вопросы!\n' +
+        'Если у Вас появились какие-либо сложности - напишите нам об этом в форме обратной связи.')
+    },
+    alertGetError: function() {
+      alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
+    },
     validate: function(data) {
-      return !!data.eventData.eventDateTime && !!data.location.lat && !!data.location.lon && !!data.feltReport.pollId
+      return !!data.eventData.eventDateTime &&
+        !!data.location.lat &&
+        !!data.location.lon &&
+        !!data.feltReport.pollId &&
+        data.feltReport.answers.length === this.questions.length
     },
     updateAnswers: function(data) {
       this.requestData.feltReport.answers = []
@@ -87,8 +105,8 @@ export default {
       this.$http.get(apiSettings.endpointFeltReportPoll)
         .then(response => {
           this.setData(response.data.data)
-        }).catch(error => {
-          this.errorResponse = error.response
+        }).catch(() => {
+          this.alertGetError()
         })
     },
     setData: function(data) {
