@@ -40,6 +40,9 @@ export default {
   watch: {
     datetime(value) {
       this.formatDatetime(value)
+    },
+    formattedDatetime(value) {
+      this.$emit('update', value)
     }
   },
   data() {
@@ -50,7 +53,9 @@ export default {
   },
   methods: {
     formatDatetime(value) {
-      this.formattedDatetime = this.$moment(value).utc().format('YYYY-MM-DD HH:mm:ss')
+      if (value) {
+        this.formattedDatetime = this.$moment(value).utc().format('YYYY-MM-DD HH:mm:ss')
+      }
     }
   },
   mounted() {

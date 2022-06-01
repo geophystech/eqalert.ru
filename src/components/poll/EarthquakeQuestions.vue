@@ -32,8 +32,13 @@ export default {
       answers: {}
     }
   },
-  mounted() {
-    console.log(this.questions)
+  watch: {
+    answers: {
+      deep: true,
+      handler: function(value) {
+        this.$emit('update', value)
+      }
+    }
   }
 }
 </script>

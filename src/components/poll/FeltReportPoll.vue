@@ -1,7 +1,16 @@
 <template>
   <div class="poll__container">
-    <date-time-questions :key="`dt-${refreshKey}`" :timezone="timezone"/>
-    <earthquake-questions :questions="questions" :key="`eq-${refreshKey}`"/>
+    <date-time-questions
+      :key="`dt-${refreshKey}`"
+      :timezone="timezone"
+      @update="requestData.eventData.eventDateTime = $event"
+    />
+    <earthquake-questions
+      :questions="questions"
+      :key="`eq-${refreshKey}`"
+      @update="updateAnswers"
+    />
+    <b-button variant="primary" @click="submit">Отправить</b-button>
   </div>
 </template>
 
@@ -17,14 +26,62 @@ export default {
   mixins: [geolocation],
   data() {
     return {
-      pollId: null,
       localisations: [],
       questions: [],
       actions: {},
-      refreshKey: null
+      refreshKey: null,
+      requestData: {
+        eventData: {
+          type: 'eventDateTime',
+          eventDateTime: null
+        },
+        location: {
+          lat: null,
+          lon: null
+        },
+        feltReport: {
+          pollId: null,
+          answers: []
+        }
+      }
+    }
+  },
+  watch: {
+    location: {
+      deep: true,
+      handler: function(value) {
+        this.requestData.location = value
+      }
     }
   },
   methods: {
+    submit: function() {
+      const formData = this.requestData
+      if (this.validate(formData)) {
+        this.$http.post(apiSettings.endpointFeltReport, formData)
+          .then(response => {
+            console.debug(response)
+          }).catch(error => {
+            this.errorResponse = error.response
+          })
+      } else {
+        // @todo: alert error
+        console.error('Please fill out all the mandatory fields')
+      }
+    },
+    validate: function(data) {
+      return !!data.eventData.eventDateTime && !!data.location.lat && !!data.location.lon && !!data.feltReport.pollId
+    },
+    updateAnswers: function(data) {
+      this.requestData.feltReport.answers = []
+      const questionIds = Object.keys(data)
+      questionIds.forEach(questionId => {
+        this.requestData.feltReport.answers.push({
+          questionId: 1 * questionId,
+          answerId: 1 * data[questionId]
+        })
+      })
+    },
     fetchData: function() {
       this.errorResponse = null
       this.$http.get(apiSettings.endpointFeltReportPoll)
@@ -36,7 +93,7 @@ export default {
     },
     setData: function(data) {
       const pollData = data.poll.data
-      this.pollId = pollData.id
+      this.requestData.feltReport.pollId = pollData.id
       this.localisations = pollData.localisations.data
       this.questions = pollData.questions.data
       this.actions = data.actions.data
