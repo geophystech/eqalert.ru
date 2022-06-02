@@ -62,11 +62,8 @@
         this.items[7].value = data.locValues.data.sta_num
         this.items[8].value = data.processingMethod.long
         this.items[9].value = agency(data.agency)
-        try {
-          this.items[10].value = data.nearestCity.data.feltReportAnalysis.data.felt_reports_count
-        } catch (error) {
-          this.items[10].value = 0 // no reports
-        }
+        this.items[10].value = data.nearestCity.data.feltReportAnalysis ?
+          data.nearestCity.data.feltReportAnalysis.data.felt_reports_count : 0
       }
     },
     watch: {

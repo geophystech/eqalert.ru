@@ -39,6 +39,7 @@
           { key: 'settlement', label: 'Населённый пункт' },
           { key: 'distance', label: 'Расстояние', 'class': 'text-center' },
           { key: 'msk64', label: 'MSK64', 'class': 'text-center' },
+          { key: 'cii', label: 'ШСИ-2017', 'class': 'text-center' },
           { key: 'description', label: ' ', 'class': 'text-center' }
         ]
       }
@@ -104,10 +105,12 @@
           const convertedValue = convertMsk64(settlement.msk64_value)
           const region = settlement.settlement.data.translation.data.region
           const title = settlement.settlement.data.translation.data.title
+          const cii = settlement.feltReportAnalysis ? settlement.feltReportAnalysis.data.cii : ''
           const item = {
             description: this.description(convertedValue),
             distance: round(settlement.ep_dis, 2),
             msk64: convertedValue,
+            cii,
             settlement: [title, region].join(', ')
           }
 
