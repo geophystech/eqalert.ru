@@ -31,7 +31,8 @@
           { parameter: 'RMS', value: null, error: null, description: 'Суммарная невязка по внутренней сходимости' },
           { parameter: 'Число станций', value: null, error: null, description: 'Количество станций задействованных в обработке для этого землетрясения' },
           { parameter: 'Метод обработки', value: null, error: null, description: 'Ручная или автоматическая обработка' },
-          { parameter: 'Агентство', value: null, error: null, description: 'Источник данных' }
+          { parameter: 'Агентство', value: null, error: null, description: 'Источник данных' },
+          { parameter: 'Общее количество откликов', value: null, error: null, description: 'Количество откликов от населения, пережившего это землетрясение' }
         ],
         fields: [
           { key: 'index', label: '#' },
@@ -61,6 +62,8 @@
         this.items[7].value = data.locValues.data.sta_num
         this.items[8].value = data.processingMethod.long
         this.items[9].value = agency(data.agency)
+        this.items[10].value = data.nearestCity.data.feltReportAnalysis ?
+          data.nearestCity.data.feltReportAnalysis.data.felt_reports_count : 0
       }
     },
     watch: {

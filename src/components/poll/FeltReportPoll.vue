@@ -7,6 +7,7 @@
     </template>
     <template v-else>
       <date-time-questions
+        v-if="requestData.eventData.type === 'eventDateTime'"
         :key="`dt-${refreshKey}`"
         :timezone="timezone"
         @update="requestData.eventData.eventDateTime = $event"
@@ -55,6 +56,12 @@ export default {
     }
   },
   watch: {
+    '$route.query': {
+      deep: true,
+      handler: function() {
+        this.$router.go(0)
+      }
+    },
     location: {
       deep: true,
       handler: function(value) {
@@ -84,7 +91,9 @@ export default {
       alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
     },
     validate: function(data) {
-      return !!data.eventData.eventDateTime &&
+      const eventDataValidated = data.eventData.type === 'eventDateTime' ?
+        !!data.eventData.eventDateTime : !!data.eventData.reportId
+      return eventDataValidated &&
         !!data.location.lat &&
         !!data.location.lon &&
         !!data.feltReport.pollId &&
@@ -101,6 +110,13 @@ export default {
       })
     },
     fetchData: function() {
+      if (this.$route.query.hasOwnProperty('reportId') && this.$route.query.reportId) {
+        // @todo: add reportId validation (report exists or not)
+        this.requestData.eventData = {
+          type: 'reportId',
+          reportId: this.$route.query.reportId
+        }
+      }
       this.errorResponse = null
       this.$http.get(apiSettings.endpointFeltReportPoll)
         .then(response => {
