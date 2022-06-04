@@ -681,7 +681,7 @@ export function createMapEventMarker(event, $moment)
        </tbody>
      </table>
      <div class="text-center read-more">
-        <a href="#/events/${event.id}" class="btn btn-success">Подробнее</a>
+        <a href="/events/${event.id}" class="btn btn-success">Подробнее</a>
      </div>`
 
   marker.bindPopup(popup)
