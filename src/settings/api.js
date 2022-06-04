@@ -30,6 +30,8 @@ class Config
     this.endpointUserResetPassword = `${this.baseURL}/${this.version}/user/resetPassword`
     this.endpointUserResetPasswordCheck = `${this.baseURL}/${this.version}/user/resetPasswordCheck`
     this.endpointUserResetPasswordComplete = `${this.baseURL}/${this.version}/user/resetPasswordComplete`
+    this.endpointFeltReportPoll = `${this.baseURL}/${this.version}/feltReport/poll`
+    this.endpointFeltReport = `${this.baseURL}/${this.version}/feltReport`
   }
 
   endpointEmailConfirmation(token) {
