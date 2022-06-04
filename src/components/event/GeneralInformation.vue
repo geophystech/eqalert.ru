@@ -32,7 +32,7 @@
           { parameter: 'Число станций', value: null, error: null, description: 'Количество станций задействованных в обработке для этого землетрясения' },
           { parameter: 'Метод обработки', value: null, error: null, description: 'Ручная или автоматическая обработка' },
           { parameter: 'Агентство', value: null, error: null, description: 'Источник данных' },
-          { parameter: 'Общее количество откликов', value: null, error: null, description: 'Количество откликов от населения, пережившего это землетрясение' }
+          { parameter: 'Отклики', value: null, error: null, description: 'Количество откликов, оставленных населением' }
         ],
         fields: [
           { key: 'index', label: '#' },
