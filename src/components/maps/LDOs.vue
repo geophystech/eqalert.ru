@@ -4,8 +4,10 @@
 
 <script>
   import {addEpicenter, createMap, id, mapLDOsLayerCreate, removeEpicenter, setView} from '@/map_functions'
+  import security from './mixins/security'
 
   export default {
+    mixins: [security],
     props: ['event', 'tab'],
     data() {
       return {

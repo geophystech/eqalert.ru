@@ -6,8 +6,10 @@
   import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions'
   import { numberDeclension } from '@/helpers/number'
   import apiSettings from '@/settings/api'
+  import security from './mixins/security'
 
   export default {
+    mixins: [security],
     props: ['event', 'tab'],
     data() {
       return {
