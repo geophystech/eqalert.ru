@@ -21,8 +21,21 @@
       }
     },
     methods: {
-      addData: function(data) {
-        
+      syncFeltReportData: function(event) {
+        if (this.event.nearestCity.data.feltReportAnalysis) {
+          this.$http.get(apiSettings.endpointEventMeasuredIntensityAggregations(this.event.id))
+            .then(response => {
+              this.addData(event.data.data, response.data.feltReports)
+            })
+            .catch(error => {
+              console.log(error)
+              this.addData(event.data.data)
+            })
+        } else {
+          this.addData(event.data.data)
+        }
+      },
+      addData: function(data, feltReports = []) {
         let legendData = `
           <table>
             <thead>
@@ -72,6 +85,22 @@
           pga.bindPopup(popupMessage)
         })
 
+        if (feltReports.length) {
+          const icon = window.L.icon({
+            iconUrl: '/static/img/green-square.png',
+            iconSize: [15, 15]
+          })
+
+          feltReports.forEach((feltReportObject) => {
+            const center = feltReportObject.location
+            const cii = feltReportObject.cii
+            window.L
+              .marker([center.lat, center.lon], {icon})
+              .addTo(this.map.object)
+              .bindPopup(`Интенсивность по ШСИ-2017: ${cii} ${numberDeclension(cii, ['балл', 'балла', 'баллов'])}`)
+          })
+        }
+
         // Show map legend just once.
         if (!this.$el.querySelector('.map-legend')) {
           let pgaLegend = window.L.control({ position: 'bottomright' })
@@ -98,7 +127,7 @@
 
         this.$http.get(apiSettings.endpointEventPga(this.event.id))
           .then(response => {
-            this.addData(response.data.data)
+            this.syncFeltReportData(response)
           })
           .catch(error => {
             console.log(error)
