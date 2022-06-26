@@ -6,6 +6,28 @@
       </b-alert>
     </template>
     <template v-else>
+      <div class="poll__header">
+        <p class="title">Ощутили землетрясение?</p>
+        <p class="subtitle">Пожалуйста, ответьте на несколько важных вопросов.</p>
+        <p class="text-primary" v-b-modal.why-modal>Зачем оставлять отклики?</p>
+
+        <b-modal id="why-modal" ref="why-modal" hide-footer hide-header hide-header-close>
+          <p class="my-4 modal-body">
+            С помощью опросных листов "Ощутили землетрясение?"
+            мы получаем важную обратную связь от вас.<br/>
+            Ответив на несколько вопросов анкеты, вы поможете
+            уточнить интенсивность колебаний в области воздействия
+            землетрясения. Это не займет много времени.<br/>
+            Возможно именно ваш отклик окажется критически важным для
+            объективного понимания силы сотрясений.<br/>
+            Мы благодарим вас за предоставленные отклики.
+          </p>
+          <div class="actions">
+            <b-button class="ml-auto mt-3 bg-primary" @click="$refs['why-modal'].hide()">Понятно</b-button>
+          </div>
+        </b-modal>
+      </div>
+      <hr/>
       <date-time-questions
         v-if="requestData.eventData.type === 'eventDateTime'"
         :key="`dt-${refreshKey}`"
@@ -145,5 +167,29 @@ export default {
 <style lang="scss">
 .poll__container {
   margin-top: 3%;
+  .poll__header {
+    text-align: center;
+    .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .subtitle {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .text-primary {
+      font-weight: 600;
+    }
+  }
+}
+#why-modal {
+  .modal-body {
+    font-size: 1.075rem;
+  }
+  .actions {
+    display: flex;
+  }
 }
 </style>
