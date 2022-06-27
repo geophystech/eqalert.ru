@@ -14,12 +14,12 @@
         <b-modal id="why-modal" ref="why-modal" hide-footer hide-header hide-header-close>
           <p class="my-4 modal-body">
             С помощью опросных листов "Ощутили землетрясение?"
-            мы получаем важную обратную связь от вас.<br/>
+            мы получаем важную обратную связь от вас.
             Ответив на несколько вопросов анкеты, вы поможете
             уточнить интенсивность колебаний в области воздействия
-            землетрясения. Это не займет много времени.<br/>
+            землетрясения. Это не займет много времени.
             Возможно именно ваш отклик окажется критически важным для
-            объективного понимания силы сотрясений.<br/>
+            объективного понимания силы сотрясений.
             Мы благодарим вас за предоставленные отклики.
           </p>
           <div class="actions">
@@ -28,6 +28,10 @@
         </b-modal>
       </div>
       <hr/>
+      <location-questions
+        :key="`lq-${refreshKey}`"
+        @update="updateLocation"
+      />
       <date-time-questions
         v-if="requestData.eventData.type === 'eventDateTime'"
         :key="`dt-${refreshKey}`"
@@ -49,10 +53,11 @@ import apiSettings from '@/settings/api'
 import EarthquakeQuestions from './EarthquakeQuestions'
 import geolocation from './mixins/geolocation'
 import DateTimeQuestions from './DateTimeQuestions'
+import LocationQuestions from './LocationQuestions'
 
 export default {
   name: 'FeltReportPoll',
-  components: {DateTimeQuestions, EarthquakeQuestions},
+  components: {LocationQuestions, DateTimeQuestions, EarthquakeQuestions},
   mixins: [geolocation],
   data() {
     return {
@@ -106,8 +111,7 @@ export default {
       }
     },
     alertPostError: function() {
-      alert('Пожалуйста, разрешите сайту определить Вашу геолокацию и ответьте на все обязательные вопросы!\n' +
-        'Если у Вас появились какие-либо сложности - напишите нам об этом в форме обратной связи.')
+      alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
     },
     alertGetError: function() {
       alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
@@ -120,6 +124,9 @@ export default {
         !!data.location.lon &&
         !!data.feltReport.pollId &&
         data.feltReport.answers.length === this.questions.length
+    },
+    updateLocation: function(location) {
+      this.location = location
     },
     updateAnswers: function(data) {
       this.requestData.feltReport.answers = []
