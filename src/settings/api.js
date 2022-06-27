@@ -46,6 +46,10 @@ class Config
     return `${this.baseURL}/${this.version}/reports/${id}`
   }
 
+  endpointEventMeasuredIntensityAggregations(id) {
+    return `${this.baseURL}/${this.version}/reports/${id}/measuredIntensityAggregations`
+  }
+
   endpointEventLDOs(id) {
     return `${this.baseURL}/${this.version}/pga/damagedLongDistanceObjects/${id}`
   }
