@@ -21,6 +21,7 @@
         </v-datetime>
       </b-form-group>
     </div>
+    <hr/>
   </div>
 </template>
 

@@ -6,6 +6,32 @@
       </b-alert>
     </template>
     <template v-else>
+      <div class="poll__header">
+        <p class="title">Ощутили землетрясение?</p>
+        <p class="subtitle">Пожалуйста, ответьте на несколько важных вопросов.</p>
+        <p class="text-primary" v-b-modal.why-modal>Зачем оставлять отклики?</p>
+
+        <b-modal id="why-modal" ref="why-modal" hide-footer hide-header hide-header-close>
+          <p class="my-4 modal-body">
+            С помощью опросных листов "Ощутили землетрясение?"
+            мы получаем важную обратную связь от вас.
+            Ответив на несколько вопросов анкеты, вы поможете
+            уточнить интенсивность колебаний в области воздействия
+            землетрясения. Это не займет много времени.
+            Возможно именно ваш отклик окажется критически важным для
+            объективного понимания силы сотрясений.
+            Мы благодарим вас за предоставленные отклики.
+          </p>
+          <div class="actions">
+            <b-button class="ml-auto mt-3 bg-primary" @click="$refs['why-modal'].hide()">Понятно</b-button>
+          </div>
+        </b-modal>
+      </div>
+      <hr/>
+      <location-questions
+        :key="`lq-${refreshKey}`"
+        @update="updateLocation"
+      />
       <date-time-questions
         v-if="requestData.eventData.type === 'eventDateTime'"
         :key="`dt-${refreshKey}`"
@@ -27,10 +53,11 @@ import apiSettings from '@/settings/api'
 import EarthquakeQuestions from './EarthquakeQuestions'
 import geolocation from './mixins/geolocation'
 import DateTimeQuestions from './DateTimeQuestions'
+import LocationQuestions from './LocationQuestions'
 
 export default {
   name: 'FeltReportPoll',
-  components: {DateTimeQuestions, EarthquakeQuestions},
+  components: {LocationQuestions, DateTimeQuestions, EarthquakeQuestions},
   mixins: [geolocation],
   data() {
     return {
@@ -84,8 +111,7 @@ export default {
       }
     },
     alertPostError: function() {
-      alert('Пожалуйста, разрешите сайту определить Вашу геолокацию и ответьте на все обязательные вопросы!\n' +
-        'Если у Вас появились какие-либо сложности - напишите нам об этом в форме обратной связи.')
+      alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
     },
     alertGetError: function() {
       alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
@@ -98,6 +124,9 @@ export default {
         !!data.location.lon &&
         !!data.feltReport.pollId &&
         data.feltReport.answers.length === this.questions.length
+    },
+    updateLocation: function(location) {
+      this.location = location
     },
     updateAnswers: function(data) {
       this.requestData.feltReport.answers = []
@@ -145,5 +174,29 @@ export default {
 <style lang="scss">
 .poll__container {
   margin-top: 3%;
+  .poll__header {
+    text-align: center;
+    .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .subtitle {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .text-primary {
+      font-weight: 600;
+    }
+  }
+}
+#why-modal {
+  .modal-body {
+    font-size: 1.075rem;
+  }
+  .actions {
+    display: flex;
+  }
 }
 </style>
