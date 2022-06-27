@@ -57,7 +57,7 @@ describe('event/LastEvents.vue', () => {
 
   const respData = resp.data.data
 
-  it('Load data', async () => {
+  it('Load data', async() => {
     flushPromises().then(() => {
       expect(wrapper.events.length).to.equal(respData.length)
     })

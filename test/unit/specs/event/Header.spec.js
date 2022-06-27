@@ -44,7 +44,7 @@ describe('event/Header.vue', () => {
       event[labelVariant[0]] = true
       wrapper.vm.event = event
 
-      it(labelVariant[1], async () => {
+      it(labelVariant[1], async() => {
         flushPromises().then(() => {
           expect(wrapper.vm.label.variant).to.eql(labelVariant[1])
         })

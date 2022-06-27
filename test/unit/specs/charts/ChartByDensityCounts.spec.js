@@ -49,19 +49,19 @@ describe('charts/ChartByDensityCounts.vue', () => {
       const respData = resp.data.data
       mod(wrapper)
 
-      it('Chart datasets label', async () => {
+      it('Chart datasets label', async() => {
         flushPromises().then(() => {
           expect(wrapper.vm.chartData.datasets[0].label).to.equal('Плотностное распределение повторяемости (ML)')
         })
       })
 
-      it('Chart datasets data', async () => {
+      it('Chart datasets data', async() => {
         flushPromises().then(() => {
           expect(wrapper.vm.chartData.datasets[0].data).to.equal(respData.counts)
         })
       })
 
-      it('Chart labels', async () => {
+      it('Chart labels', async() => {
         flushPromises().then(() => {
           expect(wrapper.vm.chartData.labels).to.equal(respData.magnitudes)
         })

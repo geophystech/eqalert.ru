@@ -67,7 +67,7 @@ describe('StaticPage.vue', () => {
       const wrapper = createWrapper()
       const [label, mod] = conf
 
-      it(label, async () => {
+      it(label, async() => {
         mod(wrapper)
         flushPromises().then(() => {
           expect(wrapper.vm.content).to.equal(PAGE_CONTENT)
@@ -82,13 +82,13 @@ describe('StaticPage.vue', () => {
 
     const wrapper = createWrapper()
 
-    it('Check map link', async () => {
+    it('Check map link', async() => {
       flushPromises().then(() => {
         expect(wrapper.find('.mainpage-map-link').exists()).to.eql(true)
       })
     })
 
-    it('Open dialog', async () => {
+    it('Open dialog', async() => {
       flushPromises().then(() => {
         wrapper.find('.mainpage-map-link').trigger('click')
         flushPromises().then(() => {

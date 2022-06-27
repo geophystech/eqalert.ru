@@ -52,7 +52,7 @@ describe('maps/GeneralInformation.vue', () => {
 
       mod(wrapper)
 
-      it('Success load data', async () => {
+      it('Success load data', async() => {
         flushPromises().then(() => {
           expect(!!wrapper.vm.map.object).to.equal(true)
         })
@@ -68,7 +68,7 @@ describe('maps/GeneralInformation.vue', () => {
 
         mod(wrapper)
 
-        it('Error load data', async () => {
+        it('Error load data', async() => {
           flushPromises().then(() => {
             expect(!!wrapper.vm.map.object).to.equal(true)
           })

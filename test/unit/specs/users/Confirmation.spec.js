@@ -35,7 +35,7 @@ describe('users/Confirmation.vue', () => {
     const wrapper = createWrapper(Promise.resolve())
     const [label, status] = conf
 
-    it(label, async () => {
+    it(label, async() => {
       flushPromises().then(() => {
         expect(wrapper.vm.status).to.equal(status)
       })

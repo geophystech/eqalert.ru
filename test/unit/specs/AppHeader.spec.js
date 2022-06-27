@@ -45,13 +45,14 @@ describe('AppHeader.vue', () => {
     it('renders links', () => {
 
       const DYFILinkContainer = wrapper.find('.did-you-feel-it')
-      const DYFILink = DYFILinkContainer.find('a')
-
       expect(DYFILinkContainer.classes()).to.contain('text-center')
 
-      expect(DYFILink.attributes().href).to.equal('https://goo.gl/forms/Hd4E0BcA2ffRNjfY2')
-      expect(DYFILink.attributes().target).to.equal('_blank')
-      expect(DYFILink.text()).to.equal('Ощутили землетрясение?')
+      const DYFILink = DYFILinkContainer.find(RouterLink)
+
+      it('renders correct link', () => {
+        expect(DYFILink.props().to.name).to.equal('FeltReportPoll')
+        expect(DYFILink.text()).to.equal('Ощутили землетрясение?')
+      })
 
     })
 

@@ -95,7 +95,7 @@ describe('users/ResetPassword.vue', () => {
       const [ title, resp, expect ] = conf
       const wrapper = createWrapper(resp)
 
-      it(title, async () => {
+      it(title, async() => {
         formInit(wrapper).then(() => {
           expect(wrapper)
         })
