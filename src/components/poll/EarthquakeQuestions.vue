@@ -1,18 +1,21 @@
 <template>
   <div class="earthquake-questions__container">
     <div v-for="question in questions" :key="`question-${question.id}`">
-      <b-form-group>
-        <template slot="label">
-          {{ question.text[localisation] }} <span style="color: red" title="Обязательный вопрос">*</span>
-        </template>
-        <b-form-radio
-          v-for="answer in question.answers.data"
-          :key="`answer-${answer.id}`"
-          v-model="answers[`${question.id}`]"
-          :name="`question-${question.id}`"
-          :value="answer.id"
-        >{{ answer.text[localisation] }}</b-form-radio>
-      </b-form-group>
+      <div>
+        <b-form-group>
+          <template slot="label">
+            {{ question.text[localisation] }} <span style="color: red" title="Обязательный вопрос">*</span>
+          </template>
+          <b-form-radio
+            v-for="answer in question.answers.data"
+            :key="`answer-${answer.id}`"
+            v-model="answers[`${question.id}`]"
+            :name="`question-${question.id}`"
+            :value="answer.id"
+          >{{ answer.text[localisation] }}</b-form-radio>
+        </b-form-group>
+      </div>
+      <hr/>
     </div>
   </div>
 </template>
