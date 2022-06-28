@@ -101,6 +101,12 @@ Example of deploying the application manually to a staging host:
 rsync -avzr --delete -e ssh dist/ USERNAME@HOSTNAME:/opt/eqalert-frontend-test
 ```
 
+## Run docker container with prebuild application
+
+```bash
+docker run -p 8888:80 --rm --env API_URI=https://api-test.geophystech.ru/api --env AUTH_URI=https://oauth-client-test.geophystech.ru harbor.ju0.ru/geophystech/eqalert-front
+```
+
 ## LICENSE
 
    Copyright 2017-2019 GEOPHYSTECH LLC
