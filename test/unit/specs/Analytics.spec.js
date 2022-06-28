@@ -23,7 +23,7 @@ describe('Analytics.vue', () => {
     stubs
   })
 
-  it('Chart By Datetime Update', async () => {
+  it('Chart By Datetime Update', async() => {
     wrapper.find(stubs.ChartByDatetime).vm.$emit('update', {
       eventsCount: 10,
       startDate: 'startDate',

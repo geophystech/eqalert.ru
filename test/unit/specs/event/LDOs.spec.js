@@ -63,7 +63,7 @@ describe('event/LDOs.vue', () => {
 
   const respData = resp.data.data
 
-  it('Load data', async () => {
+  it('Load data', async() => {
     flushPromises().then(() => {
       expect(wrapper.vm.items[6].value).to.equal($store.getters.srssDBVersion)
       expect(wrapper.vm.items[7].value).to.equal(respData.length)

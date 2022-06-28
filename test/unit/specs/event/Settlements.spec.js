@@ -70,7 +70,7 @@ describe('event/Settlements.vue', () => {
       const respData = resp.data.data
       mod(wrapper)
 
-      it('Load data', async () => {
+      it('Load data', async() => {
         flushPromises().then(() => {
           expect(wrapper.items.length).to.equal(respData.length)
         })

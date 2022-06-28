@@ -38,7 +38,7 @@ describe('event/MomentTensor.vue', () => {
 
   const respData = resp.data.data[0]
 
-  it('Load data', async () => {
+  it('Load data', async() => {
     flushPromises().then(() => {
       expect(wrapper.image).to.equal(respData.beachball.svg)
     })

@@ -80,13 +80,13 @@ describe('maps/Mainpage.vue', () => {
     get: () => Promise.resolve(resp)
   })
 
-  it('Check map', async () => {
+  it('Check map', async() => {
     flushPromises().then(() => {
       expect(!!wrapper.vm.map.object).to.equal(true)
     })
   })
 
-  it('Map notification', async () => {
+  it('Map notification', async() => {
     wrapper.vm.mapNotify('Notification msg', 0)
     flushPromises().then(() => {
       wrapper.find('.map-notify').trigger('transitionend') // 1
