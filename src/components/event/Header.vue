@@ -37,15 +37,6 @@
         </b-col>
       </b-row>
 
-      <b-row class="event-local-dt-row">
-        <b-col class="text-center">
-          <b-badge
-            variant="primary"
-            :to="{ name: 'FeltReportPoll', query: { reportId: event.id } }"
-          >Я ощутил это землетрясение</b-badge>
-        </b-col>
-      </b-row>
-
       <b-row v-if="event.magnitude">
         <b-col class="text-center">
           <b-badge
@@ -53,6 +44,14 @@
             v-b-popover.hover.auto="label.description">
             {{ label.text }}
           </b-badge>
+        </b-col>
+      </b-row>
+
+      <b-row class="event-local-dt-row mt-2">
+        <b-col class="text-center font-weight-bolder">
+          <router-link
+            :to="{ name: 'FeltReportPoll', query: { reportId: event.id } }"
+          >Ощутили это землетрясение?</router-link>
         </b-col>
       </b-row>
 
