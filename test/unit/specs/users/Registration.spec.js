@@ -148,7 +148,7 @@ describe('users/Registration.vue', () => {
         return {value: it[0], text: it[1]}
       })
 
-      it(title, async () => {
+      it(title, async() => {
         formInit(wrapper).then(() => {
           expect(wrapper)
         })

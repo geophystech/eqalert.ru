@@ -41,7 +41,7 @@ describe('maps/Settlements.vue', () => {
 
       mod(wrapper)
 
-      it('Check map', async () => {
+      it('Check map', async() => {
         flushPromises().then(() => {
           expect(!!wrapper.vm.map.object).to.equal(true)
         })

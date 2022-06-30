@@ -59,7 +59,7 @@ describe('Filters.vue', () => {
 
     const magMinField = wrapper.find('input[name="mag_min"]')
 
-    it('Form change', async () => {
+    it('Form change', async() => {
 
       magMinField.setValue(1)
       magMinField.trigger('input.native')
@@ -71,7 +71,7 @@ describe('Filters.vue', () => {
 
     })
 
-    it('Form submit', async () => {
+    it('Form submit', async() => {
       wrapper.trigger('submit')
 
       flushPromises().then(() => {
@@ -81,7 +81,7 @@ describe('Filters.vue', () => {
       })
     })
 
-    it('Response errors', async () => {
+    it('Response errors', async() => {
 
       const errors = {
         _otherError: ['Other error']

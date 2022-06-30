@@ -74,7 +74,7 @@ export function describeCheckFormFields(wrapper, fields, {
 
       if (async)
       {
-        it(`Check field ${fieldName}`, async () => {
+        it(`Check field ${fieldName}`, async() => {
           flushPromises().then(() => {
             expect(field.exists()).to.eql(true)
           })

@@ -111,7 +111,7 @@ describe('Event.vue', () => {
         }
       }, !!authenticated)
 
-      it(label, async () => {
+      it(label, async() => {
         callBack(wrapper)
       })
 

@@ -48,7 +48,7 @@ describe('ExportDropDown.vue', () => {
 
   wrapper.vm.$refs.dropdown.visible = true
 
-  it('Request xls file url', async () => {
+  it('Request xls file url', async() => {
 
     wrapper.find('.dropdown-item').trigger('click')
 

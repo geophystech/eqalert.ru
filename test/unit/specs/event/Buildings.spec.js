@@ -53,7 +53,7 @@ describe('event/Buildings.vue', () => {
       const respData = resp.data.data
       mod(wrapper)
 
-      it('Load data', async () => {
+      it('Load data', async() => {
         flushPromises().then(() => {
           expect(wrapper.vm.items[wrapper.vm.items.length - 2].value).to.equal(respData.length)
           expect(wrapper.vm.items[wrapper.vm.items.length - 1].value).to.equal($store.getters.msk64ConfigVersion)

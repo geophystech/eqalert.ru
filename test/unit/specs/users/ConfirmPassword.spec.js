@@ -86,7 +86,7 @@ describe('users/ConfirmPassword.vue', () => {
       const [ title, resp, expect ] = conf
       const wrapper = createWrapper(resp)
 
-      it(title, async () => {
+      it(title, async() => {
         formInit(wrapper).then(() => {
           expect(wrapper)
         })

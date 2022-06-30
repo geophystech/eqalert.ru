@@ -83,7 +83,7 @@ const resp = (empty) => {
 
 describe('Events.vue', () => {
 
-  it('Event list rendered by filter', async () => {
+  it('Event list rendered by filter', async() => {
 
     const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
@@ -96,7 +96,7 @@ describe('Events.vue', () => {
 
   })
 
-  it('Event list rendered by empty filter', async () => {
+  it('Event list rendered by empty filter', async() => {
 
     const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
@@ -109,7 +109,7 @@ describe('Events.vue', () => {
 
   })
 
-  it('Event list more rendered', async () => {
+  it('Event list more rendered', async() => {
 
     const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
@@ -130,7 +130,7 @@ describe('Events.vue', () => {
 
   })
 
-  it('Event list empty response', async () => {
+  it('Event list empty response', async() => {
 
     const wrapper = createWrapper({
       get: () => Promise.resolve(resp(true))
@@ -143,7 +143,7 @@ describe('Events.vue', () => {
 
   })
 
-  it('Show Training Events', async () => {
+  it('Show Training Events', async() => {
 
     const wrapper = createWrapper({
       get: () => Promise.resolve(resp())
@@ -160,7 +160,7 @@ describe('Events.vue', () => {
 
   describe('Check datetime formats', () => {
 
-    it('If Mobile', async () => {
+    it('If Mobile', async() => {
 
       const wrapper = createWrapper({
         get: () => Promise.resolve(resp())
@@ -175,7 +175,7 @@ describe('Events.vue', () => {
       })
     })
 
-    it('If Not Mobile', async () => {
+    it('If Not Mobile', async() => {
 
       const wrapper = createWrapper({
         get: () => Promise.resolve(resp())
@@ -216,7 +216,7 @@ describe('Events.vue', () => {
 
       const [label, statusCode, data, reject] = conf
 
-      it(label, async () => {
+      it(label, async() => {
 
         const wrapper = createWrapper({
           get: () => Promise.reject({

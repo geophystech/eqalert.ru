@@ -87,7 +87,7 @@ describe('maps/ModalMap.vue', () => {
   wrapper.destroy()
   wrapper = createWrapper($http)
 
-  it('Modal opening', async () => {
+  it('Modal opening', async() => {
     wrapper.find('#map-dialog-btn').trigger('click')
     wrapper.vm.onOpen()
     flushPromises().then(() => {
@@ -98,7 +98,7 @@ describe('maps/ModalMap.vue', () => {
   wrapper.destroy()
   wrapper = createWrapper($http)
 
-  it('Modal closing', async () => {
+  it('Modal closing', async() => {
 
     wrapper.find('#map-dialog-btn').trigger('click')
 
