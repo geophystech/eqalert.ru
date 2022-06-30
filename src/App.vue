@@ -67,6 +67,9 @@
       }
     },
     mounted() {
+      if (this.$route.fullPath.includes('/#/')) {
+        this.$router.push(this.$route.fullPath.substring(2))
+      }
       setInterval(() => { this.fetchSystemInfo() }, 30000)
       this.fetchPlateBoundaries()
     },
