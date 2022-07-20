@@ -43,7 +43,7 @@
         :key="`eq-${refreshKey}`"
         @update="updateAnswers"
       />
-      <b-button variant="primary" @click="submit">Отправить</b-button>
+      <b-button variant="primary" @click="submit" :disabled="!filled">Отправить</b-button>
     </template>
   </div>
 </template>
@@ -79,10 +79,17 @@ export default {
           answers: []
         }
       },
-      submitted: false
+      submitted: false,
+      filled: false
     }
   },
   watch: {
+    requestData: {
+      deep: true,
+      handler: function(data) {
+        this.filled = this.validate(data)
+      }
+    },
     '$route.query': {
       deep: true,
       handler: function() {

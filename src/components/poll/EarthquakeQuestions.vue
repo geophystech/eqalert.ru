@@ -4,12 +4,13 @@
       <div>
         <b-form-group>
           <template slot="label">
-            {{ question.text[localisation] }} <span style="color: red" title="Обязательный вопрос">*</span>
+            {{ question.text[localisation] }}
           </template>
           <b-form-radio
             v-for="answer in question.answers.data"
             :key="`answer-${answer.id}`"
-            v-model="answers[`${question.id}`]"
+            :checked="answers[`${question.id}`]"
+            @input="setAnswer(question.id, answer.id)"
             :name="`question-${question.id}`"
             :value="answer.id"
           >{{ answer.text[localisation] }}</b-form-radio>
@@ -39,12 +40,6 @@ export default {
     }
   },
   watch: {
-    answers: {
-      deep: true,
-      handler: function(value) {
-        this.$emit('update', value)
-      }
-    },
     questions(data) {
       if (data.length) {
         this.syncQuestions()
@@ -52,12 +47,17 @@ export default {
     }
   },
   methods: {
+    setAnswer(questionId, answerId) {
+      this.answers[`${questionId}`] = answerId
+      this.$emit('update', this.answers)
+    },
     syncQuestions() {
       this.questions.forEach((question) => {
         if (!this.answers[`${question.id}`]) {
           this.answers[`${question.id}`] = question.answers.data[0].id
         }
       })
+      this.$emit('update', this.answers)
     }
   }
 }
