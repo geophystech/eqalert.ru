@@ -7,10 +7,8 @@
     addEpicenter, buildingColor, createMap, id, removeEpicenter, setView, createMapBuildingMarker,
     createMapMarkerClusterGroup, mapCentering
   } from '@/map_functions'
-  import security from './mixins/security'
 
   export default {
-    mixins: [security],
     props: ['event', 'tab'],
     data() {
       return {
