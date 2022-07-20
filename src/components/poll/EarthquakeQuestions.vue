@@ -44,6 +44,20 @@ export default {
       handler: function(value) {
         this.$emit('update', value)
       }
+    },
+    questions(data) {
+      if (data.length) {
+        this.syncQuestions()
+      }
+    }
+  },
+  methods: {
+    syncQuestions() {
+      this.questions.forEach((question) => {
+        if (!this.answers[`${question.id}`]) {
+          this.answers[`${question.id}`] = question.answers.data[0].id
+        }
+      })
     }
   }
 }
