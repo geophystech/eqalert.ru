@@ -18,11 +18,9 @@
 <script>
   import {createMap, createMapEventMarker, mapCentering} from '@/map_functions'
   import apiSettings from '@/settings/api'
-  import security from './mixins/security'
 
   export default {
     name: 'ModalMap',
-    mixins: [security],
     props: {
       filtersData: {}
     },

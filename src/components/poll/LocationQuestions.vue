@@ -1,7 +1,12 @@
 <template>
   <div class="location-questions__container">
     <div>
-      <div :id="map.id"></div>
+      <b-form-group>
+        <template slot="label">
+          Укажите свое местоположение <span style="color: red" title="Обязательный вопрос">*</span>
+        </template>
+        <div :id="map.id"></div>
+      </b-form-group>
     </div>
     <hr/>
   </div>
@@ -70,6 +75,12 @@ export default {
   #felt-report-map {
     width: 100%;
     height: 400px;
+  }
+  .form-group {
+    legend {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
   }
 }
 </style>

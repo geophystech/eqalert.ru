@@ -6,11 +6,9 @@
   import {createMap, createMapEventMarker} from '@/map_functions'
   import {EVENTS_RANGES} from '@/helpers/event'
   import apiSettings from '@/settings/api'
-  import security from './mixins/security'
 
   export default
   {
-    mixins: [security],
     props: {
       gestureHandling: true,
       onlyStations: false

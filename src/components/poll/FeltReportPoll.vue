@@ -9,7 +9,7 @@
       <div class="poll__header">
         <p class="title">Ощутили землетрясение?</p>
         <p class="subtitle">Пожалуйста, ответьте на несколько важных вопросов.</p>
-        <p class="text-primary" v-b-modal.why-modal>Зачем оставлять отклики?</p>
+        <a class="text-primary" target="_blank" v-b-modal.why-modal>Зачем оставлять отклики?</a>
 
         <b-modal id="why-modal" ref="why-modal" hide-footer hide-header hide-header-close>
           <p class="my-4 modal-body">
@@ -43,7 +43,7 @@
         :key="`eq-${refreshKey}`"
         @update="updateAnswers"
       />
-      <b-button variant="primary" @click="submit">Отправить</b-button>
+      <b-button variant="primary" @click="submit" :disabled="!filled">Отправить</b-button>
     </template>
   </div>
 </template>
@@ -79,10 +79,17 @@ export default {
           answers: []
         }
       },
-      submitted: false
+      submitted: false,
+      filled: false
     }
   },
   watch: {
+    requestData: {
+      deep: true,
+      handler: function(data) {
+        this.filled = this.validate(data)
+      }
+    },
     '$route.query': {
       deep: true,
       handler: function() {

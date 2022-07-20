@@ -5,6 +5,7 @@ import stationsSettings from '@/settings/stations.js'
 
 import {agency, eventColor, eventRadius} from '@/helpers/event'
 import {colorDarken, colorHexToRGB, colorLighten} from '@/helpers/color'
+import {numberDeclension} from '@/helpers/number'
 
 function listenerStoreCurrentTileProvider(map) {
   // Store current tile provider to the storage
@@ -284,6 +285,37 @@ function addStations(map, controls, show = true)
       })
 
   })
+}
+
+// Show seismic stations
+export function addFeltReports(map, items, controls, show = true)
+{
+  let markers = []
+
+  const icon = window.L.icon({
+    iconUrl: '/static/img/green-square.png',
+    iconSize: [15, 15]
+  })
+
+  items.forEach((feltReportObject) => {
+    const center = feltReportObject.location
+    const cii = feltReportObject.cii
+    const marker = window.L
+      .marker([center.lat, center.lon], {icon})
+      .addTo(map)
+      .bindPopup(`Интенсивность по ШСИ-2017: ${cii} ${numberDeclension(cii, ['балл', 'балла', 'баллов'])}`)
+    markers.push(marker)
+  })
+
+  const markersGroup = new window.L.LayerGroup(markers)
+
+  if (!controls || show) {
+    map.addLayer(markersGroup)
+  }
+
+  if (controls) {
+    controls.addOverlay(markersGroup, 'Отлики')
+  }
 }
 
 // Show Buildings
