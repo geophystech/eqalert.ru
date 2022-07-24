@@ -3,13 +3,11 @@
 </template>
 
 <script>
-  import { addEpicenter, createMap, id, removeEpicenter, setView } from '@/map_functions'
+  import { addEpicenter, createMap, id, removeEpicenter, setView, addFeltReports } from '@/map_functions'
   import { numberDeclension } from '@/helpers/number'
   import apiSettings from '@/settings/api'
-  import security from './mixins/security'
 
   export default {
-    mixins: [security],
     props: ['event', 'tab'],
     data() {
       return {
@@ -88,19 +86,7 @@
         })
 
         if (feltReports.length) {
-          const icon = window.L.icon({
-            iconUrl: '/static/img/green-square.png',
-            iconSize: [15, 15]
-          })
-
-          feltReports.forEach((feltReportObject) => {
-            const center = feltReportObject.location
-            const cii = feltReportObject.cii
-            window.L
-              .marker([center.lat, center.lon], {icon})
-              .addTo(this.map.object)
-              .bindPopup(`Интенсивность по ШСИ-2017: ${cii} ${numberDeclension(cii, ['балл', 'балла', 'баллов'])}`)
-          })
+          addFeltReports(this.map.object, feltReports, this.map.object._controls)
         }
 
         // Show map legend just once.
