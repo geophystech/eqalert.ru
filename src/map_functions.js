@@ -319,6 +319,8 @@ export function addFeltReports(map, items, controls, show = true)
   if (controls) {
     controls.addOverlay(markersGroup, 'Отлики')
   }
+
+  return markersGroup
 }
 
 // Show Buildings

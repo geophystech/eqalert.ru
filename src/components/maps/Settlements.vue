@@ -11,6 +11,7 @@
     data() {
       return {
         coordinates: [],
+        markersGroup: null,
         map: {
           epicenter: null,
           id: null,
@@ -37,7 +38,7 @@
         })
 
         if (feltReports && feltReports.length) {
-          addFeltReports(this.map.object, feltReports, this.map.object._controls)
+          this.markersGroup = addFeltReports(this.map.object, feltReports, this.map.object._controls)
         }
 
         if (data.length) {
@@ -87,6 +88,10 @@
         const legend = this.$el.querySelector('.map-legend')
         if (legend) legend.remove()
         this.map.circles.forEach(circle => { this.map.object.removeLayer(circle) })
+        if (this.markersGroup) {
+          this.map.object.removeLayer(this.markersGroup)
+          this.map.object._controls.removeLayer(this.markersGroup)
+        }
       },
       resetMap: function() {
         removeEpicenter(this.map.object, this.map.epicenter)
