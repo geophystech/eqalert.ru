@@ -177,8 +177,6 @@ export default {
   },
   created() {
     this.fetchData()
-  },
-  mounted() {
     this.refreshKey = Math.random() * Math.random()
   }
 }
