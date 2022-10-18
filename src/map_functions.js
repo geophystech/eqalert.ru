@@ -95,6 +95,9 @@ export function createMap(mapID, coordinates, {
 
   const map = window.L.map(mapID, options)
 
+  // remove Ukrainian flag
+  map.attributionControl.setPrefix('')
+
   if(gestureHandling)
   {
     map.on('fullscreenchange', () => {
