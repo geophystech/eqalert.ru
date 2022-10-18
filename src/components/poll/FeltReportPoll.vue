@@ -11,7 +11,7 @@
         <p class="subtitle">Пожалуйста, ответьте на несколько важных вопросов.</p>
         <a class="text-primary" target="_blank" v-b-modal.why-modal>Зачем оставлять отклики?</a>
 
-        <b-modal id="why-modal" ref="why-modal" hide-footer hide-header hide-header-close>
+        <b-modal id="why-modal" ref="why-modal" modal-class="poll__error-modal" hide-footer hide-header hide-header-close>
           <p class="my-4 modal-body">
             С помощью опросных листов "Ощутили землетрясение?"
             мы получаем важную обратную связь от вас.
@@ -24,6 +24,15 @@
           </p>
           <div class="actions">
             <b-button class="ml-auto mt-3 bg-primary" @click="$refs['why-modal'].hide()">Понятно</b-button>
+          </div>
+        </b-modal>
+
+        <b-modal ref="error-modal" modal-class="poll__error-modal" hide-footer hide-header hide-header-close>
+          <p class="modal-body">
+            Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!
+          </p>
+          <div class="actions">
+            <b-button class="ml-auto mt-3 bg-primary" @click="$refs['error-modal'].hide()">Закрыть</b-button>
           </div>
         </b-modal>
       </div>
@@ -111,17 +120,14 @@ export default {
           .then(response => {
             this.submitted = response.data.message
           }).catch(() => {
-            this.alertPostError()
+            this.showErrorModal()
           })
       } else {
-        this.alertPostError()
+        this.showErrorModal()
       }
     },
-    alertPostError: function() {
-      alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
-    },
-    alertGetError: function() {
-      alert('Что-то пошло не так... Пожалуйста, попробуйте ещё раз через некоторое время!')
+    showErrorModal: function() {
+      this.$refs['error-modal'].show()
     },
     validate: function(data) {
       const eventDataValidated = data.eventData.type === 'eventDateTime' ?
@@ -158,7 +164,7 @@ export default {
         .then(response => {
           this.setData(response.data.data)
         }).catch(() => {
-          this.alertGetError()
+          this.showErrorModal()
         })
     },
     setData: function(data) {
@@ -198,7 +204,7 @@ export default {
     }
   }
 }
-#why-modal {
+.poll__error-modal {
   .modal-body {
     font-size: 1.075rem;
   }
