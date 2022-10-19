@@ -42,7 +42,11 @@ export default {
         iconUrl: '/static/img/marker.png',
         iconSize: [30, 30]
       })
-      this.$emit('update', {lat: event.latlng.lat, lon: event.latlng.lng})
+      const location = {
+        lat: parseFloat(event.latlng.lat.toFixed(9)),
+        lon: parseFloat(event.latlng.lng.toFixed(9))
+      }
+      this.$emit('update', location)
       this.marker = window.L.marker(event.latlng, {icon}).addTo(this.map.object)
     }
   },
