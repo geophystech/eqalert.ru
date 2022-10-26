@@ -23,7 +23,7 @@
     },
     methods: {
       syncFeltReportData: function(event) {
-        if (this.event.nearestCity.data.feltReportAnalysis) {
+        if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
           this.$http.get(apiSettings.endpointEventMeasuredIntensityAggregations(this.event.id))
             .then(response => {
               this.addData(event.data.data, response.data.feltReports)
