@@ -48,28 +48,36 @@ export default {
       }
       this.$emit('update', location)
       this.marker = window.L.marker(event.latlng, {icon}).addTo(this.map.object)
+    },
+    getCurrentPosition() {
+      let vm = this
+      window.navigator.geolocation.getCurrentPosition(
+        function(position) {
+          vm.map.coordinates = [position.coords.latitude, position.coords.longitude]
+          vm.map.object = createMap(vm.map.id, vm.map.coordinates, {zoom: 10})
+          vm.addMarker({latlng: {lat: position.coords.latitude, lng: position.coords.longitude}})
+          vm.watchMapClick()
+        },
+        function(error) {
+          const errorTypes = {
+            1: 'PERMISSION_DENIED',
+            2: 'POSITION_UNAVAILABLE',
+            3: 'TIMEOUT'
+          }
+          console.error(error.message, {code: errorTypes[error.code]})
+          vm.map.object = createMap(vm.map.id, vm.map.coordinates, {zoom: 10})
+          vm.watchMapClick()
+        }
+      )
     }
   },
   mounted() {
-    let vm = this
-    window.navigator.geolocation.getCurrentPosition(
-      function(position) {
-        vm.map.coordinates = [position.coords.latitude, position.coords.longitude]
-        vm.map.object = createMap(vm.map.id, vm.map.coordinates, {zoom: 10})
-        vm.addMarker({latlng: {lat: position.coords.latitude, lng: position.coords.longitude}})
-        vm.watchMapClick()
-      },
-      function(error) {
-        const errorTypes = {
-          1: 'PERMISSION_DENIED',
-          2: 'POSITION_UNAVAILABLE',
-          3: 'TIMEOUT'
-        }
-        console.error(error.message, {code: errorTypes[error.code]})
-        vm.map.object = createMap(vm.map.id, vm.map.coordinates, {zoom: 10})
-        vm.watchMapClick()
-      }
-    )
+    if (window.navigator.geolocation) {
+      this.getCurrentPosition()
+    }
+    else {
+      console.warn('GeoLocation API is unavailable for your browser')
+    }
   }
 }
 </script>
