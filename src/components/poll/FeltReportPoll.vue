@@ -60,16 +60,20 @@
 <script>
 import apiSettings from '@/settings/api'
 import EarthquakeQuestions from './EarthquakeQuestions'
-import geolocation from './mixins/geolocation'
+import timezone from './mixins/timezone'
 import DateTimeQuestions from './DateTimeQuestions'
 import LocationQuestions from './LocationQuestions'
 
 export default {
   name: 'FeltReportPoll',
   components: {LocationQuestions, DateTimeQuestions, EarthquakeQuestions},
-  mixins: [geolocation],
+  mixins: [timezone],
   data() {
     return {
+      location: {
+        lat: null,
+        lon: null
+      },
       localisations: [],
       questions: [],
       actions: {},
@@ -109,6 +113,7 @@ export default {
       deep: true,
       handler: function(value) {
         this.requestData.location = value
+        this.getTimezone()
       }
     }
   },

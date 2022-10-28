@@ -63,7 +63,7 @@
         let feltReportsData = []
 
         try {
-          if (this.event.nearestCity.data.feltReportAnalysis) {
+          if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
             const response = await this.$http.get(apiSettings.endpointEventMeasuredIntensityAggregations(this.event.id))
             feltReportsData = response.data.feltReports
           }
