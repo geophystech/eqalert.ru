@@ -18,7 +18,6 @@
   import AppFooter from '@/components/AppFooter'
   import appSettings from '@/settings/app'
   import apiSettings from '@/settings/api'
-  import security from '@/mixins/security'
 
   export default {
     metaInfo: {
@@ -43,7 +42,6 @@
       AppFooter,
       MobileAppAlert
     },
-    mixins: [security],
     data() {
       return {
         googlePlayUrl: appSettings.mobileAppUrls.googlePlay,

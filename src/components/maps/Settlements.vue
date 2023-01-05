@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { addEpicenter, createMap, id, convertMsk64, msk64Color, removeEpicenter, setView } from '@/map_functions'
+  import { addEpicenter, createMap, id, convertMsk64, msk64Color, removeEpicenter, setView, addFeltReports } from '@/map_functions'
   import apiSettings from '@/settings/api'
 
   export default {
@@ -11,6 +11,7 @@
     data() {
       return {
         coordinates: [],
+        markersGroup: null,
         map: {
           epicenter: null,
           id: null,
@@ -20,7 +21,7 @@
       }
     },
     methods: {
-      addData: function(data) {
+      addData: function(data, feltReports) {
         let legendData = ''
 
         data.forEach(item => {
@@ -35,6 +36,10 @@
 
           legendData += `<i style="background: ${color}"></i>${value}<br>`
         })
+
+        if (feltReports && feltReports.length) {
+          this.markersGroup = addFeltReports(this.map.object, feltReports, this.map.object._controls)
+        }
 
         if (data.length) {
           const legend = window.L.control({ position: 'bottomright' })
@@ -54,9 +59,22 @@
       createMap: function() {
         this.map.object = createMap(this.map.id, this.coordinates)
       },
-      fetchData: function() {
-        this.$http.get(apiSettings.endpointEventMsk64(this.event.id))
-          .then(response => { this.addData(response.data.data) })
+      fetchData: async function() {
+        let feltReportsData = []
+
+        try {
+          if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
+            const response = await this.$http.get(apiSettings.endpointEventMeasuredIntensityAggregations(this.event.id))
+            feltReportsData = response.data.feltReports
+          }
+        } catch (e) {
+          console.log(e)
+        }
+
+        const response = await this.$http.get(apiSettings.endpointEventMsk64(this.event.id))
+        const data = response.data.data
+
+        this.addData(data, feltReportsData)
       },
       initialize: function() {
         this.map.id = id(this.event.id, this.tab)
@@ -70,6 +88,10 @@
         const legend = this.$el.querySelector('.map-legend')
         if (legend) legend.remove()
         this.map.circles.forEach(circle => { this.map.object.removeLayer(circle) })
+        if (this.markersGroup) {
+          this.map.object.removeLayer(this.markersGroup)
+          this.map.object._controls.removeLayer(this.markersGroup)
+        }
       },
       resetMap: function() {
         removeEpicenter(this.map.object, this.map.epicenter)
@@ -85,7 +107,7 @@
       this.fetchData()
     },
     watch: {
-      event: function(data) {
+      event: function() {
         this.initialize()
         this.resetMap()
         this.fetchData()

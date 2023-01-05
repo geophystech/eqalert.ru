@@ -12,6 +12,7 @@
     data() {
       return {
         coordinates: [],
+        markersGroup: null,
         map: {
           epicenter: null,
           id: null,
@@ -22,7 +23,7 @@
     },
     methods: {
       syncFeltReportData: function(event) {
-        if (this.event.nearestCity.data.feltReportAnalysis) {
+        if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
           this.$http.get(apiSettings.endpointEventMeasuredIntensityAggregations(this.event.id))
             .then(response => {
               this.addData(event.data.data, response.data.feltReports)
@@ -86,7 +87,7 @@
         })
 
         if (feltReports.length) {
-          addFeltReports(this.map.object, feltReports, this.map.object._controls)
+          this.markersGroup = addFeltReports(this.map.object, feltReports, this.map.object._controls)
         }
 
         // Show map legend just once.
@@ -150,6 +151,11 @@
       removeData: function() {
         // Remove PGA polylines.
         this.map.pga.forEach(layer => { this.map.object.removeLayer(layer) })
+
+        if (this.markersGroup) {
+          this.map.object.removeLayer(this.markersGroup)
+          this.map.object._controls.removeLayer(this.markersGroup)
+        }
       },
       resetMap: function() {
         removeEpicenter(this.map.object, this.map.epicenter)

@@ -63,7 +63,7 @@
         this.items[8].value = data.processingMethod.long
         this.items[9].value = agency(data.agency)
         this.items[10].value = data.nearestCity.data.feltReportAnalysis ?
-          data.nearestCity.data.feltReportAnalysis.data.felt_reports_count : 0
+          data.nearestCity.data.feltReportAnalysis.data.felt_reports_count : data.felt_reports_count
       }
     },
     watch: {

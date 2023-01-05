@@ -95,6 +95,9 @@ export function createMap(mapID, coordinates, {
 
   const map = window.L.map(mapID, options)
 
+  // remove Ukrainian flag
+  map.attributionControl.setPrefix('')
+
   if(gestureHandling)
   {
     map.on('fullscreenchange', () => {
@@ -316,6 +319,8 @@ export function addFeltReports(map, items, controls, show = true)
   if (controls) {
     controls.addOverlay(markersGroup, 'Отлики')
   }
+
+  return markersGroup
 }
 
 // Show Buildings
