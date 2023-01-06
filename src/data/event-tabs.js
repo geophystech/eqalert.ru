@@ -20,7 +20,7 @@ export default {
     href: '#'
   },
   ldos: {
-    label: 'Магистральные объекты',
+    label: 'Линейные объекты',
     available: false,
     href: '#'
   }
