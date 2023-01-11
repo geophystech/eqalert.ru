@@ -302,7 +302,7 @@ export function addFeltReports(map, items, controls, show = true)
 
   items.forEach((feltReportObject) => {
     const center = feltReportObject.location
-    const cii = feltReportObject.cii
+    const cii = feltReportObject.cii - 0.2
     const marker = window.L
       .marker([center.lat, center.lon], {icon})
       .addTo(map)
@@ -317,7 +317,7 @@ export function addFeltReports(map, items, controls, show = true)
   }
 
   if (controls) {
-    controls.addOverlay(markersGroup, 'Отлики')
+    controls.addOverlay(markersGroup, 'Отклики')
   }
 
   return markersGroup

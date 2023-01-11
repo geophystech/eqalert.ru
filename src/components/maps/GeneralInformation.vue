@@ -59,7 +59,7 @@
           const nextRange = data[parseInt(key) + 1]
           let intensityLegendValue = this.pgaToIntensity(data[key].range)
           let pgaLegendValue = data[key].range
-          let intensityPopupRange = intensityLegendValue
+          let intensityPopupRange = intensityLegendValue - 0.2
           let pgaPopupRange = data[key].range
 
           if (nextRange) {
