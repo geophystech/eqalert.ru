@@ -120,11 +120,11 @@ export function createMap(mapID, coordinates, {
     ymapsOpts: { suppressMapOpenBlock: true }
   })
 
-  map.addLayer(osm)
+  map.addLayer(yndx)
 
   const controls = new window.L.Control.Layers({
-    'Open Street Map': osm,
-    'Yandex Map': yndx
+    'Yandex Map': yndx,
+    'Open Street Map': osm
   })
 
   map._zoomHome = zoomHome()
