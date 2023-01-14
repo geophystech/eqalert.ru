@@ -105,7 +105,7 @@
           const convertedValue = convertMsk64(settlement.msk64_value)
           const region = settlement.settlement.data.translation.data.region
           const title = settlement.settlement.data.translation.data.title
-          const cii = settlement.feltReportAnalysis ? settlement.feltReportAnalysis.data.cii : ''
+          const cii = settlement.feltReportAnalysis ? settlement.feltReportAnalysis.data.cii - 0.2 : ''
           const item = {
             description: this.description(convertedValue),
             distance: round(settlement.ep_dis, 2),
