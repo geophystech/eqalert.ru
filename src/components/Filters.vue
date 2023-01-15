@@ -181,6 +181,16 @@
         </b-col>
       </b-row>
       <b-row class="filter-row" no-gutters>
+        <b-col>
+          <b-row no-gutters class="filter-inputs">
+            <b-col>
+              <b-form-checkbox name="has_felt_reports" @change.native="onFiltersChange($event)"
+                               v-model="filters.has_felt_reports" :disabled="disabled">С откликами от населения</b-form-checkbox>
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
+      <b-row class="filter-row" no-gutters>
         <b-col class="text-center">
           <b-button type="reset" size="sm" :disabled="disabled">Сбросить фильтры</b-button>
         </b-col>
@@ -229,6 +239,7 @@
           depth_max: null,
           depth_min: null,
           has_mt: null,
+          has_felt_reports: null,
           mag_max: null,
           mag_min: null,
           lat_max: null,
@@ -405,7 +416,7 @@
 
         Object.keys(this.$route.query).forEach(key => {
           if (key in this.filters) {
-            if (key === 'has_mt' || key === 'datetime_min' || key === 'datetime_max') {
+            if (['has_mt', 'datetime_min', 'datetime_max', 'has_felt_reports'].includes(key)) {
               this.filters[key] = this.prepareValue(key, this.$route.query[key])
             } else {
               this.filters[key] = parseFloat(this.$route.query[key] || 0)
@@ -425,7 +436,7 @@
             return null
 
           case 1:
-            return key === 'has_mt' ? true : value
+            return ['has_mt', 'has_felt_reports'].includes(key) ? true : value
 
           case '1':
             return true
