@@ -18,6 +18,18 @@
         <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>
+
+    <b-row class="load-more-events" no-gutters>
+      <b-col class="text-center">
+        <Spinner v-if="spinners.loadMoreEvents" />
+        <a
+          href="#"
+          v-if="nextPage && !spinners.loadMoreEvents"
+          id="loadMoreEventsBtn"
+          @click.prevent="() => { page++ }"
+        >Показать больше событий</a>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -32,6 +44,8 @@
     props: ['event'],
     data() {
       return {
+        nextPage: null,
+        page: 1,
         cursor: '',
         items: [],
         fields: [
@@ -41,7 +55,10 @@
           { key: 'msk64', label: 'MSK64', 'class': 'text-center' },
           { key: 'cii', label: 'ШСИ-2017', 'class': 'text-center' },
           { key: 'description', label: ' ', 'class': 'text-center' }
-        ]
+        ],
+        spinners: {
+          loadMoreEvents: false
+        }
       }
     },
     created() {
@@ -94,18 +111,22 @@
         this.$http.get(apiSettings.endpointEventSettlements(this.event.id), {
           params: {
             cursor: this.cursor,
-            limit: 10
+            limit: 10,
+            page: this.page
           }
         }).then(response => {
+          this.spinners.loadMoreEvents = false
+          this.nextPage = !!response.data.meta.pagination.links.next
           this.setData(response.data.data)
         })
       },
       setData(data) {
         data.forEach(settlement => {
+          // @todo >> add number of felt reports >> in API response
           const convertedValue = convertMsk64(settlement.msk64_value)
           const region = settlement.settlement.data.translation.data.region
           const title = settlement.settlement.data.translation.data.title
-          const cii = settlement.feltReportAnalysis ? settlement.feltReportAnalysis.data.cii - 0.2 : ''
+          const cii = settlement.feltReportAnalysis ? (settlement.feltReportAnalysis.data.cii - 0.2).toFixed(2) : ''
           const item = {
             description: this.description(convertedValue),
             distance: round(settlement.ep_dis, 2),
@@ -122,6 +143,11 @@
       event: function() {
         this.clearData()
         this.fetchData()
+      },
+      page: function(val, oldVal) {
+        if (oldVal >= 1 && val !== oldVal) {
+          this.fetchData()
+        }
       }
     }
   }
