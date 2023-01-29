@@ -1,0 +1,8 @@
+@mixin calc($prop, $val, $default)
+{
+  #{$prop}: $default;
+
+  @each $prefix in -webkit-, -moz-, -o-, '' {
+    #{$prop}: #{$prefix}calc(#{$val});
+  }
+}
