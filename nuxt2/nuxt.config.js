@@ -6,7 +6,7 @@ export default {
   head: {
     title: 'nuxt2',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ru'
     },
     meta: [
       { charset: 'utf-8' },
@@ -37,7 +37,7 @@ export default {
 
   moment: {
     defaultLocale: 'ru',
-    locales: ['ru', 'en']
+    locales: ['ru']
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
