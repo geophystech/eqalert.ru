@@ -6,7 +6,7 @@
   import {
     addEpicenter, buildingColor, createMap, id, removeEpicenter, setView, createMapBuildingMarker,
     createMapMarkerClusterGroup, mapCentering
-  } from '@/map_functions'
+  } from '@/config/map_functions'
 
   export default {
     props: ['event', 'tab'],

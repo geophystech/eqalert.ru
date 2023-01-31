@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {createMap} from '@/map_functions'
+import {createMap} from '@/config/map_functions'
 
 export default {
   name: 'LocationQuestions',

@@ -3,7 +3,10 @@
 </template>
 
 <script>
-  import { addEpicenter, createMap, id, removeEpicenter, setView, addFeltReports } from '@/map_functions'
+  import {
+    addEpicenter, createMap, id,
+    removeEpicenter, setView, addFeltReports
+  } from '@/config/map_functions'
   import { numberDeclension } from '@/helpers/number'
   import apiSettings from '@/settings/api'
 

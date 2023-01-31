@@ -25,7 +25,9 @@
 
       <b-col v-if="!error" class="all-events">
 
-        <BasicSpinner :size="32" v-if="spinners.loadMoreEvents" />
+        <ClientOnly>
+          <Spinner :size="32" v-if="spinners.loadMoreEvents" />
+        </ClientOnly>
 
         <b-row no-gutters class="events-head text-center">
           <b-col v-if="!$root.onMobile" md="1">#</b-col>
@@ -68,7 +70,9 @@
 
         <b-row class="load-more-events" no-gutters>
           <b-col class="text-center">
-            <BasicSpinner v-if="spinners.loadMoreEvents" />
+            <ClientOnly>
+              <Spinner v-if="spinners.loadMoreEvents" />
+            </ClientOnly>
             <a href="#" v-if="apiParams.cursor && !spinners.loadMoreEvents" id="loadMoreEventsBtn"
                @click.prevent="loadMoreEvents">Показать больше событий</a>
             <span v-if="!apiParams.cursor">Загружены все события</span>
@@ -86,6 +90,9 @@ import eventsSettings from '@/settings/events'
 
 export default {
   props: {
+  },
+  components: {
+    Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
   },
   data() {
     return {

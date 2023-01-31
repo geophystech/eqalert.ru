@@ -1,6 +1,8 @@
 <template>
   <div class="event-tab">
-    <BasicSpinner v-if="spinner" />
+    <ClientOnly>
+      <Spinner v-if="spinner" />
+    </ClientOnly>
 
     <b-table hover outlined responsive :fields="fields" :items="items" v-if="!spinner">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
@@ -17,6 +19,9 @@ import apiSettings from '@/settings/api'
 
 export default {
   props: ['event'],
+  components: {
+    Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
+  },
   data() {
     return {
       items: [

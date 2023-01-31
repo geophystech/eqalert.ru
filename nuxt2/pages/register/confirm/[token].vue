@@ -61,7 +61,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~scss/_variables';
+@import 'assets/scss/_variables';
 
 .breadcrumbs {
   .breadcrumb {

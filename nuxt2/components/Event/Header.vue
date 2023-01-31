@@ -9,7 +9,9 @@
     <b-col cols="12" md="8">
       <b-row>
         <b-col class="text-center">
-          <Spinner v-if="!event.magnitude && !!event.id" />
+          <ClientOnly>
+            <Spinner v-if="!event.magnitude && !!event.id" />
+          </ClientOnly>
 
           <h5 v-if="event.magnitude">
             <span class="magnitude-type" v-for="item in event.magnitudeType" :key="item[0]">
@@ -59,7 +61,7 @@
 
     <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
       <b-button-group>
-        <ExportDropDown v-if="event.id" @export2xls="export2xls" />
+        <BasicExportDropDown v-if="event.id" @export2xls="export2xls" />
       </b-button-group>
     </b-col>
 
@@ -68,15 +70,15 @@
 </template>
 
 <script>
-  import Spinner from '@/components/Spinner'
-  import ExportDropDown from '@/components/ExportDropDown'
   import { agency, agencyDescription } from '@/helpers/event'
   import apiSettings from '@/settings/api'
 
   export default {
-    components: { Spinner, ExportDropDown },
     props: {
       event: {}
+    },
+    components: {
+      Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
     },
     data() {
       return {

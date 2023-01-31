@@ -1,6 +1,8 @@
 <template>
   <div class="event-tab">
-    <BasicSpinner v-if="!image" />
+    <ClientOnly>
+      <Spinner v-if="!image" />
+    </ClientOnly>
 
     <b-row v-if="image">
       <b-col class="text-center">
@@ -73,6 +75,9 @@
 
   export default {
     props: ['event'],
+    components: {
+      Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
+    },
     data() {
       return {
         fields: {

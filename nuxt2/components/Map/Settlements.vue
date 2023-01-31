@@ -6,7 +6,7 @@
   import {
     addEpicenter, createMap, id, convertMsk64,
     msk64Color, removeEpicenter, setView, addFeltReports
-  } from '@/map_functions'
+  } from '@/config/map_functions'
   import apiSettings from '@/settings/api'
 
   export default {

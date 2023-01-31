@@ -3,7 +3,10 @@
 </template>
 
 <script>
-  import {addEpicenter, createMap, id, mapLDOsLayerCreate, removeEpicenter, setView} from '@/map_functions'
+  import {
+    addEpicenter, createMap, id,
+    mapLDOsLayerCreate, removeEpicenter, setView
+  } from '@/config/map_functions'
 
   export default {
     props: ['event', 'tab'],

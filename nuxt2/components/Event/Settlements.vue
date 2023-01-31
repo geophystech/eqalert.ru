@@ -1,6 +1,8 @@
 <template>
   <div class="event-tab">
-    <BasicSpinner v-if="!items.length" />
+    <ClientOnly>
+      <Spinner v-if="!items.length" />
+    </ClientOnly>
 
     <b-table
       hover
@@ -21,7 +23,9 @@
 
     <b-row class="load-more-events" no-gutters>
       <b-col class="text-center">
-        <BasicSpinner v-if="spinners.loadMoreEvents" />
+        <ClientOnly>
+          <Spinner v-if="spinners.loadMoreEvents" />
+        </ClientOnly>
         <a
           href="#"
           v-if="nextPage && !spinners.loadMoreEvents"
@@ -34,12 +38,15 @@
 </template>
 
 <script>
-  import { convertMsk64 } from '@/map_functions'
+  import { convertMsk64 } from '@/config/map_functions'
   import { round } from '@/helpers/math'
   import apiSettings from '@/settings/api'
 
   export default {
     props: ['event'],
+    components: {
+      Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
+    },
     data() {
       return {
         nextPage: null,

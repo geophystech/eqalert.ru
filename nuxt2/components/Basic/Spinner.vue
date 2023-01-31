@@ -1,9 +1,8 @@
 
 <script>
-import VueSpinner from 'vue-simple-spinner'
 export default {
   name: 'Spinner',
-  extends: VueSpinner,
+  extends: (process.client) ? import('vue-simple-spinner') : null,
   props: {
     'line-fg-color': {
       type: String,

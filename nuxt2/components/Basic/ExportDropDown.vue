@@ -3,7 +3,10 @@
               text="Скачать" size="sm" variant="secondary" @hide="onHide"
               ref="dropdown" right>
     <b-dropdown-item @click="xlsItemClick">
-      Скачать в формате XLS <BasicSpinner size="21" v-if="xlsSpinnerShow" class="dropdown-item-spiner" />
+      Скачать в формате XLS
+      <ClientOnly>
+        <Spinner size="21" v-if="xlsSpinnerShow" class="dropdown-item-spiner" />
+      </ClientOnly>
     </b-dropdown-item>
   </b-dropdown>
 </template>
@@ -11,6 +14,9 @@
 <script>
   export default {
     name: 'ExportDropDown',
+    components: {
+      Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
+    },
     props: {},
     data() {
       return {

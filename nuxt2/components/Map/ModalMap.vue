@@ -16,7 +16,9 @@
 </template>
 
 <script>
-  import {createMap, createMapEventMarker, mapCentering} from '@/map_functions'
+  import {
+    createMap, createMapEventMarker, mapCentering
+  } from '@/config/map_functions'
   import apiSettings from '@/settings/api'
 
   export default {

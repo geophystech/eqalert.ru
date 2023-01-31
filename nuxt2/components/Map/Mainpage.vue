@@ -3,7 +3,9 @@
 </template>
 
 <script>
-  import {createMap, createMapEventMarker} from '@/map_functions'
+  import {
+    createMap, createMapEventMarker
+  } from '@/config/map_functions'
   import {EVENTS_RANGES} from '@/helpers/event'
   import apiSettings from '@/settings/api'
 
