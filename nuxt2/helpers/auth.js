@@ -2,7 +2,6 @@ import {
   axiosSetAuthorizationHeaders
 } from '@/helpers/axios'
 import apiSettings from '@/settings/api'
-import store from '@/store'
 
 /**
  *
@@ -61,8 +60,8 @@ export async function refreshToken(refreshToken)
             // Время жизни токена в секундах
             // authResp.data.expires_in
 
-            store.dispatch('authenticateUser', {
-              rememberMe: store.getters.user.rememberMe,
+            this.$store.dispatch('authenticateUser', {
+              rememberMe: this.$store.getters.user.rememberMe,
               refreshToken: authResp.data.refresh_token,
               accessToken: authResp.data.access_token,
               permissions: permissions
@@ -118,7 +117,7 @@ export async function auth({username, password, rememberMe = false})
             // Время жизни токена в секундах
             // authResp.data.expires_in
 
-            store.dispatch('authenticateUser', {
+            this.$store.dispatch('authenticateUser', {
               refreshToken: authResp.data.refresh_token,
               accessToken: authResp.data.access_token,
               permissions: permissions,

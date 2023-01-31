@@ -1,4 +1,3 @@
-import store from '@/store'
 import apiSettings from '@/settings/api'
 import stationsSettings from '@/settings/stations'
 
@@ -8,8 +7,9 @@ import {numberDeclension} from '@/helpers/number'
 
 function listenerStoreCurrentTileProvider(map) {
   // Store current tile provider to the storage
+  const _this = this;
   map.on('baselayerchange', tileProvider => {
-    store.dispatch('setCurrentTileProvider', tileProvider.name)
+    _this.$store.dispatch('setCurrentTileProvider', tileProvider.name)
   })
 }
 
@@ -170,7 +170,7 @@ export function createMap(mapID, coordinates, {
 // Plate Boundaries
 function addPlateBoundaries(controls)
 {
-  const boundaries = new window.L.GeoJSON(store.getters.plateBoundaries, {
+  const boundaries = new window.L.GeoJSON(this.$store.getters.plateBoundaries, {
 
     style: {
       color: '#8A0707',

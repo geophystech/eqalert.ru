@@ -64,18 +64,19 @@
 </template>
 
 <script>
-import Buildings from '@/components/event/Buildings'
-import EventHeader from '@/components/event/Header'
-import GeneralInformation from '@/components/event/GeneralInformation'
-import LastEvents from '@/components/event/LastEvents'
-import LDOs from '@/components/event/LDOs'
-import MapBuildings from '@/components/maps/Buildings'
-import MapGeneralInformation from '@/components/maps/GeneralInformation'
-import MapLDOs from '@/components/maps/LDOs'
-import MapSettlements from '@/components/maps/Settlements'
-import MomentTensor from '@/components/event/MomentTensor'
-import Settlements from '@/components/event/Settlements'
-import Tabs from '@/components/event/Tabs'
+import Buildings from '@/components/Event/Buildings.vue'
+import EventHeader from '@/components/Event/Header.vue'
+import GeneralInformation from '@/components/Event/GeneralInformation.vue'
+import LastEvents from '@/components/Event/LastEvents.vue'
+import LDOs from '@/components/Event/LDOs.vue'
+import MapBuildings from '@/components/Map/Buildings.vue'
+import MapGeneralInformation from '@/components/Map/GeneralInformation.vue'
+import MapLDOs from '@/components/Map/LDOs.vue'
+import MapSettlements from '@/components/Map/Settlements.vue'
+import MomentTensor from '@/components/Event/MomentTensor.vue'
+import Settlements from '@/components/Event/Settlements.vue'
+import Tabs from '@/components/Event/Tabs.vue'
+
 import appSettings from '@/settings/app'
 import apiSettings from '@/settings/api'
 

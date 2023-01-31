@@ -1,6 +1,6 @@
 <template>
   <div class="analytics">
-    <CountersHeader
+    <BasicCountersHeader
       :filtersData="filtersParams"
       :count="eventsCount"
       :startDate="startDate"
@@ -29,24 +29,7 @@
 </template>
 
 <script>
-import CountersHeader from '@/components/CountersHeader'
-import Filters from '@/components/Filters'
-import ChartByDatetime from '@/components/charts/ChartByDatetime'
-import ChartByDensityCounts from '@/components/charts/ChartByDensityCounts'
-import ChartByMagnitudeCumulative from '@/components/charts/ChartByMagnitudeCumulative'
-import ChartByRMSAllocation from '@/components/charts/ChartByRMSAllocation'
-import ChartByStationCounts from '@/components/charts/ChartByStationCounts'
-
 export default {
-  components: {
-    ChartByDatetime,
-    ChartByDensityCounts,
-    ChartByMagnitudeCumulative,
-    ChartByRMSAllocation,
-    ChartByStationCounts,
-    CountersHeader,
-    Filters
-  },
   data() {
     return {
       disabledFilters: false,

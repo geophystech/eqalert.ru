@@ -1,5 +1,3 @@
-import store from '@/store'
-
 import {refreshToken} from '@/helpers/auth'
 import apiSettings from '@/settings/api'
 
@@ -7,7 +5,7 @@ export function axiosRemoveAuthorizationHeaders() {
   delete this.$axios.defaults.headers.common['Authorization']
 }
 
-export function axiosSetAuthorizationHeaders(accessToken = store.getters.user.accessToken)
+export function axiosSetAuthorizationHeaders(accessToken = this.$store.getters.user.accessToken)
 {
   if (accessToken) {
     this.$axios.defaults.headers.common['Authorization'] = `${apiSettings.authorizationType} ${accessToken}`
@@ -32,7 +30,7 @@ export function axiosAddRefreshTokenInterceptor()
 
         this.$axios.interceptors.response.eject(axiosResponseInterceptor)
 
-        return refreshToken(store.getters.user.refreshToken)
+        return refreshToken(this.$store.getters.user.refreshToken)
 
           .then(response => {
 
@@ -46,7 +44,7 @@ export function axiosAddRefreshTokenInterceptor()
 
           .catch(error => {
 
-            store.dispatch('unauthenticateUser')
+            this.$store.dispatch('unauthenticateUser')
             axiosAddRefreshTokenInterceptor()
             return Promise.reject(error)
 
