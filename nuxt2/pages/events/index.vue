@@ -150,7 +150,7 @@ export default {
         this.spinners.loadMoreEvents = true
         this.disabledFilters = true
 
-        this.$http.get(apiSettings.endpointEvents, { params: params })
+        this.$axios.get(apiSettings.endpointEvents, { params: params })
           .then(response => {
 
             this.spinners.loadMoreEvents = false

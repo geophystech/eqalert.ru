@@ -7,7 +7,7 @@
       <b-row v-for="event in events" :key="event.id" no-gutters align-v="center"
              :class="{ event: true, 'highlight-event': highlightEvent(event.id) }">
 
-        <router-link :to="routerLink(event.id)" class="d-flex align-items-center" :key="event.id">
+        <NuxtLink :to="routerLink(event.id)" class="d-flex align-items-center" :key="event.id">
 
           <b-col cols="2" class="magnitude text-center">
             <strong>{{ event.locValues.data.mag.toFixed(1) }}</strong>
@@ -21,7 +21,7 @@
             </div>
           </b-col>
 
-        </router-link>
+        </NuxtLink>
 
       </b-row>
 
@@ -52,7 +52,7 @@
         }
 
         return {
-          name: 'Event',
+          name: 'events-[id]',
           params: {
             id: eventId
           },
@@ -61,7 +61,7 @@
       },
       fetchEvents: function()
       {
-        this.$http.get(apiSettings.endpointEvents, {
+        this.$axios.get(apiSettings.endpointEvents, {
           params: {
             datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
             has_training: !this.event || !this.event.has_training ? 0 : 1,
@@ -101,7 +101,7 @@
 
 <style lang="scss" scoped>
 
-  @import '~scss/_variables';
+  @import 'assets/scss/_variables';
 
   $border: 1px $color-gray-light solid;
 

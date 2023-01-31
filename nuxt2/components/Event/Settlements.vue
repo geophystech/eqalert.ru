@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab">
-    <Spinner v-if="!items.length" />
+    <BasicSpinner v-if="!items.length" />
 
     <b-table
       hover
@@ -15,13 +15,13 @@
         <b-badge :variant="data.value">{{ data.value }}</b-badge>
       </template>
       <template slot="description" slot-scope="data">
-        <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
+        <img src="/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>
 
     <b-row class="load-more-events" no-gutters>
       <b-col class="text-center">
-        <Spinner v-if="spinners.loadMoreEvents" />
+        <BasicSpinner v-if="spinners.loadMoreEvents" />
         <a
           href="#"
           v-if="nextPage && !spinners.loadMoreEvents"
@@ -34,13 +34,11 @@
 </template>
 
 <script>
-  import Spinner from '@/components/Spinner'
   import { convertMsk64 } from '@/map_functions'
   import { round } from '@/helpers/math'
   import apiSettings from '@/settings/api'
 
   export default {
-    components: { Spinner },
     props: ['event'],
     data() {
       return {
@@ -108,7 +106,7 @@
         this.items = []
       },
       fetchData: function() {
-        this.$http.get(apiSettings.endpointEventSettlements(this.event.id), {
+        this.$axios.get(apiSettings.endpointEventSettlements(this.event.id), {
           params: {
             cursor: this.cursor,
             limit: 10,
@@ -154,7 +152,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/event';
+  @import 'assets/scss/event';
 
   $border-radius: 4px;
   $color-gray-light-4: #ebeaea;

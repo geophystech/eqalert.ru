@@ -104,7 +104,7 @@ export default {
 
       this.disableFields()
 
-      this.$http.post(apiSettings.endpointUserResetPassword, payload)
+      this.$axios.post(apiSettings.endpointUserResetPassword, payload)
         .then(response => {
           this.resetComplete = true
         })

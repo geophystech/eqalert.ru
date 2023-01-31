@@ -66,7 +66,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function(params = {}) {
-      this.$http.get(apiSettings.endpointAnalyticsEarthquakeCounts, { params: params })
+      this.$axios.get(apiSettings.endpointAnalyticsEarthquakeCounts, { params: params })
         .then(response => {
 
           const respData = response.data.data

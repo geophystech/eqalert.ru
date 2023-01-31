@@ -1,11 +1,11 @@
 <template>
   <div class="event-tab">
-    <Spinner v-if="spinner" />
+    <BasicSpinner v-if="spinner" />
 
     <b-table hover outlined responsive :fields="fields" :items="items" v-if="!spinner">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
       <template slot="description" slot-scope="data">
-        <img src="../../assets/img/question-circle.png" alt="Описание"
+        <img src="/img/question-circle.png" alt="Описание"
              v-if="!!data.value" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>
@@ -13,11 +13,9 @@
 </template>
 
 <script>
-import Spinner from '@/components/Spinner'
 import apiSettings from '@/settings/api'
 
 export default {
-  components: { Spinner },
   props: ['event'],
   data() {
     return {
@@ -62,7 +60,7 @@ export default {
   },
   methods: {
     fetchData: function() {
-      this.$http.get(apiSettings.endpointEventLDOs(this.event.id), {
+      this.$axios.get(apiSettings.endpointEventLDOs(this.event.id), {
         params: {
           customer_ids: [1], // Change id(s) when the user management is implemented.
           show_all_parts: 1
@@ -105,5 +103,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/event';
+  @import 'assets/scss/event';
 </style>

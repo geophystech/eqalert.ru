@@ -10,10 +10,10 @@
       <b-col cols="8" offset="2" align="center">
         <h5 :class="status">{{ message }}</h5>
 
-        <router-link :to="{ name: 'UserAuthentication' }" key="authentication" v-if="status === 'success'">
+        <NuxtLink to="/sign-in" key="authentication" v-if="status === 'success'">
           Войти
           <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
-        </router-link>
+        </NuxtLink>
       </b-col>
     </b-row>
   </div>
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     confirmEmail: function(token) {
-      this.$http.post(apiSettings.endpointEmailConfirmation(token))
+      this.$axios.post(apiSettings.endpointEmailConfirmation(token))
         .then(response => {
           this.status = 'success'
           this.message = response.data.data

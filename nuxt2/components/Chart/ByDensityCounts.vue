@@ -72,7 +72,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function(params = {}) {
-      this.$http.get(apiSettings.endpointAnalyticsDensityCounts, { params: params })
+      this.$axios.get(apiSettings.endpointAnalyticsDensityCounts, { params: params })
         .then(response => {
 
           const respData = response.data.data

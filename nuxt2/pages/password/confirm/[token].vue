@@ -10,10 +10,10 @@
       <b-col class="complete" cols="8" offset="2" align="center">
         <h5>Пароль изменён</h5>
 
-        <router-link :to="{ name: 'UserAuthentication' }" key="authentication">
+        <NuxtLink to="/sign-in" key="authentication">
           Войти
           <i class="fa fa-long-arrow-right align-middle" aria-hidden="true" />
-        </router-link>
+        </NuxtLink>
       </b-col>
     </b-row>
 
@@ -114,7 +114,7 @@ export default {
 
       this.disableFields()
 
-      this.$http.post(apiSettings.endpointUserResetPasswordComplete, payload)
+      this.$axios.post(apiSettings.endpointUserResetPasswordComplete, payload)
         .then(response => {
           this.passwordChanged = true
         })

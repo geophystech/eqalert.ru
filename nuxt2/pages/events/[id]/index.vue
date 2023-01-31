@@ -118,7 +118,7 @@ export default {
     {
       this.errorResponse = null
 
-      let eventRequest = this.$http.get(apiSettings.endpointEvent(eventId), {
+      let eventRequest = this.$axios.get(apiSettings.endpointEvent(eventId), {
         params: { include: 'nearestCity' }
       })
 
@@ -139,9 +139,9 @@ export default {
       }
       else
       {
-        let buildingsRequest = this.$http.get(apiSettings.endpointEventBuildings(eventId))
+        let buildingsRequest = this.$axios.get(apiSettings.endpointEventBuildings(eventId))
 
-        let ldosRequest = this.$http.get(apiSettings.endpointEventLDOs(eventId), {
+        let ldosRequest = this.$axios.get(apiSettings.endpointEventLDOs(eventId), {
           params: { customer_ids: [1], show_all_parts: 1 }
         })
 

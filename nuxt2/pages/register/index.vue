@@ -16,11 +16,11 @@
 
     <b-row v-if="!registrationComplete">
       <b-col class="info" cols="12">
-        <h5>Зарегистрированные пользователи <router-link :to="{ name: 'Mainpage' }">eqalert.ru</router-link> получают следующие возможности:</h5>
+        <h5>Зарегистрированные пользователи <NuxtLink to="/">eqalert.ru</NuxtLink> получают следующие возможности:</h5>
         <ul>
           <li>Осуществлять поиск по архиву сейсмических событий без ограничений по магнитуде и времени.</li>
           <li>Использовать инструменты экспорта данных в EXCEL.</li>
-          <li>Использовать расширенные средства <router-link :to="{ name: 'Analytics' }">статистического анализа и визуализации</router-link>.</li>
+          <li>Использовать расширенные средства <NuxtLink to="/analytics">статистического анализа и визуализации</NuxtLink>.</li>
           <li>Подписываться на уведомления и сводки по email.</li>
           <li>Участвовать в тестировании новых функций.</li>
         </ul>
@@ -192,7 +192,7 @@ export default {
       this.changeFieldsDisabledState(true)
     },
     getPurposesList: function() {
-      this.$http.get(apiSettings.endpointPurposesList)
+      this.$axios.get(apiSettings.endpointPurposesList)
         .then(response => {
           for (let [id, title] of Object.entries(response.data.data)) {
             this.form.purposes.values.push({ value: id, text: title })
@@ -218,7 +218,7 @@ export default {
 
       this.disableFields()
 
-      this.$http.post(apiSettings.endpointUserRegistration, payload)
+      this.$axios.post(apiSettings.endpointUserRegistration, payload)
         .then(response => {
           this.registrationComplete = true
         })

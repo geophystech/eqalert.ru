@@ -116,7 +116,7 @@ export default {
     submit: function() {
       const formData = this.requestData
       if (this.validate(formData)) {
-        this.$http.post(apiSettings.endpointFeltReport, formData)
+        this.$axios.post(apiSettings.endpointFeltReport, formData)
           .then(response => {
             this.submitted = response.data.message
           }).catch(() => {
@@ -160,7 +160,7 @@ export default {
         }
       }
       this.errorResponse = null
-      this.$http.get(apiSettings.endpointFeltReportPoll)
+      this.$axios.get(apiSettings.endpointFeltReportPoll)
         .then(response => {
           this.setData(response.data.data)
         }).catch(() => {

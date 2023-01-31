@@ -1,12 +1,11 @@
 <template>
-
   <b-row class="infobar" align-v="center" no-gutters>
 
     <b-col class="text-center text-md-left" v-if="!$root.onMobile">
-      <router-link to="/sign-in" v-if="!$store.getters.user.authenticated">
+      <NuxtLink to="/sign-in" v-if="!$store.getters.user.authenticated">
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
         <span>Снять ограничения данных</span>
-      </router-link>
+      </NuxtLink>
     </b-col>
 
     <b-col cols="4" class="text-center">
@@ -25,8 +24,8 @@
           id="showTraining"
           size="sm">{{ showTrainingEvents ? 'Скрыть' : 'Показать' }} учебные</b-btn>
 
-        <ModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
-        <ExportDropDown v-if="count > 0" @export2xls="export2xls" />
+        <MapModalMap v-if="showModalMap && count > 0" :filtersData="filtersData" />
+        <BasicExportDropDown v-if="count > 0" @export2xls="export2xls" />
       </div>
     </b-col>
 
@@ -35,8 +34,6 @@
 </template>
 
 <script>
-  import ModalMap from '@/components/maps/ModalMap'
-  import ExportDropDown from '@/components/ExportDropDown'
   import apiSettings from '@/settings/api'
 
   export default {
@@ -54,8 +51,6 @@
         showTrainingEvents: false
       }
     },
-    components: { ModalMap, ExportDropDown },
-
     methods: {
       export2xls: function(request) {
         let params = Object.assign({}, this.filtersData)

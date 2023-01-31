@@ -29,7 +29,7 @@
 
 <script>
   import { round } from '@/helpers/math'
-  import eventTabs from '@/data/event-tabs'
+  import eventTabs from '@/config/event-tabs'
 
   export default {
     props: ['event'],

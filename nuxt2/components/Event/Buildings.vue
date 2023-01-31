@@ -3,7 +3,7 @@
     <b-table hover outlined responsive :fields="fields" :items="items">
       <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
       <template slot="description" slot-scope="data">
-        <img v-if="data.value" src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
+        <img v-if="data.value" src="/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>
   </div>
@@ -11,6 +11,7 @@
 
 <script>
   import apiSettings from '@/settings/api'
+
   export default {
     props: ['event'],
     data() {
@@ -99,7 +100,7 @@
     },
     methods: {
       fetchData: function() {
-        this.$http.get(apiSettings.endpointEventBuildings(this.event.id))
+        this.$axios.get(apiSettings.endpointEventBuildings(this.event.id))
           .then(response => {
             this.$root.$emit('onMapBuildingsDataFetched', response.data.data)
             this.setData(response.data.data)
@@ -134,5 +135,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/event';
+  @import 'assets/scss/event';
 </style>

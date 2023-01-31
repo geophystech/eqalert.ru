@@ -49,9 +49,9 @@
 
       <b-row class="event-local-dt-row mt-2">
         <b-col class="text-center font-weight-bolder">
-          <router-link
-            :to="{ name: 'FeltReportPoll', query: { reportId: event.id } }"
-          >Ощутили это землетрясение?</router-link>
+          <NuxtLink
+            :to="{ name: 'felt-report', query: { reportId: event.id } }"
+          >Ощутили это землетрясение?</NuxtLink>
         </b-col>
       </b-row>
 
@@ -174,7 +174,7 @@
 </style>
 
 <style lang="scss" scoped>
-  @import '~scss/_variables';
+  @import 'assets/scss/_variables';
 
   .event-header {
     margin-bottom: 3%;

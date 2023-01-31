@@ -1,6 +1,6 @@
 <template>
   <div class="event-tab">
-    <Spinner v-if="!image" />
+    <BasicSpinner v-if="!image" />
 
     <b-row v-if="image">
       <b-col class="text-center">
@@ -27,7 +27,7 @@
           :items="items.momentTensor">
           <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
           <template slot="description" slot-scope="data">
-            <img src="../../assets/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
+            <img src="/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
           </template>
         </b-table>
       </b-col>
@@ -69,11 +69,9 @@
 </template>
 
 <script>
-  import Spinner from '@/components/Spinner'
   import apiSettings from '@/settings/api'
 
   export default {
-    components: { Spinner },
     props: ['event'],
     data() {
       return {
@@ -138,7 +136,7 @@
     },
     methods: {
       fetchData: function() {
-        this.$http.get(apiSettings.endpointMomentTensor(this.event.id))
+        this.$axios.get(apiSettings.endpointMomentTensor(this.event.id))
           .then(response => {
             this.setData(response.data.data[0])
           })
@@ -190,7 +188,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~scss/event';
+  @import 'assets/scss/event';
 
   .event-tab {
     .edit-moment-tensor {
