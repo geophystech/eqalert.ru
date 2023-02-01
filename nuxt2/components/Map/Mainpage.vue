@@ -31,13 +31,14 @@
       createMap: function()
       {
         this.map.object = createMap(this.map.id, this.map.coordinates, {
-          addToggleShowBuildings: this.$store.getters.user.authenticated,
-          addToggleShowLDOs: this.$store.getters.user.authenticated,
+          addToggleShowBuildings: this.$store.getters["user/user"].authenticated,
+          addToggleShowLDOs: this.$store.getters["user/user"].authenticated,
           gestureHandling: this.gestureHandling,
           onlyStations: this.onlyStations,
           markerPopupHeader: '',
           showStations: false,
-          zoom: 4
+          zoom: 4,
+          store: this.$store,
         })
 
         if(!this.onlyStations) {

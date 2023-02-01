@@ -1,5 +1,5 @@
 <template>
-  <header id="header" class="AppHeader">
+  <header id="header">
     <b-row class="align-items-center">
       <b-col cols="6" md="2" order="1" order-md="1">
           <span id="logo">

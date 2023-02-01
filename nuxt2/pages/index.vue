@@ -1,10 +1,20 @@
 <template>
   <div class="mainpage">
     <EventLastEvents v-if="$root.onMobile" />
-    <MapMainpage v-if="!$root.onMobile" />
+    <ClientOnly>
+      <MainpageMap v-if="!$root.onMobile" />
+    </ClientOnly>
     <BasicPartners />
   </div>
 </template>
+
+<script>
+export default {
+  components: {
+    MainpageMap: () => process.client ? import('@/components/Map/Mainpage.vue') : null,
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 @import 'assets/scss/_variables';

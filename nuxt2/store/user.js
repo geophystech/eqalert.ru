@@ -7,7 +7,7 @@ export const state = () => ({
   authDate: null
 });
 
-export const getters = () => ({
+export const getters = {
   user: state => {
     return {
       authenticated: state.authenticated,
@@ -18,9 +18,9 @@ export const getters = () => ({
       authDate: state.authDate
     }
   }
-});
+};
 
-export const mutations = () => ({
+export const mutations = {
   authenticateUser(state, values)
   {
     state.authDate = this.$moment(values.authDate || state.authDate || [])
@@ -40,9 +40,9 @@ export const mutations = () => ({
     state.authDate = null
     state.permissions = {}
   }
-});
+};
 
-export const actions = () => ({
+export const actions = {
   authenticateUser({ commit, state }, values) {
     commit('authenticateUser', {
       refreshToken: values.refreshToken,
@@ -57,4 +57,4 @@ export const actions = () => ({
   signOut({ commit, state }) {
     commit('unauthenticateUser')
   }
-});
+};

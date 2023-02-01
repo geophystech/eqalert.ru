@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'nuxt2',
+    title: '%s | EQA!ert',
     htmlAttrs: {
       lang: 'ru'
     },
@@ -12,10 +12,23 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+      { name: 'format-detection', content: 'telephone=no' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Eqalert.ru – информационная служба реального времени о землетрясениях, сейсмических воздействиях и опасности'
+      },
+      {
+        hid: 'keywords',
+        name: 'keywords',
+        content: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, ' +
+          'сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, ' +
+          'магнитуда, механизм очага, тензор момента, архив'
+      }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/img/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Open+Sans:300&amp;subset=cyrillic' },
     ]
   },
 
@@ -26,6 +39,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/persistedstate.js', mode: 'client' },
+    { src: '~/plugins/leaflet.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

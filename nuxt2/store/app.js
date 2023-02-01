@@ -15,7 +15,7 @@ export const state = () => ({
   }
 });
 
-export const getters = () => ({
+export const getters = {
   currentTileProvider: state => {
     return state.currentTileProvider
   },
@@ -23,9 +23,9 @@ export const getters = () => ({
   plateBoundaries: state => { return state.plateBoundaries },
   srssDBVersion: state => { return state.srssCoreConfig.dbVersion },
   totalEventsCount: state => { return state.counters.totalEvents }
-});
+};
 
-export const mutations = () => ({
+export const mutations = {
   setCurrentTileProvider(state, { key, value }) {
     state[key] = value
   },
@@ -44,9 +44,9 @@ export const mutations = () => ({
   setSrssDBVersion(state, { key, value }) {
     state.srssCoreConfig[key] = value
   }
-});
+};
 
-export const actions = () => ({
+export const actions = {
   setCurrentTileProvider({ commit, state }, provider) {
     if (provider !== state.currentTileProvider) {
       commit('setCurrentTileProvider', { key: 'currentTileProvider', value: provider })
@@ -66,4 +66,4 @@ export const actions = () => ({
   setSrssDBVersion({ commit }, value) {
     commit('setSrssDBVersion', { key: 'dbVersion', value: value })
   }
-});
+};

@@ -5,11 +5,10 @@ import {agency, eventColor, eventRadius} from '@/helpers/event'
 import {colorDarken, colorHexToRGB, colorLighten} from '@/helpers/color'
 import {numberDeclension} from '@/helpers/number'
 
-function listenerStoreCurrentTileProvider(map) {
+function listenerStoreCurrentTileProvider(map, store) {
   // Store current tile provider to the storage
-  const _this = this;
   map.on('baselayerchange', tileProvider => {
-    _this.$store.dispatch('setCurrentTileProvider', tileProvider.name)
+    store.dispatch('setCurrentTileProvider', tileProvider.name)
   })
 }
 
@@ -142,7 +141,7 @@ export function createMap(mapID, coordinates, {
   else
   {
     // Plate Boundaries
-    addPlateBoundaries(controls)
+    addPlateBoundaries(controls, store)
 
     // Show seismic stations
     addStations(map, controls, showStations)
@@ -168,9 +167,10 @@ export function createMap(mapID, coordinates, {
 }
 
 // Plate Boundaries
-function addPlateBoundaries(controls)
+function addPlateBoundaries(controls, store)
 {
-  const boundaries = new window.L.GeoJSON(this.$store.getters.plateBoundaries, {
+  console.debug(store);
+  const boundaries = new window.L.GeoJSON(store.getters["app/plateBoundaries"], {
 
     style: {
       color: '#8A0707',
