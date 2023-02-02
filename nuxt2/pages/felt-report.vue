@@ -37,10 +37,12 @@
         </b-modal>
       </div>
       <hr/>
-      <FeltReportLocationQuestions
-        :key="`lq-${refreshKey}`"
-        @update="updateLocation"
-      />
+      <ClientOnly>
+        <LocationQuestions
+          :key="`lq-${refreshKey}`"
+          @update="updateLocation"
+        />
+      </ClientOnly>
       <FeltReportDateTimeQuestions
         v-if="requestData.eventData.type === 'eventDateTime'"
         :key="`dt-${refreshKey}`"
@@ -59,10 +61,13 @@
 
 <script>
 import apiSettings from '@/settings/api'
-import timezone from '~/mixins/timezone'
+import timezone from '@/mixins/timezone'
 
 export default {
   mixins: [timezone],
+  components: {
+    LocationQuestions: () => process.client ? import('@/components/FeltReport/LocationQuestions.vue') : null,
+  },
   data() {
     return {
       location: {

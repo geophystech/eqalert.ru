@@ -23,8 +23,12 @@ export default {
       const timestamp = Date.now()
       const point = [this.location.lat, this.location.lon]
       const time = ts.getFuzzyLocalTimeFromPoint(timestamp, point)
-      this.timezoneOffset = time._d.getTimezoneOffset()
-      this.timezone = this.formatTimezone(this.timezoneOffset)
+      if (time) {
+        this.timezoneOffset = time._d.getTimezoneOffset()
+        this.timezone = this.formatTimezone(this.timezoneOffset)
+      } else {
+        console.error(`Your current timezone is not supported due to some reasons`)
+      }
     }
   }
 }

@@ -169,7 +169,6 @@ export function createMap(mapID, coordinates, {
 // Plate Boundaries
 function addPlateBoundaries(controls, store)
 {
-  console.debug(store);
   const boundaries = new window.L.GeoJSON(store.getters["app/plateBoundaries"], {
 
     style: {
@@ -210,7 +209,7 @@ function addStations(map, controls, show = true)
 
   return new Promise((resolve, reject) => {
 
-    this.$axios.get(apiSettings.endpointStations)
+    axios.get(apiSettings.endpointStations)
       .then(response => {
         let markers = []
 
@@ -295,7 +294,7 @@ export function addFeltReports(map, items, controls, show = true)
   let markers = []
 
   const icon = window.L.icon({
-    iconUrl: '/static/img/green-square.png',
+    iconUrl: '/img/green-square.png',
     iconSize: [15, 15]
   })
 
@@ -339,7 +338,7 @@ function showBuildings(map, controls)
     {
       return new Promise((resolve, reject) => {
 
-        this.$axios.get(url, httpConf).then(response => {
+        axios.get(url, httpConf).then(response => {
 
           buildings = buildings.concat(response.data.data)
           const pagination = response.data.meta.pagination
@@ -393,10 +392,10 @@ function showLDOs(map, controls)
   {
     map.spin(true)
 
-    const LDOs = (await this.$axios.get(apiSettings.endpointLDOs)).data.data
+    const LDOs = (await axios.get(apiSettings.endpointLDOs)).data.data
 
     LDOs.forEach(async ldo => {
-      ldo.parts = (await this.$axios.get(apiSettings.endpointLdoParts(ldo.id))).data
+      ldo.parts = (await axios.get(apiSettings.endpointLdoParts(ldo.id))).data
       mapLDOsLayerCreate(ldo, layerGroup)
     })
 

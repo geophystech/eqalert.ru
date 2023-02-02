@@ -39,7 +39,7 @@ export default {
     },
     addMarker: function(event) {
       const icon = window.L.icon({
-        iconUrl: '/static/img/marker.png',
+        iconUrl: '/img/marker.png',
         iconSize: [30, 30]
       })
       const location = {
@@ -54,7 +54,14 @@ export default {
       window.navigator.geolocation.getCurrentPosition(
         function(position) {
           vm.map.coordinates = [position.coords.latitude, position.coords.longitude]
-          vm.map.object = createMap(vm.map.id, vm.map.coordinates, {zoom: 10})
+          vm.map.object = createMap(
+            vm.map.id,
+            vm.map.coordinates,
+            {
+              zoom: 10,
+              store: vm.$store
+            }
+          )
           vm.addMarker({latlng: {lat: position.coords.latitude, lng: position.coords.longitude}})
           vm.watchMapClick()
         },

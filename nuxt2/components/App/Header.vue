@@ -13,7 +13,7 @@
         <NuxtLink to="/events">
             <span id="events-count">
               <span class="exclamation-mark">!</span>
-              <span>{{ $store.getters.totalEventsCount }}</span>
+              <span>{{ $store.getters['app/totalEventsCount'] }}</span>
             </span>
         </NuxtLink>
       </b-col>
@@ -29,7 +29,7 @@
       </b-col>
 
       <b-col class="sign-block text-right" cols="4" md="2" order="5" order-md="5">
-          <span class="sign-in-out" v-if="$store.getters.user?.authenticated">
+          <span class="sign-in-out" v-if="$store.getters['user/user'].authenticated">
             <a href="#" v-on:click.prevent="signOut" key="sign-out" data-btn="sign-out">
               Выйти <i class="fa fa-times" />
             </a>

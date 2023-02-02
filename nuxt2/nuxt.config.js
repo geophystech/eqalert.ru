@@ -40,6 +40,11 @@ export default {
   plugins: [
     { src: '~/plugins/persistedstate.js', mode: 'client' },
     { src: '~/plugins/leaflet.js', mode: 'client' },
+    { src: '~/plugins/analytics.js', mode: 'client' },
+    { src: '~/plugins/idle.js', mode: 'client' },
+    { src: '~/plugins/toasted.js', mode: 'client' },
+    { src: '~/plugins/yandex-metrika.js', mode: 'client' },
+    { src: '~/plugins/beautify.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
