@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     getContent() {
-      this.$axios.get(`/static/markdown/${this.page}.md`).then(response => {
+      this.$axios.get(`/markdown/${this.page}.md`).then(response => {
         this.content = response.data
       })
     },

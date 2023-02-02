@@ -132,7 +132,7 @@
 
         breadcrumbs.push({
           text: 'Главная',
-          href: this.$router.resolve({ name: 'Mainpage' }).href
+          href: "/"
         })
 
         if (!this.$root.onMobile)
@@ -141,7 +141,7 @@
 
           breadcrumbs.push({
             text: 'События',
-            href: this.$router.resolve({ name: 'Events', query }).href
+            href: this.$router.resolve({ name: 'events', query }).href
           })
         }
 

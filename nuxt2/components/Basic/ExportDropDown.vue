@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown v-if="$store.getters.user.authenticated && 'xls_access' in $store.getters.user.permissions"
+  <b-dropdown v-if="$store.getters['user/user'].authenticated && 'xls_access' in $store.getters['user/user'].permissions"
               text="Скачать" size="sm" variant="secondary" @hide="onHide"
               ref="dropdown" right>
     <b-dropdown-item @click="xlsItemClick">

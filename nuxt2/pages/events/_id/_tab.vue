@@ -123,7 +123,7 @@ export default {
         params: { include: 'nearestCity' }
       })
 
-      if(!this.$store.getters.user.authenticated)
+      if(!this.$store.getters['user/user'].authenticated)
       {
         eventRequest.then(response => {
 

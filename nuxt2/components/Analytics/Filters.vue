@@ -263,7 +263,7 @@
       this.minDatetimeConfig.maxDate = this.$moment.utc().format('YYYY-MM-DD 00:00:00')
       this.maxDatetimeConfig.maxDate = this.$moment.utc().format('YYYY-MM-DD 00:00:00')
 
-      if (!this.$store.getters.user.authenticated) {
+      if (!this.$store.getters['user/user'].authenticated) {
         this.minDatetimeConfig.minDate = this.minDatetimeConfig.defaultDate
         this.maxDatetimeConfig.minDate = this.minDatetimeConfig.defaultDate
       }

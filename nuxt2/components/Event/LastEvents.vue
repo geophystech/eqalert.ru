@@ -52,7 +52,7 @@
         }
 
         return {
-          name: 'events-[id]',
+          name: 'events-_id',
           params: {
             id: eventId
           },

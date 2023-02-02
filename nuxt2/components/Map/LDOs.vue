@@ -33,7 +33,7 @@
         this.putEpicenter()
       },
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.coordinates)
+        this.map.object = createMap(this.map.id, this.coordinates, { store: this.$store })
       },
       initialize: function() {
         this.map.id = id(this.event.id, this.tab)

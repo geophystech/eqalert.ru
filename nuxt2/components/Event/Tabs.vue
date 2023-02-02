@@ -39,7 +39,7 @@
         tabs: eventTabs
       }
     },
-    metaInfo() {
+    head() {
       return {
         title: this.getTitle()
       }
@@ -77,7 +77,7 @@
 
         if (tab) params.tab = tab
 
-        return this.$router.resolve({ name: 'Event', params, query }).href
+        return this.$router.resolve({ name: 'events-id-tab', params, query }).href
       },
       getTitle: function() {
         const id = this.event.id
@@ -135,6 +135,7 @@
     },
     created() {
       this.setData()
+      console.debug(this.tabs);
     },
     watch: {
       event: function() {

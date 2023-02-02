@@ -1,7 +1,7 @@
 <template>
   <div class="events">
     <BasicCountersHeader v-if="!error"
-                    :trainingEventsBtnShow="$store.getters.user.authenticated"
+                    :trainingEventsBtnShow="$store.getters['user/user'].authenticated"
                     :trainingEventsBtnDisabled="spinners.loadMoreEvents"
                     @toggleTrainingEvents="toggleTrainingEvents"
                     :filtersData="filtersData"
@@ -38,7 +38,7 @@
         </b-row>
 
         <NuxtLink v-for="(event, index) in events" :key="event.id"
-                     :to="{ name: 'events-[id]', params: { id: event.id }, query: {backUrlQuery: backUrlQuery} }">
+                     :to="{ name: 'events-id-tab', params: { id: event.id }, query: {backUrlQuery: backUrlQuery} }">
 
           <b-row no-gutters class="events-row text-center">
 

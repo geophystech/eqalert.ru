@@ -42,7 +42,8 @@
         let map = this.map.object = createMap(this.map.id, this.map.coordinates, {
           gestureHandling: false,
           showStations: false,
-          zoom: 4
+          zoom: 4,
+          store: this.$store,
         })
 
         let $moment = this.$moment

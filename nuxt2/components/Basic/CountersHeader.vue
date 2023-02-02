@@ -2,7 +2,7 @@
   <b-row class="infobar" align-v="center" no-gutters>
 
     <b-col class="text-center text-md-left" v-if="!$root.onMobile">
-      <NuxtLink to="/sign-in" v-if="!$store.getters.user.authenticated">
+      <NuxtLink to="/sign-in" v-if="!$store.getters['user/user'].authenticated">
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
         <span>Снять ограничения данных</span>
       </NuxtLink>
@@ -13,7 +13,7 @@
       <span v-if="count && !$root.onMobile">({{ startDate }} — {{ endDate }})</span>
     </b-col>
 
-    <b-col :cols="$store.getters.user.authenticated && trainingEventsBtnShow ? 5 : 4">
+    <b-col :cols="$store.getters['user/user'].authenticated && trainingEventsBtnShow ? 5 : 4">
       <div class="pull-right">
 
         <b-btn
@@ -59,7 +59,7 @@
         }))
       },
       hasUserAccessTraningEvents: function() {
-        let permissions = this.$store.getters.user.permissions
+        let permissions = this.$store.getters['user/user'].permissions
         return 'reports:view_training' in permissions || 'reports' in permissions
       }
     },

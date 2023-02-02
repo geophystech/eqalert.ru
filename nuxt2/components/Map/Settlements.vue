@@ -60,7 +60,7 @@
         this.putEpicenter()
       },
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.coordinates)
+        this.map.object = createMap(this.map.id, this.coordinates, { store: this.$store })
       },
       fetchData: async function() {
         let feltReportsData = []
