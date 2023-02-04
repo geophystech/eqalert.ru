@@ -16,7 +16,7 @@
           <b-col cols="10" class="event-data">
             <div class="settlement">{{ event.settlement }}</div>
             <div class="datetime">
-              {{ event.locValues.data.event_datetime | moment('LL в HH:mm:ss UTC') }},
+              {{ $moment(event.locValues.data.event_datetime).format('LL в HH:mm:ss UTC') }},
               глубина {{ event.locValues.data.depth }} км
             </div>
           </b-col>
@@ -52,7 +52,7 @@
         }
 
         return {
-          name: 'events-_id',
+          name: 'events-id-tab',
           params: {
             id: eventId
           },

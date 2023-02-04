@@ -1,28 +1,31 @@
 <template>
   <b-tabs>
-    <template slot="tabs">
+    <template #tabs-end>
       <b-nav-item
         v-if="!$root.onMobile && isTabAvailable(tab)"
         v-for="tab in tabs"
         :href="tab.href"
         :key="tab.href"
         :active="isTabActive(tab)"
-        @click="onTabSwitch(tab)">
+        @click="onTabSwitch(tab)"
+      >
         {{ tab.label }}
       </b-nav-item>
 
-    <b-form-select
-      v-if="$root.onMobile"
-      v-model="activeTab"
-      @change="onTabSwitch">
+      <b-form-select
+        v-if="$root.onMobile"
+        v-model="activeTab"
+        @change="onTabSwitch"
+      >
         <option
           v-if="isTabAvailable(tab)"
           v-for="tab in tabs"
           :value="tab.href"
-          :key="tab.href">
-            {{ tab.label }}
+          :key="tab.href"
+        >
+          {{ tab.label }}
         </option>
-    </b-form-select>
+      </b-form-select>
     </template>
   </b-tabs>
 </template>
@@ -135,7 +138,6 @@
     },
     created() {
       this.setData()
-      console.debug(this.tabs);
     },
     watch: {
       event: function() {

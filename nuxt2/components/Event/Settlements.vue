@@ -11,12 +11,12 @@
       :fields="fields"
       :items="items"
       v-if="items.length">
-      <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
-      <template slot="distance" slot-scope="data">{{ data.value }} км</template>
-      <template slot="msk64" slot-scope="data">
+      <template #cell(index)="data">{{ data.index + 1 }}</template>
+      <template #cell(distance)="data">{{ data.value }} км</template>
+      <template #cell(msk64)="data">
         <b-badge :variant="data.value">{{ data.value }}</b-badge>
       </template>
-      <template slot="description" slot-scope="data">
+      <template #cell(description)="data">
         <img src="/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>

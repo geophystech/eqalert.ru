@@ -18,7 +18,7 @@
               <span>{{ item[0] }}</span><small>{{ item[1] }}</small>
             </span>
             ( <span class="magnitude">{{ event.magnitude }}</span> )
-            {{ event.datetime | moment(datetimeFormatUTC) }}
+            {{ $moment(event.datetime).format(datetimeFormatUTC) }}
             <span class="processing-method">
               {{ event.processingMethod.short }}
             </span>

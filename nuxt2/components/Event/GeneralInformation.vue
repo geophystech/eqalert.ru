@@ -6,8 +6,8 @@
       responsive
       :fields="fields"
       :items="items">
-      <template slot="index" slot-scope="data">{{ data.index + 1 }}</template>
-      <template slot="description" slot-scope="data">
+      <template #cell(index)="data">{{ data.index + 1 }}</template>
+      <template #cell(description)="data">
         <img src="/img/question-circle.png" alt="Описание" v-b-popover.hover.right="data.value" />
       </template>
     </b-table>
