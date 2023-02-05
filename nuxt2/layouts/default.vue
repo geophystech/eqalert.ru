@@ -12,22 +12,21 @@
 <script>
 import appSettings from '@/settings/app'
 import apiSettings from '@/settings/api'
+import {translateScale} from '@/helpers/scale'
 
 export default {
-  metaInfo: {
-    htmlAttrs: {
-      lang: 'ru'
-    },
-    meta: [
-      { charset: 'utf-8' },
-      { content: 'width=device-width, initial-scale=1', name: 'viewport' },
-      { description: 'Eqalert.ru – информационная служба реального времени о землетрясениях, сейсмических воздействиях и опасности' },
-      { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, ' +
-          'сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, ' +
-          'магнитуда, механизм очага, тензор момента, архив' }
-    ],
-    title: 'Главная',
-    titleTemplate: '%s | EQA!ert'
+  head() {
+    return {
+      meta: [
+        { charset: 'utf-8' },
+        { content: 'width=device-width, initial-scale=1', name: 'viewport' },
+        { description: 'Eqalert.ru – информационная служба реального времени о землетрясениях, сейсмических воздействиях и опасности' },
+        { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, ' +
+            'сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, ' +
+            'магнитуда, механизм очага, тензор момента, архив' }
+      ],
+      title: 'EQA!ert'
+    }
   },
   data() {
     return {
@@ -36,13 +35,15 @@ export default {
     }
   },
   created() {
+    if (process.client) {
+      translateScale();
+    }
     this.fetchSystemInfo()
   },
   methods: {
     fetchPlateBoundaries: function() {
       // /static/ ----> /
       this.$axios.get('/json/plate_boundaries.geo.json').then(response => {
-        console.debug(response.data);
         this.$store.dispatch('app/setPlateBoundaries', response.data)
       })
     },

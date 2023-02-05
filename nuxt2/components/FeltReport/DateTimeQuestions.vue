@@ -2,7 +2,7 @@
   <div class="date-time-questions__container">
     <div>
       <b-form-group>
-        <Datetime
+        <v-datetime
           v-model="datetime"
           type="datetime"
           input-id="datetime-input"
@@ -18,7 +18,7 @@
           <template slot="button-confirm">
             Далее
           </template>
-        </Datetime>
+        </v-datetime>
       </b-form-group>
     </div>
     <hr/>
@@ -26,11 +26,9 @@
 </template>
 
 <script>
-import { Datetime } from 'vue-datetime'
 
 export default {
   name: 'DateTimeQuestions',
-  components: { Datetime },
   props: {
     localisation: {
       type: String,

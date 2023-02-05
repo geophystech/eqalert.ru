@@ -44,23 +44,24 @@
           showStations: false,
           zoom: 4,
           store: this.$store,
+          axios: this.$axios,
         })
 
-        let $moment = this.$moment
+        const moment = this.$moment
 
         map.scrollWheelZoom.enable()
         map.spin(true)
 
         this.getAllEvents((events) => {
 
-          let startDate = $moment(events[events.length - 1].event_datetime).format('L')
-          let endDate = $moment(events[0].event_datetime).format('L')
+          let startDate = moment(events[events.length - 1].event_datetime).format('L')
+          let endDate = moment(events[0].event_datetime).format('L')
           let coordinates = []
 
           this.title = `Загружено ${events.length} событий (${startDate} — ${endDate})`
 
           events.forEach(event => {
-            createMapEventMarker(event, $moment).addTo(map)
+            createMapEventMarker(event, moment).addTo(map)
             coordinates.push([event.lat, event.lon])
           })
 

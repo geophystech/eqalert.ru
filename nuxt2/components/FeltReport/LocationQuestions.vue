@@ -59,7 +59,8 @@ export default {
             vm.map.coordinates,
             {
               zoom: 10,
-              store: vm.$store
+              store: vm.$store,
+              axios: vm.$axios,
             }
           )
           vm.addMarker({latlng: {lat: position.coords.latitude, lng: position.coords.longitude}})
@@ -72,7 +73,14 @@ export default {
             3: 'TIMEOUT'
           }
           console.error(error.message, {code: errorTypes[error.code]})
-          vm.map.object = createMap(vm.map.id, vm.map.coordinates, {zoom: 10})
+          vm.map.object = createMap(
+            vm.map.id,
+            vm.map.coordinates,
+            {
+              zoom: 10,
+              store: vm.$store,
+              axios: vm.$axios,
+            })
           vm.watchMapClick()
         }
       )

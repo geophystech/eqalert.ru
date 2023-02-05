@@ -109,7 +109,12 @@
         this.putEpicenter()
       },
       createMap: function() {
-        this.map.object = createMap(this.map.id, this.coordinates, { store: this.$store })
+        this.map.object = createMap(
+          this.map.id,
+          this.coordinates, {
+            store: this.$store,
+            axios: this.$axios,
+          })
       },
       fetchData: function()
       {

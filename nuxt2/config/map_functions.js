@@ -8,7 +8,7 @@ import {numberDeclension} from '@/helpers/number'
 function listenerStoreCurrentTileProvider(map, store) {
   // Store current tile provider to the storage
   map.on('baselayerchange', tileProvider => {
-    store.dispatch('setCurrentTileProvider', tileProvider.name)
+    store.dispatch('app/setCurrentTileProvider', tileProvider.name)
   })
 }
 
@@ -78,8 +78,8 @@ export function createMap(mapID, coordinates, {
   showStations = true,
   onlyStations = false,
   zoom = 8,
-  store
-
+  store,
+  axios
 } = {}) {
 
   const options = {
@@ -134,7 +134,7 @@ export function createMap(mapID, coordinates, {
 
   if(onlyStations)
   {
-    addStations(map).then(coordinates => {
+    addStations(axios, map).then(coordinates => {
       mapCentering(map, coordinates)
     })
   }
@@ -144,16 +144,16 @@ export function createMap(mapID, coordinates, {
     addPlateBoundaries(controls, store)
 
     // Show seismic stations
-    addStations(map, controls, showStations)
+    addStations(axios, map, controls, showStations)
 
     // Show Buildings
     if(addToggleShowBuildings) {
-      showBuildings(map, controls)
+      showBuildings(axios, map, controls)
     }
 
     // Show LDOs (long distance objects)
     if(addToggleShowLDOs) {
-      showLDOs(map, controls)
+      showLDOs(axios, map, controls)
     }
   }
 
@@ -203,7 +203,7 @@ function addPlateBoundaries(controls, store)
 }
 
 // Show seismic stations
-function addStations(map, controls, show = true)
+function addStations(axios, map, controls, show = true)
 {
   const allCoords = []
 
@@ -327,7 +327,7 @@ export function addFeltReports(map, items, controls, show = true)
 }
 
 // Show Buildings
-function showBuildings(map, controls)
+function showBuildings(axios, map, controls)
 {
   let _getBuildings = (function() {
 
@@ -386,7 +386,7 @@ function showBuildings(map, controls)
 }
 
 // Show LDOs (long distance objects)
-function showLDOs(map, controls)
+function showLDOs(axios, map, controls)
 {
   async function getLDOs(layerGroup)
   {

@@ -39,6 +39,7 @@
           showStations: false,
           zoom: 4,
           store: this.$store,
+          axios: this.$axios,
         })
 
         if(!this.onlyStations) {

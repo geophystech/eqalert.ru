@@ -45,6 +45,7 @@ export default {
     { src: '~/plugins/toasted.js', mode: 'client' },
     { src: '~/plugins/yandex-metrika.js', mode: 'client' },
     { src: '~/plugins/beautify.js', mode: 'client' },
+    { src: '~/plugins/datetime.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -73,7 +74,7 @@ export default {
   },
 
   dayjs: {
-    locales: ['en', 'ru'],
+    locales: ['ru'],
     defaultLocale: 'ru',
     plugins: ['utc', 'timezone']
   },
