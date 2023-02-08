@@ -1,9 +1,9 @@
 <template>
   <div class="social-media-links SocialMediaLinks">
     <a class="tg-bot-link" :href="tgBotUrl"><i class="fa fa-telegram" aria-hidden="true" /></a>
-    <a v-if="!$root.onMobile" :href="googlePlay.url" :title="googlePlay.title"
+    <a v-if="!$onMobile" :href="googlePlay.url" :title="googlePlay.title"
        class="download-icon google-play-icon" target="_blank">{{ googlePlay.title }}</a>
-    <a v-if="!$root.onMobile" :href="appStore.url" :title="appStore.title"
+    <a v-if="!$onMobile" :href="appStore.url" :title="appStore.title"
        class="download-icon app-store-icon" target="_blank">{{ appStore.title }}</a>
   </div>
 </template>

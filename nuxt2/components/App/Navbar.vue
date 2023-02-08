@@ -6,8 +6,8 @@
       </b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav @click.capture="clicked" justified>
-          <b-nav-item v-if="!$root.onMobile" to="/events" key="events">Все землетрясения</b-nav-item>
-          <b-nav-item v-if="!$root.onMobile" to="/analytics" key="analytics">Аналитика</b-nav-item>
+          <b-nav-item v-if="!$onMobile" to="/events" key="events">Все землетрясения</b-nav-item>
+          <b-nav-item v-if="!$onMobile" to="/analytics" key="analytics">Аналитика</b-nav-item>
           <li><a href="https://geophystech.ru/services/seismic-monitoring-system/" class="nav-item nav-link">Мониторинг объектов</a></li>
           <b-nav-item to="/about" key="static-page-about">О проекте</b-nav-item>
         </b-navbar-nav>

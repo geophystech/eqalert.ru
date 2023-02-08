@@ -5,7 +5,7 @@
         <template slot="label">
           Укажите свое местоположение <span style="color: red" title="Обязательный вопрос">*</span>
         </template>
-        <div :id="map.id"></div>
+        <div :id="map.id" class="map"></div>
       </b-form-group>
     </div>
     <hr/>

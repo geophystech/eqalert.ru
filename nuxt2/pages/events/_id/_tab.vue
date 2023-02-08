@@ -42,7 +42,7 @@
             :is="components.maps[components.currentTab]"
             :tab="components.currentTab"
             :event="event"
-            v-if="event.id && !$root.onMobile" />
+            v-if="event.id && !$onMobile" />
         </keep-alive>
 
         <keep-alive>
@@ -53,7 +53,7 @@
 
       <b-col cols="4">
         <keep-alive>
-          <component :is="components.lastEvents" :event="event" v-if="!$root.onMobile && !!event.id" />
+          <component :is="components.lastEvents" :event="event" v-if="!$onMobile && !!event.id" />
         </keep-alive>
       </b-col>
 
@@ -96,7 +96,7 @@ export default {
       defaultViewport: '',
       components: {
         currentTab: this.$router.currentRoute.params.tab || (
-          this.$root.onMobile ? 'settlements' : 'generalInformation'
+          this.$onMobile ? 'settlements' : 'generalInformation'
         ),
         lastEvents: LastEvents,
         header: EventHeader,
@@ -215,7 +215,7 @@ export default {
     // Do nothing on switching tabs.
     if (to.params.id !== this.$router.currentRoute.params.id) {
       this.fetchData(to.params.id)
-      this.components.currentTab = this.$root.onMobile ? 'settlements' : 'generalInformation'
+      this.components.currentTab = this.$onMobile ? 'settlements' : 'generalInformation'
     }
 
     next()

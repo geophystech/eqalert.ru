@@ -16,7 +16,7 @@
         :disabled="disabledFilters"
         @filtersUpdated="getEvents"
         key="mainpage-filters"
-        v-if="!$root.onMobile"
+        v-if="!$onMobile"
         ref="filters"/>
 
       <b-col v-if="error">
@@ -30,11 +30,11 @@
         </ClientOnly>
 
         <b-row no-gutters class="events-head text-center">
-          <b-col v-if="!$root.onMobile" md="1">#</b-col>
+          <b-col v-if="!$onMobile" md="1">#</b-col>
           <b-col cols="3" md="1">Магнитуда</b-col>
           <b-col cols="3" md="2">Глубина</b-col>
           <b-col cols="6" md="4" class="datetime">Дата и время</b-col>
-          <b-col cols="12" md="4" v-if="!$root.onMobile">Ближайший населённый пункт</b-col>
+          <b-col cols="12" md="4" v-if="!$onMobile">Ближайший населённый пункт</b-col>
         </b-row>
 
         <NuxtLink v-for="(event, index) in events" :key="event.id"
@@ -42,7 +42,7 @@
 
           <b-row no-gutters class="events-row text-center">
 
-            <b-col v-if="!$root.onMobile" md="1">{{ index + 1 }}</b-col>
+            <b-col v-if="!$onMobile" md="1">{{ index + 1 }}</b-col>
 
             <b-col cols="3" md="1">
               <span :class="{ 'highlight-event': event.locValues.data.mag > highlightEventTreshold }">
@@ -56,7 +56,7 @@
               {{ event.locValues.data.event_datetime | moment(datetimeFormat) }}
             </b-col>
 
-            <b-col cols="12" md="4" class="settlement" v-if="!$root.onMobile">
+            <b-col cols="12" md="4" class="settlement" v-if="!$onMobile">
               <span v-if="!event.nearestCity">Нет данных</span>
               <span v-else>
                 {{ round(event.nearestCity.data.ep_dis, 1) }} км
@@ -119,7 +119,7 @@ export default {
     },
     datetimeFormat: function()
     {
-      if (this.$root.onMobile) {
+      if (this.$onMobile) {
         return 'L в HH:mm:ss'
       }
 

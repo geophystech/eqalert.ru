@@ -59,7 +59,7 @@
 
     </b-col>
 
-    <b-col cols="1" md="1" class="text-right" v-if="!$root.onMobile">
+    <b-col cols="1" md="1" class="text-right" v-if="!$onMobile">
       <b-button-group>
         <BasicExportDropDown v-if="event.id" @export2xls="export2xls" />
       </b-button-group>
@@ -121,10 +121,10 @@
     },
     computed: {
       datetimeFormatUTC: function() {
-        return this.$root.onMobile ? 'L в HH:mm:ss UTC' : 'LL в HH:mm:ss UTC'
+        return this.$onMobile ? 'L в HH:mm:ss UTC' : 'LL в HH:mm:ss UTC'
       },
       datetimeFormatLocal: function() {
-        return this.$root.onMobile ? 'L в HH:mm:ss (UTCZ)' : 'LL в HH:mm:ss (UTCZ)'
+        return this.$onMobile ? 'L в HH:mm:ss (UTCZ)' : 'LL в HH:mm:ss (UTCZ)'
       },
       breadcrumbs: function()
       {
@@ -135,7 +135,7 @@
           href: "/"
         })
 
-        if (!this.$root.onMobile)
+        if (!this.$onMobile)
         {
           let query = JSON.parse(this.$route.query.backUrlQuery || '{}')
 

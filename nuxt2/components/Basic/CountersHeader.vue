@@ -1,7 +1,7 @@
 <template>
   <b-row class="infobar" align-v="center" no-gutters>
 
-    <b-col class="text-center text-md-left" v-if="!$root.onMobile">
+    <b-col class="text-center text-md-left" v-if="!$onMobile">
       <NuxtLink to="/sign-in" v-if="!$store.getters['user/user'].authenticated">
         <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
         <span>Снять ограничения данных</span>
@@ -10,7 +10,7 @@
 
     <b-col cols="4" class="text-center">
       Загружено <span class="count">{{ count }}</span> событий
-      <span v-if="count && !$root.onMobile">({{ startDate }} — {{ endDate }})</span>
+      <span v-if="count && !$onMobile">({{ startDate }} — {{ endDate }})</span>
     </b-col>
 
     <b-col :cols="$store.getters['user/user'].authenticated && trainingEventsBtnShow ? 5 : 4">

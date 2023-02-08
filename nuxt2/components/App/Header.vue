@@ -9,7 +9,7 @@
           </span>
       </b-col>
 
-      <b-col cols="6" md="1" class="text-right" order-md="2" v-if="!$root.onMobile">
+      <b-col cols="6" md="1" class="text-right" order-md="2" v-if="!$onMobile">
         <NuxtLink to="/events">
             <span id="events-count">
               <span class="exclamation-mark">!</span>

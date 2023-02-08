@@ -35,7 +35,7 @@ export default {
     }
   },
   created() {
-    if (process.client) {
+    if (process.browser) {
       translateScale();
     }
     this.fetchSystemInfo()
@@ -65,11 +65,11 @@ export default {
   },
   computed: {
     is_android: function() {
-      return this.$root.onMobile && /Android/i.test(navigator.userAgent)
+      return this.$onMobile && /Android/i.test(navigator.userAgent)
         && !/Windows\s+Phone/i.test(navigator.userAgent)
     },
     is_iOS: function() {
-      return this.$root.onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
+      return this.$onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
         && !/Windows\s+Phone/i.test(navigator.userAgent)
     }
   }

@@ -2,7 +2,7 @@
   <b-tabs>
     <template #tabs-end>
       <b-nav-item
-        v-if="!$root.onMobile && isTabAvailable(tab)"
+        v-if="!$onMobile && isTabAvailable(tab)"
         v-for="tab in tabs"
         :href="tab.href"
         :key="tab.href"
@@ -13,7 +13,7 @@
       </b-nav-item>
 
       <b-form-select
-        v-if="$root.onMobile"
+        v-if="$onMobile"
         v-model="activeTab"
         @change="onTabSwitch"
       >
@@ -51,7 +51,7 @@
       convertTabName: function(tab)
       {
         if (!tab) {
-          return (!this.$root.onMobile || !this.tabs.settlements.available)
+          return (!this.$onMobile || !this.tabs.settlements.available)
             ? 'generalInformation' : 'settlements'
         }
 
