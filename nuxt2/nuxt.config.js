@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -67,11 +69,58 @@ export default {
     // https://go.nuxtjs.dev/bootstrap
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
-    '@nuxtjs/dayjs'
+    '@nuxtjs/dayjs',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots'
   ],
 
   axios: {
     //
+  },
+
+  sitemap: {
+    cacheTime: 43200, // 12 hrs
+    hostname: 'https://eqalert.ru',
+    gzip: true,
+    exclude: [
+      '/**',
+    ],
+    routes: async () => {
+      const constantRoutes = [
+        '/',
+        '/analytics',
+        '/about',
+        {
+          url: '/events',
+          changefreq: 'daily',
+          priority: 1,
+          lastmod: '2023-02-07T13:30:00.000Z'
+        },
+      ]
+      const template = {
+        changefreq: 'daily',
+        priority: 1,
+        lastmod: '2023-02-07T13:30:00.000Z'
+      }
+      const prefix = `https://rest-api.eqalert.ru`
+      const route = `/api/v1/reports?limit=100&mag_min=3.5`
+      let eventRoutes = []
+      let data = (await axios.get(`${prefix}${route}`)).data
+      let next = data.meta.cursor.next
+      eventRoutes = [...eventRoutes, ...data.data.map(item => ({ url: `/events/${item.id}`, ...template }))]
+      while (next) {
+        data = (await axios.get(`${prefix}${route}&cursor=${next}`)).data
+        next = data.meta.cursor.next
+        eventRoutes = [...eventRoutes, ...data.data.map(item => ({ url: `/events/${item.id}`, ...template }))]
+      }
+      return [...constantRoutes, ...eventRoutes]
+    }
+  },
+
+  robots: {
+    UserAgent: '*',
+    Allow: '/',
+    Sitemap: 'https://eqalert.ru/sitemap.xml'
   },
 
   dayjs: {
@@ -82,5 +131,8 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    babel: {
+      compact: true
+    }
   }
 }

@@ -60,7 +60,7 @@ export async function refreshToken(refreshToken)
             // Время жизни токена в секундах
             // authResp.data.expires_in
 
-            this.$store.dispatch('authenticateUser', {
+            this.$store.dispatch('user/authenticateUser', {
               rememberMe: this.$store.getters.user.rememberMe,
               refreshToken: authResp.data.refresh_token,
               accessToken: authResp.data.access_token,
@@ -117,7 +117,7 @@ export async function auth({username, password, rememberMe = false})
             // Время жизни токена в секундах
             // authResp.data.expires_in
 
-            this.$store.dispatch('authenticateUser', {
+            this.$store.dispatch('user/authenticateUser', {
               refreshToken: authResp.data.refresh_token,
               accessToken: authResp.data.access_token,
               permissions: permissions,
@@ -145,9 +145,9 @@ export async function auth({username, password, rememberMe = false})
 import authSettings from '@/settings/auth'
 import {camelCase} from '@/helpers/string'
 
-export function authTimeoutCheck(store)
+export function authTimeoutCheck(store = null)
 {
-  let user = store.getters.user
+  let user = store ? store.getters["user/user"] : this.$store.getters["user/user"]
 
   if(!user.authenticated) {
     return
@@ -180,7 +180,7 @@ export function authTimeoutCheck(store)
   if ((rememberMe && duration[rememberFn]() >= Number(rememberVal))
     || (!rememberMe && duration[defaultFn]() >= Number(defaultVal))
   ) {
-    store.dispatch('signOut')
+    store.dispatch('user/signOut')
     location.replace('/')
   }
 }

@@ -44,7 +44,7 @@ export function axiosAddRefreshTokenInterceptor()
 
           .catch(error => {
 
-            this.$store.dispatch('unauthenticateUser')
+            this.$store.dispatch('user/unauthenticateUser')
             axiosAddRefreshTokenInterceptor()
             return Promise.reject(error)
 

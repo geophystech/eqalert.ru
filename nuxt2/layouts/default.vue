@@ -12,7 +12,9 @@
 <script>
 import appSettings from '@/settings/app'
 import apiSettings from '@/settings/api'
-import {translateScale} from '@/helpers/scale'
+import { translateScale } from '@/helpers/scale'
+import { axiosAddRefreshTokenInterceptor, axiosSetAuthorizationHeaders } from '@/helpers/axios'
+import { authTimeoutCheck } from '@/helpers/auth'
 
 export default {
   head() {
@@ -36,7 +38,10 @@ export default {
   },
   created() {
     if (process.browser) {
-      translateScale();
+      axiosSetAuthorizationHeaders()
+      axiosAddRefreshTokenInterceptor()
+      authTimeoutCheck()
+      translateScale()
     }
     this.fetchSystemInfo()
   },
