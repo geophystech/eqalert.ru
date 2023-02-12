@@ -31,7 +31,6 @@
 </template>
 
 <script>
-  import { round } from '@/helpers/math'
   import eventTabs from '@/config/event-tabs'
 
   export default {
@@ -40,11 +39,6 @@
       return {
         activeTab: '#' + this.$router.currentRoute.fullPath,
         tabs: eventTabs
-      }
-    },
-    head() {
-      return {
-        title: this.getTitle()
       }
     },
     methods: {
@@ -57,15 +51,6 @@
 
         if (tab === 'moment-tensor') return 'momentTensor'
         return tab
-      },
-      currentTabName: function() {
-        const currentTab = Object.keys(this.tabs).find(key => {
-          return this.isTabActive(this.tabs[key])
-        })
-
-        return currentTab
-          ? this.tabs[currentTab].label
-          : 'Информация о событии'
       },
       isTabActive: function(tab) {
         return this.activeTab === tab.href
@@ -81,20 +66,6 @@
         if (tab) params.tab = tab
 
         return this.$router.resolve({ name: 'events-id-tab', params, query }).href
-      },
-      getTitle: function() {
-        const id = this.event.id
-        const magnitude = `Землетрясение M${this.event.magnitude}`
-        let settlement = ``
-
-        if (this.event.nearestCity) {
-          const distance = round(this.event.nearestCity.data.ep_dis, 2)
-          const title = this.event.nearestCity.data.settlement.data.translation.data.title
-          const region = this.event.nearestCity.data.settlement.data.translation.data.region
-          settlement = `| ${distance} км до ${title}, ${region}`
-        }
-
-        return `${magnitude} ${settlement} | ${this.currentTabName()} | ${id}`
       },
       onTabSwitch: function(object) {
         const href = typeof object === 'string' ? object : object.href

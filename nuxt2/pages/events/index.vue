@@ -87,6 +87,7 @@
 import apiSettings from '@/settings/api'
 import { round } from '@/helpers/math'
 import eventsSettings from '@/settings/events'
+import mixins from '@/mixins/events'
 
 export default {
   props: {
@@ -94,6 +95,7 @@ export default {
   components: {
     Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
   },
+  mixins: [mixins],
   data() {
     return {
       error: '',
@@ -103,7 +105,6 @@ export default {
         cursor: '',
         limit: 10
       },
-      events: [],
       disabledFilters: false,
       highlightEventTreshold: eventsSettings.highlightTreshold,
       spinners: {

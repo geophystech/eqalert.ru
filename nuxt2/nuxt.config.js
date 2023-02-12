@@ -70,8 +70,7 @@ export default {
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
     '@nuxtjs/dayjs',
-    '@nuxtjs/sitemap',
-    '@nuxtjs/robots'
+    '@nuxtjs/sitemap'
   ],
 
   axios: {
@@ -115,12 +114,6 @@ export default {
       }
       return [...constantRoutes, ...eventRoutes]
     }
-  },
-
-  robots: {
-    UserAgent: '*',
-    Allow: '/',
-    Sitemap: 'https://eqalert.ru/sitemap.xml'
   },
 
   dayjs: {
