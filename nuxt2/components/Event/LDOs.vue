@@ -97,9 +97,9 @@ export default {
         this.items[5].value += damagedParts[level]
       })
 
-      this.items[6].value = this.$store.getters.srssDBVersion
+      this.items[6].value = this.$store.getters['app/srssDBVersion']
       this.items[7].value = data.length
-      this.items[8].value = this.$store.getters.msk64ConfigVersion
+      this.items[8].value = this.$store.getters['app/msk64ConfigVersion']
 
       this.spinner = false
     }

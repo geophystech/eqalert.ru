@@ -11,10 +11,10 @@ export default ({ store, isHMR }) => {
 
         switch (mutation.type)
         {
-          case 'setCurrentTileProvider':
-          case 'setPlateBoundaries':
-          case 'unauthenticateUser':
-          case 'authenticateUser':
+          case 'app/setCurrentTileProvider':
+          case 'app/setPlateBoundaries':
+          case 'user/unauthenticateUser':
+          case 'user/authenticateUser':
             return true
 
           default:

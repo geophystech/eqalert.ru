@@ -76,7 +76,7 @@ export default {
       validationError: ''
     }
   },
-  metaInfo: {
+  head: {
     title: 'Сбросить пароль'
   },
   methods: {

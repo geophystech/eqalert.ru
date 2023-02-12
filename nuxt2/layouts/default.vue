@@ -17,19 +17,6 @@ import { axiosAddRefreshTokenInterceptor, axiosSetAuthorizationHeaders } from '@
 import { authTimeoutCheck } from '@/helpers/auth'
 
 export default {
-  head() {
-    return {
-      meta: [
-        { charset: 'utf-8' },
-        { content: 'width=device-width, initial-scale=1', name: 'viewport' },
-        { description: 'Eqalert.ru – информационная служба реального времени о землетрясениях, сейсмических воздействиях и опасности' },
-        { keywords: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, ' +
-            'сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, ' +
-            'магнитуда, механизм очага, тензор момента, архив' }
-      ],
-      title: 'EQA!ert'
-    }
-  },
   data() {
     return {
       googlePlayUrl: appSettings.mobileAppUrls.googlePlay,
@@ -38,9 +25,9 @@ export default {
   },
   created() {
     if (process.browser) {
-      axiosSetAuthorizationHeaders()
-      axiosAddRefreshTokenInterceptor()
-      authTimeoutCheck()
+      axiosSetAuthorizationHeaders(this.$axios, this.$store.getters['user/user'].accessToken)
+      axiosAddRefreshTokenInterceptor(this.$axios, this.$store)
+      authTimeoutCheck(this.$store, this.$moment)
       translateScale()
     }
     this.fetchSystemInfo()

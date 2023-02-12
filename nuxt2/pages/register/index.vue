@@ -174,7 +174,7 @@ export default {
   created() {
     this.getPurposesList()
   },
-  metaInfo: {
+  head: {
     title: 'Регистрация'
   },
   methods: {

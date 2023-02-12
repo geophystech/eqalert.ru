@@ -121,9 +121,9 @@
 
         damageLevels.forEach((v, _level) => { this.items[_level].value = v })
         this.items[itemsLen - 4].value = destroyed
-        this.items[itemsLen - 3].value = this.$store.getters.srssDBVersion
+        this.items[itemsLen - 3].value = this.$store.getters['app/srssDBVersion']
         this.items[itemsLen - 2].value = buildings.length
-        this.items[itemsLen - 1].value = `${this.$store.getters.msk64ConfigVersion}`
+        this.items[itemsLen - 1].value = `${this.$store.getters['app/msk64ConfigVersion']}`
       }
     },
     watch: {

@@ -130,7 +130,7 @@ export default {
       return JSON.stringify(this.$route.query)
     }
   },
-  metaInfo: {
+  head: {
     title: 'События'
   },
   watch: {

@@ -6,14 +6,15 @@ import apiSettings from '@/settings/api'
 /**
  *
  * @param {string} accessToken
+ * @param axios
  * @return {Promise<any>}
  * @private
  */
-async function _getUserPermissions(accessToken)
+async function _getUserPermissions(accessToken, axios)
 {
   return new Promise((resolve, reject) => {
 
-    this.$axios.get(apiSettings.endpointUserRefreshScopes).then(resp => {
+    axios.get(apiSettings.endpointUserRefreshScopes).then(resp => {
 
       let permissions = {}
 
@@ -40,28 +41,30 @@ let _refreshTokenRequest = null
 
 /**
  * @param {null} refreshToken
+ * @param store
+ * @param axios
  * @return {Promise<any>}
  */
-export async function refreshToken(refreshToken)
+export async function refreshToken(refreshToken, store, axios)
 {
   return _refreshTokenRequest || (_refreshTokenRequest = new Promise((resolve, reject) => {
 
-    this.$axios.post(apiSettings.endpointUserRefreshToken, {'refresh_token': refreshToken})
+    axios.post(apiSettings.endpointUserRefreshToken, {'refresh_token': refreshToken})
 
       .then(authResp => {
 
-        axiosSetAuthorizationHeaders(authResp.data.access_token)
+        axiosSetAuthorizationHeaders(axios, authResp.data.access_token)
 
         // Get permissions
-        _getUserPermissions(authResp.data.access_token)
+        _getUserPermissions(authResp.data.access_token, axios)
 
           .then(permissions => {
 
             // Время жизни токена в секундах
             // authResp.data.expires_in
 
-            this.$store.dispatch('user/authenticateUser', {
-              rememberMe: this.$store.getters.user.rememberMe,
+            store.dispatch('user/authenticateUser', {
+              rememberMe: store.getters['user/user'].rememberMe,
               refreshToken: authResp.data.refresh_token,
               accessToken: authResp.data.access_token,
               permissions: permissions
@@ -93,9 +96,11 @@ export async function refreshToken(refreshToken)
  * @param {string} username
  * @param {string} password
  * @param {boolean} rememberMe
+ * @param store
+ * @param axios
  * @return {Promise<any>}
  */
-export async function auth({username, password, rememberMe = false})
+export async function auth({username, password, rememberMe = false}, store, axios)
 {
   return new Promise((resolve, reject) => {
 
@@ -104,20 +109,20 @@ export async function auth({username, password, rememberMe = false})
       password: password
     }
 
-    this.$axios.post(apiSettings.endpointUserAuthentication, payload)
+    axios.post(apiSettings.endpointUserAuthentication, payload)
 
       .then(authResp => {
 
-        axiosSetAuthorizationHeaders(authResp.data.access_token)
+        axiosSetAuthorizationHeaders(axios, authResp.data.access_token)
 
-        _getUserPermissions(authResp.data.access_token)
+        _getUserPermissions(authResp.data.access_token, axios)
 
           .then(permissions => {
 
             // Время жизни токена в секундах
             // authResp.data.expires_in
 
-            this.$store.dispatch('user/authenticateUser', {
+            store.dispatch('user/authenticateUser', {
               refreshToken: authResp.data.refresh_token,
               accessToken: authResp.data.access_token,
               permissions: permissions,
@@ -145,17 +150,17 @@ export async function auth({username, password, rememberMe = false})
 import authSettings from '@/settings/auth'
 import {camelCase} from '@/helpers/string'
 
-export function authTimeoutCheck(store = null)
+export function authTimeoutCheck(store, moment)
 {
-  let user = store ? store.getters["user/user"] : this.$store.getters["user/user"]
+  let user = store.getters['user/user']
 
   if(!user.authenticated) {
     return
   }
 
-  let duration = this.$moment.duration(
-    this.$moment().diff(
-      this.$moment(
+  let duration = moment.duration(
+    moment().diff(
+      moment(
         user.authDate
       )
     )

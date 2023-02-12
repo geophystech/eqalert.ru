@@ -31,8 +31,8 @@
       createMap: function()
       {
         this.map.object = createMap(this.map.id, this.map.coordinates, {
-          addToggleShowBuildings: this.$store.getters["user/user"].authenticated,
-          addToggleShowLDOs: this.$store.getters["user/user"].authenticated,
+          addToggleShowBuildings: this.$store.getters['user/user'].authenticated,
+          addToggleShowLDOs: this.$store.getters['user/user'].authenticated,
           gestureHandling: this.gestureHandling,
           onlyStations: this.onlyStations,
           markerPopupHeader: '',

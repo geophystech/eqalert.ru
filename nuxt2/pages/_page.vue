@@ -29,7 +29,7 @@ export default {
       }
     }
   },
-  metaInfo() {
+  head() {
     return {
       title: this.pages[this.page]
     }

@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('axios')
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -6,7 +6,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: '%s | EQA!ert',
+    titleTemplate: '%s | EQA!ert',
     htmlAttrs: {
       lang: 'ru'
     },

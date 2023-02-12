@@ -39,7 +39,7 @@ export default {
       endDate: ''
     }
   },
-  metaInfo: {
+  head: {
     title: 'Аналитика'
   },
   methods: {

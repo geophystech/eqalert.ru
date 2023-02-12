@@ -3,15 +3,15 @@ import {
   axiosRemoveAuthorizationHeaders
 } from '@/helpers/axios'
 
-const axiosAuthorizationHeaders = store => {
-  store.subscribe((mutation, state) => {
+const axiosAuthorizationHeaders = (store) => {
+  store.subscribe((mutation) => {
     switch (mutation.type) {
-      case 'authenticateUser':
-        axiosSetAuthorizationHeaders()
+      case 'user/authenticateUser':
+        axiosSetAuthorizationHeaders(store.$axios, store.getters['user/user'].accessToken)
         break
-      case 'lockRequests':
-      case 'unauthenticateUser':
-        axiosRemoveAuthorizationHeaders()
+      case 'requests/lockRequests':
+      case 'user/unauthenticateUser':
+        axiosRemoveAuthorizationHeaders(store.$axios)
         break
     }
   })

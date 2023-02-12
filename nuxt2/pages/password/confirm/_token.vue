@@ -85,7 +85,7 @@ export default {
       validationError: ''
     }
   },
-  metaInfo: {
+  head: {
     title: 'Смена пароля'
   },
   methods: {

@@ -169,7 +169,7 @@ export function createMap(mapID, coordinates, {
 // Plate Boundaries
 function addPlateBoundaries(controls, store)
 {
-  const boundaries = new window.L.GeoJSON(store.getters["app/plateBoundaries"], {
+  const boundaries = new window.L.GeoJSON(store.getters['app/plateBoundaries'], {
 
     style: {
       color: '#8A0707',
@@ -300,7 +300,7 @@ export function addFeltReports(map, items, controls, show = true)
 
   items.forEach((feltReportObject) => {
     const center = feltReportObject.location
-    const cii = feltReportObject.cii - 0.2
+    const cii = 1 * (feltReportObject.cii - 0.2).toFixed(2)
     const ciiText = `Интенсивность по ШСИ-2017: ${cii} ${numberDeclension(cii, ['балл', 'балла', 'баллов'])}`
     const countText = `Количество откликов: ${feltReportObject.count}`
     const {region, title} = feltReportObject.settlement.data.translation.data

@@ -50,13 +50,10 @@ export default {
   methods: {
     signOut: function() {
       this.$toasted.success(`Вы вышли из сайта`, { icon: 'check' })
-      this.$store.dispatch('signOut')
+      this.$store.dispatch('user/signOut')
       this.$router.replace({ name: this.$route.name })
       location.reload()
     }
-  },
-  mounted() {
-    console.debug('header is loading...')
   }
 }
 </script>

@@ -41,7 +41,7 @@ export default {
   created() {
     this.confirmEmail(this.$router.currentRoute.params.token)
   },
-  metaInfo: {
+  head: {
     title: 'Подтверждение емэйла'
   },
   methods: {

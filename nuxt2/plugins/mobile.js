@@ -1,5 +1,5 @@
 export default (context, inject) => {
-  if (window) {
+  if (process.browser) {
     const onMobile = screen.width < 768
     inject('onMobile', onMobile)
   }

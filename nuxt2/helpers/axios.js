@@ -1,20 +1,20 @@
 import {refreshToken} from '@/helpers/auth'
 import apiSettings from '@/settings/api'
 
-export function axiosRemoveAuthorizationHeaders() {
-  delete this.$axios.defaults.headers.common['Authorization']
+export function axiosRemoveAuthorizationHeaders(axios) {
+  delete axios.defaults.headers.common['Authorization']
 }
 
-export function axiosSetAuthorizationHeaders(accessToken = this.$store.getters.user.accessToken)
+export function axiosSetAuthorizationHeaders(axios, accessToken)
 {
   if (accessToken) {
-    this.$axios.defaults.headers.common['Authorization'] = `${apiSettings.authorizationType} ${accessToken}`
+    axios.defaults.headers.common['Authorization'] = `${apiSettings.authorizationType} ${accessToken}`
   }
 }
 
-export function axiosAddRefreshTokenInterceptor()
+export function axiosAddRefreshTokenInterceptor(axios, store)
 {
-  const axiosResponseInterceptor = this.$axios.interceptors.response.use(
+  const axiosResponseInterceptor = axios.interceptors.response.use(
 
     undefined,
 
@@ -28,24 +28,24 @@ export function axiosAddRefreshTokenInterceptor()
         && apiSettings.endpointUserRefreshToken !== errorResponse.config.url
       ) {
 
-        this.$axios.interceptors.response.eject(axiosResponseInterceptor)
+        axios.interceptors.response.eject(axiosResponseInterceptor)
 
-        return refreshToken(this.$store.getters.user.refreshToken)
+        return refreshToken(store.getters['user/user'].refreshToken, store, axios)
 
           .then(response => {
 
             errorResponse.config.headers['Authorization'] = `${apiSettings.authorizationType} ${response.data.access_token}`
-            axiosSetAuthorizationHeaders(response.data.access_token)
-            axiosAddRefreshTokenInterceptor()
+            axiosSetAuthorizationHeaders(axios, response.data.access_token)
+            axiosAddRefreshTokenInterceptor(axios, store)
 
-            return this.$axios(errorResponse.config)
+            return axios(errorResponse.config)
 
           })
 
           .catch(error => {
 
-            this.$store.dispatch('user/unauthenticateUser')
-            axiosAddRefreshTokenInterceptor()
+            store.dispatch('user/unauthenticateUser')
+            axiosAddRefreshTokenInterceptor(axios, store)
             return Promise.reject(error)
 
           })

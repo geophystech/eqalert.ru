@@ -4,14 +4,9 @@ class Config
   {
     this.authorizationType = 'Bearer'
 
-    this.baseURL = 'https://api-test.geophystech.ru/api'
-    this.oauthBaseURL = 'https://oauth-client-test.geophystech.ru'
-
-    // this.baseURL = process.env.API_BASE_URL
-    // this.oauthBaseURL = process.env.API_OAUTH_BASE_URL
-
-    this.version = 'v1'
-    //this.version = process.env.API_VERSION
+    this.baseURL = process.env.API_BASE_URL ?? 'https://rest-api.eqalert.ru/api'
+    this.oauthBaseURL = process.env.API_OAUTH_BASE_URL ?? 'https://oauth-web.eqalert.ru'
+    this.version = process.env.API_VERSION ?? 'v1'
 
     this.endpointAnalyticsCumulativeCounts = `${this.baseURL}/${this.version}/analytics/cumulativeCounts`
     this.endpointAnalyticsDensityCounts = `${this.baseURL}/${this.version}/analytics/densityCounts`

@@ -88,6 +88,11 @@ export default {
     buildings: Buildings,
     ldos: LDOs
   },
+  head() {
+    return {
+      title: ''
+    }
+  },
   data() {
     return {
       feedbackUrl: appSettings.feedbackUrl,

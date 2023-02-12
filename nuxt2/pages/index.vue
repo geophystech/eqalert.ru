@@ -12,6 +12,9 @@
 export default {
   components: {
     MainpageMap: () => process.client ? import('@/components/Map/Mainpage.vue') : null,
+  },
+  head: {
+    title: 'Главная'
   }
 }
 </script>
