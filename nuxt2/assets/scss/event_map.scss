@@ -1,0 +1,153 @@
+
+$legend-marker-size: 10px;
+
+.map
+{
+  height: 450px;
+
+  .magnitude-color {
+    color: red;
+    font-size: 140%;
+    font-weight: bold;
+  }
+
+  .read-more {
+    a {
+      color: white;
+      padding: 3px 5px;
+      font-size: 100%;
+      line-height: 1.5;
+    }
+  }
+
+  // Подпись.
+  .map-text
+  {
+    background-color: rgba(255, 255, 255, .5);
+    border-radius: 2px;
+    font-size: 120%;
+    width: 280px;
+
+    p {
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+      line-height: 25px;
+      height: 25px;
+      color: #444;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .marker-cluster-damage-level
+  {
+    > div {
+      border-radius: 50%;
+      padding: 5px;
+      height: 100%;
+      width: 100%;
+
+      > div {
+        margin: 0;
+      }
+    }
+  }
+
+  .map-legend
+  {
+    box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+    background: rgba(255, 255, 255, .8);
+    border-radius: 5px;
+    line-height: 15px;
+    padding: 6px 8px;
+    text-align: left;
+    color: #555;
+
+    i {
+      float: left;
+      height: 15px;
+      margin-right: 8px;
+      opacity: .7;
+      width: 15px;
+    }
+
+    &.btn-group
+    {
+      .btn {
+        line-height: normal;
+        text-align: center;
+        cursor: pointer;
+        margin-bottom: 0;
+        font-size: 12px;
+        width: 71px;
+        padding: 0;
+
+        &:focus {
+          box-shadow: none;
+          outline: none;
+        }
+
+        &:hover {
+          z-index: auto;
+        }
+
+        > span {
+          padding: 5px 0;
+          display: block;
+          color: #444;
+        }
+
+        > input[type=radio]:disabled + span {
+          box-shadow: inset 1px 1px 20px 1px rgba(255, 255, 255, 0.7);
+          opacity: 0.5;
+        }
+
+        > input[type=radio]:checked + span,
+        &:hover > span {
+          box-shadow: inset 1px 1px 10px 1px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+
+    .buildings-legend
+    {
+      position: relative;
+      width: 50px;
+      top: -1px;
+
+      span:first-child
+      {
+        height: $legend-marker-size;
+        width: $legend-marker-size;
+        vertical-align: middle;
+        display: inline-block;
+      }
+
+      span:last-child
+      {
+        line-height: $legend-marker-size;
+        height: $legend-marker-size;
+        vertical-align: middle;
+        display: inline-block;
+        margin-left: 8px;
+        width: auto;
+      }
+    }
+  }
+
+  .leaflet-control-attribution {
+    margin-right: 10px;
+    text-align: center;
+    width: 280px;
+  }
+
+  /* ZoomHome plugin */
+  .leaflet-control-zoomhome-home i.fa-home {
+    font-size: 160%;
+  }
+
+  a.leaflet-control-zoomhome-in,
+  a.leaflet-control-zoomhome-out {
+    font-size: 150%;
+  }
+}
