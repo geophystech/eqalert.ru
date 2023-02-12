@@ -16,22 +16,30 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
+import mixins from '@/mixins/_page'
 
 export default {
   name: 'static-page',
   components: { VueMarkdown },
   data() {
     return {
-      content: '',
       page: this.$router.currentRoute.params.page,
       pages: {
         about: 'О проекте'
       }
     }
   },
+  mixins: [mixins],
   head() {
     return {
-      title: this.pages[this.page]
+      title: this.htmlTitle,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.content
+        },
+      ]
     }
   },
   methods: {
@@ -51,9 +59,6 @@ export default {
     onMapDialogOpen() {
       this.$refs.map.map.object.invalidateSize()
     }
-  },
-  created() {
-    this.getContent()
   },
   beforeRouteUpdate(to, from, next) {
     this.page = to.params.page
