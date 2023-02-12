@@ -49,14 +49,19 @@
     methods: {
       setData: function(data) {
         this.items[0].value = `${data.locValues.data.lat}N`
-        this.items[0].error = `± ${data.locValues.data.lat_err} км`
+        this.items[0].error = data.locValues.data.lat_err ?
+          `± ${data.locValues.data.lat_err} км` : ''
         this.items[1].value = `${data.locValues.data.lon}E`
-        this.items[1].error = `± ${data.locValues.data.lon_err} км`
+        this.items[1].error = data.locValues.data.lon_err ?
+          `± ${data.locValues.data.lon_err} км` : ''
         this.items[2].value = `${data.locValues.data.depth} км`
-        this.items[2].error = `± ${data.locValues.data.depth_err} км`
-        this.items[3].value = this.$moment(data.locValues.data.event_datetime).format('DD.MM.YYYY в HH:mm:ss UTC')
+        this.items[2].error = data.locValues.data.depth_err ?
+          `± ${data.locValues.data.depth_err} км` : ''
+        this.items[3].value = this.$moment(data.locValues.data.event_datetime)
+          .format('DD.MM.YYYY в HH:mm:ss UTC')
         this.items[3].error = `${data.locValues.data.origin_time_err} сек`
-        this.items[4].value = `${data.locValues.data.station_near} км`
+        this.items[4].value = data.locValues.data.station_near ?
+          `${data.locValues.data.station_near} км` : ''
         this.items[5].value = `${data.locValues.data.hypo_gap}°`
         this.items[6].value = data.locValues.data.rms
         this.items[7].value = data.locValues.data.sta_num
