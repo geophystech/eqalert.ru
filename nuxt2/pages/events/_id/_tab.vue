@@ -79,6 +79,7 @@ import Tabs from '@/components/Event/Tabs.vue'
 
 import appSettings from '@/settings/app'
 import apiSettings from '@/settings/api'
+import mixins from '@/mixins/events/_id/_tab'
 
 export default {
   components: {
@@ -88,13 +89,15 @@ export default {
     buildings: Buildings,
     ldos: LDOs
   },
+  mixins: [mixins],
   head() {
     return {
-      title: ''
+      title: this.headTitle
     }
   },
   data() {
     return {
+      activeTab: '#' + this.$router.currentRoute.fullPath,
       feedbackUrl: appSettings.feedbackUrl,
       mobileMapHidden: true,
       errorResponse: null,
@@ -112,14 +115,10 @@ export default {
           ldos: MapLDOs
         },
         tabs: Tabs
-      },
-      event: {
-        processingMethod: {}
       }
     }
   },
   methods: {
-
     fetchData: function(eventId)
     {
       this.errorResponse = null
@@ -209,10 +208,6 @@ export default {
       this.event.processingMethod = this.processingMethod(data.has_auto, data.has_manual)
     }
 
-  },
-
-  created() {
-    this.fetchData(this.$router.currentRoute.params.id)
   },
 
   beforeRouteUpdate(to, from, next) {
