@@ -22,7 +22,7 @@
 
 export default {
   props: ['error'],
-  layout: 'default'
+  layout: 'error'
 }
 </script>
 
