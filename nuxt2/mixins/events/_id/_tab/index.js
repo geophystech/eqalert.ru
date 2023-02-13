@@ -8,11 +8,7 @@ export default {
       params: { include: 'nearestCity' }
     })
 
-    if (status !== 200)
-    {
-      return { errorResponse: { status }, event: { processingMethod: {} } }
-    }
-    else
+    if (status === 200)
     {
       const magnitudeType = function(type)
       {
@@ -39,10 +35,6 @@ export default {
         if (!auto && manual) return { long: 'ручной', short: 'M' }
 
         return { long: 'неизвестно', short: 'U' }
-      }
-
-      const currentTabName = function() {
-        return 'Информация о событии'
       }
 
       const getTitle = function(event, moment) {
