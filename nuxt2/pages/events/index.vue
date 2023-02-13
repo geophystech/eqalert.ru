@@ -155,6 +155,18 @@ export default {
           this.filtersData = Object.assign({}, filtersData)
         }
 
+        // edge case >> fix
+        if (!params.datetime_min) {
+          params.datetime_min = this.$moment
+            .utc()
+            .subtract(6, 'months')
+            .format('YYYY-MM-DD 00:00:00')
+          this.$router.replace({
+            name: this.$route.name,
+            query: { datetime_min: params.datetime_min }
+          })
+        }
+
         this.spinners.loadMoreEvents = true
         this.disabledFilters = true
 

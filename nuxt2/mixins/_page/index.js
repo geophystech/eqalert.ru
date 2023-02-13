@@ -9,9 +9,5 @@ export default {
       const page = pages[route.params.page] ? pages[route.params.page] : '';
       return { content: data, htmlTitle: page }
     }
-    else
-    {
-      return { content: '', htmlTitle: '' }
-    }
   }
 }
