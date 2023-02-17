@@ -1,6 +1,6 @@
 import createPersistedState from 'vuex-persistedstate'
 
-const NAME_SPACE = 'eqalert.ru'
+const NAME_SPACE = process.env.NAME_SPACE
 
 export default ({ store, isHMR }) => {
   if (isHMR) return

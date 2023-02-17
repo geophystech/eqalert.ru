@@ -1,5 +1,8 @@
 const axios = require('axios')
 
+import Dotenv from 'dotenv-webpack'
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -56,7 +59,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    '@nuxtjs/moment',
+    '@nuxtjs/moment'
   ],
 
   moment: {
@@ -79,7 +82,7 @@ export default {
 
   sitemap: {
     cacheTime: 43200, // 12 hrs
-    hostname: 'https://eqalert.ru',
+    hostname: process.env.HOST,
     gzip: true,
     exclude: [
       '/**',
@@ -101,8 +104,8 @@ export default {
         priority: 1,
         lastmod: '2023-02-07T13:30:00.000Z'
       }
-      const prefix = `https://rest-api.eqalert.ru`
-      const route = `/api/v1/reports?limit=100&mag_min=3.5`
+      const prefix = process.env.API_BASE_URL
+      const route = `/v1/reports?limit=100&mag_min=3.5`
       let eventRoutes = []
       let data = (await axios.get(`${prefix}${route}`)).data
       let next = data.meta.cursor.next
@@ -126,6 +129,9 @@ export default {
   build: {
     babel: {
       compact: true
-    }
+    },
+    plugins: [
+      new Dotenv({ path: `.env.${process.env.NODE_ENV}` })
+    ]
   }
 }
