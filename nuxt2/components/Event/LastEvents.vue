@@ -32,7 +32,6 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/api'
   import { round } from '@/helpers/math'
 
   export default {
@@ -61,7 +60,7 @@
       },
       fetchEvents: function()
       {
-        this.$axios.get(apiSettings.endpointEvents, {
+        this.$axios.get(this.$api.endpointEvents, {
           params: {
             datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
             has_training: !this.event || !this.event.has_training ? 0 : 1,

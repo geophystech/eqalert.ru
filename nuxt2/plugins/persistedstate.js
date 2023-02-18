@@ -1,12 +1,10 @@
 import createPersistedState from 'vuex-persistedstate'
 
-const NAME_SPACE = process.env.NAME_SPACE
-
-export default ({ store, isHMR }) => {
+export default ({ store, isHMR, $config }) => {
   if (isHMR) return
   if (process.browser) {
     createPersistedState({
-      key: NAME_SPACE,
+      key: $config.NAME_SPACE,
       filter: (mutation) => {
 
         switch (mutation.type)

@@ -1,6 +1,5 @@
 <script>
 import { Line } from 'vue-chartjs'
-import apiSettings from '@/settings/api'
 
 export default Line.extend({
   props: ['filtersParams'],
@@ -66,7 +65,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function(params = {}) {
-      this.$axios.get(apiSettings.endpointAnalyticsEarthquakeCounts, { params: params })
+      this.$axios.get(this.$api.endpointAnalyticsEarthquakeCounts, { params: params })
         .then(response => {
 
           const respData = response.data.data

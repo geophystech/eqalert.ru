@@ -11,7 +11,6 @@
 
 <script>
 import appSettings from '@/settings/app'
-import apiSettings from '@/settings/api'
 import { translateScale } from '@/helpers/scale'
 import { axiosAddRefreshTokenInterceptor, axiosSetAuthorizationHeaders } from '@/helpers/axios'
 import { authTimeoutCheck } from '@/helpers/auth'
@@ -26,7 +25,7 @@ export default {
   created() {
     if (process.browser) {
       axiosSetAuthorizationHeaders(this.$axios, this.$store.getters['user/user'].accessToken)
-      axiosAddRefreshTokenInterceptor(this.$axios, this.$store)
+      axiosAddRefreshTokenInterceptor(this.$axios, this.$store, this.$api)
       authTimeoutCheck(this.$store, this.$moment)
       translateScale()
     }
@@ -40,7 +39,7 @@ export default {
       })
     },
     fetchSystemInfo: function() {
-      this.$axios.get(apiSettings.endpointSystemInfo).then(response => {
+      this.$axios.get(this.$api.endpointSystemInfo).then(response => {
         const data = response.data.data
         this.$store.dispatch('app/setMsk64ConfigVersion', data.msk64Config.data.config_version)
         this.$store.dispatch('app/setSrssDBVersion', data.srssCoreConfig.data.db_version)

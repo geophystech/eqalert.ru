@@ -169,6 +169,7 @@
           this.coordinates, {
             store: this.$store,
             axios: this.$axios,
+            $api: this.$api,
           })
       },
       initialize: function() {

@@ -34,8 +34,6 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/api'
-
   export default {
     props: {
       trainingEventsBtnDisabled: false,
@@ -54,7 +52,7 @@
     methods: {
       export2xls: function(request) {
         let params = Object.assign({}, this.filtersData)
-        request(apiSettings.endpointEvents, Object.assign(params, {
+        request(this.$api.endpointEvents, Object.assign(params, {
           limit: 5000
         }))
       },

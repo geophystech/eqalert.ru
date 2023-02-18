@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import apiSettings from '@/settings/api'
 
 export default {
   data() {
@@ -46,7 +45,7 @@ export default {
   },
   methods: {
     confirmEmail: function(token) {
-      this.$axios.post(apiSettings.endpointEmailConfirmation(token))
+      this.$axios.post(this.$api.endpointEmailConfirmation(token))
         .then(response => {
           this.status = 'success'
           this.message = response.data.data

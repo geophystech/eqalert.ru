@@ -129,7 +129,7 @@ export default {
         password: this.form.fields.password.value,
         username: this.form.fields.email.value
 
-      }, this.$store, this.$axios).then(response => {
+      }, this.$store, this.$axios, this.$api).then(response => {
 
         this.$toasted.success(`Добро пожаловать!`, { icon: 'check' })
         this.$router.push(this.redirectTo)

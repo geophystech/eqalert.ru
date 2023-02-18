@@ -7,7 +7,6 @@
     createMap, createMapEventMarker
   } from '@/config/map_functions'
   import {EVENTS_RANGES} from '@/helpers/event'
-  import apiSettings from '@/settings/api'
 
   export default
   {
@@ -40,6 +39,7 @@
           zoom: 4,
           store: this.$store,
           axios: this.$axios,
+          $api: this.$api,
         })
 
         if(!this.onlyStations) {
@@ -142,7 +142,7 @@
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
               disableBtns()
 
-              return $axios.get(apiSettings.endpointEventsLight, {
+              return $axios.get(this.$api.endpointEventsLight, {
                 params: {
                   datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
                   limit: eventsRange.limit || 1000

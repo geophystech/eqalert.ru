@@ -40,7 +40,6 @@
 <script>
   import { convertMsk64 } from '@/config/map_functions'
   import { round } from '@/helpers/math'
-  import apiSettings from '@/settings/api'
 
   export default {
     props: ['event'],
@@ -113,7 +112,7 @@
         this.items = []
       },
       fetchData: function() {
-        this.$axios.get(apiSettings.endpointEventSettlements(this.event.id), {
+        this.$axios.get(this.$api.endpointEventSettlements(this.event.id), {
           params: {
             cursor: this.cursor,
             limit: 10,

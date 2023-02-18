@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import apiSettings from '@/settings/api'
 import timezone from '@/mixins/timezone'
 
 export default {
@@ -121,7 +120,7 @@ export default {
     submit: function() {
       const formData = this.requestData
       if (this.validate(formData)) {
-        this.$axios.post(apiSettings.endpointFeltReport, formData)
+        this.$axios.post(this.$api.endpointFeltReport, formData)
           .then(response => {
             this.submitted = response.data.message
           }).catch(() => {
@@ -165,7 +164,7 @@ export default {
         }
       }
       this.errorResponse = null
-      this.$axios.get(apiSettings.endpointFeltReportPoll)
+      this.$axios.get(this.$api.endpointFeltReportPoll)
         .then(response => {
           this.setData(response.data.data)
         }).catch(() => {

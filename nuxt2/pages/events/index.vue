@@ -84,7 +84,6 @@
 </template>
 
 <script>
-import apiSettings from '@/settings/api'
 import { round } from '@/helpers/math'
 import eventsSettings from '@/settings/events'
 import mixins from '@/mixins/events'
@@ -170,7 +169,7 @@ export default {
         this.spinners.loadMoreEvents = true
         this.disabledFilters = true
 
-        this.$axios.get(apiSettings.endpointEvents, { params: params })
+        this.$axios.get(this.$api.endpointEvents, { params: params })
           .then(response => {
 
             this.spinners.loadMoreEvents = false

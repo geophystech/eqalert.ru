@@ -1,20 +1,20 @@
 import {
   axiosSetAuthorizationHeaders
 } from '@/helpers/axios'
-import apiSettings from '@/settings/api'
 
 /**
  *
  * @param {string} accessToken
  * @param axios
+ * @param $api
  * @return {Promise<any>}
  * @private
  */
-async function _getUserPermissions(accessToken, axios)
+async function _getUserPermissions(accessToken, axios, $api)
 {
   return new Promise((resolve, reject) => {
 
-    axios.get(apiSettings.endpointUserRefreshScopes).then(resp => {
+    axios.get($api.endpointUserRefreshScopes).then(resp => {
 
       let permissions = {}
 
@@ -43,20 +43,21 @@ let _refreshTokenRequest = null
  * @param {null} refreshToken
  * @param store
  * @param axios
+ * @param $api
  * @return {Promise<any>}
  */
-export async function refreshToken(refreshToken, store, axios)
+export async function refreshToken(refreshToken, store, axios, $api)
 {
   return _refreshTokenRequest || (_refreshTokenRequest = new Promise((resolve, reject) => {
 
-    axios.post(apiSettings.endpointUserRefreshToken, {'refresh_token': refreshToken})
+    axios.post($api.endpointUserRefreshToken, {'refresh_token': refreshToken})
 
       .then(authResp => {
 
         axiosSetAuthorizationHeaders(axios, authResp.data.access_token)
 
         // Get permissions
-        _getUserPermissions(authResp.data.access_token, axios)
+        _getUserPermissions(authResp.data.access_token, axios, $api)
 
           .then(permissions => {
 
@@ -98,9 +99,10 @@ export async function refreshToken(refreshToken, store, axios)
  * @param {boolean} rememberMe
  * @param store
  * @param axios
+ * @param $api
  * @return {Promise<any>}
  */
-export async function auth({username, password, rememberMe = false}, store, axios)
+export async function auth({username, password, rememberMe = false}, store, axios, $api)
 {
   return new Promise((resolve, reject) => {
 
@@ -109,13 +111,13 @@ export async function auth({username, password, rememberMe = false}, store, axio
       password: password
     }
 
-    axios.post(apiSettings.endpointUserAuthentication, payload)
+    axios.post($api.endpointUserAuthentication, payload)
 
       .then(authResp => {
 
         axiosSetAuthorizationHeaders(axios, authResp.data.access_token)
 
-        _getUserPermissions(authResp.data.access_token, axios)
+        _getUserPermissions(authResp.data.access_token, axios, $api)
 
           .then(permissions => {
 

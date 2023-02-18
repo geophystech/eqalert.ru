@@ -129,7 +129,6 @@
 </template>
 
 <script>
-import apiSettings from '@/settings/api'
 
 export default {
   data() {
@@ -192,7 +191,7 @@ export default {
       this.changeFieldsDisabledState(true)
     },
     getPurposesList: function() {
-      this.$axios.get(apiSettings.endpointPurposesList)
+      this.$axios.get(this.$api.endpointPurposesList)
         .then(response => {
           for (let [id, title] of Object.entries(response.data.data)) {
             this.form.purposes.values.push({ value: id, text: title })
@@ -218,7 +217,7 @@ export default {
 
       this.disableFields()
 
-      this.$axios.post(apiSettings.endpointUserRegistration, payload)
+      this.$axios.post(this.$api.endpointUserRegistration, payload)
         .then(response => {
           this.registrationComplete = true
         })

@@ -78,7 +78,6 @@ import Settlements from '@/components/Event/Settlements.vue'
 import Tabs from '@/components/Event/Tabs.vue'
 
 import appSettings from '@/settings/app'
-import apiSettings from '@/settings/api'
 import mixins from '@/mixins/events/_id/_tab'
 
 export default {
@@ -123,7 +122,7 @@ export default {
     {
       this.errorResponse = null
 
-      let eventRequest = this.$axios.get(apiSettings.endpointEvent(eventId), {
+      let eventRequest = this.$axios.get(this.$api.endpointEvent(eventId), {
         params: { include: 'nearestCity' }
       })
 
@@ -144,9 +143,9 @@ export default {
       }
       else
       {
-        let buildingsRequest = this.$axios.get(apiSettings.endpointEventBuildings(eventId))
+        let buildingsRequest = this.$axios.get(this.$api.endpointEventBuildings(eventId))
 
-        let ldosRequest = this.$axios.get(apiSettings.endpointEventLDOs(eventId), {
+        let ldosRequest = this.$axios.get(this.$api.endpointEventLDOs(eventId), {
           params: { customer_ids: [1], show_all_parts: 1 }
         })
 

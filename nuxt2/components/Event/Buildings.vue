@@ -10,7 +10,6 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/api'
 
   export default {
     props: ['event'],
@@ -100,7 +99,7 @@
     },
     methods: {
       fetchData: function() {
-        this.$axios.get(apiSettings.endpointEventBuildings(this.event.id))
+        this.$axios.get(this.$api.endpointEventBuildings(this.event.id))
           .then(response => {
             this.$root.$emit('onMapBuildingsDataFetched', response.data.data)
             this.setData(response.data.data)

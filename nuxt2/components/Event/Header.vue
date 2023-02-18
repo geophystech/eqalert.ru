@@ -71,7 +71,6 @@
 
 <script>
   import { agency, agencyDescription } from '@/helpers/event'
-  import apiSettings from '@/settings/api'
 
   export default {
     props: {
@@ -116,7 +115,7 @@
         }
       },
       export2xls: function(request) {
-        request(apiSettings.endpointEvent(this.event.id))
+        request(this.$api.endpointEvent(this.event.id))
       }
     },
     computed: {

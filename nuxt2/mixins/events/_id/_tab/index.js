@@ -1,10 +1,9 @@
-import apiSettings from "@/settings/api";
 import {round} from "@/helpers/math";
 
 export default {
-  async asyncData({ $axios, store, route, $moment }) {
+  async asyncData({ $axios, store, route, $moment, $api }) {
     const eventId = route.params.id
-    let { data, status } = await $axios.get(apiSettings.endpointEvent(eventId), {
+    let { data, status } = await $axios.get($api.endpointEvent(eventId), {
       params: { include: 'nearestCity' }
     })
 
@@ -71,11 +70,11 @@ export default {
       {
         const accessToken = store.getters['user/user'].accessToken
 
-        $axios.defaults.headers.common['Authorization'] = `${apiSettings.authorizationType} ${accessToken}`
+        $axios.defaults.headers.common['Authorization'] = `${$api.authorizationType} ${accessToken}`
 
-        let buildingsRequest = await $axios.get(apiSettings.endpointEventBuildings(eventId))
+        let buildingsRequest = await $axios.get($api.endpointEventBuildings(eventId))
 
-        let ldosRequest = await $axios.get(apiSettings.endpointEventLDOs(eventId), {
+        let ldosRequest = await $axios.get($api.endpointEventLDOs(eventId), {
           params: { customer_ids: [1], show_all_parts: 1 }
         })
 

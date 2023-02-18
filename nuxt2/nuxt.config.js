@@ -1,11 +1,20 @@
 const axios = require('axios')
 
-import Dotenv from 'dotenv-webpack'
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
+import { GlobalSettings } from "./environmentsettings.js"
+
+const appEnv = process.env.NODE_ENV || 'development'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
+
+  publicRuntimeConfig: {
+    API_BASE_URL: GlobalSettings[appEnv].API_BASE_URL,
+    API_OAUTH_BASE_URL: GlobalSettings[appEnv].API_OAUTH_BASE_URL,
+    API_VERSION: GlobalSettings[appEnv].API_VERSION,
+    HOST: GlobalSettings[appEnv].HOST,
+    NAME_SPACE: GlobalSettings[appEnv].NAME_SPACE,
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -43,6 +52,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/api.js' },
     { src: '~/plugins/persistedstate.js', mode: 'client' },
     { src: '~/plugins/leaflet.js', mode: 'client' },
     { src: '~/plugins/analytics.js', mode: 'client' },
@@ -82,7 +92,7 @@ export default {
 
   sitemap: {
     cacheTime: 43200, // 12 hrs
-    hostname: process.env.HOST,
+    hostname: GlobalSettings[appEnv].HOST,
     gzip: true,
     exclude: [
       '/**',
@@ -104,7 +114,7 @@ export default {
         priority: 1,
         lastmod: '2023-02-07T13:30:00.000Z'
       }
-      const prefix = process.env.API_BASE_URL
+      const prefix = GlobalSettings[appEnv].API_BASE_URL
       const route = `/v1/reports?limit=100&mag_min=3.5`
       let eventRoutes = []
       let data = (await axios.get(`${prefix}${route}`)).data
@@ -129,9 +139,6 @@ export default {
   build: {
     babel: {
       compact: true
-    },
-    plugins: [
-      new Dotenv({ path: `.env.${process.env.NODE_ENV}` })
-    ]
+    }
   }
 }

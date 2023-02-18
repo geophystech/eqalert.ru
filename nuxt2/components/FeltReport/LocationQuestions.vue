@@ -61,6 +61,7 @@ export default {
               zoom: 10,
               store: vm.$store,
               axios: vm.$axios,
+              $api: vm.$api,
             }
           )
           vm.addMarker({latlng: {lat: position.coords.latitude, lng: position.coords.longitude}})
@@ -80,6 +81,7 @@ export default {
               zoom: 10,
               store: vm.$store,
               axios: vm.$axios,
+              $api: vm.$api,
             })
           vm.watchMapClick()
         }
