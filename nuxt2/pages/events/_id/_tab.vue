@@ -3,7 +3,9 @@
 
     <component :is="components.header" :event="event" />
     <b-alert show v-if="!!event.has_training" variant="event-training">Режим учебных событий</b-alert>
-    <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id" />
+    <ClientOnly>
+      <component :is="components.tabs" :event="event" @onTabSwitch="onTabSwitch" v-if="event.id" />
+    </ClientOnly>
 
     <b-row>
 
@@ -37,13 +39,15 @@
 
         </div>
 
-        <keep-alive>
-          <component
-            :is="components.maps[components.currentTab]"
-            :tab="components.currentTab"
-            :event="event"
-            v-if="event.id && !$onMobile" />
-        </keep-alive>
+        <ClientOnly>
+          <keep-alive>
+            <component
+              :is="components.maps[components.currentTab]"
+              :tab="components.currentTab"
+              :event="event"
+              v-if="event.id && !onMobile" />
+          </keep-alive>
+        </ClientOnly>
 
         <keep-alive>
           <component :is="components.currentTab" :event="event" v-if="event.id" />
@@ -51,11 +55,13 @@
 
       </b-col>
 
-      <b-col cols="4">
-        <keep-alive>
-          <component :is="components.lastEvents" :event="event" v-if="!$onMobile && !!event.id" />
-        </keep-alive>
-      </b-col>
+      <ClientOnly>
+        <b-col cols="4">
+          <keep-alive>
+            <component :is="components.lastEvents" :event="event" v-if="!onMobile && !!event.id" />
+          </keep-alive>
+        </b-col>
+      </ClientOnly>
 
     </b-row>
 
@@ -79,6 +85,7 @@ import Tabs from '@/components/Event/Tabs.vue'
 
 import appSettings from '@/settings/app'
 import mixins from '@/mixins/events/_id/_tab'
+import onMobile from "@/mixins/onMobile";
 
 export default {
   components: {
@@ -88,7 +95,7 @@ export default {
     buildings: Buildings,
     ldos: LDOs
   },
-  mixins: [mixins],
+  mixins: [mixins, onMobile],
   head() {
     return {
       title: this.headTitle
@@ -103,7 +110,7 @@ export default {
       defaultViewport: '',
       components: {
         currentTab: this.$router.currentRoute.params.tab || (
-          this.$onMobile ? 'settlements' : 'generalInformation'
+          this.onMobile ? 'settlements' : 'generalInformation'
         ),
         lastEvents: LastEvents,
         header: EventHeader,
@@ -214,7 +221,7 @@ export default {
     // Do nothing on switching tabs.
     if (to.params.id !== this.$router.currentRoute.params.id) {
       this.fetchData(to.params.id)
-      this.components.currentTab = this.$onMobile ? 'settlements' : 'generalInformation'
+      this.components.currentTab = this.onMobile ? 'settlements' : 'generalInformation'
     }
 
     next()

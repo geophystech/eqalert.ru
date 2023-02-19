@@ -1,15 +1,18 @@
 <template>
   <div class="mainpage">
     <ClientOnly>
-      <EventLastEvents v-if="$onMobile" />
-      <MainpageMap v-if="!$onMobile" />
+      <EventLastEvents v-if="onMobile" />
+      <MainpageMap v-if="!onMobile" />
     </ClientOnly>
     <BasicPartners />
   </div>
 </template>
 
 <script>
+import onMobile from "@/mixins/onMobile";
+
 export default {
+  mixins: [onMobile],
   components: {
     MainpageMap: () => process.client ? import('@/components/Map/Mainpage.vue') : null,
   },

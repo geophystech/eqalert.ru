@@ -7,7 +7,14 @@
       :endDate="endDate" />
 
     <b-row no-gutters>
-      <AnalyticsFilters :disabled="disabledFilters" @filtersUpdated="filtersUpdated" key="analytics-filters" v-if="!$onMobile" />
+      <ClientOnly>
+        <AnalyticsFilters
+          :disabled="disabledFilters"
+          @filtersUpdated="filtersUpdated"
+          key="analytics-filters"
+          v-if="!onMobile"
+        />
+      </ClientOnly>
       <b-col cols="8">
         <h4 class="text-center">Количество землетрясений</h4>
         <ChartByDatetime :height="200" @update="chartByDatetimeUpdate" :filtersParams="filtersParams" />
@@ -29,6 +36,8 @@
 </template>
 
 <script>
+import onMobile from "@/mixins/onMobile";
+
 export default {
   data() {
     return {
@@ -39,6 +48,7 @@ export default {
       endDate: ''
     }
   },
+  mixins: [onMobile],
   head: {
     title: 'Аналитика'
   },

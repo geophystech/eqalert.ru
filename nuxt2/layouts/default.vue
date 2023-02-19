@@ -1,9 +1,11 @@
 <template>
   <b-container>
     <AppHeader/>
-    <AppNavbar/>
-    <AppMobileAlert v-if="is_android" message="Мы сделали приложение для Android" :url="googlePlayUrl" />
-    <AppMobileAlert v-if="is_iOS" message="Мы сделали приложение для iOS" :url="appStoreUrl" />
+    <ClientOnly>
+      <AppNavbar/>
+      <AppMobileAlert v-if="is_android" message="Мы сделали приложение для Android" :url="googlePlayUrl" />
+      <AppMobileAlert v-if="is_iOS" message="Мы сделали приложение для iOS" :url="appStoreUrl" />
+    </ClientOnly>
     <Nuxt />
     <AppFooter/>
   </b-container>
@@ -14,8 +16,10 @@ import appSettings from '@/settings/app'
 import { translateScale } from '@/helpers/scale'
 import { axiosAddRefreshTokenInterceptor, axiosSetAuthorizationHeaders } from '@/helpers/axios'
 import { authTimeoutCheck } from '@/helpers/auth'
+import onMobile from "@/mixins/onMobile";
 
 export default {
+  mixins: [onMobile],
   data() {
     return {
       googlePlayUrl: appSettings.mobileAppUrls.googlePlay,
@@ -56,11 +60,11 @@ export default {
   },
   computed: {
     is_android: function() {
-      return this.$onMobile && /Android/i.test(navigator.userAgent)
+      return this.onMobile && /Android/i.test(navigator.userAgent)
         && !/Windows\s+Phone/i.test(navigator.userAgent)
     },
     is_iOS: function() {
-      return this.$onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
+      return this.onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
         && !/Windows\s+Phone/i.test(navigator.userAgent)
     }
   }

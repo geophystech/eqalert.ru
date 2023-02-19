@@ -1,16 +1,18 @@
 <template>
   <b-row class="infobar" align-v="center" no-gutters>
 
-    <b-col class="text-center text-md-left" v-if="!$onMobile">
-      <NuxtLink to="/sign-in" v-if="!$store.getters['user/user'].authenticated">
-        <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
-        <span>Снять ограничения данных</span>
-      </NuxtLink>
-    </b-col>
+    <ClientOnly>
+      <b-col class="text-center text-md-left" v-if="!onMobile">
+        <NuxtLink to="/sign-in" v-if="!$store.getters['user/user'].authenticated">
+          <i class="fa fa-lg fa-lock align-middle" aria-hidden="true" />
+          <span>Снять ограничения данных</span>
+        </NuxtLink>
+      </b-col>
+    </ClientOnly>
 
     <b-col cols="4" class="text-center">
       Загружено <span class="count">{{ count }}</span> событий
-      <span v-if="count && !$onMobile">({{ startDate }} — {{ endDate }})</span>
+      <span v-if="count && !onMobile">({{ startDate }} — {{ endDate }})</span>
     </b-col>
 
     <b-col :cols="$store.getters['user/user'].authenticated && trainingEventsBtnShow ? 5 : 4">
@@ -34,6 +36,8 @@
 </template>
 
 <script>
+  import onMobile from "@/mixins/onMobile";
+
   export default {
     props: {
       trainingEventsBtnDisabled: false,
@@ -44,6 +48,7 @@
       endDate: '',
       count: 0
     },
+    mixins: [onMobile],
     data() {
       return {
         showTrainingEvents: false

@@ -1,18 +1,22 @@
 <template>
   <div class="social-media-links SocialMediaLinks">
     <a class="tg-bot-link" :href="tgBotUrl"><i class="fa fa-telegram" aria-hidden="true" /></a>
-    <a v-if="!$onMobile" :href="googlePlay.url" :title="googlePlay.title"
-       class="download-icon google-play-icon" target="_blank">{{ googlePlay.title }}</a>
-    <a v-if="!$onMobile" :href="appStore.url" :title="appStore.title"
-       class="download-icon app-store-icon" target="_blank">{{ appStore.title }}</a>
+    <ClientOnly>
+      <a v-if="!onMobile" :href="googlePlay.url" :title="googlePlay.title"
+         class="download-icon google-play-icon" target="_blank">{{ googlePlay.title }}</a>
+      <a v-if="!onMobile" :href="appStore.url" :title="appStore.title"
+         class="download-icon app-store-icon" target="_blank">{{ appStore.title }}</a>
+    </ClientOnly>
   </div>
 </template>
 
 <script>
 import appSettings from '@/settings/app'
+import onMobile from "@/mixins/onMobile";
 
 export default {
   name: 'SocialMediaLinks',
+  mixins: [onMobile],
   data() {
     return {
       tgBotUrl: appSettings.tgBotUrl,

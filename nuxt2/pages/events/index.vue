@@ -12,12 +12,15 @@
 
     <b-row style="margin-top: 33px" no-gutters>
 
-      <AnalyticsFilters
-        :disabled="disabledFilters"
-        @filtersUpdated="getEvents"
-        key="mainpage-filters"
-        v-if="!$onMobile"
-        ref="filters"/>
+      <ClientOnly>
+        <AnalyticsFilters
+          :disabled="disabledFilters"
+          @filtersUpdated="getEvents"
+          key="mainpage-filters"
+          v-if="!onMobile"
+          ref="filters"
+        />
+      </ClientOnly>
 
       <b-col v-if="error">
         <b-alert show variant="danger">{{ error }}</b-alert>
@@ -30,11 +33,15 @@
         </ClientOnly>
 
         <b-row no-gutters class="events-head text-center">
-          <b-col v-if="!$onMobile" md="1">#</b-col>
+          <ClientOnly>
+            <b-col v-if="!onMobile" md="1">#</b-col>
+          </ClientOnly>
           <b-col cols="3" md="1">Магнитуда</b-col>
           <b-col cols="3" md="2">Глубина</b-col>
           <b-col cols="6" md="4" class="datetime">Дата и время</b-col>
-          <b-col cols="12" md="4" v-if="!$onMobile">Ближайший населённый пункт</b-col>
+          <ClientOnly>
+            <b-col cols="12" md="4" v-if="!onMobile">Ближайший населённый пункт</b-col>
+          </ClientOnly>
         </b-row>
 
         <NuxtLink v-for="(event, index) in events" :key="event.id"
@@ -42,7 +49,9 @@
 
           <b-row no-gutters class="events-row text-center">
 
-            <b-col v-if="!$onMobile" md="1">{{ index + 1 }}</b-col>
+            <ClientOnly>
+              <b-col v-if="!onMobile" md="1">{{ index + 1 }}</b-col>
+            </ClientOnly>
 
             <b-col cols="3" md="1">
               <span :class="{ 'highlight-event': event.locValues.data.mag > highlightEventTreshold }">
@@ -56,13 +65,15 @@
               {{ event.locValues.data.event_datetime | moment(datetimeFormat) }}
             </b-col>
 
-            <b-col cols="12" md="4" class="settlement" v-if="!$onMobile">
-              <span v-if="!event.nearestCity">Нет данных</span>
-              <span v-else>
-                {{ round(event.nearestCity.data.ep_dis, 1) }} км
-                до {{ event.nearestCity.data.settlement.data.translation.data.title }}
-              </span>
-            </b-col>
+            <ClientOnly>
+              <b-col cols="12" md="4" class="settlement" v-if="!onMobile">
+                <span v-if="!event.nearestCity">Нет данных</span>
+                <span v-else>
+                  {{ round(event.nearestCity.data.ep_dis, 1) }} км
+                  до {{ event.nearestCity.data.settlement.data.translation.data.title }}
+                </span>
+              </b-col>
+            </ClientOnly>
 
           </b-row>
 
@@ -87,6 +98,7 @@
 import { round } from '@/helpers/math'
 import eventsSettings from '@/settings/events'
 import mixins from '@/mixins/events'
+import onMobile from "@/mixins/onMobile";
 
 export default {
   props: {
@@ -94,7 +106,7 @@ export default {
   components: {
     Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
   },
-  mixins: [mixins],
+  mixins: [mixins, onMobile],
   data() {
     return {
       error: '',
@@ -119,7 +131,7 @@ export default {
     },
     datetimeFormat: function()
     {
-      if (this.$onMobile) {
+      if (this.onMobile) {
         return 'L в HH:mm:ss'
       }
 

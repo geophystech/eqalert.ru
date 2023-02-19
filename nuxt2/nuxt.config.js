@@ -61,7 +61,6 @@ export default {
     { src: '~/plugins/yandex-metrika.js', mode: 'client' },
     { src: '~/plugins/beautify.js', mode: 'client' },
     { src: '~/plugins/datetime.js', mode: 'client' },
-    { src: '~/plugins/mobile.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
