@@ -1,7 +1,7 @@
 <template>
   <div class="mainpage">
-    <EventLastEvents v-if="$onMobile" />
     <ClientOnly>
+      <EventLastEvents v-if="$onMobile" />
       <MainpageMap v-if="!$onMobile" />
     </ClientOnly>
     <BasicPartners />

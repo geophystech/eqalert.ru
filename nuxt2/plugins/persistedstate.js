@@ -1,10 +1,11 @@
 import createPersistedState from 'vuex-persistedstate'
 
 export default ({ store, isHMR, $config }) => {
+  const NAME_SPACE = $config.NAME_SPACE || 'eqalert.ru'
   if (isHMR) return
   if (process.browser) {
     createPersistedState({
-      key: $config.NAME_SPACE,
+      key: NAME_SPACE,
       filter: (mutation) => {
 
         switch (mutation.type)

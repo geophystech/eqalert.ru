@@ -79,7 +79,7 @@ export function createMap(mapID, coordinates, {
   zoom = 8,
   store,
   axios,
-  $api
+  $api,
 } = {}) {
 
   const options = {

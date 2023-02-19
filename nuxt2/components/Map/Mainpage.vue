@@ -53,6 +53,7 @@
         const defaultEventsRange = this.map.defaultEventsRange
         let $moment = this.$moment
         let $axios = this.$axios
+        let $api = this.$api
 
         let legend = window.L.control({position: 'bottomright'})
         let stateLabel = window.L.DomUtil.create('p')
@@ -142,7 +143,7 @@
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
               disableBtns()
 
-              return $axios.get(this.$api.endpointEventsLight, {
+              return $axios.get($api.endpointEventsLight, {
                 params: {
                   datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
                   limit: eventsRange.limit || 1000

@@ -8,8 +8,9 @@
       :hide-footer="true"
       :lazy="true"
       size="lg"
-      @shown="onMapDialogOpen">
-      <BasicMap ref="map" :onlyStations="true" :gestureHandling="false" />
+      @shown="onMapDialogOpen"
+    >
+        <MainpageMap ref="map" :onlyStations="true" :gestureHandling="false" />
     </b-modal>
   </div>
 </template>
@@ -20,7 +21,10 @@ import mixins from '@/mixins/_page'
 
 export default {
   name: 'static-page',
-  components: { VueMarkdown },
+  components: {
+    VueMarkdown,
+    MainpageMap: () => process.client ? import('@/components/Map/Mainpage.vue') : null,
+  },
   data() {
     return {
       page: this.$router.currentRoute.params.page,
