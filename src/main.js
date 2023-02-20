@@ -33,6 +33,7 @@ import { Datetime } from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
 
 import { Settings } from 'luxon'
+import {translateScale} from '@/helpers/scale'
 
 Settings.defaultLocale = 'ru'
 
@@ -82,6 +83,8 @@ Vue.use(VueYandexMetrika, {
 axiosSetAuthorizationHeaders()
 axiosAddRefreshTokenInterceptor()
 authTimeoutCheck(store)
+
+translateScale()
 
 /* eslint-disable no-new */
 new Vue({

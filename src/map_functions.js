@@ -120,11 +120,11 @@ export function createMap(mapID, coordinates, {
     ymapsOpts: { suppressMapOpenBlock: true }
   })
 
-  map.addLayer(osm)
+  map.addLayer(yndx)
 
   const controls = new window.L.Control.Layers({
-    'Open Street Map': osm,
-    'Yandex Map': yndx
+    'Yandex Map': yndx,
+    'Open Street Map': osm
   })
 
   map._zoomHome = zoomHome()
@@ -302,11 +302,16 @@ export function addFeltReports(map, items, controls, show = true)
 
   items.forEach((feltReportObject) => {
     const center = feltReportObject.location
-    const cii = feltReportObject.cii
+    const cii = feltReportObject.cii - 0.2
+    const ciiText = `Интенсивность по ШСИ-2017: ${cii} ${numberDeclension(cii, ['балл', 'балла', 'баллов'])}`
+    const countText = `Количество откликов: ${feltReportObject.count}`
+    const {region, title} = feltReportObject.settlement.data.translation.data
+    const locationText = `Населенный пункт: ${title}, ${region}`
+    const popupText = `${locationText}<br/>${ciiText}<br/>${countText}`
     const marker = window.L
       .marker([center.lat, center.lon], {icon})
       .addTo(map)
-      .bindPopup(`Интенсивность по ШСИ-2017: ${cii} ${numberDeclension(cii, ['балл', 'балла', 'баллов'])}`)
+      .bindPopup(popupText)
     markers.push(marker)
   })
 
@@ -317,7 +322,7 @@ export function addFeltReports(map, items, controls, show = true)
   }
 
   if (controls) {
-    controls.addOverlay(markersGroup, 'Отлики')
+    controls.addOverlay(markersGroup, 'Отклики')
   }
 
   return markersGroup

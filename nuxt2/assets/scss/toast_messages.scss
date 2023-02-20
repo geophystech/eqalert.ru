@@ -1,0 +1,38 @@
+.toasted {
+  // Override original theme.
+  &.primary {
+    border-radius: 4px;
+    min-height: 38px;
+    line-height: 1.3em;
+    background-color: #444;
+    padding: 0 20px;
+    font-size: 17px;
+    font-weight: 300;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+    &.success {
+      background: #45bf7b;
+
+      .action {
+        color: #dfdfdf;
+      }
+    }
+
+    &.error {
+      background: #e52c5a;
+
+      .action {
+        color: #dfdfdf;
+      }
+    }
+
+    &.info {
+      background: #444;
+    }
+
+    .action {
+      color: #a1c2fa;
+    }
+  }
+}

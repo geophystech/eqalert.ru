@@ -116,7 +116,7 @@
         // Тензор момента
         this.tabs.momentTensor.available = this.event.has_mt
 
-        // Магистральные объекты
+        // Линейные объекты
         this.tabs.ldos.available = this.event.has_long_distance_objects_analysis
       },
       setData: function() {

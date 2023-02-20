@@ -31,10 +31,18 @@ Built on <a href="https://vuejs.org">Vue.js 2.5</a>, <a href="https://webpack.js
 
 Eqalert.ru – the real-time information resource about earthquakes, seismic impacts and hazards
 
+## v3 (SSR version)
+
+This README is deprecated. Please check `./nuxt2/README.md`.
+
+There is a new application written using `Nuxt2` with `Server-Side Rendering (SSR)` to make SEO better for _Google_ and _Yandex_ robots
+
+---
+
 ## Used technologies
 
-This is a Single Page Application built with [VueJS](https://vuejs.org/) and [webpack](https://webpack.js.org/).     
-Data is received from an API host using [axios](https://github.com/axios/axios) library. 
+This is a Single Page Application built with [VueJS](https://vuejs.org/) and [webpack](https://webpack.js.org/).
+Data is received from an API host using [axios](https://github.com/axios/axios) library.
 
 More about used technologies you can get from the `packages.json` file.
 
@@ -47,7 +55,7 @@ git clone git@github.com:geophystech/eqalert.ru.git
 cd eqalert.ru
 
 # Install dependencies
-yarn install 
+yarn install
 ```
 
 
@@ -59,17 +67,17 @@ To run application in development mode, just run:
 yarn dev
 ```
 
-The application will be compiled and run. 
-It will be available at http://localhost:8080 
+The application will be compiled and run.
+It will be available at http://localhost:8080
 
 By default the application uses hot-reload mode which means any changes will be picked up and all open pages will be reloaded automatically.
-Exception is static markdown pages located in `static/markdown` directory. 
+Exception is static markdown pages located in `static/markdown` directory.
 
 If you changem them, you should update your browser pages manually (`F5`).
 
 ## Run tests
 
-The application has a few tests. Not very good coverage yet, but still. 
+The application has a few tests. Not very good coverage yet, but still.
 
 To run tests, just run:
 
@@ -84,7 +92,7 @@ npm run e2e
 npm test
 ```
 
-## Build application 
+## Build application
 
 To run application in staging or production areas, it should be compiled first:
 
@@ -92,8 +100,8 @@ To run application in staging or production areas, it should be compiled first:
 NODE_ENV=production yarn build
 ```
 
-The compiled application will be stored in the `dist/` directory.     
-You can deploy it to your target (staging, production, etc) using any tools you like. 
+The compiled application will be stored in the `dist/` directory.
+You can deploy it to your target (staging, production, etc) using any tools you like.
 
 Example of deploying the application manually to a staging host:
 
@@ -122,3 +130,15 @@ docker run -p 8888:80 --rm --env API_URI=https://api-test.geophystech.ru/api --e
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+
+## Vulnerabilities
+
+  - node-sass@8.0.0 >> [website](https://devhub.checkmarx.com/cve-details/CVE-2017-12964/?utm_source=jetbrains&utm_medium=referral&utm_campaign=pycharm&utm_term=python)
+  ```
+    There is a stack consumption issue in all versions of LibSass,
+    that is triggered in the function "Sass::Eval::operator()"
+    in "eval.cpp". It will lead to a remote denial of service attack.
+    This issue also affects all versions of other packages that use
+    the LibSass library, such as node-sass, libsass-python, sassc, jsass.
+  ```
