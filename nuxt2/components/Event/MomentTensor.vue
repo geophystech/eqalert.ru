@@ -71,7 +71,6 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/api'
 
   export default {
     props: ['event'],
@@ -141,7 +140,7 @@
     },
     methods: {
       fetchData: function() {
-        this.$axios.get(apiSettings.endpointMomentTensor(this.event.id))
+        this.$axios.get(this.$api.endpointMomentTensor(this.event.id))
           .then(response => {
             this.setData(response.data.data[0])
           })

@@ -8,7 +8,6 @@
     removeEpicenter, setView, addFeltReports
   } from '@/config/map_functions'
   import { numberDeclension } from '@/helpers/number'
-  import apiSettings from '@/settings/api'
 
   export default {
     props: ['event', 'tab'],
@@ -27,7 +26,7 @@
     methods: {
       syncFeltReportData: function(event) {
         if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
-          this.$axios.get(apiSettings.endpointEventMeasuredIntensityAggregations(this.event.id))
+          this.$axios.get(this.$api.endpointEventMeasuredIntensityAggregations(this.event.id))
             .then(response => {
               this.addData(event.data.data, response.data.feltReports)
             })
@@ -114,6 +113,7 @@
           this.coordinates, {
             store: this.$store,
             axios: this.$axios,
+            $api: this.$api,
           })
       },
       fetchData: function()
@@ -122,7 +122,7 @@
           return this.putEpicenter()
         }
 
-        this.$axios.get(apiSettings.endpointEventPga(this.event.id))
+        this.$axios.get(this.$api.endpointEventPga(this.event.id))
           .then(response => {
             this.syncFeltReportData(response)
           })

@@ -1,4 +1,3 @@
-import apiSettings from '@/settings/api'
 import stationsSettings from '@/settings/stations'
 
 import {agency, eventColor, eventRadius} from '@/helpers/event'
@@ -79,7 +78,8 @@ export function createMap(mapID, coordinates, {
   onlyStations = false,
   zoom = 8,
   store,
-  axios
+  axios,
+  $api,
 } = {}) {
 
   const options = {
@@ -134,7 +134,7 @@ export function createMap(mapID, coordinates, {
 
   if(onlyStations)
   {
-    addStations(axios, map).then(coordinates => {
+    addStations($api, axios, map).then(coordinates => {
       mapCentering(map, coordinates)
     })
   }
@@ -144,16 +144,16 @@ export function createMap(mapID, coordinates, {
     addPlateBoundaries(controls, store)
 
     // Show seismic stations
-    addStations(axios, map, controls, showStations)
+    addStations($api, axios, map, controls, showStations)
 
     // Show Buildings
     if(addToggleShowBuildings) {
-      showBuildings(axios, map, controls)
+      showBuildings($api, axios, map, controls)
     }
 
     // Show LDOs (long distance objects)
     if(addToggleShowLDOs) {
-      showLDOs(axios, map, controls)
+      showLDOs($api, axios, map, controls)
     }
   }
 
@@ -203,13 +203,13 @@ function addPlateBoundaries(controls, store)
 }
 
 // Show seismic stations
-function addStations(axios, map, controls, show = true)
+function addStations($api, axios, map, controls, show = true)
 {
   const allCoords = []
 
   return new Promise((resolve, reject) => {
 
-    axios.get(apiSettings.endpointStations)
+    axios.get($api.endpointStations)
       .then(response => {
         let markers = []
 
@@ -327,7 +327,7 @@ export function addFeltReports(map, items, controls, show = true)
 }
 
 // Show Buildings
-function showBuildings(axios, map, controls)
+function showBuildings($api, axios, map, controls)
 {
   let _getBuildings = (function() {
 
@@ -360,7 +360,7 @@ function showBuildings(axios, map, controls)
   {
     map.spin(true)
 
-    _getBuildings(apiSettings.endpointBuildings).then(buildings => {
+    _getBuildings($api.endpointBuildings).then(buildings => {
 
       buildings.forEach(building => {
         let marker = createMapBuildingMarker(building)
@@ -386,16 +386,16 @@ function showBuildings(axios, map, controls)
 }
 
 // Show LDOs (long distance objects)
-function showLDOs(axios, map, controls)
+function showLDOs($api, axios, map, controls)
 {
   async function getLDOs(layerGroup)
   {
     map.spin(true)
 
-    const LDOs = (await axios.get(apiSettings.endpointLDOs)).data.data
+    const LDOs = (await axios.get($api.endpointLDOs)).data.data
 
     LDOs.forEach(async ldo => {
-      ldo.parts = (await axios.get(apiSettings.endpointLdoParts(ldo.id))).data
+      ldo.parts = (await axios.get($api.endpointLdoParts(ldo.id))).data
       mapLDOsLayerCreate(ldo, layerGroup)
     })
 

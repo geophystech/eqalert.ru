@@ -1,9 +1,11 @@
 <template>
   <b-container>
     <AppHeader/>
-    <AppNavbar/>
-    <AppMobileAlert v-if="is_android" message="Мы сделали приложение для Android" :url="googlePlayUrl" />
-    <AppMobileAlert v-if="is_iOS" message="Мы сделали приложение для iOS" :url="appStoreUrl" />
+    <ClientOnly>
+      <AppNavbar/>
+      <AppMobileAlert v-if="is_android" message="Мы сделали приложение для Android" :url="googlePlayUrl" />
+      <AppMobileAlert v-if="is_iOS" message="Мы сделали приложение для iOS" :url="appStoreUrl" />
+    </ClientOnly>
     <Nuxt />
     <AppFooter/>
   </b-container>
@@ -11,12 +13,13 @@
 
 <script>
 import appSettings from '@/settings/app'
-import apiSettings from '@/settings/api'
 import { translateScale } from '@/helpers/scale'
 import { axiosAddRefreshTokenInterceptor, axiosSetAuthorizationHeaders } from '@/helpers/axios'
 import { authTimeoutCheck } from '@/helpers/auth'
+import onMobile from "@/mixins/onMobile";
 
 export default {
+  mixins: [onMobile],
   data() {
     return {
       googlePlayUrl: appSettings.mobileAppUrls.googlePlay,
@@ -26,7 +29,7 @@ export default {
   created() {
     if (process.browser) {
       axiosSetAuthorizationHeaders(this.$axios, this.$store.getters['user/user'].accessToken)
-      axiosAddRefreshTokenInterceptor(this.$axios, this.$store)
+      axiosAddRefreshTokenInterceptor(this.$axios, this.$store, this.$api)
       authTimeoutCheck(this.$store, this.$moment)
       translateScale()
     }
@@ -40,7 +43,7 @@ export default {
       })
     },
     fetchSystemInfo: function() {
-      this.$axios.get(apiSettings.endpointSystemInfo).then(response => {
+      this.$axios.get(this.$api.endpointSystemInfo).then(response => {
         const data = response.data.data
         this.$store.dispatch('app/setMsk64ConfigVersion', data.msk64Config.data.config_version)
         this.$store.dispatch('app/setSrssDBVersion', data.srssCoreConfig.data.db_version)
@@ -57,11 +60,11 @@ export default {
   },
   computed: {
     is_android: function() {
-      return this.$onMobile && /Android/i.test(navigator.userAgent)
+      return this.onMobile && /Android/i.test(navigator.userAgent)
         && !/Windows\s+Phone/i.test(navigator.userAgent)
     },
     is_iOS: function() {
-      return this.$onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
+      return this.onMobile && /iPad|iPhone|iPod/i.test(navigator.userAgent)
         && !/Windows\s+Phone/i.test(navigator.userAgent)
     }
   }

@@ -32,8 +32,8 @@
 </template>
 
 <script>
-  import apiSettings from '@/settings/api'
   import { round } from '@/helpers/math'
+  import onMobile from "@/mixins/onMobile";
 
   export default {
     props: ['event'],
@@ -42,6 +42,7 @@
         events: []
       }
     },
+    mixins: [onMobile],
     methods: {
       routerLink: function(eventId)
       {
@@ -61,11 +62,11 @@
       },
       fetchEvents: function()
       {
-        this.$axios.get(apiSettings.endpointEvents, {
+        this.$axios.get(this.$api.endpointEvents, {
           params: {
             datetime_min: this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00'),
             has_training: !this.event || !this.event.has_training ? 0 : 1,
-            limit: this.$onMobile ? 20 : 10,
+            limit: this.onMobile ? 20 : 10,
             include: 'nearestCity'
           }
         })

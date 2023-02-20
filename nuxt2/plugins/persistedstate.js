@@ -1,8 +1,7 @@
 import createPersistedState from 'vuex-persistedstate'
 
-const NAME_SPACE = 'eqalert.ru'
-
-export default ({ store, isHMR }) => {
+export default ({ store, isHMR, $config }) => {
+  const NAME_SPACE = $config.NAME_SPACE || 'eqalert.ru'
   if (isHMR) return
   if (process.browser) {
     createPersistedState({

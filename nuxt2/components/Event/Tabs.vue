@@ -2,7 +2,7 @@
   <b-tabs>
     <template #tabs-end>
       <b-nav-item
-        v-if="!$onMobile && isTabAvailable(tab)"
+        v-if="!onMobile && isTabAvailable(tab)"
         v-for="tab in tabs"
         :href="tab.href"
         :key="tab.href"
@@ -13,7 +13,7 @@
       </b-nav-item>
 
       <b-form-select
-        v-if="$onMobile"
+        v-if="onMobile"
         v-model="activeTab"
         @change="onTabSwitch"
       >
@@ -32,6 +32,7 @@
 
 <script>
   import eventTabs from '@/config/event-tabs'
+  import onMobile from "@/mixins/onMobile";
 
   export default {
     props: ['event'],
@@ -41,11 +42,12 @@
         tabs: eventTabs
       }
     },
+    mixins: [onMobile],
     methods: {
       convertTabName: function(tab)
       {
         if (!tab) {
-          return (!this.$onMobile || !this.tabs.settlements.available)
+          return (!this.onMobile || !this.tabs.settlements.available)
             ? 'generalInformation' : 'settlements'
         }
 

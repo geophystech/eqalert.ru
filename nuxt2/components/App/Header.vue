@@ -9,14 +9,16 @@
           </span>
       </b-col>
 
-      <b-col cols="6" md="1" class="text-right" order-md="2" v-if="!$onMobile">
-        <NuxtLink :to="{ name: 'events' }">
-            <span id="events-count">
-              <span class="exclamation-mark">!</span>
-              <span>{{ $store.getters['app/totalEventsCount'] }}</span>
-            </span>
-        </NuxtLink>
-      </b-col>
+      <ClientOnly>
+        <b-col cols="6" md="1" class="text-right" order-md="2" v-if="!onMobile">
+          <NuxtLink :to="{ name: 'events' }">
+              <span id="events-count">
+                <span class="exclamation-mark">!</span>
+                <span>{{ $store.getters['app/totalEventsCount'] }}</span>
+              </span>
+          </NuxtLink>
+        </b-col>
+      </ClientOnly>
 
       <b-col class="did-you-feel-it text-center" cols="8" md="4" order="3" order-md="3">
         <NuxtLink to="/felt-report">
@@ -46,7 +48,10 @@
 
 <script>
 
+import onMobile from "@/mixins/onMobile";
+
 export default {
+  mixins: [onMobile],
   methods: {
     signOut: function() {
       this.$toasted.success(`Вы вышли из сайта`, { icon: 'check' })

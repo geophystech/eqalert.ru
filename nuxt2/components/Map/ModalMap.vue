@@ -19,7 +19,6 @@
   import {
     createMap, createMapEventMarker, mapCentering
   } from '@/config/map_functions'
-  import apiSettings from '@/settings/api'
 
   export default {
     name: 'ModalMap',
@@ -45,6 +44,7 @@
           zoom: 4,
           store: this.$store,
           axios: this.$axios,
+          $api: this.$api,
         })
 
         const moment = this.$moment
@@ -120,7 +120,7 @@
 
         }.bind(this)
 
-        _getEvents(apiSettings.endpointEventsLight)
+        _getEvents(this.$api.endpointEventsLight)
       }
     }
   }

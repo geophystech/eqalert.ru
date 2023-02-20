@@ -7,7 +7,6 @@
     createMap, createMapEventMarker
   } from '@/config/map_functions'
   import {EVENTS_RANGES} from '@/helpers/event'
-  import apiSettings from '@/settings/api'
 
   export default
   {
@@ -40,6 +39,7 @@
           zoom: 4,
           store: this.$store,
           axios: this.$axios,
+          $api: this.$api,
         })
 
         if(!this.onlyStations) {
@@ -53,6 +53,7 @@
         const defaultEventsRange = this.map.defaultEventsRange
         let $moment = this.$moment
         let $axios = this.$axios
+        let $api = this.$api
 
         let legend = window.L.control({position: 'bottomright'})
         let stateLabel = window.L.DomUtil.create('p')
@@ -142,7 +143,7 @@
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
               disableBtns()
 
-              return $axios.get(apiSettings.endpointEventsLight, {
+              return $axios.get($api.endpointEventsLight, {
                 params: {
                   datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
                   limit: eventsRange.limit || 1000

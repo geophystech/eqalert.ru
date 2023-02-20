@@ -1,12 +1,12 @@
 class Config
 {
-  constructor()
+  constructor($config)
   {
     this.authorizationType = 'Bearer'
 
-    this.baseURL = process.env.API_BASE_URL ?? 'https://rest-api.eqalert.ru/api'
-    this.oauthBaseURL = process.env.API_OAUTH_BASE_URL ?? 'https://oauth-web.eqalert.ru'
-    this.version = process.env.API_VERSION ?? 'v1'
+    this.baseURL = $config.API_BASE_URL
+    this.oauthBaseURL = $config.API_OAUTH_BASE_URL
+    this.version = $config.API_VERSION
 
     this.endpointAnalyticsCumulativeCounts = `${this.baseURL}/${this.version}/analytics/cumulativeCounts`
     this.endpointAnalyticsDensityCounts = `${this.baseURL}/${this.version}/analytics/densityCounts`
@@ -72,4 +72,4 @@ class Config
   }
 }
 
-export default new Config()
+export default Config

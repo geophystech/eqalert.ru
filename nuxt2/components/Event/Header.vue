@@ -2,9 +2,11 @@
 
   <b-row class="event-header" no-gutters>
 
-    <b-col cols="11" md="3">
-      <b-breadcrumb :items="breadcrumbs" />
-    </b-col>
+    <ClientOnly>
+      <b-col cols="11" md="3">
+        <b-breadcrumb :items="breadcrumbs" />
+      </b-col>
+    </ClientOnly>
 
     <b-col cols="12" md="8">
       <b-row>
@@ -59,11 +61,13 @@
 
     </b-col>
 
-    <b-col cols="1" md="1" class="text-right" v-if="!$onMobile">
-      <b-button-group>
-        <BasicExportDropDown v-if="event.id" @export2xls="export2xls" />
-      </b-button-group>
-    </b-col>
+    <ClientOnly>
+      <b-col cols="1" md="1" class="text-right" v-if="!onMobile">
+        <b-button-group>
+          <BasicExportDropDown v-if="event.id" @export2xls="export2xls" />
+        </b-button-group>
+      </b-col>
+    </ClientOnly>
 
   </b-row>
 
@@ -71,12 +75,13 @@
 
 <script>
   import { agency, agencyDescription } from '@/helpers/event'
-  import apiSettings from '@/settings/api'
+  import onMobile from "@/mixins/onMobile";
 
   export default {
     props: {
       event: {}
     },
+    mixins: [onMobile],
     components: {
       Spinner: () => (process.client) ? import('@/components/Basic/Spinner.vue') : null,
     },
@@ -116,15 +121,15 @@
         }
       },
       export2xls: function(request) {
-        request(apiSettings.endpointEvent(this.event.id))
+        request(this.$api.endpointEvent(this.event.id))
       }
     },
     computed: {
       datetimeFormatUTC: function() {
-        return this.$onMobile ? 'L в HH:mm:ss UTC' : 'LL в HH:mm:ss UTC'
+        return this.onMobile ? 'L в HH:mm:ss UTC' : 'LL в HH:mm:ss UTC'
       },
       datetimeFormatLocal: function() {
-        return this.$onMobile ? 'L в HH:mm:ss (UTCZ)' : 'LL в HH:mm:ss (UTCZ)'
+        return this.onMobile ? 'L в HH:mm:ss (UTCZ)' : 'LL в HH:mm:ss (UTCZ)'
       },
       breadcrumbs: function()
       {
@@ -135,7 +140,7 @@
           href: "/"
         })
 
-        if (!this.$onMobile)
+        if (!this.onMobile)
         {
           let query = JSON.parse(this.$route.query.backUrlQuery || '{}')
 

@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import apiSettings from '@/settings/api'
 
 export default {
   props: ['event'],
@@ -65,7 +64,7 @@ export default {
   },
   methods: {
     fetchData: function() {
-      this.$axios.get(apiSettings.endpointEventLDOs(this.event.id), {
+      this.$axios.get(this.$api.endpointEventLDOs(this.event.id), {
         params: {
           customer_ids: [1], // Change id(s) when the user management is implemented.
           show_all_parts: 1

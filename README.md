@@ -31,6 +31,14 @@ Built on <a href="https://vuejs.org">Vue.js 2.5</a>, <a href="https://webpack.js
 
 Eqalert.ru – the real-time information resource about earthquakes, seismic impacts and hazards
 
+## v3 (SSR version)
+
+This README is deprecated. Please check `./nuxt2/README.md`.
+
+There is a new application written using `Nuxt2` with `Server-Side Rendering (SSR)` to make SEO better for _Google_ and _Yandex_ robots
+
+---
+
 ## Used technologies
 
 This is a Single Page Application built with [VueJS](https://vuejs.org/) and [webpack](https://webpack.js.org/).

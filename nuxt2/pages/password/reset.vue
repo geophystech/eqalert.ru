@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import apiSettings from '@/settings/api'
 
 export default {
   data() {
@@ -104,7 +103,7 @@ export default {
 
       this.disableFields()
 
-      this.$axios.post(apiSettings.endpointUserResetPassword, payload)
+      this.$axios.post(this.$api.endpointUserResetPassword, payload)
         .then(response => {
           this.resetComplete = true
         })

@@ -1,6 +1,5 @@
 <script>
 import { Line } from 'vue-chartjs'
-import apiSettings from '@/settings/api'
 
 export default Line.extend({
   props: ['filtersParams'],
@@ -66,7 +65,7 @@ export default Line.extend({
   },
   methods: {
     drawChart: function(params = {}) {
-      this.$axios.get(apiSettings.endpointAnalyticsRMSAllocation, { params: params })
+      this.$axios.get(this.$api.endpointAnalyticsRMSAllocation, { params: params })
         .then(response => {
           this.chartData.datasets[0].label = 'Распределение RMS'
           this.chartData.datasets[0].data = response.data.data.counts

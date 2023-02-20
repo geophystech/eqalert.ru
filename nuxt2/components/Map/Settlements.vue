@@ -7,7 +7,6 @@
     addEpicenter, createMap, id, convertMsk64,
     msk64Color, removeEpicenter, setView, addFeltReports
   } from '@/config/map_functions'
-  import apiSettings from '@/settings/api'
 
   export default {
     props: ['event', 'tab'],
@@ -65,6 +64,7 @@
           this.coordinates, {
             store: this.$store,
             axios: this.$axios,
+            $api: this.$api,
           })
       },
       fetchData: async function() {
@@ -72,14 +72,14 @@
 
         try {
           if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
-            const response = await this.$axios.get(apiSettings.endpointEventMeasuredIntensityAggregations(this.event.id))
+            const response = await this.$axios.get(this.$api.endpointEventMeasuredIntensityAggregations(this.event.id))
             feltReportsData = response.data.feltReports
           }
         } catch (e) {
           console.log(e)
         }
 
-        const response = await this.$axios.get(apiSettings.endpointEventMsk64(this.event.id))
+        const response = await this.$axios.get(this.$api.endpointEventMsk64(this.event.id))
         const data = response.data.data
 
         this.addData(data, feltReportsData)
