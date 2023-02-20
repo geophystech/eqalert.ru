@@ -1,20 +1,28 @@
-# nuxt2
+# v3 (SSR)
 
-## Build Setup
+## How to build this project
 
 ```bash
-# install dependencies
+# 1. switch to Node.js v14.17.*
+$ nvm use 14.17
+
+# 2. install dependencies
 $ yarn install
 
-# serve with hot reload at localhost:3000
-$ yarn dev
+# 3. generate static files into dist (DEV)
+$ yarn generate:development
 
-# build for production and launch server
-$ yarn build
-$ yarn start
+# or (PROD)
+$ yarn generate:production
 
-# generate static project
-$ yarn generate
+# 4. run project (DEV)
+$ yarn start:development
+
+# or (PROD)
+$ yarn start:production
+
+# 5. check <HOST>:3000
+
 ```
 
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
