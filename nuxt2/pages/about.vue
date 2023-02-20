@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VueMarkdown :source="content" class="static-page-content" @rendered="onRendered" />
+    <div class="static-page-content" @rendered="onRendered" v-html="content"></div>
     <b-modal
       ref="mapDialog"
       title="Карта сейсмических станций"
@@ -16,22 +16,12 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
-import mixins from '@/mixins/_page'
+import mixins from '@/mixins/about'
 
 export default {
   name: 'static-page',
   components: {
-    VueMarkdown,
     MainpageMap: () => process.client ? import('@/components/Map/Mainpage.vue') : null,
-  },
-  data() {
-    return {
-      page: this.$router.currentRoute.params.page,
-      pages: {
-        about: 'О проекте'
-      }
-    }
   },
   mixins: [mixins],
   head() {
@@ -47,11 +37,6 @@ export default {
     }
   },
   methods: {
-    getContent() {
-      this.$axios.get(`/markdown/${this.page}.md`).then(response => {
-        this.content = response.data
-      })
-    },
     onRendered() {
       !this.$el || setTimeout(() => {
         this.$el.querySelector('.mainpage-map-link').addEventListener('click', e => {
@@ -63,11 +48,6 @@ export default {
     onMapDialogOpen() {
       this.$refs.map.map.object.invalidateSize()
     }
-  },
-  beforeRouteUpdate(to, from, next) {
-    this.page = to.params.page
-    this.getContent()
-    next()
   }
 }
 </script>
