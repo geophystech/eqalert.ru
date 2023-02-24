@@ -4,15 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "development": "set NODE_ENV=development && nuxt dev",
-    "production": "set NODE_ENV=production && nuxt dev",
+    "development": "NODE_ENV=development nuxt dev",
+    "production": "NODE_ENV=production nuxt dev",
     "build": "nuxt build",
     "start": "nuxt start",
-    "start:production": "set NODE_ENV=production && nuxt start",
-    "start:development": "set NODE_ENV=development && nuxt start",
+    "start:production": "NODE_ENV=production nuxt start",
+    "start:development": "NODE_ENV=development nuxt start",
     "generate": "nuxt generate",
-    "generate:production": "set NODE_ENV=production && nuxt generate",
-    "generate:development": "set NODE_ENV=development && nuxt generate",
+    "generate:production": "NODE_ENV=production nuxt generate",
+    "generate:development": "NODE_ENV=development nuxt generate",
     "test": "jest"
   },
   "dependencies": {
