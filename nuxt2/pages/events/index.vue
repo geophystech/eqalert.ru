@@ -62,7 +62,7 @@
             <b-col cols="3" md="2">{{ event.locValues.data.depth }} км</b-col>
 
             <b-col cols="6" md="4" class="datetime">
-              {{ event.locValues.data.event_datetime | moment(datetimeFormat) }}
+              {{ $moment(event.locValues.data.event_datetime).format(datetimeFormat) }}
             </b-col>
 
             <ClientOnly>
@@ -170,7 +170,7 @@ export default {
         if (!params.datetime_min) {
           params.datetime_min = this.$moment
             .utc()
-            .subtract(6, 'months')
+            .subtract(2, 'months')
             .format('YYYY-MM-DD 00:00:00')
           this.$router.replace({
             name: this.$route.name,

@@ -4,7 +4,7 @@ export default {
       include: 'nearestCity',
       cursor: '',
       limit: 10,
-      datetime_min: $moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00')
+      datetime_min: $moment.utc().subtract(2, 'months').format('YYYY-MM-DD 00:00:00')
     }
 
     let { data } = await $axios.get($api.endpointEvents, { params })
