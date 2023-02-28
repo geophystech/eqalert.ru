@@ -1,20 +1,33 @@
-FROM node:14.17-alpine
+### STAGE 1: Build ###
+FROM node:14.17-alpine as build
 
-WORKDIR /srv/ssr
+WORKDIR /app
 
-COPY ./package.json ./
+### Install Python 3.6 and pip ###
+RUN apk add --no-cache make gcc g++ python3 && \
+    python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --no-cache --upgrade pip setuptools wheel && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi
 
-COPY ./yarn.lock ./
+ENV PATH /app/node_modules/.bin:$PATH
 
-COPY ./ ./
+COPY package.json /app/package.json
 
-RUN apk add --update python3 make g++\
-   && rm -rf /var/cache/apk/*
+COPY yarn.lock /app/yarn.lock
 
-RUN yarn install
+RUN yarn install --silent
 
-RUN yarn generate:development
+COPY . /app
 
-EXPOSE 3000
+RUN yarn run generate:development
 
-CMD [ "start:development" ]
+### STAGE 2: NGINX ###
+FROM nginx:stable-alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
