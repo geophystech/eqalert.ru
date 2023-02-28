@@ -1,23 +1,10 @@
 version: '3.8'
 
 services:
-  ssr:
-    container_name: ssr
+  web:
     build:
       context: .
       dockerfile: .dockerfiles/prod/Dockerfile
-    image: ssr_image
-    restart: always
-
-  proxy:
-    container_name: proxy
-    image: nginx:alpine
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-    restart: always
-    depends_on:
-      - ssr
-    volumes:
-      - ./proxy/docker/nginx/nginx.prod.conf:/etc/nginx/nginx.conf
-      - ./proxy/docker/nginx/conf.d/ssr.prod.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "80:80"
+      - '80:80'
+    restart: always
