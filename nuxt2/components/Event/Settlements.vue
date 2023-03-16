@@ -31,7 +31,7 @@
           v-if="nextPage && !spinners.loadMoreEvents"
           id="loadMoreEventsBtn"
           @click.prevent="() => { page++ }"
-        >Показать больше событий</a>
+        >Показать больше населенных пунктов</a>
       </b-col>
     </b-row>
   </div>
