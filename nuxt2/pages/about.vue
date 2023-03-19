@@ -463,7 +463,7 @@
           </p>
 
           <details>
-            <summary><span class="nested-container__title">Методика обработки откликов</span></summary>
+            <summary><span class="nested-container__title">Зоны мониторинга</span></summary>
 
             <nested-container>
               <p>
@@ -645,47 +645,47 @@
                   Расположение зон мониторинга на территории РФ и сопредельных стран, подверженных сейсмическому риску, с отметкой соответствующей конфигурации уравнения макросейсмического поля. Желтым цветом отмечены территориальные границы РФ по состоянию на 01.01.2022 г.
                 </p>
               </details>
-            </nested-container>
-          </details>
 
-          <details>
-            <summary><span class="nested-container__title">Показать расшифровку конфигураций</span></summary>
+              <details>
+                <summary><span class="nested-container__title">Показать расшифровку конфигураций</span></summary>
 
-            <nested-container>
-              <table>
-                <tr>
-                  <th>Наименование конфигурации уравнения затухания сейсмической интенсивности</th>
-                  <th>Расшифровка</th>
-                </tr>
-                <tr>
-                  <td>OTHERS</td>
-                  <td>Среднее значение</td>
-                </tr>
-                <tr>
-                  <td>LENING</td>
-                  <td>Ленинградская область</td>
-                </tr>
-                <tr>
-                  <td>N-CAUC</td>
-                  <td>Северный Кавказ</td>
-                </tr>
-                <tr>
-                  <td>DAGEST</td>
-                  <td>Дагестан</td>
-                </tr>
-                <tr>
-                  <td>KAMCH</td>
-                  <td>Камчатка</td>
-                </tr>
-                <tr>
-                  <td>KURIL</td>
-                  <td>Курильские острова</td>
-                </tr>
-                <tr>
-                  <td>SAKH</td>
-                  <td>Сахалин</td>
-                </tr>
-              </table>
+                <nested-container>
+                  <table>
+                    <tr>
+                      <th>Наименование конфигурации уравнения затухания сейсмической интенсивности</th>
+                      <th>Расшифровка</th>
+                    </tr>
+                    <tr>
+                      <td>OTHERS</td>
+                      <td>Среднее значение</td>
+                    </tr>
+                    <tr>
+                      <td>LENING</td>
+                      <td>Ленинградская область</td>
+                    </tr>
+                    <tr>
+                      <td>N-CAUC</td>
+                      <td>Северный Кавказ</td>
+                    </tr>
+                    <tr>
+                      <td>DAGEST</td>
+                      <td>Дагестан</td>
+                    </tr>
+                    <tr>
+                      <td>KAMCH</td>
+                      <td>Камчатка</td>
+                    </tr>
+                    <tr>
+                      <td>KURIL</td>
+                      <td>Курильские острова</td>
+                    </tr>
+                    <tr>
+                      <td>SAKH</td>
+                      <td>Сахалин</td>
+                    </tr>
+                  </table>
+                </nested-container>
+              </details>
             </nested-container>
           </details>
 
