@@ -207,7 +207,7 @@
 
     .badge {
       font-size: 70%;
-      padding: 1%;
+      padding: 8px;
       text-transform: uppercase;
 
       @media screen and (max-width: 767px) {
