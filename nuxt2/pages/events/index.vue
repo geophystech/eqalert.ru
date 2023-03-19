@@ -85,7 +85,7 @@
               <Spinner v-if="spinners.loadMoreEvents" />
             </ClientOnly>
             <a href="#" v-if="apiParams.cursor && !spinners.loadMoreEvents" id="loadMoreEventsBtn"
-               @click.prevent="loadMoreEvents">Показать больше населенных пунктов</a>
+               @click.prevent="loadMoreEvents">Показать больше событий</a>
             <span v-if="!apiParams.cursor">Загружены все события</span>
           </b-col>
         </b-row>
