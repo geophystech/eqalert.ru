@@ -16,7 +16,8 @@ import appSettings from '@/settings/app'
 import { translateScale } from '@/helpers/scale'
 import { axiosAddRefreshTokenInterceptor, axiosSetAuthorizationHeaders } from '@/helpers/axios'
 import { authTimeoutCheck } from '@/helpers/auth'
-import onMobile from "@/mixins/onMobile";
+import onMobile from "@/mixins/onMobile"
+import plateBoundariesGeo from "@/config/plate_boundaries.geo"
 
 export default {
   mixins: [onMobile],
@@ -37,10 +38,7 @@ export default {
   },
   methods: {
     fetchPlateBoundaries: function() {
-      // /static/ ----> /
-      this.$axios.get('/json/plate_boundaries.geo.json').then(response => {
-        this.$store.dispatch('app/setPlateBoundaries', response.data)
-      })
+        this.$store.dispatch('app/setPlateBoundaries', plateBoundariesGeo)
     },
     fetchSystemInfo: function() {
       this.$axios.get(this.$api.endpointSystemInfo).then(response => {
