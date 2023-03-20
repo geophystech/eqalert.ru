@@ -170,16 +170,18 @@
           <div class="text-error" v-show="errors.rms_max" v-html="errors.rms_max"></div>
         </b-col>
       </b-row>
-      <b-row class="filter-row" no-gutters>
-        <b-col>
-          <b-row no-gutters class="filter-inputs">
-            <b-col>
-              <b-form-checkbox name="has_mt" @change.native="onFiltersChange($event)"
-                v-model="filters.has_mt" :disabled="disabled">Только с тензором момента</b-form-checkbox>
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
+<!--      Keep it as comments just in case if it's necessary -->
+<!--                                                         -->
+<!--      <b-row class="filter-row" no-gutters>-->
+<!--        <b-col>-->
+<!--          <b-row no-gutters class="filter-inputs">-->
+<!--            <b-col>-->
+<!--              <b-form-checkbox name="has_mt" @change.native="onFiltersChange($event)"-->
+<!--                v-model="filters.has_mt" :disabled="disabled">Только с тензором момента</b-form-checkbox>-->
+<!--            </b-col>-->
+<!--          </b-row>-->
+<!--        </b-col>-->
+<!--      </b-row>-->
       <b-row class="filter-row" no-gutters>
         <b-col>
           <b-row no-gutters class="filter-inputs">

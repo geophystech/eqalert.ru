@@ -176,65 +176,51 @@
                   подбор и практическое обоснование скоростной модели по
                   геологическим и геофизическим данным, оценка точности гипоцентральных определений
                   [<a
-                  href="https://link.springer.com/article/10.3103/S0747923912030073"
-                  target="_blank"
-                >
-                  Konovalov et al., 2012
-                </a>];
+                    href="https://link.springer.com/article/10.3103/S0747923912030073"
+                    target="_blank"
+                  >Konovalov et al., 2012</a>];
                 </li>
                 <li>
                   калибровка локальной магнитуды
                   [<a
-                  href="https://link.springer.com/article/10.1134/S0742046314060050"
-                  target="_blank"
-                >
-                  Konovalov, Sychev, 2014
-                </a>];
+                    href="https://link.springer.com/article/10.1134/S0742046314060050"
+                    target="_blank"
+                  >Konovalov, Sychev, 2014</a>];
                 </li>
                 <li>
                   разработка архитектуры автоматизированной системы обработки сейсмологических данных
                   [<a
-                  href="https://link.springer.com/article/10.3103/S0747923914010083"
-                  target="_blank"
-                >
-                  Stepnov et al., 2014
-                </a>];
+                    href="https://link.springer.com/article/10.3103/S0747923914010083"
+                    target="_blank"
+                  >Stepnov et al., 2014</a>];
                 </li>
                 <li>
                   внедрение подсистемы автоматического расчёта параметров очага землетрясения
                   [<a
-                  href="https://link.springer.com/article/10.3103/S0747923917040107"
-                  target="_blank"
-                >
-                  Stepnov et al., 2017
-                </a>];
+                    href="https://link.springer.com/article/10.3103/S0747923917040107"
+                    target="_blank"
+                  >Stepnov et al., 2017</a>];
                 </li>
                 <li>
                   апробация подсистемы автоматической обработки сейсмологических данных на реальных землетрясениях
                   [<a
-                  href="https://link.springer.com/article/10.1007/s10950-018-9744-y"
-                  target="_blank"
-                >
-                  Konovalov et al., 2018
-                </a>];
+                    href="https://link.springer.com/article/10.1007/s10950-018-9744-y"
+                    target="_blank"
+                  >Konovalov et al., 2018</a>];
                 </li>
                 <li>
                   разработка и применение новых методов машинного обучения для обработки сейсмологических данных
                   [<a
-                  href="https://www.mdpi.com/1424-8220/21/18/6290"
-                  target="_blank"
-                >
-                  Stepnov et al., 2021
-                </a>];
+                    href="https://www.mdpi.com/1424-8220/21/18/6290"
+                    target="_blank"
+                  >Stepnov et al., 2021</a>];
                 </li>
                 <li>
                   оценка представительности каталога землетрясений
                   [<a
-                  href="https://link.springer.com/article/10.1007/s00024-022-03006-y"
-                  target="_blank"
-                >
-                  Konovalov et al., 2022
-                </a>].
+                    href="https://link.springer.com/article/10.1007/s00024-022-03006-y"
+                    target="_blank"
+                  >Konovalov et al., 2022</a>].
                 </li>
               </ul>
             </nested-container>
@@ -261,9 +247,11 @@
                 с различных источников, (2) проверкой наличия дубликатов при появлении
                 новых данных и (3) выбором приоритетных данных при наличии дубликатов.
                 Все магнитудные оценки сводятся к моментной шкале, что регулируется
-                соответствующими межмагнитудными соотношениями [
-                <span class="tooltip-static-page" data-tooltip="Konovalov, A.V., Stepnov, A.A. & Samsonov, G.A. A Logit-Based Binary Classifier of Tsunamigenic Earthquakes for the Northwestern Pacific Ocean. Pure Appl. Geophys.(2022). https://doi.org/10.1007/s00024-022-03194-7">Konovalov et al., 2022</span>
-                ].
+                соответствующими межмагнитудными соотношениями
+                [<span
+                  class="tooltip-static-page"
+                  data-tooltip="Konovalov, A.V., Stepnov, A.A. & Samsonov, G.A. A Logit-Based Binary Classifier of Tsunamigenic Earthquakes for the Northwestern Pacific Ocean. Pure Appl. Geophys.(2022). https://doi.org/10.1007/s00024-022-03194-7"
+                >Konovalov et al., 2022</span>].
               </p>
 
               <p>
@@ -297,9 +285,10 @@
                 Информация об исторической сейсмичности территории
                 Сахалина в период с 1905 по 2005 гг. добавлена по
                 данным регионального каталога землетрясений
-                [
-                <span class="tooltip-static-page" data-tooltip="Региональный каталог землетрясений о. Сахалин, 1905-2005 / Л.Н. Поплавская и др. – Южно-Сахалинск, ИМГиГ ДВО РАН, 2006. 104 с.">Поплавская и др., 2006</span>
-                ].
+                [<span
+                  class="tooltip-static-page"
+                  data-tooltip="Региональный каталог землетрясений о. Сахалин, 1905-2005 / Л.Н. Поплавская и др. – Южно-Сахалинск, ИМГиГ ДВО РАН, 2006. 104 с."
+                >Поплавская и др., 2006</span>].
               </p>
             </nested-container>
           </details>
@@ -383,9 +372,10 @@
                 по откликам от населения используется опросный лист
                 в соответствии с методикой
                 <span class="tooltip-static-page" data-tooltip="«Did You Feel It?»">DYFI</span>
-                [
-                <span class="tooltip-static-page" data-tooltip="Wald D.J., Quitoriano V., Dengler L.A., Dewey J.W. Utilization of the internet for rapid community intensity maps // Seismol. Res. Lett. 1999. V. 70. P. 680–697.">Wald et al., 1999</span>
-                ].
+                [<span
+                  class="tooltip-static-page"
+                  data-tooltip="Wald D.J., Quitoriano V., Dengler L.A., Dewey J.W. Utilization of the internet for rapid community intensity maps // Seismol. Res. Lett. 1999. V. 70. P. 680–697."
+                >Wald et al., 1999</span>].
                 Ответы респондентов в каждом населенном пункте
                 приводятся к взвешенной сумме
                 <span class="tooltip-static-page" data-tooltip="Community Weighted Sum">CWS</span>
@@ -415,9 +405,9 @@
                 Более подробная информация о методике обработки
                 откликов приведена в
                 [<a
-                href="https://link.springer.com/article/10.3103/S0747923922060081"
-                target="_blank"
-              >Konovalov et al., 2022</a>].
+                  href="https://link.springer.com/article/10.3103/S0747923922060081"
+                  target="_blank"
+                >Konovalov et al., 2022</a>].
               </p>
             </nested-container>
           </details>
@@ -473,7 +463,7 @@
           </p>
 
           <details>
-            <summary><span class="nested-container__title">Методика обработки откликов</span></summary>
+            <summary><span class="nested-container__title">Зоны мониторинга</span></summary>
 
             <nested-container>
               <p>
@@ -539,21 +529,30 @@
                     </tr>
                     <tr>
                       <td>AB1995</td>
-                      <td>Глобальная модель затухания для регионов со стабильной корой [
-                        <span class="tooltip-static-page" data-tooltip="Atkinson G.M., Boore D.M. Ground-motion relations for eastern North America. Bulletin of the Seismological Society of America. 1995. 85(1):17-30.">Atkinson, Boore, 1995</span>
-                        ]</td>
+                      <td>Глобальная модель затухания для регионов со стабильной корой
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Atkinson G.M., Boore D.M. Ground-motion relations for eastern North America. Bulletin of the Seismological Society of America. 1995. 85(1):17-30."
+                        >Atkinson, Boore, 1995</span>]
+                      </td>
                     </tr>
                     <tr>
                       <td>AS1997</td>
-                      <td>Глобальная модель затухания для регионов с активной корой [
-                        <span class="tooltip-static-page" data-tooltip="Abrahamson N.A., Silva W.J. Empirical response spectral attenuation relations for shallow crustal earthquakes. Seismological Research Letters. 1997. 68(1):94, 127.">Abrahamson, Silva, 1997</span>
-                        ]</td>
+                      <td>Глобальная модель затухания для регионов с активной корой
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Abrahamson N.A., Silva W.J. Empirical response spectral attenuation relations for shallow crustal earthquakes. Seismological Research Letters. 1997. 68(1):94, 127."
+                        >Abrahamson, Silva, 1997</span>]
+                      </td>
                     </tr>
                     <tr>
                       <td>ASB2013</td>
-                      <td>Региональная модель затухания для Европы и Ближнего Востока [
-                        <span class="tooltip-static-page" data-tooltip="Akkar S., Sandkkaya M.A., Bommer J.J. Empirical ground-motion models for point- and extendedsourcecrustal earthquake scenarios in Europe and the Middle East // Bull. of Earthq. Engineering. 2014. 12(1):359-387, 2014. doi: 10.1007/s10518-013-9461-4">Akkar et al., 2014</span>
-                        ]</td>
+                      <td>Региональная модель затухания для Европы и Ближнего Востока
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Akkar S., Sandkkaya M.A., Bommer J.J. Empirical ground-motion models for point- and extendedsourcecrustal earthquake scenarios in Europe and the Middle East // Bull. of Earthq. Engineering. 2014. 12(1):359-387, 2014. doi: 10.1007/s10518-013-9461-4"
+                        >Akkar et al., 2014</span>]
+                      </td>
                     </tr>
                     <tr>
                       <td>ASB2013*</td>
@@ -561,27 +560,39 @@
                     </tr>
                     <tr>
                       <td>JSGGA2022</td>
-                      <td>Региональная модель затухания, разработанная по записям местных коровых землетрясений в Грузии и соседствующем Кавказе [
-                        <span class="tooltip-static-page" data-tooltip="Jorjiashvili N., Shengelia I., Godoladze T., Gunia., Akubardia D. Ground motion prediction equations based on shallow crustal earthquakes in Georgia and the surrounding Caucasus. Earthq Sci. 2022. 35(6): 497–509, doi: 10.1016/j.eqs.2022.12.001">Jorjiashvili et al., 2022</span>
-                        ]</td>
+                      <td>Региональная модель затухания, разработанная по записям местных коровых землетрясений в Грузии и соседствующем Кавказе
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Jorjiashvili N., Shengelia I., Godoladze T., Gunia., Akubardia D. Ground motion prediction equations based on shallow crustal earthquakes in Georgia and the surrounding Caucasus. Earthq Sci. 2022. 35(6): 497–509, doi: 10.1016/j.eqs.2022.12.001"
+                        >Jorjiashvili et al., 2022</span>]
+                      </td>
                     </tr>
                     <tr>
                       <td>MF2013_1</td>
-                      <td>Региональная модель затухания, разработанная по записям местных коровых землетрясений в Японии [
-                        <span class="tooltip-static-page" data-tooltip="Morikawa N., Fujiwara H. “A New Ground Motion Prediction Equation for Japan Applicable up to M9 Mega-Earthquake.” Journal of Disaster Research. 2013. 8(5):878–88. doi: 10.20965/jdr.2013.p0878">Morikawa, Fujiwara, 2013</span>
-                        ]</td>
+                      <td>Региональная модель затухания, разработанная по записям местных коровых землетрясений в Японии
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Morikawa N., Fujiwara H. “A New Ground Motion Prediction Equation for Japan Applicable up to M9 Mega-Earthquake.” Journal of Disaster Research. 2013. 8(5):878–88. doi: 10.20965/jdr.2013.p0878"
+                        >Morikawa, Fujiwara, 2013</span>]
+                      </td>
                     </tr>
                     <tr>
                       <td>MF2013_2</td>
-                      <td>Региональная модель затухания, разработанная по записям межплитовых субдукционных землетрясений в Японии [
-                        <span class="tooltip-static-page" data-tooltip="Morikawa N., Fujiwara H. “A New Ground Motion Prediction Equation for Japan Applicable up to M9 Mega-Earthquake.” Journal of Disaster Research. 2013. 8(5):878–88. doi: 10.20965/jdr.2013.p0878">Morikawa, Fujiwara, 2013</span>
-                        ]</td>
+                      <td>Региональная модель затухания, разработанная по записям межплитовых субдукционных землетрясений в Японии
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Morikawa N., Fujiwara H. “A New Ground Motion Prediction Equation for Japan Applicable up to M9 Mega-Earthquake.” Journal of Disaster Research. 2013. 8(5):878–88. doi: 10.20965/jdr.2013.p0878"
+                        >Morikawa, Fujiwara, 2013</span>]
+                      </td>
                     </tr>
                     <tr>
                       <td>MF2013_3</td>
-                      <td>Региональная модель затухания, разработанная по записям внутриплитовых субдукционных землетрясений в Японии [
-                        <span class="tooltip-static-page" data-tooltip="Morikawa N., Fujiwara H. “A New Ground Motion Prediction Equation for Japan Applicable up to M9 Mega-Earthquake.” Journal of Disaster Research. 2013. 8(5):878–88. doi: 10.20965/jdr.2013.p0878">Morikawa, Fujiwara, 2013</span>
-                        ]</td>
+                      <td>Региональная модель затухания, разработанная по записям внутриплитовых субдукционных землетрясений в Японии
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Morikawa N., Fujiwara H. “A New Ground Motion Prediction Equation for Japan Applicable up to M9 Mega-Earthquake.” Journal of Disaster Research. 2013. 8(5):878–88. doi: 10.20965/jdr.2013.p0878"
+                        >Morikawa, Fujiwara, 2013</span>]
+                      </td>
                     </tr>
                     <tr>
                       <td>AB1995+AS1997</td>
@@ -593,9 +604,12 @@
                     </tr>
                     <tr>
                       <td>Sakh2018+AS1997</td>
-                      <td>Гибрид моделей Sakh2018 и AS1997, где Sakh2018 – региональная модель затухания, разработанная по записям сахалинских землетрясений [
-                        <span class="tooltip-static-page" data-tooltip="Коновалов А.В., Манайчев К.А., Степнов А.А., Гаврилов А.В. Региональная модель затухания сильных движений грунта для о. Сахалин // Вопросы инженерной сейсмологии. 2018. Т. 45, № 1. С. 19–30. https://doi.org/10.21455/VIS2018.1-2">Коновалов и др., 2018</span>
-                        ]</td>
+                      <td>Гибрид моделей Sakh2018 и AS1997, где Sakh2018 – региональная модель затухания, разработанная по записям сахалинских землетрясений
+                        [<span
+                          class="tooltip-static-page"
+                          data-tooltip="Коновалов А.В., Манайчев К.А., Степнов А.А., Гаврилов А.В. Региональная модель затухания сильных движений грунта для о. Сахалин // Вопросы инженерной сейсмологии. 2018. Т. 45, № 1. С. 19–30. https://doi.org/10.21455/VIS2018.1-2"
+                        >Коновалов и др., 2018</span>]
+                      </td>
                     </tr>
                   </table>
                 </nested-container>
@@ -631,47 +645,47 @@
                   Расположение зон мониторинга на территории РФ и сопредельных стран, подверженных сейсмическому риску, с отметкой соответствующей конфигурации уравнения макросейсмического поля. Желтым цветом отмечены территориальные границы РФ по состоянию на 01.01.2022 г.
                 </p>
               </details>
-            </nested-container>
-          </details>
 
-          <details>
-            <summary><span class="nested-container__title">Показать расшифровку конфигураций</span></summary>
+              <details>
+                <summary><span class="nested-container__title">Показать расшифровку конфигураций</span></summary>
 
-            <nested-container>
-              <table>
-                <tr>
-                  <th>Наименование конфигурации уравнения затухания сейсмической интенсивности</th>
-                  <th>Расшифровка</th>
-                </tr>
-                <tr>
-                  <td>OTHERS</td>
-                  <td>Среднее значение</td>
-                </tr>
-                <tr>
-                  <td>LENING</td>
-                  <td>Ленинградская область</td>
-                </tr>
-                <tr>
-                  <td>N-CAUC</td>
-                  <td>Северный Кавказ</td>
-                </tr>
-                <tr>
-                  <td>DAGEST</td>
-                  <td>Дагестан</td>
-                </tr>
-                <tr>
-                  <td>KAMCH</td>
-                  <td>Камчатка</td>
-                </tr>
-                <tr>
-                  <td>KURIL</td>
-                  <td>Курильские острова</td>
-                </tr>
-                <tr>
-                  <td>SAKH</td>
-                  <td>Сахалин</td>
-                </tr>
-              </table>
+                <nested-container>
+                  <table>
+                    <tr>
+                      <th>Наименование конфигурации уравнения затухания сейсмической интенсивности</th>
+                      <th>Расшифровка</th>
+                    </tr>
+                    <tr>
+                      <td>OTHERS</td>
+                      <td>Среднее значение</td>
+                    </tr>
+                    <tr>
+                      <td>LENING</td>
+                      <td>Ленинградская область</td>
+                    </tr>
+                    <tr>
+                      <td>N-CAUC</td>
+                      <td>Северный Кавказ</td>
+                    </tr>
+                    <tr>
+                      <td>DAGEST</td>
+                      <td>Дагестан</td>
+                    </tr>
+                    <tr>
+                      <td>KAMCH</td>
+                      <td>Камчатка</td>
+                    </tr>
+                    <tr>
+                      <td>KURIL</td>
+                      <td>Курильские острова</td>
+                    </tr>
+                    <tr>
+                      <td>SAKH</td>
+                      <td>Сахалин</td>
+                    </tr>
+                  </table>
+                </nested-container>
+              </details>
             </nested-container>
           </details>
 
@@ -697,9 +711,9 @@
                 интенсивностью, полученной по откликам от населения,
                 установлена эмпирическая связь
                 [<a
-                href="https://link.springer.com/article/10.3103/S0747923922060081"
-                target="_blank"
-              >Konovalov et al., 2022</a>],
+                  href="https://link.springer.com/article/10.3103/S0747923922060081"
+                  target="_blank"
+                >Konovalov et al., 2022</a>],
                 которая используется в оперативной оценке средневзвешенного
                 поля сейсмических воздействий. Это означает, что интенсивность
                 можно пересчитывать в физически измеряемые характеристики
@@ -926,15 +940,17 @@
         </nested-container>
       </details>
 
-      <details>
-        <summary>
-          <!--- При раскрытии инструкции открывается окно с проигрывателем --->
-          <h3 @click="showPlayer" style="cursor: default">
-            Инструкция по работе с сервисом
-          </h3>
-        </summary>
-        <!--- --->
-      </details>
+      <ClientOnly>
+        <details>
+          <summary>
+            <!--- При раскрытии инструкции открывается окно с проигрывателем --->
+            <h3 @click="showPlayer" style="cursor: default">
+              Инструкция по работе с сервисом
+            </h3>
+          </summary>
+          <!--- --->
+        </details>
+      </ClientOnly>
 
       <details>
         <summary><h3>Использование данных сервиса</h3></summary>
@@ -957,26 +973,6 @@
               target="_blank"
             >Konovalov, A.V., Stepnov, A.A., Bogdanov, E.S. et al. New Tools for Rapid Assessment of Felt Reports and a Case Study on Sakhalin Island. Seism. Instr. 58, 676–693 (2022). https://doi.org/10.3103/S0747923922060081</a>
           </p>
-
-<!--          <p>Расшифровка обозначений:</p>-->
-<!--          <ul>-->
-<!--            <li>API (интерфейс прикладного программирования)</li>-->
-<!--            <li>Konovalov et al., 2022 (Konovalov, A.V., Stepnov, A.A. & Samsonov, G.A. A Logit-Based Binary Classifier of Tsunamigenic Earthquakes for the Northwestern Pacific Ocean. Pure Appl. Geophys.(2022). https://doi.org/10.1007/s00024-022-03194-7)</li>-->
-<!--            <li>g (ускорение свободного падения)</li>-->
-<!--            <li>Поплавская и др., 2006 (Региональный каталог землетрясений о. Сахалин, 1905-2005 / Л.Н. Поплавская и др. – Южно-Сахалинск, ИМГиГ ДВО РАН, 2006. 104 с.)</li>-->
-<!--            <li>DYFI («Did You Feel It?»)</li>-->
-<!--            <li>Wald et al., 1999 (Wald D.J., Quitoriano V., Dengler L.A., Dewey J.W. Utilization of the internet for rapid community intensity maps // Seismol. Res. Lett. 1999. V. 70. P. 680–697.)</li>-->
-<!--            <li>CWS (Community Weighted Sum)</li>-->
-<!--            <li>ШСИ-2017 (Шкала сейсмической интенсивности, 2017 г.)</li>-->
-<!--            <li>MSK-64 (Шкала Медведева-Шпонхойера-Карника, 1964 г.)</li>-->
-<!--            <li>Schulte, Mooney, 2005 (Schulte S.M., Mooney W.D. (2005). An updated global earthquake catalogue for stable continental regions: reassessing the correlation with ancient rifts, Geophysical Journal International, Volume 161, Issue 3, 2005, P. 707–721. https://doi.org/10.1111/j.1365-246X.2005.02554.x)</li>-->
-<!--            <li>Atkinson, Boore, 1995 (Atkinson G.M., Boore D.M. Ground-motion relations for eastern North America. Bulletin of the Seismological Society of America. 1995. 85(1):17-30.)</li>-->
-<!--            <li>Abrahamson, Silva, 1997 (Abrahamson N.A., Silva W.J. Empirical response spectral attenuation relations for shallow crustal earthquakes. Seismological Research Letters. 1997. 68(1):94, 127.)</li>-->
-<!--            <li>Akkar et al., 2014 (Akkar S., Sandkkaya M.A., Bommer J.J. Empirical ground-motion models for point- and extendedsourcecrustal earthquake scenarios in Europe and the Middle East // Bull. of Earthq. Engineering. 2014. 12(1):359-387, 2014. doi: 10.1007/s10518-013-9461-4)</li>-->
-<!--            <li>Jorjiashvili et al., 2022 (Jorjiashvili N., Shengelia I., Godoladze T., Gunia., Akubardia D. Ground motion prediction equations based on shallow crustal earthquakes in Georgia and the surrounding Caucasus. Earthq Sci. 2022. 35(6): 497–509, doi: 10.1016/j.eqs.2022.12.001)</li>-->
-<!--            <li>Morikawa, Fujiwara, 2013 (Morikawa N., Fujiwara H. “A New Ground Motion Prediction Equation for Japan Applicable up to M9 Mega-Earthquake.” Journal of Disaster Research. 2013. 8(5):878–88. doi: 10.20965/jdr.2013.p0878)</li>-->
-<!--            <li>Коновалов и др., 2018 (Коновалов А.В., Манайчев К.А., Степнов А.А., Гаврилов А.В. Региональная модель затухания сильных движений грунта для о. Сахалин // Вопросы инженерной сейсмологии. 2018. Т. 45, № 1. С. 19–30. https://doi.org/10.21455/VIS2018.1-2)</li>-->
-<!--          </ul>-->
         </nested-container>
       </details>
 
@@ -994,22 +990,24 @@
         <MainpageMap ref="map" :onlyStations="true" :gestureHandling="false" />
     </b-modal>
 
-    <b-modal
-      ref="player"
-      title="Инструкция по работе с сервисом"
-      :no-close-on-backdrop="true"
-      :hide-footer="true"
-      :lazy="true"
-      size="lg"
-    >
-      <iframe
-        width="100%"
-        height="100%"
-        src="http://www.youtube.com/embed/V4Zwhi2frTk?autoplay=1"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
-    </b-modal>
+    <ClientOnly>
+      <b-modal
+        ref="player"
+        title="Инструкция по работе с сервисом"
+        :no-close-on-backdrop="true"
+        :hide-footer="true"
+        :lazy="true"
+        size="lg"
+      >
+        <iframe
+          width="100%"
+          height="100%"
+          src="http://www.youtube.com/embed/V4Zwhi2frTk?autoplay=1"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </b-modal>
+    </ClientOnly>
 
   </div>
 </template>

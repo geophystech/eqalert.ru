@@ -190,6 +190,7 @@ export default {
         case 'G': return [['M', 'b'], ['L', 'g']]
         case 'C': return [['M', 'c']]
         case 'mww': return [['M', 'mww']]
+        case 'WW': return [['M', 'ww']]
         default: return [['M', '']]
       }
     },
