@@ -995,20 +995,14 @@
 
     <ClientOnly>
       <b-modal
-        ref="player"
+        ref="playerModal"
         title="Инструкция по работе с сервисом"
         :no-close-on-backdrop="true"
         :hide-footer="true"
         :lazy="true"
         size="lg"
       >
-        <iframe
-          width="100%"
-          height="100%"
-          src="http://www.youtube.com/embed/V4Zwhi2frTk?autoplay=1"
-          frameborder="0"
-          allowfullscreen
-        ></iframe>
+        <div id="player"></div>
       </b-modal>
     </ClientOnly>
 
@@ -1016,6 +1010,7 @@
 </template>
 
 <script>
+import YT from 'yt-player';
 
 export default {
   name: 'static-page',
@@ -1036,19 +1031,45 @@ export default {
   },
   data() {
     return {
-
+      videoId: 'V4Zwhi2frTk',
+      player: null,
     }
   },
   methods: {
+    initPlayer() {
+      this.player = new YT(document.getElementById('player'), {
+        height: '100%',
+        width: '100%',
+        autoplay: true,
+      })
+      this.player.load(this.videoId, true, 0)
+    },
     showPlayer() {
-      this.$refs.player.show()
+      this.$refs.playerModal.show()
+      setTimeout(() => {
+        this.initPlayer()
+      }, 1000)
     },
     showMap() {
       this.$refs.mapDialog.show()
     },
     onMapDialogOpen() {
       this.$refs.map.map.object.invalidateSize()
-    }
+    },
+    destroyPlayer() {
+      if (this.player) {
+        this.player.destroy();
+      }
+    },
+  },
+  mounted() {
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    const firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+  },
+  beforeDestroy() {
+    this.destroyPlayer()
   }
 }
 </script>
