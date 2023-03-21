@@ -258,7 +258,7 @@
     {
       this.minDatetimeConfig = Object.assign({}, this.datetimeConfig)
       this.maxDatetimeConfig = Object.assign({}, this.datetimeConfig)
-      this.minDatetimeConfig.defaultDate = this.$moment.utc().subtract(6, 'months').format('YYYY-MM-DD 00:00:00')
+      this.minDatetimeConfig.defaultDate = this.$moment.utc().subtract(3, 'months').format('YYYY-MM-DD 00:00:00')
 
       this.parseURL()
 

@@ -8,10 +8,10 @@
     Кроме того, прошу поменять название на главной странице: "О проекте" заменить на "О сервисе".
     --->
     <div class="static-page-content">
-      <details class="align-start">
+      <details>
         <summary><h3>Общая информация</h3></summary>
         <!--- nested element --->
-        <nested-container>
+        <nested-container class="first-level">
           <p>
             Сейсмологический сервис
             <a href="https://eqalert.ru/" target="_blank">eqalert.ru</a> обеспечивает население,
@@ -30,7 +30,7 @@
 
           <details>
             <summary><span class="nested-container__title">Цель сервиса</span></summary>
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Цель сервиса – развитие национального сейсмологического дата-центра для исследования
                 сейсмической активности, оценки сейсмической опасности и риска, предоставления
@@ -42,7 +42,7 @@
 
           <details>
             <summary><span class="nested-container__title">Задачи проекта</span></summary>
-            <nested-container>
+            <nested-container class="second-level">
               <ul>
                 <li>
                   развитие инженерно-сейсмологической сети станций;
@@ -79,7 +79,8 @@
 
       <details>
         <summary><h3>Используемые данные</h3></summary>
-        <nested-container>
+
+        <nested-container class="first-level">
           <p>
             Данные о параметрах землетрясения (время, координаты и магнитуда) становятся
             доступными на сервисе после обработки инструментальных измерений или публикации
@@ -110,7 +111,8 @@
 
           <details>
             <summary><span class="nested-container__title">Показать внешние источники данных</span></summary>
-            <nested-container>
+
+            <nested-container class="second-level">
               <ul>
                 <li>
                   <a href="https://earthquake.usgs.gov/fdsnws/event/1/" target="_blank">
@@ -135,7 +137,8 @@
 
       <details>
         <summary><h3>Система обработки данных</h3></summary>
-        <nested-container>
+
+        <nested-container class="first-level">
           <p>
             Система обработки данных состоит из нескольких подсистем.
             Ключевыми из них являются подсистемы автоматической
@@ -164,7 +167,7 @@
           <details>
             <summary><span class="nested-container__title">Методы обработки инструментальных данных</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Технологичный стек автоматизированной системы процессинга
                 сейсмологических данных и методология обработки представлены
@@ -228,7 +231,8 @@
 
           <details>
             <summary><span class="nested-container__title">Импорт данных с внешних источников</span></summary>
-            <nested-container>
+
+            <nested-container class="second-level">
               <p>
                 Для получения информации о параметрах сильных землетрясений
                 реализован автоматический импорт данных, публикуемых
@@ -296,7 +300,7 @@
           <details>
             <summary><span class="nested-container__title">Типы магнитуд</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Mww – моментная магнитуда, определяемая путем инверсии записей
                 W-фаз и оценки тензора сейсмического момента.
@@ -317,7 +321,6 @@
                 M – неизвестный тип магнитуды.
               </p>
             </nested-container>
-
           </details>
         </nested-container>
       </details>
@@ -325,7 +328,7 @@
       <details>
         <summary><h3>Ощутили землетрясение?</h3></summary>
 
-        <nested-container>
+        <nested-container class="first-level">
           <p>
             В сервисе реализован сбор откликов от населения через интернет.
             Обратную связь от населения сервис получает с помощью
@@ -348,7 +351,7 @@
           <details>
             <summary><span class="nested-container__title">Сбор откликов</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Сбор откликов осуществляется через
                 <a href="https://eqalert.ru/felt-report" target="_blank">сайт сервиса</a>
@@ -366,7 +369,7 @@
           <details>
             <summary><span class="nested-container__title">Методика обработки откликов</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Для оперативной оценки сейсмической интенсивности
                 по откликам от населения используется опросный лист
@@ -417,7 +420,7 @@
       <details>
         <summary><h3>Построение карт сотрясаемости</h3></summary>
 
-        <nested-container>
+        <nested-container class="first-level">
           <p>
             Моделирование поля сейсмических воздействий и генерация
             карт сотрясаемости запускаются после того, как в базе данных
@@ -465,7 +468,7 @@
           <details>
             <summary><span class="nested-container__title">Зоны мониторинга</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Территория РФ и сопредельные районы были поделены на
                 отдельные зоны, представленные в виде прямоугольников.
@@ -492,7 +495,7 @@
           <details>
             <summary><span class="nested-container__title">Уравнения затухания пикового ускорения грунта</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Для каждой зоны мониторинга подобрано соответствующее
                 уравнение затухания пикового ускорения грунта из
@@ -521,7 +524,7 @@
               <details>
                 <summary><span class="nested-container__title">Показать расшифровку конфигураций</span></summary>
 
-                <nested-container>
+                <nested-container class="third-level">
                   <table>
                     <tr>
                       <th>Наименование конфигурации уравнения затухания сейсмических ускорений</th>
@@ -620,7 +623,7 @@
           <details>
             <summary><span class="nested-container__title">Уравнения затухания сейсмической интенсивности</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Для оценки интенсивности землетрясений в каждой из зон
                 используется уравнение макросейсмического поля.
@@ -649,7 +652,7 @@
               <details>
                 <summary><span class="nested-container__title">Показать расшифровку конфигураций</span></summary>
 
-                <nested-container>
+                <nested-container class="third-level">
                   <table>
                     <tr>
                       <th>Наименование конфигурации уравнения затухания сейсмической интенсивности</th>
@@ -692,7 +695,7 @@
           <details>
             <summary><span class="nested-container__title">Сравнительные характеристики движения грунта</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 <span class="tooltip-static-page" data-tooltip="Шкала сейсмической интенсивности, 2017 г.">ШСИ-2017</span>
                 является результатом модификации шкалы
@@ -731,7 +734,7 @@
                   <span class="nested-container__title">Посмотреть эмпирические значения параметров движения грунта [ГОСТ Р57546-2017]</span>
                 </summary>
 
-                <nested-container>
+                <nested-container class="third-level">
                   <table>
                     <tr>
                       <th>Интенсивность землетрясения I, баллы</th>
@@ -818,7 +821,7 @@
           <details>
             <summary><span class="nested-container__title">Средневзвешенный анализ</span></summary>
 
-            <nested-container>
+            <nested-container class="second-level">
               <p>
                 Систематическая недооценка реального уровня сейсмических
                 колебаний может приводить к искаженной картине ситуационной
@@ -874,7 +877,7 @@
       <details>
         <summary><h3>Стек технологий</h3></summary>
 
-        <nested-container>
+        <nested-container class="first-level">
           <p>
             Сервис построен по принципу микросервисной архитектуры.
             Каждый отдельный компонент сервиса выполняет свою
@@ -955,7 +958,7 @@
       <details>
         <summary><h3>Использование данных сервиса</h3></summary>
 
-        <nested-container>
+        <nested-container class="first-level">
           <p>
             При использовании (воспроизведении, копировании) в сети
             Интернет любых материалов, размещенных на информационном
@@ -1031,6 +1034,11 @@ export default {
       ]
     }
   },
+  data() {
+    return {
+
+    }
+  },
   methods: {
     showPlayer() {
       this.$refs.player.show()
@@ -1055,7 +1063,7 @@ export default {
 {
   margin-top: 3%;
 
-  h1, h2, h3, h4, h5, h6 {
+  h1, h2, h4, h5 {
     text-align: center !important;
   }
 
@@ -1067,10 +1075,15 @@ export default {
 }
 
 nested-container {
+  display: block;
   text-align: left !important;
   .nested-container__title {
     font-weight: bold;
   }
+}
+
+.first-level, .second-level, .third-level {
+  padding-left: 1rem;
 }
 
 </style>

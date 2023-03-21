@@ -170,7 +170,7 @@ export default {
         if (!params.datetime_min) {
           params.datetime_min = this.$moment
             .utc()
-            .subtract(6, 'months')
+            .subtract(3, 'months')
             .format('YYYY-MM-DD 00:00:00')
           this.$router.replace({
             name: this.$route.name,
