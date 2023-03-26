@@ -8,6 +8,8 @@ export function numberDeclension(n, titles) {
     title = 0
   } else if ([2, 3, 4].includes(n)) {
     title = 1
+  } else if (!Number.isInteger(n)) {
+    title = 1
   }
 
   return titles[title]
