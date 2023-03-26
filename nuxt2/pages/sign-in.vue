@@ -95,14 +95,26 @@ export default {
         submitButtonDisabled: false,
         validated: false
       },
-      redirectTo: '/',
       validationError: ''
     }
   },
   head: {
     title: 'Вход'
   },
+  computed: {
+    redirectTo() {
+      return this.$store.state.app.redirectTo
+    }
+  },
   methods: {
+    navigateToRoute() {
+      if (this.redirectTo) {
+        this.$router.push(this.redirectTo)
+        this.$store.commit('app/setRedirectTo', null)
+      } else {
+        this.$router.push('/')
+      }
+    },
     enableFields: function() {
       this.changeFieldsDisabledState(false)
     },
@@ -132,7 +144,7 @@ export default {
       }, this.$store, this.$axios, this.$api).then(response => {
 
         this.$toasted.success(`Добро пожаловать!`, { icon: 'check' })
-        this.$router.push(this.redirectTo)
+        this.navigateToRoute()
 
       }).catch(error => {
 
@@ -146,10 +158,14 @@ export default {
       })
     }
   },
-  beforeRouteEnter: (to, from, next) => {
-    next(vm => {
-      if (from.meta.redirectable) vm.redirectTo = from.path
-    })
+  fetch({ from, app, store }) {
+    if (from && from.path) {
+      const redirectTo = app.router.resolve({
+        path: from.path,
+        query: from.query
+      }).href
+      store.commit('app/setRedirectTo', redirectTo)
+    }
   }
 }
 </script>
