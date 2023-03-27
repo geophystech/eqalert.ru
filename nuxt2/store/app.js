@@ -12,7 +12,8 @@ export const state = () => ({
   plateBoundaries: [],
   srssCoreConfig: {
     dbVersion: ''
-  }
+  },
+  redirectTo: null
 });
 
 export const getters = {
@@ -43,6 +44,9 @@ export const mutations = {
   },
   setSrssDBVersion(state, { key, value }) {
     state.srssCoreConfig[key] = value
+  },
+  setRedirectTo(state, redirectTo) {
+    state.redirectTo = redirectTo
   }
 };
 

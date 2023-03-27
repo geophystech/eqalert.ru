@@ -25,17 +25,18 @@
     },
     methods: {
       syncFeltReportData: function(event) {
+        const data = event ? event.data.data : null;
         if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
           this.$axios.get(this.$api.endpointEventMeasuredIntensityAggregations(this.event.id))
             .then(response => {
-              this.addData(event.data.data, response.data.feltReports)
+              this.addData(data, response.data.feltReports)
             })
             .catch(error => {
               console.log(error)
-              this.addData(event.data.data)
+              this.addData(data)
             })
         } else {
-          this.addData(event.data.data)
+          this.addData(data)
         }
       },
       addData: function(data, feltReports = []) {
@@ -50,60 +51,64 @@
             </thead>
             <tbody>`
 
-        Object.keys(data).forEach((key) => {
+        if (data) {
+          Object.keys(data).forEach((key) => {
 
-          const lineColor = this.pgaLineColor(key)
-          const pga = window.L.polygon(data[key].data, { color: lineColor, weigh: 2 })
+            const lineColor = this.pgaLineColor(key)
+            const pga = window.L.polygon(data[key].data, { color: lineColor, weigh: 2 })
 
-          this.map.pga.push(pga)
-          pga.addTo(this.map.object)
+            this.map.pga.push(pga)
+            pga.addTo(this.map.object)
 
-          const nextRange = data[parseInt(key) + 1]
-          let intensityLegendValue = this.pgaToIntensity(data[key].range)
-          let pgaLegendValue = data[key].range
-          let intensityPopupRange = intensityLegendValue - 0.2
-          let pgaPopupRange = data[key].range
+            const nextRange = data[parseInt(key) + 1]
+            let intensityLegendValue = this.pgaToIntensity(data[key].range)
+            let pgaLegendValue = data[key].range
+            let intensityPopupRange = intensityLegendValue - 0.2
+            let pgaPopupRange = data[key].range
 
-          if (nextRange) {
-            intensityPopupRange += ` - ${this.pgaToIntensity(nextRange.range)}`
-            pgaPopupRange += ` - ${nextRange.range}`
-          } else {
-            intensityLegendValue += `+`
-            pgaLegendValue += `+`
-            pgaPopupRange += `+`
-          }
+            if (nextRange) {
+              intensityPopupRange += ` - ${this.pgaToIntensity(nextRange.range)}`
+              pgaPopupRange += ` - ${nextRange.range}`
+            } else {
+              intensityLegendValue += `+`
+              pgaLegendValue += `+`
+              pgaPopupRange += `+`
+            }
 
-          legendData += `
+            legendData += `
             <tr>
               <td align="right">${intensityLegendValue}</td>
               <td><i style="background: ${lineColor}; margin-left: 8px;"></i></td>
               <td>${pgaLegendValue}</td>
             </tr>`
 
-          const popupMessage = `
+            const popupMessage = `
             Пиковое ускорение грунта: ${pgaPopupRange}%g <br>
             Интенсивность по ШСИ-2017: ${intensityPopupRange} ${numberDeclension(intensityLegendValue, ['балл', 'балла', 'баллов'])}
           `
 
-          pga.bindPopup(popupMessage)
-        })
+            pga.bindPopup(popupMessage)
+          })
+        }
 
         if (feltReports.length) {
           this.markersGroup = addFeltReports(this.map.object, feltReports, this.map.object._controls)
         }
 
-        // Show map legend just once.
-        if (!this.$el.querySelector('.map-legend')) {
-          let pgaLegend = window.L.control({ position: 'bottomright' })
+        if (data) {
+          // Show map legend just once.
+          if (!this.$el.querySelector('.map-legend')) {
+            let pgaLegend = window.L.control({ position: 'bottomright' })
 
-          pgaLegend.onAdd = (map) => {
-            const div = window.L.DomUtil.create('div', 'map-legend')
-            div.innerHTML += legendData + `</tbody></table>`
+            pgaLegend.onAdd = (map) => {
+              const div = window.L.DomUtil.create('div', 'map-legend')
+              div.innerHTML += legendData + `</tbody></table>`
 
-            return div
+              return div
+            }
+
+            pgaLegend.addTo(this.map.object)
           }
-
-          pgaLegend.addTo(this.map.object)
         }
         this.putEpicenter()
       },
@@ -118,17 +123,17 @@
       },
       fetchData: function()
       {
-        if (!this.event.has_pga_data) {
-          return this.putEpicenter()
-        }
-
         this.$axios.get(this.$api.endpointEventPga(this.event.id))
           .then(response => {
             this.syncFeltReportData(response)
           })
           .catch(error => {
             console.log(error)
-            this.putEpicenter()
+            if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
+              this.syncFeltReportData(null)
+            } else {
+              this.putEpicenter()
+            }
           })
       },
       initialize: function() {

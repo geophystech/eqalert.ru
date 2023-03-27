@@ -4,7 +4,7 @@
       <div>
         <b-form-group>
           <template slot="label">
-            {{ question.text[localisation] }}
+            {{ question.text[localisation] }} <span style="color: red" title="Обязательный вопрос">*</span>
           </template>
           <b-form-radio
             v-for="answer in question.answers.data"
@@ -52,11 +52,13 @@ export default {
       this.$emit('update', this.answers)
     },
     syncQuestions() {
+      /* comment it due to request to set answers empty by default
       this.questions.forEach((question) => {
         if (!this.answers[`${question.id}`]) {
           this.answers[`${question.id}`] = question.answers.data[0].id
         }
       })
+       */
       this.$emit('update', this.answers)
     }
   }

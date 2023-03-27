@@ -146,7 +146,7 @@
               return $axios.get($api.endpointEventsLight, {
                 params: {
                   datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
-                  limit: eventsRange.limit || 1000
+                  limit: 1000 // the same limit as modal map
                 }
               })
                 .then(response => {
