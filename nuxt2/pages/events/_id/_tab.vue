@@ -1,5 +1,7 @@
 <template>
   <div class="event">
+    <!-- to improve SEO -->
+    <h1 style="display: none;" v-html="headTitle"></h1>
 
     <component :is="components.header" :event="event" />
     <b-alert show v-if="!!event.has_training" variant="event-training">Режим учебных событий</b-alert>
