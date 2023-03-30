@@ -64,7 +64,7 @@
           markers.forEach(marker => map.removeLayer(marker))
           markers = []
 
-          events.reverse().forEach(event => {
+          events.forEach(event => {
             let marker = createMapEventMarker(event, $moment)
             markers.push(marker)
             marker.addTo(map)
@@ -138,29 +138,37 @@
 
             let eventsRange = EVENTS_RANGES[eventsRangeName]
             let minDateSubtract = eventsRange.minDateSubtract
-            let request = function()
+
+            let events = []
+
+            let request = function(callBack, url = $api.endpointEventsLight)
             {
               let minDate = $moment.utc().subtract(minDateSubtract[0], minDateSubtract[1])
               disableBtns()
 
-              return $axios.get($api.endpointEventsLight, {
-                params: {
-                  datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
-                  limit: 1000 // the same limit as modal map
-                }
-              })
+              const params = {
+                datetime_min: minDate.format('YYYY-MM-DD HH:mm:ss'),
+                limit: 1000 // the same limit as modal map
+              }
+
+              return $axios.get(url, { params })
                 .then(response => {
-                  addEvents(response.data.data)
-                  disableBtns(false)
-                  setReloadTimer()
+                  events = events.concat(response.data.data)
+                  const nextPageUrl = response.data.meta.pagination.links.next
+                  nextPageUrl ? request(callBack, nextPageUrl) : callBack()
                 })
             }
 
             eventsRangeRequests[eventsRangeName] = request
             appendBtn(eventsRangeName, () => {
               map.spin(true)
-              request().then(() => {
+              request(() => {
+                addEvents(events)
+                disableBtns(false)
+                setReloadTimer()
                 map.spin(false)
+              }).then(() => {
+                // ...
               })
             })
 
