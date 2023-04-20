@@ -67,6 +67,9 @@ export default {
   components: {
     LocationQuestions: () => process.client ? import('@/components/FeltReport/LocationQuestions.vue') : null,
   },
+  head: {
+    title: 'Ощутили землетрясение?'
+  },
   data() {
     return {
       location: {
