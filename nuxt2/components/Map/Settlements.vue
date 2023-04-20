@@ -71,7 +71,12 @@
         let feltReportsData = []
 
         try {
-          if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
+          if (
+            this.event.nearestCity &&
+            this.event.nearestCity.data &&
+            this.event.nearestCity.data.feltReportAnalysis ||
+            this.event.felt_reports_count
+          ) {
             const response = await this.$axios.get(this.$api.endpointEventMeasuredIntensityAggregations(this.event.id))
             feltReportsData = response.data.feltReports
           }

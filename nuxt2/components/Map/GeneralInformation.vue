@@ -129,7 +129,12 @@
           })
           .catch(error => {
             console.log(error)
-            if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
+            if (
+              this.event.nearestCity &&
+              this.event.nearestCity.data &&
+              this.event.nearestCity.data.feltReportAnalysis ||
+              this.event.felt_reports_count
+            ) {
               this.syncFeltReportData(null)
             } else {
               this.putEpicenter()
