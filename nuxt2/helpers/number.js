@@ -2,6 +2,7 @@
 // Usage: numberDeclension(value, ['one', 'two', 'five'])
 // Example: numberDeclension(7, ['балл', 'балла', 'баллов'])
 export function numberDeclension(n, titles) {
+  n = Math.round(n)
   let title = 2
 
   if (n === 1) {

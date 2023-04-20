@@ -64,6 +64,7 @@
             let intensityLegendValue = this.pgaToIntensity(data[key].range)
             let pgaLegendValue = data[key].range
             let intensityPopupRange = intensityLegendValue - 0.2
+            intensityPopupRange = Math.round(intensityPopupRange)
             let pgaPopupRange = data[key].range
 
             if (nextRange) {
@@ -84,7 +85,7 @@
 
             const popupMessage = `
             Пиковое ускорение грунта: ${pgaPopupRange}%g <br>
-            Интенсивность по ШСИ-2017: ${intensityPopupRange} ${numberDeclension(intensityLegendValue, ['балл', 'балла', 'баллов'])}
+            Интенсивность по ШСИ-2017: ${intensityPopupRange} ${numberDeclension(this.pgaToIntensity(data[key].range), ['балл', 'балла', 'баллов'])}
           `
 
             pga.bindPopup(popupMessage)
@@ -129,7 +130,12 @@
           })
           .catch(error => {
             console.log(error)
-            if (this.event.nearestCity.data.feltReportAnalysis || this.event.felt_reports_count) {
+            if (
+              this.event.nearestCity &&
+              this.event.nearestCity.data &&
+              this.event.nearestCity.data.feltReportAnalysis ||
+              this.event.felt_reports_count
+            ) {
               this.syncFeltReportData(null)
             } else {
               this.putEpicenter()
