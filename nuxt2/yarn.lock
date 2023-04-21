@@ -1632,6 +1632,13 @@
     consola "^2.10.1"
     dayjs "^1.10.4"
 
+"@nuxtjs/google-analytics@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/google-analytics/-/google-analytics-2.4.0.tgz#3bb9f398a05cc23340d1f423f8d8653dc4114f46"
+  integrity sha512-rDQTwHIjyjVrx8GywHPuWykJ3jRFGaHl5Iqji/y8tQWUc0yGEeHxOoR0yimzxnTS1Ph2/PubQYpgnVeEPEdL/A==
+  dependencies:
+    vue-analytics "^5.22.1"
+
 "@nuxtjs/moment@^1.6.1":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@nuxtjs/moment/-/moment-1.6.1.tgz#a4e98a861c9d21e34f983046143f4c9bb92bdb7c"

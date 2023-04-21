@@ -55,7 +55,6 @@ export default {
     { src: '~/plugins/api.js' },
     { src: '~/plugins/persistedstate.js', mode: 'client' },
     { src: '~/plugins/leaflet.js', mode: 'client' },
-    { src: '~/plugins/analytics.js', mode: 'client' },
     { src: '~/plugins/idle.js', mode: 'client' },
     { src: '~/plugins/toasted.js', mode: 'client' },
     { src: '~/plugins/yandex-metrika.js', mode: 'client' },
@@ -82,8 +81,16 @@ export default {
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
     '@nuxtjs/dayjs',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    '@nuxtjs/google-analytics'
   ],
+
+  googleAnalytics: {
+    id: 'UA-47326418-4',
+    debug: {
+      sendHitTask: appEnv === 'production'
+    }
+  },
 
   axios: {
     //
