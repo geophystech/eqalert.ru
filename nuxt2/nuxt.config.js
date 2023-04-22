@@ -22,6 +22,18 @@ export default {
     htmlAttrs: {
       lang: 'ru'
     },
+    script: [
+      { src: 'https://www.googletagmanager.com/gtag/js?id=G-RFF8MWHH6E', async: true },
+      {
+        hid: 'gtag',
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-RFF8MWHH6E');
+        `
+      }
+    ],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -55,7 +67,6 @@ export default {
     { src: '~/plugins/api.js' },
     { src: '~/plugins/persistedstate.js', mode: 'client' },
     { src: '~/plugins/leaflet.js', mode: 'client' },
-    { src: '~/plugins/analytics.js', mode: 'client' },
     { src: '~/plugins/idle.js', mode: 'client' },
     { src: '~/plugins/toasted.js', mode: 'client' },
     { src: '~/plugins/yandex-metrika.js', mode: 'client' },
