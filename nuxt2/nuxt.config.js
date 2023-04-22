@@ -22,6 +22,18 @@ export default {
     htmlAttrs: {
       lang: 'ru'
     },
+    script: [
+      { src: 'https://www.googletagmanager.com/gtag/js?id=G-RFF8MWHH6E', async: true },
+      {
+        hid: 'gtag',
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-RFF8MWHH6E');
+        `
+      }
+    ],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -38,7 +50,7 @@ export default {
         content: 'землетрясение, интенсивность, сейсмическая опасность, сейсмические воздействия, пиковые ускорения грунта, ' +
           'сейсмический мониторинг, pga, msk64, информирование о землетрясении, эпицентр, гипоцентр, ' +
           'магнитуда, механизм очага, тензор момента, архив'
-      }
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/img/favicon.ico' },
@@ -81,16 +93,8 @@ export default {
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
     '@nuxtjs/dayjs',
-    '@nuxtjs/sitemap',
-    '@nuxtjs/google-analytics'
+    '@nuxtjs/sitemap'
   ],
-
-  googleAnalytics: {
-    id: 'UA-47326418-4',
-    debug: {
-      sendHitTask: appEnv === 'production'
-    }
-  },
 
   axios: {
     //
