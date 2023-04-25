@@ -52,6 +52,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/gtag.js', mode: 'client' },
     { src: '~/plugins/api.js' },
     { src: '~/plugins/persistedstate.js', mode: 'client' },
     { src: '~/plugins/leaflet.js', mode: 'client' },
@@ -82,13 +83,6 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dayjs',
     '@nuxtjs/sitemap',
-    ['@nuxtjs/google-analytics', {
-      id: 'G-RFF8MWHH6E',
-      debug: {
-        enabled: false,
-        sendHitTask: appEnv === 'production'
-      }
-    }]
   ],
 
   axios: {
