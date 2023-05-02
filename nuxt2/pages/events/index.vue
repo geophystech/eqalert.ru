@@ -143,7 +143,8 @@ export default {
     }
   },
   head: {
-    title: 'События'
+    title: 'События',
+    description: 'Последние землетрясения, интенсивность в ближайших населённых пунктах'
   },
   watch: {
     error: function(msg) {
