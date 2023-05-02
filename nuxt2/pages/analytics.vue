@@ -50,7 +50,8 @@ export default {
   },
   mixins: [onMobile],
   head: {
-    title: 'Аналитика'
+    title: 'Аналитика',
+    description: 'Статистика землетрясений'
   },
   methods: {
     // The method is used to get data from the `ChartByDatetime` component.

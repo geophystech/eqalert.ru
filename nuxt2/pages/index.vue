@@ -17,7 +17,8 @@ export default {
     MainpageMap: () => process.client ? import('@/components/Map/Mainpage.vue') : null,
   },
   head: {
-    title: 'Карта землетрясений онлайн'
+    title: 'Карта землетрясений онлайн',
+    description: 'Мониторинг в режиме реального времени'
   }
 }
 </script>

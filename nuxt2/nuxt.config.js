@@ -101,6 +101,7 @@ export default {
         '/',
         '/analytics',
         '/about',
+        '/felt-report',
         {
           url: '/events',
           changefreq: 'daily',
