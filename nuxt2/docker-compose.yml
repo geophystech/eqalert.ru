@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: .dockerfiles/prod/Dockerfile
+    image: eqalertru-app:${IMAGE_TAG:-latest}
     expose:
       - "3000"
     environment:
