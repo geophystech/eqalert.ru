@@ -42,9 +42,36 @@
           </b-form-group>
         </b-form>
 
-        <b-form-group>
-          <b-form-checkbox v-model="form.fields.rememberMe.value" name="rememberMe">Запомнить меня</b-form-checkbox>
+        <b-form-group class="remember-me-group">
+          <b-form-checkbox
+            v-model="form.fields.rememberMe.value"
+            :disabled="form.fields.rememberMe.disabled"
+            name="rememberMe"
+          >
+            Запомнить меня
+          </b-form-checkbox>
+        </b-form-group>
 
+        <b-form-group class="privacy-consent-group">
+          <b-form-checkbox
+            v-model="form.fields.personalDataConsent.value"
+            :disabled="form.fields.personalDataConsent.disabled"
+            name="personalDataConsent"
+          >
+            Нажимая кнопку «Войти», я даю согласие на обработку своих персональных данных в соответствии с
+            Федеральным законом от 27.07.2006 года №152 ФЗ «О персональных данных», на условиях определенных
+            <a
+              href="https://geophystech.ru/documents/EQALERT_RU_PRIVACY_POLICY.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              @click.stop
+            >
+              Политикой конфиденциальности
+            </a>.
+          </b-form-checkbox>
+        </b-form-group>
+
+        <b-form-group>
           <NuxtLink to="/password/reset" key="reset-password" class="reset-password-link">
             Сбросить пароль
           </NuxtLink>
@@ -52,7 +79,7 @@
 
         <b-button type="submit"
                   variant="send-request"
-                  :disabled="form.submitButtonDisabled"
+                  :disabled="isSubmitDisabled"
                   v-on:click="onSubmit">
           Войти
         </b-button>
@@ -86,7 +113,8 @@ export default {
         fields: {
           email: { value: '', disabled: false, state: null },
           password: { value: '', disabled: false, state: null },
-          rememberMe: { value: '', disabled: false }
+          rememberMe: { value: false, disabled: false },
+          personalDataConsent: { value: false, disabled: false }
         },
         messages: {
           email: 'Некорректная электронная почта',
@@ -102,6 +130,9 @@ export default {
     title: 'Вход'
   },
   computed: {
+    isSubmitDisabled() {
+      return this.form.submitButtonDisabled || !this.form.fields.personalDataConsent.value
+    },
     redirectTo() {
       return this.$store.state.app.redirectTo
     }
@@ -132,6 +163,7 @@ export default {
       this.form.validated = true
 
       if (!this.$refs.form.checkValidity()) return
+      if (!this.form.fields.personalDataConsent.value) return
 
       this.disableFields()
 
@@ -195,6 +227,18 @@ export default {
   border-bottom: 1px solid $color-gray-light;
   padding-bottom: 3%;
   margin-bottom: 3%;
+}
+
+.remember-me-group {
+  margin-bottom: 0.5rem;
+}
+
+.privacy-consent-group {
+  margin-bottom: 1rem;
+}
+
+.privacy-consent-group ::v-deep .custom-control-label {
+  line-height: 1.4;
 }
 
 .btn {

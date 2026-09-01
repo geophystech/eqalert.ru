@@ -1,33 +1,38 @@
 ### STAGE 1: Build ###
-FROM node:14.17-alpine as build
+FROM node:14.17-alpine AS build
 
 WORKDIR /app
 
-### Install Python 3.6 and pip ###
-RUN apk add --no-cache make gcc g++ python3 && \
-    python3 -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip3 install --no-cache --upgrade pip setuptools wheel && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
-    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi
+RUN apk add --no-cache make gcc g++ python3
 
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
+ENV NODE_OPTIONS=--max-old-space-size=1024
+ENV NODE_ENV=development
 
-COPY package.json /app/package.json
+COPY package.json yarn.lock ./
 
-COPY yarn.lock /app/yarn.lock
+RUN yarn install 
 
-RUN yarn install --silent
+COPY . .
 
-COPY . /app
+RUN yarn generate:development
 
-RUN yarn run generate:development
 
-### STAGE 2: NGINX ###
-FROM nginx:stable-alpine
+### STAGE 2: Runtime ###
+FROM node:14.17-alpine
 
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-EXPOSE 80
+ENV NODE_ENV=development
 
-CMD ["nginx", "-g", "daemon off;"]
+#COPY --from=build /app /app
+COPY --from=build /app/package.json ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/nuxt.config.js ./nuxt.config.js
+COPY --from=build /app/environmentsettings.js ./environmentsettings.js
+COPY --from=build /app/static ./static
+COPY --from=build /app/dist ./dist
+
+EXPOSE 3000
+
+CMD ["yarn", "start:development"]

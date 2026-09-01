@@ -117,9 +117,28 @@
             </b-form-textarea>
           </b-form-group>
 
+          <b-form-group class="privacy-consent-group">
+            <b-form-checkbox
+              v-model="form.fields.personalDataConsent.value"
+              :disabled="form.fields.personalDataConsent.disabled"
+              name="personalDataConsent"
+            >
+              Нажимая кнопку «Зарегистрироваться», я даю согласие на обработку своих персональных данных в соответствии с
+              Федеральным законом от 27.07.2006 года №152 ФЗ «О персональных данных», на условиях определенных
+              <a
+                href="https://geophystech.ru/documents/EQALERT_RU_PRIVACY_POLICY.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                @click.stop
+              >
+                Политикой конфиденциальности
+              </a>.
+            </b-form-checkbox>
+          </b-form-group>
+
           <b-button type="submit"
                     variant="send-request"
-                    :disabled="form.submitButtonDisabled">
+                    :disabled="isSubmitDisabled">
             Зарегистрироваться
           </b-button>
         </b-form>
@@ -149,6 +168,7 @@ export default {
           email: { value: '', disabled: false, state: null },
           fullname: { value: '', disabled: false, state: null },
           password: { value: '', disabled: false, state: null },
+          personalDataConsent: { value: false, disabled: false, state: null },
           purpose: { value: null, disabled: false, state: null }
         },
         messages: {
@@ -175,6 +195,11 @@ export default {
   },
   head: {
     title: 'Регистрация'
+  },
+  computed: {
+    isSubmitDisabled() {
+      return this.form.submitButtonDisabled || !this.form.fields.personalDataConsent.value
+    }
   },
   methods: {
     enableFields: function() {
@@ -205,6 +230,7 @@ export default {
       this.form.validated = true
 
       if (!event.target.checkValidity()) return
+      if (!this.form.fields.personalDataConsent.value) return
 
       const payload = {
         additional_info: this.form.fields.additionalInfo.value,
@@ -284,6 +310,48 @@ export default {
 
   .additional-info {
     height: 250px;
+  }
+
+  .privacy-consent-group {
+    text-align: left;
+    width: 100%;
+  }
+
+  .privacy-consent-group ::v-deep .custom-control {
+    width: 100%;
+  }
+
+  .privacy-consent-group ::v-deep .custom-control-label {
+    display: block;
+    line-height: 1.4;
+    width: 100%;
+  }
+
+  .privacy-consent-group ::v-deep .custom-control-input.is-valid ~ .custom-control-label,
+  .privacy-consent-group ::v-deep .custom-control-input:valid ~ .custom-control-label,
+  .privacy-consent-group ::v-deep .custom-control-input:checked ~ .custom-control-label,
+  .privacy-consent-group ::v-deep .custom-control-input.is-valid ~ .custom-control-label *,
+  .privacy-consent-group ::v-deep .custom-control-input:valid ~ .custom-control-label *,
+  .privacy-consent-group ::v-deep .custom-control-input:checked ~ .custom-control-label * {
+    color: inherit !important;
+  }
+
+  .privacy-consent-group ::v-deep .custom-control-input.is-valid ~ .custom-control-label::before,
+  .privacy-consent-group ::v-deep .custom-control-input:valid ~ .custom-control-label::before {
+    border-color: #adb5bd !important;
+  }
+
+  .privacy-consent-group ::v-deep .custom-control-input.is-valid:checked ~ .custom-control-label::before,
+  .privacy-consent-group ::v-deep .custom-control-input:valid:checked ~ .custom-control-label::before {
+    background-color: $color-blue !important;
+    border-color: $color-blue !important;
+  }
+
+  .privacy-consent-group ::v-deep .custom-control-label a,
+  .privacy-consent-group ::v-deep .custom-control-input.is-valid ~ .custom-control-label a,
+  .privacy-consent-group ::v-deep .custom-control-input:valid ~ .custom-control-label a,
+  .privacy-consent-group ::v-deep .custom-control-input:checked ~ .custom-control-label a {
+    color: $color-blue !important;
   }
 
   .btn {

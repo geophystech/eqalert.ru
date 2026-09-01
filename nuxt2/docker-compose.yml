@@ -1,10 +1,26 @@
-version: '3.8'
-
 services:
-  web:
+  app:
     build:
       context: .
-      dockerfile: .dockerfiles/dev/Dockerfile
+      dockerfile: .dockerfiles/prod/Dockerfile
+    expose:
+      - "3000"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - app
     ports:
-      - '80:80'
-    restart: always
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/opt/caddy/Caddyfile:/etc/caddy/Caddyfile:ro"
+      - "/opt/caddy/data:/data"
+      - "/opt/caddy/config:/config"
+      - "/opt/site-data/deeplink/ios:/opt/ios:ro"
+      - "/opt/site-data/deeplink/android:/opt/android:ro"
+    restart: unless-stopped
